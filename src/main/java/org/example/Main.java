@@ -6,6 +6,14 @@ import lejos.remote.ev3.RemoteEV3;
 
 public class Main {
     public static void main(String[] args) {
+
+        WASDController wasdController = new WASDController();
+        try {
+            wasdController.EV3Controller();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        /*
         try{
         System.out.println("poopoo");
         RemoteEV3 ev3 = new RemoteEV3("172.20.10.8");
@@ -50,6 +58,6 @@ public class Main {
     } catch (Exception e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
-    }
+    }*/
     }
 }
