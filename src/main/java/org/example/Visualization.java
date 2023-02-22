@@ -23,7 +23,7 @@ public class Visualization {
             }
             @Override
             public void mouseReleased(MouseEvent e) {
-                painterThread.interrupt();
+                painterThread.running = false;
             }
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -48,7 +48,7 @@ public class Visualization {
             g.drawLine(910,35,910,285);
             g.drawLine(910,385,910,635);
 
-            g.drawLine(460,35,460,335);
+            //<g.drawLine(460,35,460,335);
 
             //Dims i midten TODO regn den om så den passer(den starter fra x, den skal starte i midten af x)
             g.fillRect(460,270, 20,100);
@@ -83,28 +83,34 @@ public class Visualization {
     }
     static class PainterThread extends Thread{
         JFrame jFrame;
+        boolean running = true;
         PainterThread(JFrame jFrame){
             this.jFrame = jFrame;
         }
         @Override
         public void run(){
             int lastX=-1,lastY=-1;
-            while(true) {
+            while(running) {
                 PointerInfo pointerInfo = MouseInfo.getPointerInfo();
-                    if (!(lastX == pointerInfo.getLocation().x && lastY == pointerInfo.getLocation().y)) {
+                int tempX, tempY;
+
+                tempX = pointerInfo.getLocation().x - jFrame.getX()-10;
+                tempY = pointerInfo.getLocation().y - jFrame.getY()-30;
+                    if (!(lastX == tempX && lastY == tempY)) {
                         try {
-                        PainterComponent painterComponent = new PainterComponent(pointerInfo.getLocation().x, pointerInfo.getLocation().y);
-                        jFrame.add(painterComponent);
-                        jFrame.revalidate();
-                        jFrame.repaint();
-                        lastX = pointerInfo.getLocation().x;
-                        lastY = pointerInfo.getLocation().y;
-                        sleep(20);
-                    } catch(InterruptedException e){
-                        throw new RuntimeException(e);
-                    }
+                            PainterComponent painterComponent = new PainterComponent(tempX, tempY);
+                            jFrame.add(painterComponent);
+                            jFrame.revalidate();
+                            jFrame.repaint();
+                            lastX = tempX;
+                            lastY = tempY;
+                            sleep(5);
+                        } catch(InterruptedException e){
+                            throw new RuntimeException(e);
+                        }
                 }
             }
+            this.interrupt();
         }
     }
 }
