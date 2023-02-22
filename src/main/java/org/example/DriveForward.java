@@ -15,13 +15,12 @@ public class DriveForward implements Behavior {
         this.harvester = harvester;
         this.a = a;
         this.b = b;
-
     }
 
 
     @Override
     public boolean takeControl() {
-        return false;
+        return true;
     }
 
     @Override
