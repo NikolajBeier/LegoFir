@@ -8,18 +8,44 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
 public class WASDController {
+    RemoteEV3 ev3;
+    JFrame jFrame = new JFrame();
+    public void Connect(){
+        jFrame.setSize(1000, 750);
+        jFrame.setLayout(new GridLayout(5,2));
+        JTextField jTextField = new JTextField("172.20.10.8");
+        JTextArea jTextArea = new JTextArea("Message Terminal");
+        JButton jButton = new JButton("Connect");
+        jButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String str = connectToRobot(jTextField.getText());
+                if(str.equals("success")){
+                    try {
+                        EV3Controller();
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
+                } else {
+                    jTextArea.setText(str);
+                }
+            }
+        });
+
+        jFrame.add(jTextArea);
+        jFrame.add(jButton);
+        jFrame.add(jTextField);
+        jFrame.setVisible(true);
+    }
     public void EV3Controller() throws Exception {
-        JFrame jFrame = new JFrame();
-        jFrame.setSize(750, 500);
-        RemoteEV3 ev3 = new RemoteEV3("172.20.10.8");
+        jFrame.removeAll();
+        jFrame.revalidate();
+        jFrame.repaint();
         Audio sound = ev3.getAudio();
         sound.systemSound(0);
         RMIRegulatedMotor a = ev3.createRegulatedMotor("A", 'L');
@@ -32,8 +58,6 @@ public class WASDController {
         a.setSpeed(1080);
         b.setSpeed(1080);
         JLabel jLabel = new JLabel("Hola");
-        jFrame.setLayout(new GridLayout(5,2));
-
 
         JSlider jSpeed = new JSlider(JSlider.HORIZONTAL, 0,7200, 1080);
         JSlider jAcc = new JSlider(JSlider.HORIZONTAL, 0,7200, 1080);
@@ -191,8 +215,33 @@ public class WASDController {
                 }
             }});
 
-
+        jFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if(JOptionPane.showConfirmDialog(null, "Shutdown robot connection?")==0){
+                    try {
+                        a.close();
+                        b.close();
+                        harvester.close();
+                    }catch(Exception j){
+                        j.printStackTrace();
+                    }
+                    System.exit(0);
+                }
+            }
+        });
         jFrame.setVisible(true);
+        jFrame.revalidate();
+        jFrame.repaint();
+    }
 
+
+    public String connectToRobot(String ip){
+        try{
+            ev3 = new RemoteEV3(ip);
+            return "success";
+        } catch(Exception e){
+            return e.toString();
+        }
     }
 }

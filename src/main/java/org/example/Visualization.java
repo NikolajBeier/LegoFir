@@ -4,14 +4,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class Visualization {
-    public static void main(String[] args) {
+    PainterThread painterThread;
+    public Visualization() {
         JFrame jFrame = new StartJFrame();
         jFrame.setSize(920,750);
 
         jFrame.addMouseListener(new MouseListener() {
-            PainterThread painterThread;
+
             @Override
             public void mouseClicked(MouseEvent e) {
 
@@ -32,6 +35,16 @@ public class Visualization {
             @Override
             public void mouseExited(MouseEvent e) {
 
+            }
+        });
+
+        jFrame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if(painterThread != null) {
+                    painterThread.running = false;
+                }
+                System.exit(0);
             }
         });
 
@@ -75,7 +88,7 @@ public class Visualization {
         {
             super.paintComponent(g);
 
-            Color c = new Color(0.25F,0.0F,1.0F);
+            Color c = new Color(1.0f,0.0F,0.0F);
             g.setColor(c);
 
             g.fillOval(x-2, y-2, 4, 4);
@@ -94,7 +107,7 @@ public class Visualization {
                 PointerInfo pointerInfo = MouseInfo.getPointerInfo();
                 int tempX, tempY;
 
-                tempX = pointerInfo.getLocation().x - jFrame.getX()-10;
+                tempX = pointerInfo.getLocation().x - jFrame.getX();
                 tempY = pointerInfo.getLocation().y - jFrame.getY()-30;
                     if (!(lastX == tempX && lastY == tempY)) {
                         try {
