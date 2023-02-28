@@ -1,10 +1,8 @@
-package org.example;
+package org.example.robot.behaviour;
 
-import lejos.hardware.sensor.EV3UltrasonicSensor;
-import lejos.remote.ev3.RMIRegulatedMotor;
-import lejos.robotics.RangeFinder;
 import lejos.robotics.SampleProvider;
 import lejos.robotics.subsumption.Behavior;
+import org.example.robot.Legofir;
 
 import java.rmi.RemoteException;
 

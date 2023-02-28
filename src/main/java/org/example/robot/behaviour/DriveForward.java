@@ -1,7 +1,8 @@
-package org.example;
+package org.example.robot.behaviour;
 
-import lejos.remote.ev3.RMIRegulatedMotor;
 import lejos.robotics.subsumption.Behavior;
+import org.example.robot.Legofir;
+
 import static java.lang.Thread.sleep;
 
 import java.rmi.RemoteException;

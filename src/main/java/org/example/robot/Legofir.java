@@ -1,4 +1,4 @@
-package org.example;
+package org.example.robot;
 
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.remote.ev3.RMIRegulatedMotor;
@@ -9,6 +9,7 @@ import static java.lang.Thread.sleep;
 
 public class Legofir {
 
+    public EV3UltrasonicSensor ultrasonicSensor;
     // Motors
     RMIRegulatedMotor left;
     RMIRegulatedMotor right;
@@ -21,7 +22,6 @@ public class Legofir {
     int defaultAccelerationWheel;
 
     // Sensors
-    EV3UltrasonicSensor ultrasonicSensor;
 
     public Legofir(RMIRegulatedMotor left, RMIRegulatedMotor right, RMIRegulatedMotor harvester, int defaultSpeedHarvester, int defaultSpeedWheel, int defaultAccelerationHarvester, int defaultAccelerationWheel, EV3UltrasonicSensor ultrasonicSensor) {
         this.left = left;

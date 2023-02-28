@@ -1,4 +1,4 @@
-package org.example;
+package org.example.robot;
 
 import lejos.hardware.Audio;
 import lejos.remote.ev3.RMIRegulatedMotor;
@@ -12,35 +12,11 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-public class WASDController {
+public class WASDController implements Program{
     RemoteEV3 ev3;
     JFrame jFrame = new JFrame();
-    public void Connect(){
-        jFrame.setSize(1000, 750);
-        jFrame.setLayout(new GridLayout(5,2));
-        JTextField jTextField = new JTextField("172.20.10.8");
-        JTextArea jTextArea = new JTextArea("Message Terminal");
-        JButton jButton = new JButton("Connect");
-        jButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String str = connectToRobot(jTextField.getText());
-                if(str.equals("success")){
-                    try {
-                        EV3Controller();
-                    } catch (Exception ex) {
-                        throw new RuntimeException(ex);
-                    }
-                } else {
-                    jTextArea.setText(str);
-                }
-            }
-        });
-
-        jFrame.add(jTextArea);
-        jFrame.add(jButton);
-        jFrame.add(jTextField);
-        jFrame.setVisible(true);
+    public WASDController(RemoteEV3 ev3){
+        this.ev3 = ev3;
     }
     public void EV3Controller() throws Exception {
         jFrame.removeAll();
@@ -235,13 +211,12 @@ public class WASDController {
         jFrame.repaint();
     }
 
-
-    public String connectToRobot(String ip){
-        try{
-            ev3 = new RemoteEV3(ip);
-            return "success";
-        } catch(Exception e){
-            return e.toString();
+    @Override
+    public void Launch() {
+        try {
+            EV3Controller();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }
