@@ -1,5 +1,6 @@
 package org.example;
 
+import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.remote.ev3.RMIRegulatedMotor;
 
 import java.rmi.RemoteException;
@@ -8,15 +9,21 @@ import static java.lang.Thread.sleep;
 
 public class Legofir {
 
+    // Motors
     RMIRegulatedMotor left;
     RMIRegulatedMotor right;
     RMIRegulatedMotor harvester;
+
+    // Motor default values
     int defaultSpeedHarvester;
     int defaultSpeedWheel;
     int defaultAccelerationHarvester;
     int defaultAccelerationWheel;
 
-    public Legofir(RMIRegulatedMotor left, RMIRegulatedMotor right, RMIRegulatedMotor harvester, int defaultSpeedHarvester, int defaultSpeedWheel, int defaultAccelerationHarvester, int defaultAccelerationWheel) {
+    // Sensors
+    EV3UltrasonicSensor ultrasonicSensor;
+
+    public Legofir(RMIRegulatedMotor left, RMIRegulatedMotor right, RMIRegulatedMotor harvester, int defaultSpeedHarvester, int defaultSpeedWheel, int defaultAccelerationHarvester, int defaultAccelerationWheel, EV3UltrasonicSensor ultrasonicSensor) {
         this.left = left;
         this.right = right;
         this.harvester = harvester;
@@ -24,6 +31,7 @@ public class Legofir {
         this.defaultAccelerationHarvester = defaultAccelerationHarvester;
         this.defaultSpeedWheel = defaultSpeedWheel;
         this.defaultAccelerationWheel = defaultAccelerationWheel;
+        this.ultrasonicSensor = ultrasonicSensor;
     }
 
     public void moveForward() throws RemoteException{

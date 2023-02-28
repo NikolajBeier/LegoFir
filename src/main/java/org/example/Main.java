@@ -1,6 +1,7 @@
 package org.example;
 
 import lejos.hardware.Audio;
+import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.remote.ev3.RMIRegulatedMotor;
 import lejos.remote.ev3.RemoteEV3;
 import lejos.robotics.subsumption.Arbitrator;
@@ -14,37 +15,42 @@ public class Main {
         Audio sound = ev3.getAudio();
         sound.setVolume(15);
 
-            for (int i = 0; i < 3; i++) {
-                sound.playTone(2500, 100);
-                sound.playTone(500, 100);
-            }
-            for (int i = 0; i < 4; i++) {
-                sound.playTone(300, 200);
-            }
-            for (int i = 0; i < 3; i++) {
-                sound.playTone(2500, 100);
-                sound.playTone(100, 100);
-            }
-            for (int i = 0; i < 4; i++) {
-                sound.playTone(300, 200);
-            }
-            for (int i = 0; i < 3; i++) {
-                sound.playTone(2500, 100);
-                sound.playTone(400, 100);
-            }
+        for (int i = 0; i < 3; i++) {
+            sound.playTone(2500, 100);
+            sound.playTone(500, 100);
+        }
+        for (int i = 0; i < 4; i++) {
+            sound.playTone(300, 200);
+        }
+        for (int i = 0; i < 3; i++) {
+            sound.playTone(2500, 100);
+            sound.playTone(100, 100);
+        }
+        for (int i = 0; i < 4; i++) {
+            sound.playTone(300, 200);
+        }
+        for (int i = 0; i < 3; i++) {
+            sound.playTone(2500, 100);
+            sound.playTone(400, 100);
+        }
 
-            sound.playTone(300, 4000);
+        sound.playTone(300, 4000);
 
         //sound.systemSound(100, 4000);
         System.out.println("Når vi her?");
 
-            RMIRegulatedMotor right = ev3.createRegulatedMotor("A", 'L');
-            RMIRegulatedMotor left =ev3.createRegulatedMotor("D", 'L');
-            RMIRegulatedMotor harvester =ev3.createRegulatedMotor("B", 'M');
+        // Create the motor objects
+        RMIRegulatedMotor right = ev3.createRegulatedMotor("A", 'L');
+        RMIRegulatedMotor left =ev3.createRegulatedMotor("D", 'L');
+        RMIRegulatedMotor harvester =ev3.createRegulatedMotor("B", 'M');
 
-            Legofir dude = new Legofir(left,right,harvester,720,720,1000,1000);
+        // Create the sensor objects
+        EV3UltrasonicSensor ultrasonicSensor = new EV3UltrasonicSensor(ev3.getPort("S1"));
 
-            /*
+        // Robot object
+        Legofir dude = new Legofir(left,right,harvester,720,720,1000,1000, ultrasonicSensor);
+
+        /*
         harvester.setAcceleration(1000);
         a.setAcceleration(1000);
         b.setAcceleration(1000);
@@ -56,14 +62,17 @@ public class Main {
              */
 
         // behaviour
+        Behavior [] bArray = {
+                new DriveForward(dude),
+                new DetectCollision(dude)
+        };
 
-        Behavior b1 = new DriveForward(dude);
-        // Behavior b2 = new DetectCollision(dude);
-        Behavior [] bArray = {b1};
+        // Arbitrator
         Arbitrator arby = new Arbitrator(bArray);
+
+        // start behaviour
         arby.go();
 
-        System.out.println("startet begge motorer");
 
 
     } catch (Exception e) {
