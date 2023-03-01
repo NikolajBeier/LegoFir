@@ -19,7 +19,7 @@ public class SelectPrograms {
         jFrame.setLayout(new BorderLayout());
         ArrayList<Program> programs = new ArrayList<>();
         JLabel jLabel = new JLabel("Select a program to run!");
-        jLabel.setSize(100,75);
+        jLabel.setSize(1000,75);
         jFrame.add(jLabel, BorderLayout.CENTER, SwingConstants.CENTER);
 
         //Programs hardcoded
@@ -39,22 +39,9 @@ public class SelectPrograms {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     chosenProgram=programs.get(currentI);
+                    new RunProgram(ev3, chosenProgram);
                     chosenProgram.launch();
-
-
-
-
-
-                    // Disconnect button
-                    JButton disconnectButton = new JButton("disconnect");
-                    disconnectButton.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            chosenProgram.disconnect();
-                        }
-                    });
-
-                    buttons.add(disconnectButton);
+                    jFrame.dispose();
                 }
             });
             buttons.add(jButton);

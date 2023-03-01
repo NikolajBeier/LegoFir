@@ -9,6 +9,8 @@ import lejos.robotics.subsumption.Behavior;
 import org.example.robot.behaviour.DetectCollision;
 import org.example.robot.behaviour.DriveForward;
 
+import javax.swing.*;
+
 public class Launcher implements Program {
     RemoteEV3 ev3;
     Legofir dude;
