@@ -74,13 +74,18 @@ public class Launcher implements Program {
     public void launch() {
         launchRobot();
     }
+
+
+    //skal startes som sin egen thread
     @Override
     public void disconnect() {
         // set the stop condition to true, so the arbitrator will stop
         System.out.println("Forsøger at stoppe Arby");
         for(MyBehavior b : bArray){
-            b.setStopCondition(false);
+            b.setStopCondition(true);
         }
+
+        //vente
         // Stop motors and disconnect ports
         System.out.println("forsøger at stoppe motorerer og disconnecte");
         dude.stopAll();

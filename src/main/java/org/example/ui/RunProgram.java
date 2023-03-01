@@ -16,6 +16,7 @@ public class RunProgram {
     Thread program;
     public RunProgram(RemoteEV3 ev3, Program chosenProgram){
         program = new Thread(chosenProgram::launch);
+        program.start();
         mainFrame.setSize(1000,750);
         mainFrame.setLayout(new BorderLayout());
         String str = chosenProgram.toString();
@@ -30,8 +31,8 @@ public class RunProgram {
         disconnect.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new SelectPrograms(ev3);
                 chosenProgram.disconnect();
+                new SelectPrograms(ev3);
                 mainFrame.dispose();
             }
         });
