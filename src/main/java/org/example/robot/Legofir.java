@@ -114,7 +114,7 @@ public class Legofir {
 
     public void openCheeks(){
         try{
-            balldropper.forward();
+            balldropper.rotate(180);
         } catch (RemoteException e) {
             stopAll();
         }
@@ -128,7 +128,7 @@ public class Legofir {
 
     public void closeCheeks(){
         try{
-            balldropper.backward();
+            balldropper.rotate(-180);
         } catch (RemoteException e) {
             stopAll();
         }

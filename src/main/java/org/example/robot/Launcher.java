@@ -13,6 +13,7 @@ import org.example.robot.behaviour.DropBalls;
 public class Launcher implements Program {
     RemoteEV3 ev3;
     Legofir dude;
+    Themes theme = new Themes();
 
 
     public Launcher(RemoteEV3 ev3){
@@ -20,32 +21,10 @@ public class Launcher implements Program {
     }
     public void launchRobot() {
         ev3.setDefault();
-        Audio sound = ev3.getAudio();
-        sound.setVolume(15);
 
-        int i;
-        for (i = 0; i < 3; ++i) {
-            sound.playTone(2500, 100);
-            sound.playTone(500, 100);
-        }
 
-        for (i = 0; i < 4; ++i) {
-            sound.playTone(300, 200);
-        }
+        theme.TetrisTheme(ev3);
 
-        for (i = 0; i < 3; ++i) {
-            sound.playTone(2500, 100);
-            sound.playTone(100, 100);
-        }
-
-        for (i = 0; i < 4; ++i) {
-            sound.playTone(300, 200);
-        }
-
-        for (i = 0; i < 3; ++i) {
-            sound.playTone(2500, 100);
-            sound.playTone(400, 100);
-        }
 
         System.out.println("Når vi her?");
 
@@ -62,7 +41,7 @@ public class Launcher implements Program {
         dude = new Legofir(left,right,harvester, balldropper,720,720,720,1000,1000, 1000, ultrasonicSensor);
 
 
-        Behavior[] bArray = new Behavior[]{new DriveForward(dude),new DetectCollision(dude), new DropBalls(dude)};
+        Behavior[] bArray = new Behavior[]{/*new DriveForward(dude),new DetectCollision(dude),*/ new DropBalls(dude)};
         Arbitrator arby = new Arbitrator(bArray);
         arby.go();
         System.out.println("startet begge motorer");

@@ -9,6 +9,7 @@ public class DropBalls implements Behavior {
 
     Legofir dude;
     Boolean suppressed = false;
+    int test = 1;
 
     public DropBalls(Legofir dude) {
         this.dude = dude;
@@ -26,6 +27,7 @@ public class DropBalls implements Behavior {
                 e.printStackTrace();
             }
             dude.closeCheeks();
+            dude.closePorts();
 
         }
     }
@@ -37,12 +39,7 @@ public class DropBalls implements Behavior {
 
     @Override
     public boolean takeControl() {
-        try {
-            wait(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return true;
+        return (test > 0);
     }
 
 }
