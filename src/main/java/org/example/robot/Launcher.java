@@ -8,6 +8,7 @@ import lejos.robotics.subsumption.Arbitrator;
 import lejos.robotics.subsumption.Behavior;
 import org.example.robot.behaviour.DetectCollision;
 import org.example.robot.behaviour.DriveForward;
+import org.example.robot.behaviour.DropBalls;
 
 public class Launcher implements Program {
     RemoteEV3 ev3;
@@ -52,15 +53,16 @@ public class Launcher implements Program {
         RMIRegulatedMotor right = ev3.createRegulatedMotor("A", 'L');
         RMIRegulatedMotor left =ev3.createRegulatedMotor("D", 'L');
         RMIRegulatedMotor harvester =ev3.createRegulatedMotor("B", 'M');
+        RMIRegulatedMotor balldropper =ev3.createRegulatedMotor("C", 'M');
 
         // Create the sensor objects
         EV3UltrasonicSensor ultrasonicSensor = new EV3UltrasonicSensor(ev3.getPort("S1"));
 
         // Robot object
-        dude = new Legofir(left,right,harvester,720,720,1000,1000, ultrasonicSensor);
+        dude = new Legofir(left,right,harvester, balldropper,720,720,720,1000,1000, 1000, ultrasonicSensor);
 
 
-        Behavior[] bArray = new Behavior[]{new DriveForward(dude),new DetectCollision(dude)};
+        Behavior[] bArray = new Behavior[]{new DriveForward(dude),new DetectCollision(dude), new DropBalls(dude)};
         Arbitrator arby = new Arbitrator(bArray);
         arby.go();
         System.out.println("startet begge motorer");
