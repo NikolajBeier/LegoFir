@@ -32,7 +32,6 @@ public class Launcher implements Program {
 
 
         System.out.println("Når vi her?");
-
         // Create the motor objects
         RMIRegulatedMotor right = ev3.createRegulatedMotor("A", 'L');
         RMIRegulatedMotor left =ev3.createRegulatedMotor("D", 'L');
@@ -78,11 +77,6 @@ public class Launcher implements Program {
     @Override
     public void disconnect() {
         stopCondition=true;
-        try {
-            wait(10);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
         dude.stopAll();
         System.out.println("arby stopped and ports disconnected");
     }

@@ -13,7 +13,9 @@ import java.awt.event.WindowEvent;
 
 public class RunProgram {
     JFrame mainFrame = new JFrame();
+    Thread program;
     public RunProgram(RemoteEV3 ev3, Program chosenProgram){
+        program = new Thread(chosenProgram::launch);
         mainFrame.setSize(1000,750);
         mainFrame.setLayout(new BorderLayout());
         String str = chosenProgram.toString();
@@ -29,6 +31,7 @@ public class RunProgram {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new SelectPrograms(ev3);
+                chosenProgram.disconnect();
                 mainFrame.dispose();
             }
         });
@@ -43,5 +46,6 @@ public class RunProgram {
 
         mainFrame.add(buttons, BorderLayout.SOUTH);
         mainFrame.add(programView, BorderLayout.CENTER);
+        mainFrame.setVisible(true);
     }
 }

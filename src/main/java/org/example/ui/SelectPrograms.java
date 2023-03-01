@@ -39,8 +39,7 @@ public class SelectPrograms {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     chosenProgram=programs.get(currentI);
-                    new RunProgram(ev3, chosenProgram);
-                    chosenProgram.launch();
+                    RunProgram rp = new RunProgram(ev3, chosenProgram);
                     jFrame.dispose();
                 }
             });

@@ -20,14 +20,17 @@ public class ConnectToRobot {
     RemoteEV3 ev3;
     JFrame jFrame = new JFrame();
     Thread connecting;
-    String messageString;
+    String messageString = "Message Terminal";
+    JButton jButton;
+    JButton stopConnecting;
+    JTextArea jTextArea;
     public ConnectToRobot(){
         jFrame.setSize(1000, 750);
         jFrame.setLayout(new GridLayout(5,2));
-        JTextField jTextField = new JTextField("172.20.10.9");
-        JTextArea jTextArea = new JTextArea("Message Terminal");
-        JButton jButton = new JButton("Connect");
-        JButton stopConnecting = new JButton("Stop connecting");
+        JTextField jTextField = new JTextField("192.168.43.44");
+        jTextArea = new JTextArea(messageString);
+        jButton = new JButton("Connect");
+        stopConnecting = new JButton("Stop connecting");
         stopConnecting.setEnabled(false);
         stopConnecting.addActionListener(new ActionListener() {
             @Override
@@ -81,7 +84,12 @@ public class ConnectToRobot {
                         new SelectPrograms(ev3);
                         jFrame.dispose();
                     } catch(Exception e){
-                        returnValue = e.toString();
+                        e.printStackTrace();
+                        jTextArea.setText(e.getMessage());
+                        jButton.setEnabled(true);
+                        stopConnecting.setEnabled(false);
+                        jFrame.revalidate();
+                        jFrame.repaint();
                     }
                 }
             });
