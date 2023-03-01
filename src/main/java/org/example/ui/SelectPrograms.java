@@ -6,13 +6,13 @@ import org.example.robot.Program;
 import org.example.robot.WASDController;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class SelectPrograms {
+    Program chosenProgram;
     public SelectPrograms(RemoteEV3 ev3){
         JFrame jFrame = new JFrame();
         jFrame.setSize(1000, 750);
@@ -34,15 +34,33 @@ public class SelectPrograms {
             str = str.substring(18);
             str = str.split("@")[0];
             JButton jButton = new JButton(str);
-            int currentI = i;
+            int currentI = 0;
             jButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    programs.get(currentI).Launch();
+                    chosenProgram=programs.get(currentI);
+                    chosenProgram.launch();
+
+
+
+
+
+                    // Disconnect button
+                    JButton disconnectButton = new JButton("disconnect");
+                    disconnectButton.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            chosenProgram.disconnect();
+                        }
+                    });
+
+                    buttons.add(disconnectButton);
                 }
             });
             buttons.add(jButton);
         }
+
+
 
         buttons.setLayout(new GridLayout(0,2));
         jFrame.add(buttons, BorderLayout.SOUTH);

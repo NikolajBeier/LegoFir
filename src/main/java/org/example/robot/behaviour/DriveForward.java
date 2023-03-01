@@ -33,18 +33,10 @@ public class DriveForward implements Behavior {
     public void action() {
         suppressed = false;
         while(!suppressed) {
-            try {
-                legofir.beginHarvester();
-                legofir.moveForward();
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
+            legofir.beginHarvester();
+            legofir.moveForward();
         }
-        try {
-            legofir.stopHarvester();
-            legofir.stopWheels();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
+        legofir.stopHarvester();
+        legofir.stopWheels();
     }
 }

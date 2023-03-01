@@ -34,14 +34,22 @@ public class Legofir {
         this.ultrasonicSensor = ultrasonicSensor;
     }
 
-    public void moveForward() throws RemoteException{
+    public void moveForward(){
+        try {
             left.backward();
             right.backward();
+        } catch (RemoteException e) {
+            stopAll();
+        }
     }
 
-    public void turnLeft() throws RemoteException{
-        right.backward();
-        left.forward();
+    public void turnLeft(){
+        try {
+            left.forward();
+            right.backward();
+        } catch (RemoteException e) {
+            stopAll();
+        }
         try {
             sleep(1110);
         } catch (InterruptedException e) {
@@ -50,9 +58,13 @@ public class Legofir {
         stopWheels();
     }
 
-    public void turnRight() throws RemoteException{
-        left.backward();
-        right.forward();
+    public void turnRight(){
+        try{
+            left.backward();
+            right.forward();
+        } catch (RemoteException e) {
+            stopAll();
+        }
         try {
             sleep(1110);
         } catch (InterruptedException e) {
@@ -61,32 +73,53 @@ public class Legofir {
         stopWheels();
     }
 
-    public void beginHarvester() throws RemoteException{
-       harvester.forward();
+    public void beginHarvester(){
+        try {
+            harvester.forward();
+        } catch (RemoteException e) {
+            stopAll();
+        }
     }
 
-    public void stopWheels() throws RemoteException{
-        left.stop(true);
-        right.stop(true);
+    public void stopWheels(){
+        try {
+            left.stop(true);
+            right.stop(true);
+        } catch (RemoteException e) {
+            closePorts();
+        }
     }
 
-    public void stopHarvester() throws RemoteException{
-        harvester.stop(true);
+    public void stopHarvester(){
+        try {
+            harvester.stop(true);
+        } catch (RemoteException e) {
+            closePorts();
+        }
     }
 
-    public void openCheeks() throws RemoteException{
+    public void openCheeks(){
 
     }
 
-    public void closeCheeks() throws RemoteException{
+    public void closeCheeks(){
 
     }
 
-    public void closePorts() throws RemoteException{
-        harvester.close();
-        left.close();
-        right.close();
-        System.out.println("lukket begge motorer");
+    public void closePorts(){
+        try {
+            harvester.close();
+            left.close();
+            right.close();
+            System.out.println("lukket begge motorer");
+        } catch (RemoteException e) {
+            System.out.println("Kunne ikke lukke motorer");
+        }
     }
 
+    public void stopAll() {
+        stopWheels();
+        stopHarvester();
+        closePorts();
+    }
 }

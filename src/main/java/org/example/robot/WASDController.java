@@ -212,11 +212,16 @@ public class WASDController implements Program{
     }
 
     @Override
-    public void Launch() {
+    public void launch() {
         try {
             EV3Controller();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void disconnect() {
+
     }
 }

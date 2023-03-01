@@ -21,19 +21,15 @@ public class DetectCollision implements Behavior {
     public void action() {
         suppressed = false;
         if(!suppressed){
-            try {
-                dude.stopWheels();
-                dude.turnRight();
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
+            dude.stopWheels();
+            dude.turnRight();
         }
     }
 
     @Override
     public void suppress() {
         suppressed = true;
-    };
+    }
 
     @Override
     public boolean takeControl() {
@@ -42,5 +38,5 @@ public class DetectCollision implements Behavior {
         sampleProvider.fetchSample(sample, 0);
         float distanceValue = sample[0];
         return (distanceValue <= AVOID_DISTANCE);
-    };
+    }
 }
