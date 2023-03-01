@@ -21,8 +21,19 @@ public class Launcher implements Program {
         ev3.setDefault();
         Audio sound = ev3.getAudio();
         sound.setVolume(15);
+        //imperial march
+        for (int i = 0; i < 3; i++) {
+            sound.playTone(440,500);
+        }
+        sound.playTone(349,350);
+        sound.playTone(523,150);
 
-        int i;
+        sound.playTone(440,500);
+        sound.playTone(349,350);
+        sound.playTone(523,150);
+
+        sound.playTone(440,1000);
+     /*   int i;
         for (i = 0; i < 3; ++i) {
             sound.playTone(2500, 100);
             sound.playTone(500, 100);
@@ -44,7 +55,7 @@ public class Launcher implements Program {
         for (i = 0; i < 3; ++i) {
             sound.playTone(2500, 100);
             sound.playTone(400, 100);
-        }
+        }*/
 
         System.out.println("Når vi her?");
 
