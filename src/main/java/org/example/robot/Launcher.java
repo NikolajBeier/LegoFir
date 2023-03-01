@@ -8,6 +8,7 @@ import lejos.robotics.subsumption.Arbitrator;
 import lejos.robotics.subsumption.Behavior;
 import org.example.robot.behaviour.DetectCollision;
 import org.example.robot.behaviour.DriveForward;
+import org.example.robot.behaviour.MyBehavior;
 import org.example.robot.behaviour.StopBehaviour;
 
 public class Launcher implements Program {
@@ -15,6 +16,7 @@ public class Launcher implements Program {
     Legofir dude;
     Arbitrator arby;
     Boolean stopCondition=false;
+    MyBehavior[] bArray;
 
 
     public Launcher(RemoteEV3 ev3){
@@ -45,14 +47,13 @@ public class Launcher implements Program {
         dude = new Legofir(left,right,harvester,720,720,1000,1000, ultrasonicSensor);
 
 
-        Behavior[] bArray = new Behavior[]{
+        bArray = new MyBehavior[]{
                 new DriveForward(dude),
                 new DetectCollision(dude),
-                new StopBehaviour(stopCondition),
         };
-        arby = new Arbitrator(bArray);
+        arby = new Arbitrator(bArray, true);
         arby.go();
-        System.out.println("arby startet");
+        System.out.println("arby stoppet");
     }
 
     private void imperialLaunch(Audio sound) {
@@ -75,12 +76,13 @@ public class Launcher implements Program {
     }
     @Override
     public void disconnect() {
-        stopCondition=true;
-        try {
-            wait(10);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        // set the stop condition to true, so the arbitrator will stop
+        System.out.println("Forsøger at stoppe Arby");
+        for(MyBehavior b : bArray){
+            b.setStopCondition(false);
         }
+        // Stop motors and disconnect ports
+        System.out.println("forsøger at stoppe motorerer og disconnecte");
         dude.stopAll();
         System.out.println("arby stopped and ports disconnected");
     }

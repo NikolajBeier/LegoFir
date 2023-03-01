@@ -7,16 +7,19 @@ import static java.lang.Thread.sleep;
 
 import java.rmi.RemoteException;
 
-public class DriveForward implements Behavior {
+public class DriveForward implements MyBehavior {
 
     Boolean suppressed = false;
     Legofir legofir;
+    Boolean stopCondition = false;
 
-    public DriveForward(Legofir legofir) {
+    public DriveForward(Legofir legofir){
         this.legofir = legofir;
     }
 
-
+    public void setStopCondition(Boolean stopCondition) {
+        this.stopCondition = stopCondition;
+    }
 
     @Override
     public void suppress(){
@@ -26,8 +29,11 @@ public class DriveForward implements Behavior {
     // The default behaviour is to drive forward, so should always return true
     @Override
     public boolean takeControl() {
+        if(stopCondition){
+            return false;
+        }
         return true;
-    };
+    }
 
     @Override
     public void action() {

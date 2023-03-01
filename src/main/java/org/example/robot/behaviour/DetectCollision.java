@@ -6,16 +6,20 @@ import org.example.robot.Legofir;
 
 import java.rmi.RemoteException;
 
-public class DetectCollision implements Behavior {
+public class DetectCollision implements MyBehavior {
 
     Legofir dude;
     Boolean suppressed = false;
     final float AVOID_DISTANCE = 0.25f;
+    Boolean stopCondition = false;
 
     public DetectCollision(Legofir dude) {
         this.dude = dude;
     }
 
+    public void setStopCondition(Boolean stopCondition) {
+        this.stopCondition = stopCondition;
+    }
 
     @Override
     public void action() {
@@ -33,8 +37,11 @@ public class DetectCollision implements Behavior {
 
     @Override
     public boolean takeControl() {
+        if(stopCondition){
+            return false;
+        }
         SampleProvider sampleProvider = dude.ultrasonicSensor.getDistanceMode();
-        float [] sample = new float[sampleProvider.sampleSize()];
+        float[] sample = new float[sampleProvider.sampleSize()];
         sampleProvider.fetchSample(sample, 0);
         float distanceValue = sample[0];
         return (distanceValue <= AVOID_DISTANCE);
