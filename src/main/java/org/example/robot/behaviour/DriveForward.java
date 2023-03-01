@@ -16,12 +16,12 @@ public class DriveForward implements Behavior {
         this.legofir = legofir;
     }
 
-    /* Overridden Methods */
+
 
     @Override
-    public void suppress() {
+    public void suppress(){
         suppressed = true;
-    };
+    }
 
     // The default behaviour is to drive forward, so should always return true
     @Override

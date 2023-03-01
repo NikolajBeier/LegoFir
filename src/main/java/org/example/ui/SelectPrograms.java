@@ -43,7 +43,13 @@ public class SelectPrograms {
 
                 // Disconnect button
                 JButton disconnectButton = new JButton("disconnect");
-                disconnectButton.addActionListener(e1 -> chosenProgram.disconnect());
+                disconnectButton.addActionListener(e1 -> {
+                    disconnectButton.setEnabled(false);
+                    jFrame.revalidate();
+                    jFrame.repaint();
+                    chosenProgram.disconnect();
+
+                });
 
                 buttons.add(disconnectButton);
                 jFrame.revalidate();

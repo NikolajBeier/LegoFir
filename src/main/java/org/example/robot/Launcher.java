@@ -8,10 +8,13 @@ import lejos.robotics.subsumption.Arbitrator;
 import lejos.robotics.subsumption.Behavior;
 import org.example.robot.behaviour.DetectCollision;
 import org.example.robot.behaviour.DriveForward;
+import org.example.robot.behaviour.StopBehaviour;
 
 public class Launcher implements Program {
     RemoteEV3 ev3;
     Legofir dude;
+    Arbitrator arby;
+    Boolean stopCondition=false;
 
 
     public Launcher(RemoteEV3 ev3){
@@ -22,6 +25,37 @@ public class Launcher implements Program {
         Audio sound = ev3.getAudio();
         sound.setVolume(15);
         //imperial march
+        imperialLaunch(sound);
+
+
+
+        System.out.println("Når vi her?");
+
+        // Create the motor objects
+        RMIRegulatedMotor right = ev3.createRegulatedMotor("A", 'L');
+        RMIRegulatedMotor left =ev3.createRegulatedMotor("D", 'L');
+        RMIRegulatedMotor harvester =ev3.createRegulatedMotor("B", 'M');
+        System.out.println("motors connected");
+
+        // Create the sensor objects
+        EV3UltrasonicSensor ultrasonicSensor = new EV3UltrasonicSensor(ev3.getPort("S1"));
+        System.out.println("sensors connected");
+
+        // Robot object
+        dude = new Legofir(left,right,harvester,720,720,1000,1000, ultrasonicSensor);
+
+
+        Behavior[] bArray = new Behavior[]{
+                new DriveForward(dude),
+                new DetectCollision(dude),
+                new StopBehaviour(stopCondition),
+        };
+        arby = new Arbitrator(bArray);
+        arby.go();
+        System.out.println("arby startet");
+    }
+
+    private void imperialLaunch(Audio sound) {
         for (int i = 0; i < 3; i++) {
             sound.playTone(440,500);
         }
@@ -33,48 +67,6 @@ public class Launcher implements Program {
         sound.playTone(523,150);
 
         sound.playTone(440,1000);
-     /*   int i;
-        for (i = 0; i < 3; ++i) {
-            sound.playTone(2500, 100);
-            sound.playTone(500, 100);
-        }
-
-        for (i = 0; i < 4; ++i) {
-            sound.playTone(300, 200);
-        }
-
-        for (i = 0; i < 3; ++i) {
-            sound.playTone(2500, 100);
-            sound.playTone(100, 100);
-        }
-
-        for (i = 0; i < 4; ++i) {
-            sound.playTone(300, 200);
-        }
-
-        for (i = 0; i < 3; ++i) {
-            sound.playTone(2500, 100);
-            sound.playTone(400, 100);
-        }*/
-
-        System.out.println("Når vi her?");
-
-        // Create the motor objects
-        RMIRegulatedMotor right = ev3.createRegulatedMotor("A", 'L');
-        RMIRegulatedMotor left =ev3.createRegulatedMotor("D", 'L');
-        RMIRegulatedMotor harvester =ev3.createRegulatedMotor("B", 'M');
-
-        // Create the sensor objects
-        EV3UltrasonicSensor ultrasonicSensor = new EV3UltrasonicSensor(ev3.getPort("S1"));
-
-        // Robot object
-        dude = new Legofir(left,right,harvester,720,720,1000,1000, ultrasonicSensor);
-
-
-        Behavior[] bArray = new Behavior[]{new DriveForward(dude),new DetectCollision(dude)};
-        Arbitrator arby = new Arbitrator(bArray);
-        arby.go();
-        System.out.println("startet begge motorer");
     }
 
     @Override
@@ -83,6 +75,13 @@ public class Launcher implements Program {
     }
     @Override
     public void disconnect() {
+        stopCondition=true;
+        try {
+            wait(10);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         dude.stopAll();
+        System.out.println("arby stopped and ports disconnected");
     }
 }

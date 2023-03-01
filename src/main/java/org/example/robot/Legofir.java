@@ -111,7 +111,8 @@ public class Legofir {
             harvester.close();
             left.close();
             right.close();
-            System.out.println("lukket begge motorer");
+            ultrasonicSensor.close();
+            System.out.println("lukket alle motorer og sensorer");
         } catch (RemoteException e) {
             System.out.println("Kunne ikke lukke motorer");
         }
