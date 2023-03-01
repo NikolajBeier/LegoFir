@@ -9,8 +9,11 @@ import lejos.robotics.subsumption.Behavior;
 import org.example.robot.behaviour.DetectCollision;
 import org.example.robot.behaviour.DriveForward;
 
+import java.rmi.RemoteException;
+
 public class Launcher implements Program {
     RemoteEV3 ev3;
+    Legofir dude;
 
 
     public Launcher(RemoteEV3 ev3){
@@ -57,7 +60,7 @@ public class Launcher implements Program {
             EV3UltrasonicSensor ultrasonicSensor = new EV3UltrasonicSensor(ev3.getPort("S1"));
 
             // Robot object
-            Legofir dude = new Legofir(left,right,harvester,720,720,1000,1000, ultrasonicSensor);
+            dude = new Legofir(left,right,harvester,720,720,1000,1000, ultrasonicSensor);
 
 
             Behavior[] bArray = new Behavior[]{new DriveForward(dude),new DetectCollision(dude)};
@@ -65,7 +68,16 @@ public class Launcher implements Program {
             arby.go();
             System.out.println("startet begge motorer");
         } catch (Exception var10) {
+            disconnect();
             var10.printStackTrace();
+        }
+    }
+
+    private void disconnect() {
+        try {
+            dude.closePorts();
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
         }
     }
 

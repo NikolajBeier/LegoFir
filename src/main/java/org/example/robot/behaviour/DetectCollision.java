@@ -10,12 +10,10 @@ public class DetectCollision implements Behavior {
 
     Legofir dude;
     Boolean suppressed = false;
-    final int AVOID_DISTANCE = 15;
-    final SampleProvider sampleProvider;
+    final float AVOID_DISTANCE = 0.25f;
 
     public DetectCollision(Legofir dude) {
         this.dude = dude;
-        sampleProvider= dude.ultrasonicSensor.getDistanceMode();
     }
 
 
@@ -39,9 +37,10 @@ public class DetectCollision implements Behavior {
 
     @Override
     public boolean takeControl() {
+        SampleProvider sampleProvider = dude.ultrasonicSensor.getDistanceMode();
         float [] sample = new float[sampleProvider.sampleSize()];
         sampleProvider.fetchSample(sample, 0);
-        int distanceValue = (int)sample[0];
+        float distanceValue = sample[0];
         return (distanceValue <= AVOID_DISTANCE);
     };
 }

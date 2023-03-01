@@ -20,13 +20,14 @@ public class ConnectToRobot {
     public ConnectToRobot(){
         jFrame.setSize(1000, 750);
         jFrame.setLayout(new GridLayout(5,2));
-        JTextField jTextField = new JTextField("172.20.10.8");
+        JTextField jTextField = new JTextField("172.20.10.9");
         JTextArea jTextArea = new JTextArea("Message Terminal");
         JButton jButton = new JButton("Connect");
         jButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String str = "success";//connectToRobot(jTextField.getText());
+                String str = "success";
+                connectToRobot(jTextField.getText());
                 if(str.equals("success")){
                     new SelectPrograms(ev3);
                     jFrame.dispose();
@@ -50,4 +51,5 @@ public class ConnectToRobot {
             return e.toString();
         }
     }
+
 }
