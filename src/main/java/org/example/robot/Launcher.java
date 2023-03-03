@@ -13,7 +13,7 @@ import org.example.robot.behaviour.DropBalls;
 public class Launcher implements Program {
     RemoteEV3 ev3;
     Legofir dude;
-    Themes theme = new Themes();
+    Themes themes = new Themes();
 
 
     public Launcher(RemoteEV3 ev3){
@@ -23,7 +23,7 @@ public class Launcher implements Program {
         ev3.setDefault();
 
 
-        theme.TetrisTheme(ev3);
+        themes.TetrisTheme(ev3);
 
 
         System.out.println("Når vi her?");

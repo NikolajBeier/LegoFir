@@ -3,9 +3,12 @@ package org.example.robot;
 import lejos.hardware.Audio;
 import lejos.remote.ev3.RemoteEV3;
 
+/**
+ * This class is used to define different themes for the robot at startup. They can then be called in the launcher as
+ * such: Themes.themeName(RemoteEV3 object)
+ */
+
 public class Themes {
-
-
 
     public void OriginalTheme(RemoteEV3 ev3){
 
@@ -36,6 +39,8 @@ public class Themes {
             sound.playTone(400, 100);
         }
     }
+
+    // work in progress
 
     public void TetrisTheme(RemoteEV3 ev3) {
 
