@@ -11,6 +11,10 @@ import org.example.robot.behaviour.DriveForward;
 import org.example.robot.behaviour.MyBehavior;
 import org.example.robot.behaviour.StopBehaviour;
 
+import java.rmi.RemoteException;
+
+import static java.lang.Thread.sleep;
+
 public class Launcher implements Program {
     RemoteEV3 ev3;
     Legofir dude;
@@ -44,14 +48,17 @@ public class Launcher implements Program {
         System.out.println("sensors connected");
 
         // Robot object
-        dude = new Legofir(left,right,harvester,720,720,1000,1000, ultrasonicSensor);
+
+        dude = new Legofir(left,right,harvester,1440,720,1000,1000, ultrasonicSensor);
+
 
 
         bArray = new MyBehavior[]{
+                new StopBehaviour(),
                 new DriveForward(dude),
                 new DetectCollision(dude),
         };
-        arby = new Arbitrator(bArray, true);
+        arby = new Arbitrator(bArray);
         arby.go();
         System.out.println("arby stoppet");
     }
@@ -79,8 +86,16 @@ public class Launcher implements Program {
         // set the stop condition to true, so the arbitrator will stop
         System.out.println("Forsøger at stoppe Arby");
         for(MyBehavior b : bArray){
-            b.setStopCondition(false);
+            b.setStopCondition(true);
         }
+        arby.keepRunning=false;
+        System.out.println("stop condition sat til true");
+        try {
+            sleep(100);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Ventet på arby er stoppet");
         // Stop motors and disconnect ports
         System.out.println("forsøger at stoppe motorerer og disconnecte");
         dude.stopAll();

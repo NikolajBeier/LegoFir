@@ -2,11 +2,10 @@ package org.example.robot.behaviour;
 
 import lejos.robotics.subsumption.Behavior;
 
-public class StopBehaviour implements Behavior {
-    Boolean condition;
+public class StopBehaviour implements MyBehavior {
+    Boolean stopCondition = false;
 
-    public StopBehaviour(Boolean condition) {
-        this.condition=condition;
+    public StopBehaviour() {
     }
 
     @Override
@@ -14,8 +13,14 @@ public class StopBehaviour implements Behavior {
     }
 
     @Override
+    public void setStopCondition(Boolean stopCondition) {
+        this.stopCondition = stopCondition;
+    }
+
+    @Override
     public boolean takeControl() {
-        return condition;
+        System.out.println("StopBehaviour.takeControl() = " + !stopCondition);
+        return !stopCondition;
     }
 
     // This behavior does nothing

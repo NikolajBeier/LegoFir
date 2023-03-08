@@ -75,6 +75,7 @@ public class Legofir {
 
     public void beginHarvester(){
         try {
+            System.out.println(harvester.getSpeed());
             harvester.forward();
         } catch (RemoteException e) {
             stopAll();
@@ -111,6 +112,10 @@ public class Legofir {
             harvester.close();
             left.close();
             right.close();
+            ultrasonicSensor.disable();
+            while(ultrasonicSensor.isEnabled()) {
+                System.out.println("venter på at ultrasonicSensor skal lukke");
+            }
             ultrasonicSensor.close();
             System.out.println("lukket alle motorer og sensorer");
         } catch (RemoteException e) {

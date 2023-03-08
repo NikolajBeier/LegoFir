@@ -33,22 +33,26 @@ public class SelectPrograms {
             String str = programs.get(i).toString();
             str = str.substring(18);
             str = str.split("@")[0];
-            JButton jButton = new JButton(str);
+
             int currentI = 0;
+
+            JButton jButton = new JButton(str);
             jButton.addActionListener(e -> {
                 chosenProgram=programs.get(currentI);
                 Thread launchThread = new Thread(() -> chosenProgram.launch());
                 launchThread.start();
+                jButton.setEnabled(false);
 
 
                 // Disconnect button
                 JButton disconnectButton = new JButton("disconnect");
                 disconnectButton.addActionListener(e1 -> {
                     disconnectButton.setEnabled(false);
+                    jButton.setEnabled(true);
                     jFrame.revalidate();
                     jFrame.repaint();
-                    chosenProgram.disconnect();
-
+                    Thread disconnectThread = new Thread(() -> chosenProgram.disconnect());
+                    disconnectThread.start();
                 });
 
                 buttons.add(disconnectButton);
