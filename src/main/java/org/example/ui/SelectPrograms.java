@@ -33,15 +33,33 @@ public class SelectPrograms {
             String str = programs.get(i).toString();
             str = str.substring(18);
             str = str.split("@")[0];
-            JButton jButton = new JButton(str);
+
             int currentI = 0;
-            jButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    chosenProgram=programs.get(currentI);
-                    RunProgram rp = new RunProgram(ev3, chosenProgram);
-                    jFrame.dispose();
-                }
+
+            JButton jButton = new JButton(str);
+            jButton.addActionListener(e -> {
+                chosenProgram=programs.get(currentI);
+                Thread launchThread = new Thread(() -> chosenProgram.launch());
+                launchThread.start();
+                jButton.setEnabled(false);
+
+
+                // Disconnect button
+                JButton disconnectButton = new JButton("disconnect");
+                disconnectButton.addActionListener(e1 -> {
+                    disconnectButton.setEnabled(false);
+                    jButton.setEnabled(true);
+                    jFrame.revalidate();
+                    jFrame.repaint();
+                    Thread disconnectThread = new Thread(() -> chosenProgram.disconnect());
+                    disconnectThread.start();
+                });
+
+                buttons.add(disconnectButton);
+                jFrame.revalidate();
+                jFrame.repaint();
+
+
             });
             buttons.add(jButton);
         }
