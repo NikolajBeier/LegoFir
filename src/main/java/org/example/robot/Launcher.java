@@ -3,6 +3,7 @@ package org.example.robot;
 import lejos.hardware.Audio;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.remote.ev3.RMIRegulatedMotor;
+import lejos.remote.ev3.RMISampleProvider;
 import lejos.remote.ev3.RemoteEV3;
 import lejos.robotics.subsumption.Arbitrator;
 import lejos.robotics.subsumption.Behavior;
@@ -20,6 +21,9 @@ import org.example.robot.behaviour.DropBalls;
 
 public class Launcher implements Program {
     RemoteEV3 ev3;
+
+
+
     Legofir dude;
     Arbitrator arby;
     Boolean stopCondition=false;
@@ -30,11 +34,11 @@ public class Launcher implements Program {
     public Launcher(RemoteEV3 ev3){
         this.ev3 = ev3;
     }
-    public void launchRobot() {
+    public void setupRobot(){
         ev3.setDefault();
         Audio sound = ev3.getAudio();
         sound.setVolume(15);
-        themes.TetrisTheme(ev3);
+        themes.ImperialTheme(ev3);
 
 
         System.out.println("Når vi her?");
@@ -53,6 +57,9 @@ public class Launcher implements Program {
 
         // Robot object
         dude = new Legofir(left,right,harvester, balldropper,1440,720,720,1000,1000, 1000, ultrasonicSensor);
+    }
+    public void launchRobot() {
+
         bArray = new MyBehavior[]{
                 new StopBehaviour(),
                 new DriveForward(dude),
@@ -69,6 +76,7 @@ public class Launcher implements Program {
 
     @Override
     public void launch() {
+        setupRobot();
         launchRobot();
     }
     @Override
@@ -90,5 +98,8 @@ public class Launcher implements Program {
         System.out.println("forsøger at stoppe motorerer og disconnecte");
         dude.stopAll();
         System.out.println("arby stopped and ports disconnected");
+    }
+    public Legofir getDude() {
+        return dude;
     }
 }

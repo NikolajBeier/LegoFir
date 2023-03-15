@@ -31,12 +31,8 @@ public class ColorTest {
             float[] sample = colorSensor.fetchSample();
             System.out.println("R: " + sample[0] + " G: " + sample[1] + " B: " + sample[2]);
             colorSensor.close();
-        } catch (RemoteException | NotBoundException | MalformedURLException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        } catch (RemoteException | NotBoundException | MalformedURLException | InterruptedException e) {
+            System.out.println(e.getMessage());
         }
-
-
     }
 }
