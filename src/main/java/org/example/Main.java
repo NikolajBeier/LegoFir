@@ -1,5 +1,6 @@
 package org.example;
 
+import com.github.sarxos.webcam.Webcam;
 import org.example.ui.ConnectToRobot;
 import org.example.ui.Visualization;
 
@@ -16,6 +17,7 @@ public class Main {
         jFrame.setSize(300, 175);
         JButton visualization = new JButton("Visualization");
         JButton connect = new JButton("Connect");
+        JButton camera = new JButton("Show Camera");
         jFrame.setLayout(new BorderLayout());
         visualization.addActionListener(new ActionListener() {
             @Override
@@ -31,6 +33,13 @@ public class Main {
                 jFrame.dispose();
             }
         });
+        camera.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                startCameraAnalyze();
+                jFrame.dispose();
+            }
+        });
         JLabel header = new JLabel("GolfBot UI", SwingConstants.CENTER);
         header.setPreferredSize(new Dimension(300, 75));
         jFrame.add(header, BorderLayout.NORTH);
@@ -38,6 +47,7 @@ public class Main {
         buttons.setLayout(new GridLayout(0, 2));
         buttons.add(connect);
         buttons.add(visualization);
+        buttons.add(camera);
         jFrame.add(buttons, BorderLayout.CENTER);
         jFrame.addWindowListener(new WindowAdapter() {
             @Override
@@ -53,5 +63,8 @@ public class Main {
         }
         public static void startVisualization () {
             Visualization visualization = new Visualization();
+        }
+        public static void startCameraAnalyze(){
+            CameraAnalyze cameraAnalyze = new CameraAnalyze();
         }
     }
