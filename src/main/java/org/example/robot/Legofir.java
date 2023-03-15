@@ -14,23 +14,29 @@ public class Legofir {
     RMIRegulatedMotor left;
     RMIRegulatedMotor right;
     RMIRegulatedMotor harvester;
+    RMIRegulatedMotor balldropper;
 
     // Motor default values
     int defaultSpeedHarvester;
     int defaultSpeedWheel;
+    int defaultSpeedBallDropper;
     int defaultAccelerationHarvester;
     int defaultAccelerationWheel;
+    int defaultAccelerationBallDropper;
 
     // Sensors
 
-    public Legofir(RMIRegulatedMotor left, RMIRegulatedMotor right, RMIRegulatedMotor harvester, int defaultSpeedHarvester, int defaultSpeedWheel, int defaultAccelerationHarvester, int defaultAccelerationWheel, EV3UltrasonicSensor ultrasonicSensor) {
+    public Legofir(RMIRegulatedMotor left, RMIRegulatedMotor right, RMIRegulatedMotor harvester, RMIRegulatedMotor balldropper, int defaultSpeedHarvester, int defaultSpeedWheel, int defaultSpeedBallDropper, int defaultAccelerationHarvester, int defaultAccelerationWheel, int defaultAccelerationBallDropper, EV3UltrasonicSensor ultrasonicSensor) {
         this.left = left;
         this.right = right;
         this.harvester = harvester;
+        this.balldropper = balldropper;
         this.defaultSpeedHarvester = defaultSpeedHarvester;
         this.defaultAccelerationHarvester = defaultAccelerationHarvester;
         this.defaultSpeedWheel = defaultSpeedWheel;
         this.defaultAccelerationWheel = defaultAccelerationWheel;
+        this.defaultSpeedBallDropper = defaultSpeedBallDropper;
+        this.defaultAccelerationBallDropper = defaultAccelerationBallDropper;
         this.ultrasonicSensor = ultrasonicSensor;
     }
 
@@ -99,12 +105,40 @@ public class Legofir {
         }
     }
 
-    public void openCheeks(){
+    public void stopBallDropper(){
+        try {
+            balldropper.stop(true);
+        } catch (RemoteException e) {
+            closePorts();
+        }
+    }
 
+    public void openCheeks(){
+        try{
+            balldropper.rotate(180);
+        } catch (RemoteException e) {
+            stopAll();
+        }
+        try {
+            sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        stopBallDropper();
     }
 
     public void closeCheeks(){
-
+        try{
+            balldropper.rotate(-180);
+        } catch (RemoteException e) {
+            stopAll();
+        }
+        try {
+            sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        stopBallDropper();
     }
 
     public void closePorts(){
@@ -126,6 +160,7 @@ public class Legofir {
     public void stopAll() {
         stopWheels();
         stopHarvester();
+        stopBallDropper();
         closePorts();
     }
 }
