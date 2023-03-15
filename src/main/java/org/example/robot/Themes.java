@@ -57,4 +57,22 @@ public class Themes {
 
     }
 
+    public void ImperialTheme(RemoteEV3 ev3) {
+
+        Audio sound = ev3.getAudio();
+        sound.setVolume(15);
+
+        for (int i = 0; i < 3; i++) {
+            sound.playTone(440,500);
+        }
+        sound.playTone(349,350);
+        sound.playTone(523,150);
+
+        sound.playTone(440,500);
+        sound.playTone(349,350);
+        sound.playTone(523,150);
+
+        sound.playTone(440,1000);
+    }
+
 }

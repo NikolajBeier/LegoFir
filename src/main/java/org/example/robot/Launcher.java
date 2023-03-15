@@ -34,10 +34,6 @@ public class Launcher implements Program {
         ev3.setDefault();
         Audio sound = ev3.getAudio();
         sound.setVolume(15);
-        //imperial march
-        imperialLaunch(sound);
-
-
         themes.TetrisTheme(ev3);
 
 
@@ -57,9 +53,6 @@ public class Launcher implements Program {
 
         // Robot object
         dude = new Legofir(left,right,harvester, balldropper,1440,720,720,1000,1000, 1000, ultrasonicSensor);
-
-
-
         bArray = new MyBehavior[]{
                 new StopBehaviour(),
                 new DriveForward(dude),
@@ -71,17 +64,7 @@ public class Launcher implements Program {
     }
 
     private void imperialLaunch(Audio sound) {
-        for (int i = 0; i < 3; i++) {
-            sound.playTone(440,500);
-        }
-        sound.playTone(349,350);
-        sound.playTone(523,150);
 
-        sound.playTone(440,500);
-        sound.playTone(349,350);
-        sound.playTone(523,150);
-
-        sound.playTone(440,1000);
     }
 
     @Override
