@@ -5,10 +5,12 @@ import lejos.robotics.subsumption.Behavior;
 import org.example.robot.Legofir;
 import static java.lang.Thread.sleep;
 
-public class DropBalls implements Behavior {
+public class DropBalls implements MyBehavior {
 
     Legofir dude;
     Boolean suppressed = false;
+    Boolean stopCondition = false;
+
     int test = 1;
 
     public DropBalls(Legofir dude) {
@@ -35,6 +37,11 @@ public class DropBalls implements Behavior {
     @Override
     public void suppress() {
         suppressed = true;
+    }
+
+    @Override
+    public void setStopCondition(Boolean stopCondition) {
+        this.stopCondition = stopCondition;
     }
 
     @Override
