@@ -16,6 +16,7 @@ import javax.swing.*;
 import java.rmi.RemoteException;
 
 import static java.lang.Thread.sleep;
+import org.example.robot.behaviour.DropBalls;
 
 public class Launcher implements Program {
     RemoteEV3 ev3;
@@ -23,6 +24,7 @@ public class Launcher implements Program {
     Arbitrator arby;
     Boolean stopCondition=false;
     MyBehavior[] bArray;
+    Themes themes = new Themes();
 
 
     public Launcher(RemoteEV3 ev3){
@@ -32,9 +34,7 @@ public class Launcher implements Program {
         ev3.setDefault();
         Audio sound = ev3.getAudio();
         sound.setVolume(15);
-        //imperial march
-        imperialLaunch(sound);
-
+        themes.TetrisTheme(ev3);
 
 
         System.out.println("Når vi her?");
@@ -43,18 +43,16 @@ public class Launcher implements Program {
         RMIRegulatedMotor right = ev3.createRegulatedMotor("A", 'L');
         RMIRegulatedMotor left =ev3.createRegulatedMotor("D", 'L');
         RMIRegulatedMotor harvester =ev3.createRegulatedMotor("B", 'M');
+        RMIRegulatedMotor balldropper =ev3.createRegulatedMotor("C", 'M');
         System.out.println("motors connected");
+
 
         // Create the sensor objects
         EV3UltrasonicSensor ultrasonicSensor = new EV3UltrasonicSensor(ev3.getPort("S1"));
         System.out.println("sensors connected");
 
         // Robot object
-
-        dude = new Legofir(left,right,harvester,1440,720,1000,1000, ultrasonicSensor);
-
-
-
+        dude = new Legofir(left,right,harvester, balldropper,1440,720,720,1000,1000, 1000, ultrasonicSensor);
         bArray = new MyBehavior[]{
                 new StopBehaviour(),
                 new DriveForward(dude),
@@ -66,17 +64,7 @@ public class Launcher implements Program {
     }
 
     private void imperialLaunch(Audio sound) {
-        for (int i = 0; i < 3; i++) {
-            sound.playTone(440,500);
-        }
-        sound.playTone(349,350);
-        sound.playTone(523,150);
 
-        sound.playTone(440,500);
-        sound.playTone(349,350);
-        sound.playTone(523,150);
-
-        sound.playTone(440,1000);
     }
 
     @Override
