@@ -95,4 +95,7 @@ public class ConnectToRobot {
             });
         connecting.start();
     }
+    public RemoteEV3 getEv3() {
+        return ev3;
+    }
 }

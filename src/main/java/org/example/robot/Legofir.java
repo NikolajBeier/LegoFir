@@ -146,6 +146,7 @@ public class Legofir {
             harvester.close();
             left.close();
             right.close();
+            balldropper.close();
             ultrasonicSensor.disable();
             while(ultrasonicSensor.isEnabled()) {
                 System.out.println("venter på at ultrasonicSensor skal lukke");
@@ -156,6 +157,15 @@ public class Legofir {
             System.out.println("Kunne ikke lukke motorer");
         }
     }
+    public boolean isMoving(){
+        try {
+            return left.isMoving() && right.isMoving();
+        } catch (RemoteException e) {
+            stopAll();
+        }
+        return false;
+    }
+
 
     public void stopAll() {
         stopWheels();
