@@ -8,17 +8,13 @@ import lejos.remote.ev3.RMISampleProvider;
 import lejos.remote.ev3.RemoteEV3;
 import lejos.robotics.subsumption.Arbitrator;
 import lejos.robotics.subsumption.Behavior;
-import org.example.robot.behaviour.DetectCollision;
-import org.example.robot.behaviour.DriveForward;
-import org.example.robot.behaviour.MyBehavior;
-import org.example.robot.behaviour.StopBehaviour;
+import org.example.robot.behaviour.*;
 
 import javax.swing.*;
 
 import java.rmi.RemoteException;
 
 import static java.lang.Thread.sleep;
-import org.example.robot.behaviour.DropBalls;
 
 public class Launcher implements Program {
     RemoteEV3 ev3;
@@ -63,11 +59,14 @@ public class Launcher implements Program {
     public void launchRobot() {
 
         bArray = new MyBehavior[]{
+                new StopBehaviour(),
                 new DriveForward(dude),
                 new DetectCollision(dude),
-                new StopBehaviour()
+                new DriveTowardsBall(dude)
+
         };
         arby = new Arbitrator(bArray);
+
         arby.go();
         System.out.println("arby stoppet");
     }

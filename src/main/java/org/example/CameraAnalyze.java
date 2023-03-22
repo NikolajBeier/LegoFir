@@ -1,6 +1,6 @@
 
 package org.example;
-
+/*
 import nu.pattern.OpenCV;
 import org.bytedeco.javacpp.opencv_core;
 import org.opencv.core.Mat;
@@ -168,3 +168,6 @@ public class CameraAnalyze {
     }
 }
 
+
+
+ */
