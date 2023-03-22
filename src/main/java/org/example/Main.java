@@ -1,9 +1,12 @@
 package org.example;
 
 import com.github.sarxos.webcam.Webcam;
+//import nu.pattern.OpenCV;
 import org.example.ui.ConnectToRobot;
 import org.example.ui.Visualization;
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
 
 import javax.swing.*;
 import java.awt.*;

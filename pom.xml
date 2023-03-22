@@ -21,17 +21,34 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <artifactId>image-processing</artifactId>
+            <groupId>org.openimaj</groupId>
+            <version>1.3.10</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>com.github.sarxos</groupId>
-            <artifactId>webcam-capture</artifactId>
+            <artifactId>webcam-capture-driver-opencv</artifactId>
             <version>0.3.12</version>
         </dependency>
+        <dependency>
+            <groupId>org.openpnp</groupId>
+            <artifactId>opencv</artifactId>
+            <version>4.6.0-0</version>
+        </dependency>
     </dependencies>
+    <repositories>
+        <repository>
+            <id>Sonatype OSS Snapshot Repository</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+    </repositories>
+
     <properties>
         <maven.compiler.source>19</maven.compiler.source>
         <maven.compiler.target>19</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
 
 
 </project>
