@@ -2,6 +2,7 @@ package org.example.robot;
 
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.remote.ev3.RMIRegulatedMotor;
+import lejos.robotics.SampleProvider;
 
 import java.rmi.RemoteException;
 
