@@ -43,6 +43,7 @@ public class DriveForward implements MyBehavior {
         while(!suppressed) {
             legofir.beginHarvester();
             legofir.moveForward();
+            System.out.println(legofir);
         }
         legofir.stopHarvester();
         legofir.stopWheels();

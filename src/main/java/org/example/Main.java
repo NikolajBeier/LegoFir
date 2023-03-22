@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.mapping.Dijkstras_Algorithm;
 import org.example.ui.ConnectToRobot;
 import org.example.ui.Visualization;
 
@@ -12,6 +13,8 @@ import java.awt.event.WindowEvent;
 
 public class Main {
     public static void main(String[] args) {
+        Dijkstras_Algorithm dijkstras_algorithm=new Dijkstras_Algorithm();
+        dijkstras_algorithm.toString();
         JFrame jFrame = new JFrame();
         jFrame.setSize(300, 175);
         JButton visualization = new JButton("Visualization");

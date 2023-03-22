@@ -69,6 +69,7 @@ public class Visualization {
 
             //tennisbold
             g.drawOval(55,130,20,20);
+
         }
     }
 
