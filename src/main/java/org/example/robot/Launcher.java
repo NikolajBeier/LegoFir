@@ -1,6 +1,7 @@
 package org.example.robot;
 
 import lejos.hardware.Audio;
+import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.remote.ev3.RMIRegulatedMotor;
 import lejos.remote.ev3.RMISampleProvider;
@@ -53,10 +54,11 @@ public class Launcher implements Program {
 
         // Create the sensor objects
         EV3UltrasonicSensor ultrasonicSensor = new EV3UltrasonicSensor(ev3.getPort("S1"));
+        EV3GyroSensor ev3GyroSensor = new EV3GyroSensor(ev3.getPort("S2"));
         System.out.println("sensors connected");
 
         // Robot object
-        dude = new Legofir(left,right,harvester, balldropper,1440,720,720,1000,1000, 1000, ultrasonicSensor);
+        dude = new Legofir(left,right,harvester, balldropper,1440,720,720,1000,1000, 1000, ultrasonicSensor,ev3GyroSensor);
     }
     public void launchRobot() {
 
