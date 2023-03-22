@@ -61,9 +61,9 @@ public class Launcher implements Program {
     public void launchRobot() {
 
         bArray = new MyBehavior[]{
-                new StopBehaviour(),
                 new DriveForward(dude),
                 new DetectCollision(dude),
+                new StopBehaviour()
         };
         arby = new Arbitrator(bArray);
         arby.go();
