@@ -1,9 +1,10 @@
 package org.example;
 
 import com.github.sarxos.webcam.Webcam;
-import nu.pattern.OpenCV;
+//import nu.pattern.OpenCV;
 import org.example.ui.ConnectToRobot;
 import org.example.ui.Visualization;
+import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
@@ -16,6 +17,7 @@ import java.awt.event.WindowEvent;
 
 public class Main {
     public static void main(String[] args) {
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         JFrame jFrame = new JFrame();
         jFrame.setSize(300, 175);
         JButton visualization = new JButton("Visualization");
@@ -39,7 +41,21 @@ public class Main {
         camera.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                startCameraAnalyze();
+                EventQueue.invokeLater(new Runnable() {
+                    // Overriding existing run() method
+                    @Override public void run()
+                    {
+                        final Camera camera = new Camera();
+
+                        // Start camera in thread
+                        new Thread(new Runnable() {
+                            @Override public void run()
+                            {
+                                camera.startCamera();
+                            }
+                        }).start();
+                    }
+                });
                 jFrame.dispose();
             }
         });

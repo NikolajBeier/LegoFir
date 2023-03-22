@@ -1,3 +1,4 @@
+
 package org.example;
 
 import nu.pattern.OpenCV;
@@ -193,3 +194,4 @@ public class CameraAnalyze {
         }
     }
 }
+

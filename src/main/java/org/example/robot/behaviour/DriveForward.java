@@ -13,6 +13,7 @@ public class DriveForward implements MyBehavior {
     Legofir legofir;
     Boolean stopCondition = false;
 
+
     public DriveForward(Legofir legofir){
         this.legofir = legofir;
     }
@@ -43,6 +44,9 @@ public class DriveForward implements MyBehavior {
         while(!suppressed) {
             legofir.beginHarvester();
             legofir.moveForward();
+            System.out.println(legofir.ev3GyroSensor.getAngleAndRateMode().sampleSize());
+            System.out.println(legofir.ev3GyroSensor.getAngleMode());
+
         }
         legofir.stopHarvester();
         legofir.stopWheels();
