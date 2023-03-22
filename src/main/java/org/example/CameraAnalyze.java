@@ -2,15 +2,15 @@ package org.example;
 
 import nu.pattern.OpenCV;
 import org.bytedeco.javacpp.opencv_core;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfByte;
-import org.opencv.core.Scalar;
+import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import static org.bytedeco.javacpp.opencv_core.cvScalar;
 
@@ -36,24 +36,6 @@ public class CameraAnalyze {
                 }).start();
             }
         });
-        EventQueue.invokeLater(new Runnable() {
-            // Overriding existing run() method
-
-            @Override
-            public void run() {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        while(!camera.setup){
-
-                        }
-                        camera.ColorDetector();
-                    }
-                }).start();
-            }
-        });
-
-
     }
 
     private class Camera {
@@ -72,6 +54,9 @@ public class CameraAnalyze {
         private int camWidth, camHeight;
 
         private boolean detectColor = false;
+        public boolean getDetectColor(){
+            return this.detectColor;
+        }
 
         public void CameraUI() {
             // Designing UI
@@ -81,7 +66,30 @@ public class CameraAnalyze {
             cameraScreen.setBounds(0, 0, camWidth, camHeight);
             jFrame.add(cameraScreen);
 
-            jFrame.setSize(new Dimension(camWidth, camHeight));
+
+            Button colorDetection = new Button("Color Detection");
+            colorDetection.setBounds(camWidth/2-100,camHeight,150,40);
+            colorDetection.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    EventQueue.invokeLater(new Runnable() {
+                        // Overriding existing run() method
+
+                        @Override
+                        public void run() {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ColorDetector();
+                                }
+                            }).start();
+                        }
+                    });
+                }
+            });
+            jFrame.add(colorDetection);
+
+            jFrame.setSize(new Dimension(camWidth, camHeight+65));
             jFrame.setLocationRelativeTo(null);
             jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             jFrame.setVisible(true);
@@ -94,12 +102,9 @@ public class CameraAnalyze {
 
             ImageIcon icon;
 
-
-
             while (true) {
-
-                // read image to matrix
                 capture.read(image);
+                // read image to matrix
 
                 // convert matrix to byte
                 final MatOfByte buf = new MatOfByte();
@@ -124,10 +129,6 @@ public class CameraAnalyze {
             }
         }
         public void ColorDetector(){
-            opencv_core.CvScalar min = cvScalar(0, 0, 130, 0);//BGR-A
-            opencv_core.CvScalar max= cvScalar(140, 110, 255, 0);//BGR-A
-
-
             JFrame colorJframe = new JFrame();
             // Designing UI
             colorJframe.setLayout(null);
@@ -135,25 +136,51 @@ public class CameraAnalyze {
             JLabel colorCameraScreen = new JLabel();
             colorCameraScreen.setBounds(0, 0, camWidth, camHeight);
             colorJframe.add(colorCameraScreen);
+            JPanel sliders = new JPanel();
+            sliders.setLayout(new GridLayout(2,6));
+            JSlider hueMin = new JSlider(0,255,0);
+            JSlider hueMax = new JSlider(0,255,0);
+            JSlider satMin = new JSlider(0,255,0);
+            JSlider satMax = new JSlider(0,255,180);
+            JSlider valMin = new JSlider(0,255,0);
+            JSlider valMax = new JSlider(0,255,255);
+            JLabel hueMinName = new JLabel("Hue Min (B Min)");
+            JLabel hueMaxName = new JLabel("Hue Max (B Max)");
+            JLabel satMinName = new JLabel("Sat Min (G Min)");
+            JLabel satMaxName = new JLabel("Sat Max (G Max)");
+            JLabel valMinName = new JLabel("Val Min (R Min)");
+            JLabel valMaxName = new JLabel("Val Max (R Max)");
+            sliders.add(hueMinName);
+            sliders.add(hueMaxName);
+            sliders.add(satMinName);
+            sliders.add(satMaxName);
+            sliders.add(valMinName);
+            sliders.add(valMaxName);
+            sliders.add(hueMin);
+            sliders.add(hueMax);
+            sliders.add(satMin);
+            sliders.add(satMax);
+            sliders.add(valMin);
+            sliders.add(valMax);
+            sliders.setBounds(0,camHeight,camWidth,100);
+            colorJframe.add(sliders);
 
-            colorJframe.setSize(new Dimension(camWidth, camHeight));
+            colorJframe.setSize(new Dimension(camWidth, camHeight+130));
             colorJframe.setLocationRelativeTo(null);
-            colorJframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             colorJframe.setVisible(true);
 
-            image = new Mat();
+            Mat mask = new Mat();
             byte[] imageData;
             ImageIcon icon;
 
             while(true){
                 if(capture!=null) {
-                    capture.read(image);
-
-                    image.colRange(10, 50);
-
+                    Scalar minValues = new Scalar(hueMin.getValue(),satMin.getValue(), valMin.getValue());
+                    Scalar maxValues = new Scalar(hueMax.getValue(),satMax.getValue(),valMax.getValue());
+                    Core.inRange(image, minValues, maxValues, mask);
 
                     final MatOfByte buf = new MatOfByte();
-                    Imgcodecs.imencode(".jpg", image, buf);
+                    Imgcodecs.imencode(".jpg", mask, buf);
 
                     imageData = buf.toArray();
 
