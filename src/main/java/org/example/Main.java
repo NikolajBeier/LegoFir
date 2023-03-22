@@ -17,7 +17,6 @@ import java.awt.event.WindowEvent;
 
 public class Main {
     public static void main(String[] args) {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         JFrame jFrame = new JFrame();
         jFrame.setSize(300, 175);
         JButton visualization = new JButton("Visualization");
@@ -45,13 +44,13 @@ public class Main {
                     // Overriding existing run() method
                     @Override public void run()
                     {
-                        final Camera camera = new Camera();
+                        final CameraAnalyze camera = new CameraAnalyze();
 
                         // Start camera in thread
                         new Thread(new Runnable() {
                             @Override public void run()
                             {
-                                camera.startCamera();
+
                             }
                         }).start();
                     }

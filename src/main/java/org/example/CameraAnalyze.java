@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import static org.bytedeco.javacpp.opencv_core.cvScalar;
 
@@ -45,6 +46,7 @@ public class CameraAnalyze {
         public Camera(JFrame jFrame) {
             this.jFrame = jFrame;
         }
+
         boolean setup = false;
         // Start camera
         private VideoCapture capture;
@@ -55,7 +57,9 @@ public class CameraAnalyze {
         private int camWidth, camHeight;
 
         private boolean detectColor = false;
-        public boolean getDetectColor(){
+        private boolean colorFilter = false;
+
+        public boolean getDetectColor() {
             return this.detectColor;
         }
 
@@ -67,9 +71,9 @@ public class CameraAnalyze {
             cameraScreen.setBounds(0, 0, camWidth, camHeight);
             jFrame.add(cameraScreen);
 
-
+            JPanel buttons = new JPanel(new GridLayout(0,2));
             Button colorDetection = new Button("Color Detection");
-            colorDetection.setBounds(camWidth/2-100,camHeight,150,40);
+            buttons.setBounds(camWidth / 2 - 100, camHeight, 150, 40);
             colorDetection.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -88,13 +92,24 @@ public class CameraAnalyze {
                     });
                 }
             });
-            jFrame.add(colorDetection);
+            Button colorFilterButton = new Button("Color Filter");
+            colorFilterButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    colorFilter = !colorFilter;
+                }
+            });
 
-            jFrame.setSize(new Dimension(camWidth, camHeight+65));
+            buttons.add(colorFilterButton);
+            buttons.add(colorDetection);
+            jFrame.add(buttons);
+
+            jFrame.setSize(new Dimension(camWidth, camHeight + 65));
             jFrame.setLocationRelativeTo(null);
             jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             jFrame.setVisible(true);
         }
+
         public void startCamera() {
             capture = new VideoCapture(0);
             image = new Mat();
@@ -104,9 +119,18 @@ public class CameraAnalyze {
             ImageIcon icon;
 
             while (true) {
-                capture.read(image);
                 // read image to matrix
+                capture.read(image);
 
+                if(colorFilter){
+                    //Post proccessing to smooth the image
+                    Mat postImage = new Mat();
+
+                    Imgproc.blur(image, postImage, new Size(7, 7));
+
+                    //Revert to original picture as HSV
+                    Imgproc.cvtColor(postImage, image, Imgproc.COLOR_BGR2HSV);
+                }
                 // convert matrix to byte
                 final MatOfByte buf = new MatOfByte();
                 Imgcodecs.imencode(".jpg", image, buf);
@@ -117,19 +141,19 @@ public class CameraAnalyze {
                 icon = new ImageIcon(imageData);
 
 
-
-                if(!setup){
-                    camHeight=icon.getIconHeight();
-                    camWidth=icon.getIconWidth();
+                if (!setup) {
+                    camHeight = icon.getIconHeight();
+                    camWidth = icon.getIconWidth();
                     System.out.println(icon.getIconWidth());
                     CameraUI();
-                    setup=true;
+                    setup = true;
                 } else {
                     cameraScreen.setIcon(icon);
                 }
             }
         }
-        public void ColorDetector(){
+
+        public void ColorDetector() {
             JFrame colorJframe = new JFrame();
             // Designing UI
             colorJframe.setLayout(null);
@@ -138,13 +162,13 @@ public class CameraAnalyze {
             colorCameraScreen.setBounds(0, 0, camWidth, camHeight);
             colorJframe.add(colorCameraScreen);
             JPanel sliders = new JPanel();
-            sliders.setLayout(new GridLayout(2,6));
-            JSlider hueMin = new JSlider(0,255,0);
-            JSlider hueMax = new JSlider(0,255,0);
-            JSlider satMin = new JSlider(0,255,0);
-            JSlider satMax = new JSlider(0,255,180);
-            JSlider valMin = new JSlider(0,255,0);
-            JSlider valMax = new JSlider(0,255,255);
+            sliders.setLayout(new GridLayout(2, 6));
+            JSlider hueMin = new JSlider(0, 255, 0);
+            JSlider hueMax = new JSlider(0, 255, 0);
+            JSlider satMin = new JSlider(0, 255, 0);
+            JSlider satMax = new JSlider(0, 255, 180);
+            JSlider valMin = new JSlider(0, 255, 0);
+            JSlider valMax = new JSlider(0, 255, 255);
             JLabel hueMinName = new JLabel("Hue Min (B Min)");
             JLabel hueMaxName = new JLabel("Hue Max (B Max)");
             JLabel satMinName = new JLabel("Sat Min (G Min)");
@@ -163,10 +187,10 @@ public class CameraAnalyze {
             sliders.add(satMax);
             sliders.add(valMin);
             sliders.add(valMax);
-            sliders.setBounds(0,camHeight,camWidth,100);
+            sliders.setBounds(0, camHeight, camWidth, 100);
             colorJframe.add(sliders);
 
-            colorJframe.setSize(new Dimension(camWidth, camHeight+130));
+            colorJframe.setSize(new Dimension(camWidth, camHeight + 130));
             colorJframe.setLocationRelativeTo(null);
             colorJframe.setVisible(true);
 
@@ -174,10 +198,20 @@ public class CameraAnalyze {
             byte[] imageData;
             ImageIcon icon;
 
-            while(true){
-                if(capture!=null) {
-                    Scalar minValues = new Scalar(hueMin.getValue(),satMin.getValue(), valMin.getValue());
-                    Scalar maxValues = new Scalar(hueMax.getValue(),satMax.getValue(),valMax.getValue());
+            while (true) {
+                if (capture != null) {
+                    //Post proccessing to smooth the image
+                    Mat postImage = new Mat();
+
+                    Imgproc.blur(image, postImage, new Size(7, 7));
+
+                    //Revert to original picture as HSV
+                    Imgproc.cvtColor(postImage, mask, Imgproc.COLOR_BGR2HSV);
+
+
+
+                    Scalar minValues = new Scalar(hueMin.getValue(), satMin.getValue(), valMin.getValue());
+                    Scalar maxValues = new Scalar(hueMax.getValue(), satMax.getValue(), valMax.getValue());
                     Core.inRange(image, minValues, maxValues, mask);
 
                     final MatOfByte buf = new MatOfByte();
@@ -189,6 +223,21 @@ public class CameraAnalyze {
                     icon = new ImageIcon(imageData);
 
                     colorCameraScreen.setIcon(icon);
+
+                    //Draw Contours (works, but needs to be implemented in the main display loop, instead of the masked display loop)
+                    /*ArrayList<MatOfPoint> contours = new ArrayList<>();
+                    Mat hierarchy = new Mat();
+
+                    // find contours
+                    Imgproc.findContours(mask, contours, hierarchy, Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
+
+                    // if any contour exist...
+                    if (hierarchy.size().height > 0 && hierarchy.size().width > 0) {
+                        // for each contour, display it in blue
+                        for (int idx = 0; idx >= 0; idx = (int) hierarchy.get(0, idx)[0]) {
+                            Imgproc.drawContours(image, contours, idx, new Scalar(250, 0, 0));
+                        }
+                    }*/
                 }
             }
         }
