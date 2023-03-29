@@ -1,24 +1,22 @@
 package org.example.robot.behaviour;
 
 import lejos.robotics.SampleProvider;
-import lejos.robotics.subsumption.Behavior;
 import org.example.robot.Legofir;
 
-import java.rmi.RemoteException;
-
-public class DetectCollision implements MyBehavior {
+public class AvoidCollision implements MyBehavior {
 
     Legofir dude;
     Boolean suppressed = false;
     final float AVOID_DISTANCE = 0.25f;
     Boolean stopCondition = false;
 
-    public DetectCollision(Legofir dude) {
+    public AvoidCollision(Legofir dude) {
         this.dude = dude;
     }
 
     public void setStopCondition(Boolean stopCondition) {
         this.stopCondition = stopCondition;
+        suppressed= true;
     }
 
     @Override

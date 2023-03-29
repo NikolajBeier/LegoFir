@@ -1,7 +1,10 @@
 package org.example.robot;
 
+import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.remote.ev3.RMIRegulatedMotor;
+import lejos.remote.ev3.RMISampleProvider;
+import lejos.robotics.SampleProvider;
 
 import java.rmi.RemoteException;
 
@@ -24,9 +27,12 @@ public class Legofir {
     int defaultAccelerationWheel;
     int defaultAccelerationBallDropper;
 
+    RMISampleProvider sampleProvider;
+
+
     // Sensors
 
-    public Legofir(RMIRegulatedMotor left, RMIRegulatedMotor right, RMIRegulatedMotor harvester, RMIRegulatedMotor balldropper, int defaultSpeedHarvester, int defaultSpeedWheel, int defaultSpeedBallDropper, int defaultAccelerationHarvester, int defaultAccelerationWheel, int defaultAccelerationBallDropper, EV3UltrasonicSensor ultrasonicSensor) {
+    public Legofir(RMIRegulatedMotor left, RMIRegulatedMotor right, RMIRegulatedMotor harvester, RMIRegulatedMotor balldropper, int defaultSpeedHarvester, int defaultSpeedWheel, int defaultSpeedBallDropper, int defaultAccelerationHarvester, int defaultAccelerationWheel, int defaultAccelerationBallDropper, EV3UltrasonicSensor ultrasonicSensor, RMISampleProvider ev3GyroSensor) {
         this.left = left;
         this.right = right;
         this.harvester = harvester;
@@ -38,6 +44,7 @@ public class Legofir {
         this.defaultSpeedBallDropper = defaultSpeedBallDropper;
         this.defaultAccelerationBallDropper = defaultAccelerationBallDropper;
         this.ultrasonicSensor = ultrasonicSensor;
+        this.sampleProvider=ev3GyroSensor;
     }
 
     public void moveForward(){
@@ -56,12 +63,6 @@ public class Legofir {
         } catch (RemoteException e) {
             stopAll();
         }
-        try {
-            sleep(1110);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        stopWheels();
     }
 
     public void turnRight(){
@@ -71,12 +72,6 @@ public class Legofir {
         } catch (RemoteException e) {
             stopAll();
         }
-        try {
-            sleep(1110);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        stopWheels();
     }
 
     public void beginHarvester(){
@@ -140,6 +135,17 @@ public class Legofir {
         }
         stopBallDropper();
     }
+
+    public int GetAngle(){
+
+        try {
+            return (int) sampleProvider.fetchSample()[0];
+        } catch (RemoteException e) {
+            closePorts();
+        }
+        return 0;
+    }
+
 
     public void closePorts(){
         try {

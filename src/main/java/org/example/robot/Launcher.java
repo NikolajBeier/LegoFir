@@ -6,24 +6,12 @@ import lejos.remote.ev3.RMIRegulatedMotor;
 import lejos.remote.ev3.RMISampleProvider;
 import lejos.remote.ev3.RemoteEV3;
 import lejos.robotics.subsumption.Arbitrator;
-import lejos.robotics.subsumption.Behavior;
-import org.example.robot.behaviour.DetectCollision;
-import org.example.robot.behaviour.DriveForward;
-import org.example.robot.behaviour.MyBehavior;
-import org.example.robot.behaviour.StopBehaviour;
-
-import javax.swing.*;
-
-import java.rmi.RemoteException;
+import org.example.robot.behaviour.*;
 
 import static java.lang.Thread.sleep;
-import org.example.robot.behaviour.DropBalls;
 
 public class Launcher implements Program {
     RemoteEV3 ev3;
-
-
-
     Legofir dude;
     Arbitrator arby;
     Boolean stopCondition=false;
@@ -53,19 +41,23 @@ public class Launcher implements Program {
 
         // Create the sensor objects
         EV3UltrasonicSensor ultrasonicSensor = new EV3UltrasonicSensor(ev3.getPort("S1"));
+        // EV3 create sensor
+        RMISampleProvider ev3GyroSensor = ev3.createSampleProvider("S3", "lejos.hardware.sensor.EV3GyroSensor", "Angle");
+
         System.out.println("sensors connected");
 
         // Robot object
-        dude = new Legofir(left,right,harvester, balldropper,1440,720,720,1000,1000, 1000, ultrasonicSensor);
+        dude = new Legofir(left,right,harvester, balldropper,1440,720,720,1000,1000, 1000, ultrasonicSensor,ev3GyroSensor);
     }
     public void launchRobot() {
 
         bArray = new MyBehavior[]{
-                new DriveForward(dude),
-                new DetectCollision(dude),
-                new StopBehaviour()
+                new DriveTowardsBall(dude),
+                new AvoidCollision(dude),
+                new StopBehaviour(),
         };
         arby = new Arbitrator(bArray);
+
         arby.go();
         System.out.println("arby stoppet");
     }

@@ -4,23 +4,31 @@ import lejos.robotics.subsumption.Behavior;
 
 public class StopBehaviour implements MyBehavior {
     Boolean stopCondition = false;
+    Boolean suppressed = false;
 
     public StopBehaviour() {
+        this.suppress();
     }
 
     @Override
     public void suppress() {
+        suppressed = true;
     }
 
     @Override
     public void setStopCondition(Boolean stopCondition) {
         this.stopCondition = stopCondition;
+        suppressed = true;
     }
 
     @Override
     public boolean takeControl() {
-        System.out.println("StopBehaviour.takeControl() = " + stopCondition);
-        return stopCondition;
+        if(!stopCondition){
+            System.out.println("StopBehaviour.takeControl() = " + false);
+            return false;
+        }
+        System.out.println("StopBehaviour.takeControl() = " + true);
+        return true;
     }
 
     // This behavior does nothing
