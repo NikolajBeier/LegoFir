@@ -28,6 +28,7 @@ public class Legofir {
     int defaultAccelerationBallDropper;
 
     SampleProvider sampleProvider;
+    float[] angle;
 
 
     // Sensors
@@ -45,7 +46,9 @@ public class Legofir {
         this.defaultAccelerationBallDropper = defaultAccelerationBallDropper;
         this.ultrasonicSensor = ultrasonicSensor;
         this.ev3GyroSensor = ev3GyroSensor;
-        this.sampleProvider=ev3GyroSensor.getAngleMode();
+        this.sampleProvider=ev3GyroSensor.getAngleAndRateMode();
+        this.angle= new float[sampleProvider.sampleSize()];
+        ev3GyroSensor.reset();
     }
 
     public void moveForward(){
@@ -149,10 +152,9 @@ public class Legofir {
         stopBallDropper();
     }
 
-    public float GetAngle(){
-        float[] angle = new float [sampleProvider.sampleSize()];
+    public int GetAngle(){
         sampleProvider.fetchSample(angle,0);
-        float angleValue = angle[0];
+        int angleValue = (int) angle[0];
         return (angleValue);
     }
 

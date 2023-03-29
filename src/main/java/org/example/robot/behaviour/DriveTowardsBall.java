@@ -2,17 +2,17 @@ package org.example.robot.behaviour;
 
 
 import lejos.robotics.SampleProvider;
-import lejos.robotics.subsumption.Behavior;
-import lejos.utility.Delay;
 import org.example.robot.Legofir;
-
-import java.util.logging.Logger;
 
 
 public class DriveTowardsBall implements MyBehavior{
     Boolean suppressed = false;
     Legofir dude;
     Boolean stopCondition = false;
+    SampleProvider sampleProvider=dude.ev3GyroSensor.getAngleAndRateMode();
+    float[] angle= new float[sampleProvider.sampleSize()];
+
+
     public DriveTowardsBall(Legofir dude){
         this.dude=dude;
     }
@@ -37,7 +37,7 @@ public class DriveTowardsBall implements MyBehavior{
         suppressed=false;
         while (!suppressed){
             System.out.println(dude.GetAngle());
-
+            System.out.println(dude.ev3GyroSensor.getAngleAndRateMode().sampleSize());
             dude.turnRight();
 
 
