@@ -83,6 +83,12 @@ public class RobotDetection {
                 Mat hsvImage = new Mat();
                 Mat morphOutput = new Mat();
 
+                // remove some noise
+                Imgproc.blur(webCamImage, blurredImage, new Size(7, 7));
+
+// convert the frame to HSV
+                Imgproc.cvtColor(blurredImage, hsvImage, Imgproc.COLOR_BGR2HSV);
+
 
                 // morphological operators
 // dilate with large element, erode with small ones
