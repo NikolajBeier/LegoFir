@@ -2,14 +2,13 @@ package org.example.mapping;
 
 import org.w3c.dom.Node;
 
-import java.lang.Math;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 
 public class Dijkstras_Algorithm {
 
-    StartingPoint startPos = new StartingPoint(0, 0);
+    RobotPosition startPos = new RobotPosition(0, 0);
     TennisBall tennis1 = new TennisBall(10, 10);
     TennisBall tennis2 = new TennisBall(20, 20);
     TennisBall tennis3 = new TennisBall(30, 30);

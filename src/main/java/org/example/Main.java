@@ -3,6 +3,8 @@ package org.example;
 import com.github.sarxos.webcam.Webcam;
 //import nu.pattern.OpenCV;
 import org.example.mapping.Dijkstras_Algorithm;
+import org.example.mapping.Map;
+import org.example.mapping.TennisBall;
 import org.example.ui.ConnectToRobot;
 import org.example.ui.Visualization;
 import org.opencv.core.Core;
@@ -15,11 +17,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.LinkedList;
 
 public class Main {
     public static void main(String[] args) {
-        Dijkstras_Algorithm dijkstras_algorithm=new Dijkstras_Algorithm();
-        dijkstras_algorithm.toString();
+        LinkedList<TennisBall> ballarray = new LinkedList<>();
+        Map map = new Map(180, 120, ballarray);
         JFrame jFrame = new JFrame();
         jFrame.setSize(300, 175);
         JButton visualization = new JButton("Visualization");

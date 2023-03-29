@@ -1,12 +1,12 @@
 package org.example.mapping;
 
-public class StartingPoint {
+public class RobotPosition {
 
     int x;
 
     int y;
 
-    public StartingPoint(int x, int y) {
+    public RobotPosition(int x, int y) {
         this.x = x;
         this.y = y;
     }
