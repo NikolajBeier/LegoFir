@@ -1,7 +1,9 @@
 package org.example.robot;
 
+import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.remote.ev3.RMIRegulatedMotor;
+import lejos.robotics.SampleProvider;
 
 import java.rmi.RemoteException;
 
@@ -10,6 +12,7 @@ import static java.lang.Thread.sleep;
 public class Legofir {
 
     public EV3UltrasonicSensor ultrasonicSensor;
+    public EV3GyroSensor ev3GyroSensor;
     // Motors
     RMIRegulatedMotor left;
     RMIRegulatedMotor right;
@@ -26,7 +29,7 @@ public class Legofir {
 
     // Sensors
 
-    public Legofir(RMIRegulatedMotor left, RMIRegulatedMotor right, RMIRegulatedMotor harvester, RMIRegulatedMotor balldropper, int defaultSpeedHarvester, int defaultSpeedWheel, int defaultSpeedBallDropper, int defaultAccelerationHarvester, int defaultAccelerationWheel, int defaultAccelerationBallDropper, EV3UltrasonicSensor ultrasonicSensor) {
+    public Legofir(RMIRegulatedMotor left, RMIRegulatedMotor right, RMIRegulatedMotor harvester, RMIRegulatedMotor balldropper, int defaultSpeedHarvester, int defaultSpeedWheel, int defaultSpeedBallDropper, int defaultAccelerationHarvester, int defaultAccelerationWheel, int defaultAccelerationBallDropper, EV3UltrasonicSensor ultrasonicSensor, EV3GyroSensor ev3GyroSensorz) {
         this.left = left;
         this.right = right;
         this.harvester = harvester;
@@ -38,6 +41,7 @@ public class Legofir {
         this.defaultSpeedBallDropper = defaultSpeedBallDropper;
         this.defaultAccelerationBallDropper = defaultAccelerationBallDropper;
         this.ultrasonicSensor = ultrasonicSensor;
+        this.ev3GyroSensor = ev3GyroSensor;
     }
 
     public void moveForward(){
@@ -140,6 +144,15 @@ public class Legofir {
         }
         stopBallDropper();
     }
+
+    public float GetAngle(){
+        SampleProvider sampleProvider = ev3GyroSensor.getAngleMode();
+        float[] angle = new float [sampleProvider.sampleSize()];
+        sampleProvider.fetchSample(angle,0);
+        float angleValue = angle[0];
+        return (angleValue);
+    }
+
 
     public void closePorts(){
         try {

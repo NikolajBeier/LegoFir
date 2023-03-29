@@ -1,8 +1,13 @@
 package org.example;
 
+import com.github.sarxos.webcam.Webcam;
+//import nu.pattern.OpenCV;
 import org.example.mapping.Dijkstras_Algorithm;
 import org.example.ui.ConnectToRobot;
 import org.example.ui.Visualization;
+import org.opencv.core.Core;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,6 +24,7 @@ public class Main {
         jFrame.setSize(300, 175);
         JButton visualization = new JButton("Visualization");
         JButton connect = new JButton("Connect");
+        JButton camera = new JButton("Show Camera");
         jFrame.setLayout(new BorderLayout());
         visualization.addActionListener(new ActionListener() {
             @Override
@@ -34,6 +40,27 @@ public class Main {
                 jFrame.dispose();
             }
         });
+        camera.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                EventQueue.invokeLater(new Runnable() {
+                    // Overriding existing run() method
+                    @Override public void run()
+                    {
+                        final CameraAnalyze camera = new CameraAnalyze();
+
+                        // Start camera in thread
+                        new Thread(new Runnable() {
+                            @Override public void run()
+                            {
+
+                            }
+                        }).start();
+                    }
+                });
+                jFrame.dispose();
+            }
+        });
         JLabel header = new JLabel("GolfBot UI", SwingConstants.CENTER);
         header.setPreferredSize(new Dimension(300, 75));
         jFrame.add(header, BorderLayout.NORTH);
@@ -41,6 +68,7 @@ public class Main {
         buttons.setLayout(new GridLayout(0, 2));
         buttons.add(connect);
         buttons.add(visualization);
+        buttons.add(camera);
         jFrame.add(buttons, BorderLayout.CENTER);
         jFrame.addWindowListener(new WindowAdapter() {
             @Override
@@ -56,5 +84,8 @@ public class Main {
         }
         public static void startVisualization () {
             Visualization visualization = new Visualization();
+        }
+        public static void startCameraAnalyze(){
+            CameraAnalyze cameraAnalyze = new CameraAnalyze();
         }
     }

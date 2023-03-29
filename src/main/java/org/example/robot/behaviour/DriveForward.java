@@ -43,7 +43,9 @@ public class DriveForward implements MyBehavior {
         while(!suppressed) {
             legofir.beginHarvester();
             legofir.moveForward();
-            System.out.println(legofir);
+            System.out.println(legofir.ev3GyroSensor.getAngleAndRateMode().sampleSize());
+            System.out.println(legofir.ev3GyroSensor.getAngleMode());
+
         }
         legofir.stopHarvester();
         legofir.stopWheels();
