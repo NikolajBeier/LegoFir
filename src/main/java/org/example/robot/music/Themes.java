@@ -1,4 +1,4 @@
-package org.example.robot;
+package org.example.robot.music;
 
 import lejos.hardware.Audio;
 import lejos.remote.ev3.RemoteEV3;

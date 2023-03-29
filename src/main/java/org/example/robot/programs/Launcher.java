@@ -1,23 +1,18 @@
-package org.example.robot;
+package org.example.robot.programs;
 
 import lejos.hardware.Audio;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.remote.ev3.RMIRegulatedMotor;
-import lejos.remote.ev3.RMISampleProvider;
 import lejos.remote.ev3.RemoteEV3;
 import lejos.robotics.subsumption.Arbitrator;
-import lejos.robotics.subsumption.Behavior;
+import org.example.robot.Legofir;
+import org.example.robot.music.Themes;
 import org.example.robot.behaviour.DetectCollision;
 import org.example.robot.behaviour.DriveForward;
 import org.example.robot.behaviour.MyBehavior;
 import org.example.robot.behaviour.StopBehaviour;
 
-import javax.swing.*;
-
-import java.rmi.RemoteException;
-
 import static java.lang.Thread.sleep;
-import org.example.robot.behaviour.DropBalls;
 
 public class Launcher implements Program {
     RemoteEV3 ev3;

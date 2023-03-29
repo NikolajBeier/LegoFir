@@ -1,4 +1,4 @@
-package org.example.robot;
+package org.example.robot.programs;
 
 import lejos.hardware.Audio;
 import lejos.remote.ev3.RMIRegulatedMotor;
@@ -9,7 +9,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
 import java.util.Hashtable;
 
 public class WASDController implements Program{

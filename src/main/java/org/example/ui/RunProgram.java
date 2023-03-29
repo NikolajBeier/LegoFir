@@ -1,10 +1,9 @@
 package org.example.ui;
 
 import lejos.remote.ev3.RemoteEV3;
-import org.example.robot.Program;
+import org.example.robot.programs.Program;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

@@ -1,4 +1,4 @@
-package org.example.robot;
+package org.example.robot.programs;
 
 import javax.swing.*;
 

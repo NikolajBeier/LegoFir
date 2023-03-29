@@ -1,14 +1,12 @@
 package org.example.ui;
 
 import lejos.remote.ev3.RemoteEV3;
-import org.example.robot.Launcher;
-import org.example.robot.Program;
-import org.example.robot.WASDController;
+import org.example.robot.programs.Launcher;
+import org.example.robot.programs.Program;
+import org.example.robot.programs.WASDController;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class SelectPrograms {
