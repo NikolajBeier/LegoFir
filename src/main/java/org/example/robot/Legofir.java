@@ -63,12 +63,6 @@ public class Legofir {
         } catch (RemoteException e) {
             stopAll();
         }
-        try {
-            sleep(1110);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        stopWheels();
     }
 
     public void turnRight(){
@@ -78,12 +72,6 @@ public class Legofir {
         } catch (RemoteException e) {
             stopAll();
         }
-        try {
-            sleep(1110);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        stopWheels();
     }
 
     public void beginHarvester(){

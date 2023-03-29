@@ -1,28 +1,17 @@
 package org.example.robot;
 
 import lejos.hardware.Audio;
-import lejos.hardware.port.SensorPort;
-import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
-import lejos.hardware.sensor.SensorMode;
 import lejos.remote.ev3.RMIRegulatedMotor;
 import lejos.remote.ev3.RMISampleProvider;
 import lejos.remote.ev3.RemoteEV3;
 import lejos.robotics.subsumption.Arbitrator;
-import lejos.robotics.subsumption.Behavior;
 import org.example.robot.behaviour.*;
-
-import javax.swing.*;
-
-import java.rmi.RemoteException;
 
 import static java.lang.Thread.sleep;
 
 public class Launcher implements Program {
     RemoteEV3 ev3;
-
-
-
     Legofir dude;
     Arbitrator arby;
     Boolean stopCondition=false;
@@ -37,7 +26,7 @@ public class Launcher implements Program {
         ev3.setDefault();
         Audio sound = ev3.getAudio();
         sound.setVolume(15);
-        //themes.ImperialTheme(ev3);
+        themes.ImperialTheme(ev3);
 
 
         System.out.println("Når vi her?");
@@ -63,10 +52,9 @@ public class Launcher implements Program {
     public void launchRobot() {
 
         bArray = new MyBehavior[]{
+                new DriveTowardsBall(dude),
+                new AvoidCollision(dude),
                 new StopBehaviour(),
-                new DriveForward(dude),
-                new DetectCollision(dude),
-                new DriveTowardsBall(dude)
         };
         arby = new Arbitrator(bArray);
 
