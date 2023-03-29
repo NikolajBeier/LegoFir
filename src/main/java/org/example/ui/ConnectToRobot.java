@@ -27,7 +27,7 @@ public class ConnectToRobot {
     public ConnectToRobot(){
         jFrame.setSize(1000, 750);
         jFrame.setLayout(new GridLayout(5,2));
-        JTextField jTextField = new JTextField("192.168.43.44");
+        JTextField jTextField = new JTextField("172.20.10.9");
         jTextArea = new JTextArea(messageString);
         jButton = new JButton("Connect");
         stopConnecting = new JButton("Stop connecting");

@@ -1,8 +1,10 @@
 package org.example.robot;
 
 import lejos.hardware.Audio;
+import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
+import lejos.hardware.sensor.SensorMode;
 import lejos.remote.ev3.RMIRegulatedMotor;
 import lejos.remote.ev3.RMISampleProvider;
 import lejos.remote.ev3.RemoteEV3;
@@ -35,7 +37,7 @@ public class Launcher implements Program {
         ev3.setDefault();
         Audio sound = ev3.getAudio();
         sound.setVolume(15);
-        themes.ImperialTheme(ev3);
+        //themes.ImperialTheme(ev3);
 
 
         System.out.println("Når vi her?");
@@ -50,7 +52,9 @@ public class Launcher implements Program {
 
         // Create the sensor objects
         EV3UltrasonicSensor ultrasonicSensor = new EV3UltrasonicSensor(ev3.getPort("S1"));
-        EV3GyroSensor ev3GyroSensor = new EV3GyroSensor(ev3.getPort("S2"));
+        // EV3 create sensor
+        RMISampleProvider ev3GyroSensor = ev3.createSampleProvider("S3", "lejos.hardware.sensor.EV3GyroSensor", "Angle");
+
         System.out.println("sensors connected");
 
         // Robot object
@@ -63,7 +67,6 @@ public class Launcher implements Program {
                 new DriveForward(dude),
                 new DetectCollision(dude),
                 new DriveTowardsBall(dude)
-
         };
         arby = new Arbitrator(bArray);
 

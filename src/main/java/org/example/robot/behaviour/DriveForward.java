@@ -20,6 +20,7 @@ public class DriveForward implements MyBehavior {
 
     public void setStopCondition(Boolean stopCondition) {
         this.stopCondition = stopCondition;
+        suppressed= true;
     }
 
     @Override
@@ -44,9 +45,6 @@ public class DriveForward implements MyBehavior {
         while(!suppressed) {
             legofir.beginHarvester();
             legofir.moveForward();
-            System.out.println(legofir.ev3GyroSensor.getAngleAndRateMode().sampleSize());
-            System.out.println(legofir.ev3GyroSensor.getAngleMode());
-
         }
         legofir.stopHarvester();
         legofir.stopWheels();

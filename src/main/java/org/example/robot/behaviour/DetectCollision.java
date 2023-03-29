@@ -19,6 +19,7 @@ public class DetectCollision implements MyBehavior {
 
     public void setStopCondition(Boolean stopCondition) {
         this.stopCondition = stopCondition;
+        suppressed= true;
     }
 
     @Override

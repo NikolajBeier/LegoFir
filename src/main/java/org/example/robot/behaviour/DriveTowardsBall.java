@@ -9,8 +9,6 @@ public class DriveTowardsBall implements MyBehavior{
     Boolean suppressed = false;
     Legofir dude;
     Boolean stopCondition = false;
-    SampleProvider sampleProvider=dude.ev3GyroSensor.getAngleAndRateMode();
-    float[] angle= new float[sampleProvider.sampleSize()];
 
 
     public DriveTowardsBall(Legofir dude){
@@ -36,12 +34,8 @@ public class DriveTowardsBall implements MyBehavior{
     public void action() {
         suppressed=false;
         while (!suppressed){
-            System.out.println(dude.GetAngle());
-            System.out.println(dude.ev3GyroSensor.getAngleAndRateMode().sampleSize());
-            dude.turnRight();
-
-
-
+            System.out.println("angle in action: "+dude.GetAngle());
+            //dude.turnRight();
         }
     }
 
@@ -53,6 +47,6 @@ public class DriveTowardsBall implements MyBehavior{
     @Override
     public void setStopCondition(Boolean stopCondition) {
         this.stopCondition=stopCondition;
-
+        suppressed= true;
     }
 }

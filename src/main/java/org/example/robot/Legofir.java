@@ -3,6 +3,7 @@ package org.example.robot;
 import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.remote.ev3.RMIRegulatedMotor;
+import lejos.remote.ev3.RMISampleProvider;
 import lejos.robotics.SampleProvider;
 
 import java.rmi.RemoteException;
@@ -12,7 +13,6 @@ import static java.lang.Thread.sleep;
 public class Legofir {
 
     public EV3UltrasonicSensor ultrasonicSensor;
-    public EV3GyroSensor ev3GyroSensor;
     // Motors
     RMIRegulatedMotor left;
     RMIRegulatedMotor right;
@@ -27,13 +27,12 @@ public class Legofir {
     int defaultAccelerationWheel;
     int defaultAccelerationBallDropper;
 
-    SampleProvider sampleProvider;
-    float[] angle;
+    RMISampleProvider sampleProvider;
 
 
     // Sensors
 
-    public Legofir(RMIRegulatedMotor left, RMIRegulatedMotor right, RMIRegulatedMotor harvester, RMIRegulatedMotor balldropper, int defaultSpeedHarvester, int defaultSpeedWheel, int defaultSpeedBallDropper, int defaultAccelerationHarvester, int defaultAccelerationWheel, int defaultAccelerationBallDropper, EV3UltrasonicSensor ultrasonicSensor, EV3GyroSensor ev3GyroSensor) {
+    public Legofir(RMIRegulatedMotor left, RMIRegulatedMotor right, RMIRegulatedMotor harvester, RMIRegulatedMotor balldropper, int defaultSpeedHarvester, int defaultSpeedWheel, int defaultSpeedBallDropper, int defaultAccelerationHarvester, int defaultAccelerationWheel, int defaultAccelerationBallDropper, EV3UltrasonicSensor ultrasonicSensor, RMISampleProvider ev3GyroSensor) {
         this.left = left;
         this.right = right;
         this.harvester = harvester;
@@ -45,10 +44,7 @@ public class Legofir {
         this.defaultSpeedBallDropper = defaultSpeedBallDropper;
         this.defaultAccelerationBallDropper = defaultAccelerationBallDropper;
         this.ultrasonicSensor = ultrasonicSensor;
-        this.ev3GyroSensor = ev3GyroSensor;
-        this.sampleProvider=ev3GyroSensor.getAngleAndRateMode();
-        this.angle= new float[sampleProvider.sampleSize()];
-        ev3GyroSensor.reset();
+        this.sampleProvider=ev3GyroSensor;
     }
 
     public void moveForward(){
@@ -153,9 +149,13 @@ public class Legofir {
     }
 
     public int GetAngle(){
-        sampleProvider.fetchSample(angle,0);
-        int angleValue = (int) angle[0];
-        return (angleValue);
+
+        try {
+            return (int) sampleProvider.fetchSample()[0];
+        } catch (RemoteException e) {
+            closePorts();
+        }
+        return 0;
     }
 
 
