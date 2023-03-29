@@ -3,7 +3,6 @@ package org.example.robot.behaviour;
 import lejos.robotics.SampleProvider;
 import lejos.robotics.subsumption.Behavior;
 import org.example.robot.Legofir;
-import org.slf4j.Logger;
 
 
 public class DriveTowardsBall implements MyBehavior{
