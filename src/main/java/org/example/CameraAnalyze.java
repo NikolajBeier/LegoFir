@@ -193,12 +193,12 @@ public class CameraAnalyze {
             jFrame.add(colorCameraScreen);
             JPanel sliders = new JPanel();
             sliders.setLayout(new GridLayout(2, 6));
-            JSlider hueMin = new JSlider(0, 255, 0);
-            JSlider hueMax = new JSlider(0, 255, 0);
-            JSlider satMin = new JSlider(0, 255, 0);
-            JSlider satMax = new JSlider(0, 255, 180);
-            JSlider valMin = new JSlider(0, 255, 0);
-            JSlider valMax = new JSlider(0, 255, 255);
+            JSlider hueMin = new JSlider(0, 256, 0);
+            JSlider hueMax = new JSlider(0, 256, 255);
+            JSlider satMin = new JSlider(0, 256, 0);
+            JSlider satMax = new JSlider(0, 256, 255);
+            JSlider valMin = new JSlider(0, 256, 0);
+            JSlider valMax = new JSlider(0, 256, 255);
             JLabel hueMinName = new JLabel("Hue Min (B Min)");
             JLabel hueMaxName = new JLabel("Hue Max (B Max)");
             JLabel satMinName = new JLabel("Sat Min (G Min)");
