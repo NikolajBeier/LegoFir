@@ -1,7 +1,6 @@
 
 package org.example;
 
-import lejos.robotics.ColorDetector;
 import nu.pattern.OpenCV;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -9,11 +8,13 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
+
+import static org.opencv.imgproc.Imgproc.putText;
 
 
 public class CameraAnalyze {
@@ -62,6 +63,9 @@ public class CameraAnalyze {
         JPanel buttons;
         Button colorDetection;
         Button robotDetection;
+        Button ballDetectionButton;
+        BallDetection ballDetection = new BallDetection();
+        Boolean ballDetectionOn = false;
         Button colorFilterButton;
 
 
@@ -80,8 +84,28 @@ public class CameraAnalyze {
             buttons = new JPanel(new GridLayout(0, 2));
             colorDetection = new Button("Color Detection");
             robotDetection = new Button("Robot Detection");
+            ballDetectionButton = new Button("Ball Detection");
 
             buttons.setBounds(camWidth / 2 - 100, camHeight, 150, 40);
+
+            ballDetectionButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    EventQueue.invokeLater(new Runnable() {
+                        // Overriding existing run() method
+
+                        @Override
+                        public void run() {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ballDetectionOn=true;
+                                }
+                            }).start();
+                        }
+                    });
+                }
+            });
 
             robotDetection.addActionListener(new ActionListener() {
                 @Override
@@ -130,6 +154,7 @@ public class CameraAnalyze {
             buttons.add(colorFilterButton);
             buttons.add(colorDetection);
             buttons.add(robotDetection);
+            buttons.add(ballDetectionButton);
             jFrame.add(buttons);
 
             jFrame.setSize(new Dimension(camWidth, camHeight + 65));
@@ -150,6 +175,27 @@ public class CameraAnalyze {
                 // read image to matrix
                 capture.read(webCamImage);
                 image = webCamImage;
+
+
+                java.util.List<Rect> ballRects = new ArrayList<>();
+
+                //java.util.List<Rect> robotRects = RobotDetection.detect(image);
+
+                if(ballDetectionOn){
+                    ballRects = ballDetection.detect(image);
+                }
+
+                // draw rectangles
+
+                // Ball rects
+                for(Rect boundingRect : ballRects) {
+                    Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), new Scalar(0, 0, 255), 1);
+                    putText(image, "Ball", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+                }
+
+
+
+/*
                 if (colorFilter) {
                     //Post proccessing to smooth the image
                     Mat postImage = new Mat();
@@ -159,6 +205,8 @@ public class CameraAnalyze {
                     //Revert to original picture as HSV
                     Imgproc.cvtColor(postImage, image, Imgproc.COLOR_BGR2HSV);
                 }
+
+ */
                 // convert matrix to byte
                 final MatOfByte buf = new MatOfByte();
                 Imgcodecs.imencode(".jpg", image, buf);
@@ -176,7 +224,7 @@ public class CameraAnalyze {
                     CameraUI();
                     setup = true;
                 } else {
-                    //cameraScreen.setIcon(icon);
+                    cameraScreen.setIcon(icon);
                     correctedImage = image;
                 }
 

@@ -16,66 +16,34 @@ import static org.opencv.imgproc.Imgproc.*;
 
 public class RobotDetection {
 
-    JFrame jFrame;
-    int camHeight;
-    int camWidth;
-    JLabel cameraScreen;
-    VideoCapture capture;
-    Mat webCamImage;
-    Mat correctedImage;
 
-    public RobotDetection(JFrame jFrame, int camHeight, int camWidth, JLabel cameraScreen, VideoCapture capture, Mat webCamImage, Mat correctedImage) {
-        this.jFrame = jFrame;
-        this.camHeight = camHeight;
-        this.camWidth = camWidth;
-        this.cameraScreen = cameraScreen;
-        this.capture = capture;
-        this.webCamImage = webCamImage;
-        this.correctedImage=correctedImage;
+    public RobotDetection() {
     }
-    public void start() {
-        // UI
-        JPanel mainPanel = new JPanel(new GridLayout(0,2));
-        int width = Toolkit.getDefaultToolkit().getScreenSize().width;
-        int height = Toolkit.getDefaultToolkit().getScreenSize().height;
-        jFrame.setLayout(new BorderLayout());
-        jFrame.setSize(new Dimension(width, height));
-        jFrame.getContentPane().removeAll();
-        JLabel robotCameraScreen = new JLabel();
-        robotCameraScreen.setBounds(0, 0, camWidth, camHeight);
-        jFrame.add(robotCameraScreen);
 
-        mainPanel.setPreferredSize(new Dimension(width, height-130));
-        mainPanel.add(cameraScreen);
-        mainPanel.add(robotCameraScreen);
+    // LOGIC
+    Mat hsvImage = new Mat();
+    byte[] imageData;
+    ImageIcon icon;
+    Mat greenMask = new Mat();
+    Mat blueMask = new Mat();
+    int greenHueMin = 35;
+    int greenHueMax = 75;
+    int greenSatMin = 50;
+    int greenSatMax = 255;
 
-        jFrame.add(mainPanel, BorderLayout.CENTER);
-        jFrame.setLocationRelativeTo(null);
-        jFrame.revalidate();
-        jFrame.repaint();
-        jFrame.setVisible(true);
+    int blueHueMin = 105;
+    int blueHueMax = 130;
+    int blueSatMin = 50;
+    int blueSatMax = 255;
 
-        // LOGIC
-        Mat hsvImage = new Mat();
-        byte[] imageData;
-        ImageIcon icon;
-        Mat greenMask = new Mat();
-        Mat blueMask = new Mat();
-        int greenHueMin = 35;
-        int greenHueMax = 75;
-        int greenSatMin = 50;
-        int greenSatMax = 255;
+    int valMin = 20;
+    int valMax = 255;
+    public void detect(Mat image) {
+        List<>
 
-        int blueHueMin = 105;
-        int blueHueMax = 130;
-        int blueSatMin = 50;
-        int blueSatMax = 255;
 
-        int valMin = 20;
-        int valMax = 255;
 
-        while (true) {
-            if (capture != null) {
+
                 Imgproc.cvtColor(webCamImage, hsvImage, Imgproc.COLOR_BGR2HSV);
 
 
@@ -175,20 +143,6 @@ public class RobotDetection {
                 Icon webCamImageIcon = new ImageIcon(webCamImageArray);
                 cameraScreen.setIcon(webCamImageIcon);
 
-
-
-
-
-                final MatOfByte maskBuf = new MatOfByte();
-                Imgcodecs.imencode(".jpg", blueMask, maskBuf);
-
-                imageData = maskBuf.toArray();
-
-
-                // Add to JLabel
-                icon = new ImageIcon(imageData);
-
-                robotCameraScreen.setIcon(icon);
 
 
             }
