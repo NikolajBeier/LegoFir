@@ -1,16 +1,12 @@
 package org.example;
 
 import org.opencv.core.*;
-import org.opencv.core.Point;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
-import org.opencv.videoio.VideoCapture;
 
 import javax.swing.*;
-import javax.swing.text.MaskFormatter;
-import java.awt.*;
+
 import java.util.ArrayList;
-import java.util.Objects;
+import java.util.List;
 
 import static org.opencv.imgproc.Imgproc.*;
 
@@ -38,22 +34,20 @@ public class RobotDetection {
 
     int valMin = 20;
     int valMax = 255;
-    public void detect(Mat image) {
-        List<>
+    public List<Rect>[] detect(Mat image) {
+        List<Rect> greens = new ArrayList<>();
+        List<Rect> blues = new ArrayList<>();
+
+        Imgproc.cvtColor(image, hsvImage, Imgproc.COLOR_BGR2HSV);
 
 
+        Scalar greenMinValues = new Scalar(greenHueMin, greenSatMin, valMin);
+        Scalar greenMaxValues = new Scalar(greenHueMax, greenSatMax, valMax);
 
-
-                Imgproc.cvtColor(webCamImage, hsvImage, Imgproc.COLOR_BGR2HSV);
-
-
-                Scalar greenMinValues = new Scalar(greenHueMin, greenSatMin, valMin);
-                Scalar greenMaxValues = new Scalar(greenHueMax, greenSatMax, valMax);
-
-                Scalar blueMinValues = new Scalar(blueHueMin, blueSatMin, valMin);
-                Scalar blueMaxValues = new Scalar(blueHueMax, blueSatMax, valMax);
-                Core.inRange(hsvImage, greenMinValues, greenMaxValues, greenMask);
-                Core.inRange(hsvImage, blueMinValues, blueMaxValues, blueMask);
+        Scalar blueMinValues = new Scalar(blueHueMin, blueSatMin, valMin);
+        Scalar blueMaxValues = new Scalar(blueHueMax, blueSatMax, valMax);
+        Core.inRange(hsvImage, greenMinValues, greenMaxValues, greenMask);
+        Core.inRange(hsvImage, blueMinValues, blueMaxValues, blueMask);
 
 
 
@@ -81,71 +75,73 @@ public class RobotDetection {
 
 
 
-                // init
-                ArrayList<MatOfPoint> greenContour = new ArrayList<>();
-                Mat greenHierarchy = new Mat();
+        // init
+        ArrayList<MatOfPoint> greenContour = new ArrayList<>();
+        Mat greenHierarchy = new Mat();
 
-                ArrayList<MatOfPoint> blueContour = new ArrayList<>();
-                Mat blueHierarchy = new Mat();
+        ArrayList<MatOfPoint> blueContour = new ArrayList<>();
+        Mat blueHierarchy = new Mat();
 
 // find contours
-                Imgproc.findContours(greenMask, greenContour, greenHierarchy, RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-                Imgproc.findContours(blueMask, blueContour, blueHierarchy, RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+        Imgproc.findContours(greenMask, greenContour, greenHierarchy, RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+        Imgproc.findContours(blueMask, blueContour, blueHierarchy, RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
 
 
 // if any contour exist draw rectangle using the bounding rect
-                Rect greenBoundingRect = null;
-                Rect blueBoundingRect = null;
-                if(!greenContour.isEmpty() || !blueContour.isEmpty()) {
-                    for (MatOfPoint contour : greenContour) {
-                        if(contourArea(contour) > 500) {
-                            greenBoundingRect = boundingRect(contour);
-                            rectangle(webCamImage,new Point(greenBoundingRect.x,greenBoundingRect.y),new Point(greenBoundingRect.x+greenBoundingRect.width,greenBoundingRect.y+greenBoundingRect.height),new Scalar(0,0,255),2);
-                            putText(webCamImage, "Green", new Point(greenBoundingRect.x, greenBoundingRect.y-10), FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
-                        }
+
+        if(!greenContour.isEmpty() || !blueContour.isEmpty()) {
+            for (MatOfPoint contour : greenContour) {
+                if(contourArea(contour) > 500) {
+                    Rect greenBoundingRect = boundingRect(contour);
+                    greens.add(greenBoundingRect);
+                }
+            }
+            for (MatOfPoint contour : blueContour) {
+                if(contourArea(contour) > 500) {
+                    Rect blueBoundingRect = boundingRect(contour);
+                    blues.add(blueBoundingRect);
+                }
+            }
+
+            /*
+            if(!greens.isEmpty() && !blues.isEmpty()) {
+                for (Rect blueBoundingRect : blues) {
+                    for(Rect greenBoundingRect : greens) {
+
+                        Point blueCenter = new Point(blueBoundingRect.x + blueBoundingRect.width * 0.5, blueBoundingRect.y + blueBoundingRect.height * 0.5);
+                        Point greenCenter = new Point(greenBoundingRect.x + greenBoundingRect.width * 0.5, greenBoundingRect.y + greenBoundingRect.height * 0.5);
+                        circle(webCamImage, blueCenter, 1, new Scalar(0, 0, 255), 1);
+                        circle(webCamImage, greenCenter, 1, new Scalar(0, 0, 255), 1);
+
+                        Point centerOfLine = new Point((blueCenter.x + greenCenter.x) * 0.5, (blueCenter.y + greenCenter.y) * 0.5);
+
+                        Point vectorFromBlueToGreen = new Point(greenCenter.x - blueCenter.x, greenCenter.y - blueCenter.y);
+                        int lengthOfVector = (int) Math.sqrt(vectorFromBlueToGreen.x * vectorFromBlueToGreen.x + vectorFromBlueToGreen.y * vectorFromBlueToGreen.y);
+
+                        Point perpendicularVector = new Point(vectorFromBlueToGreen.y, -vectorFromBlueToGreen.x);
+
+                        Point arrowPoint = new Point(centerOfLine.x + perpendicularVector.x, centerOfLine.y + perpendicularVector.y);
+
+
+                        circle(webCamImage, centerOfLine, 2, new Scalar(0, 0, 255), 2);
+
+
+                        line(webCamImage, blueCenter, greenCenter, new Scalar(0, 0, 255), 1);
+                        arrowedLine(webCamImage, centerOfLine, arrowPoint, new Scalar(0, 0, 255), 1);
                     }
-                    for (MatOfPoint contour : blueContour) {
-                        if(contourArea(contour) > 500) {
-                            blueBoundingRect = boundingRect(contour);
-                            rectangle(webCamImage,new Point(blueBoundingRect.x,blueBoundingRect.y),new Point(blueBoundingRect.x+blueBoundingRect.width,blueBoundingRect.y+blueBoundingRect.height),new Scalar(0,0,255),2);
-                            putText(webCamImage, "Blue", new Point(blueBoundingRect.x, blueBoundingRect.y-10), FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
-                        }
-                    }
-
-                    if(greenBoundingRect!=null && blueBoundingRect!=null){
-                        Point blueCenter = new Point(blueBoundingRect.x+blueBoundingRect.width*0.5,blueBoundingRect.y+blueBoundingRect.height*0.5);
-                        Point greenCenter = new Point(greenBoundingRect.x+greenBoundingRect.width*0.5,greenBoundingRect.y+greenBoundingRect.height*0.5);
-                        circle(webCamImage,blueCenter,1,new Scalar(0,0,255),1);
-                        circle(webCamImage,greenCenter,1,new Scalar(0,0,255),1);
-
-                        Point centerOfLine = new Point((blueCenter.x+greenCenter.x)*0.5,(blueCenter.y+greenCenter.y)*0.5);
-
-                        Point vectorFromBlueToGreen = new Point(greenCenter.x-blueCenter.x,greenCenter.y-blueCenter.y);
-                        int lengthOfVector = (int) Math.sqrt(vectorFromBlueToGreen.x*vectorFromBlueToGreen.x+vectorFromBlueToGreen.y*vectorFromBlueToGreen.y);
-
-                        Point perpendicularVector = new Point(vectorFromBlueToGreen.y,-vectorFromBlueToGreen.x);
-
-                        Point arrowPoint = new Point(centerOfLine.x+perpendicularVector.x,centerOfLine.y+perpendicularVector.y);
 
 
-                        circle(webCamImage,centerOfLine,2,new Scalar(0,0,255),2);
-
-
-                        line(webCamImage,blueCenter,greenCenter,new Scalar(0,0,255),1);
-                        arrowedLine(webCamImage,centerOfLine,arrowPoint,new Scalar(0,0,255),1);
-                    }
                 }
 
-
-                final MatOfByte webcamBuf = new MatOfByte();
-                Imgcodecs.imencode(".jpg", webCamImage, webcamBuf);
-                byte[] webCamImageArray = webcamBuf.toArray();
-                Icon webCamImageIcon = new ImageIcon(webCamImageArray);
-                cameraScreen.setIcon(webCamImageIcon);
-
-
-
             }
+
+             */
         }
+
+
+        List<Rect>[] returnvalue = new List[2];
+        returnvalue[0] = greens;
+        returnvalue[1] = blues;
+        return returnvalue;
     }
 }
