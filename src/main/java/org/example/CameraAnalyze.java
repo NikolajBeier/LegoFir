@@ -1,20 +1,23 @@
 
 package org.example;
 
-import lejos.robotics.ColorDetector;
 import nu.pattern.OpenCV;
 import org.example.ui.ConnectToRobot;
 import org.opencv.core.*;
+import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
+
+import static org.opencv.imgproc.Imgproc.*;
+import static org.opencv.imgproc.Imgproc.arrowedLine;
 
 
 public class CameraAnalyze {
@@ -62,7 +65,12 @@ public class CameraAnalyze {
         private boolean colorFilter = false;
         JPanel buttons;
         Button colorDetection;
-        Button robotDetection;
+        Button robotDetectionButton;
+        Button ballDetectionButton;
+        BallDetection ballDetection = new BallDetection();
+        RobotDetection robotDetection = new RobotDetection();
+        Boolean ballDetectionOn = false;
+        Boolean robotDetectionOn = false;
         Button colorFilterButton;
         Button connectToRobot;
 
@@ -81,12 +89,13 @@ public class CameraAnalyze {
 
             buttons = new JPanel(new GridLayout(0, 2));
             colorDetection = new Button("Color Detection");
-            robotDetection = new Button("Robot Detection");
             connectToRobot = new Button("Connect Robot");
+            robotDetectionButton = new Button("Robot Detection");
+            ballDetectionButton = new Button("Ball Detection");
 
             buttons.setBounds(camWidth / 2 - 100, camHeight, 150, 40);
 
-            robotDetection.addActionListener(new ActionListener() {
+            ballDetectionButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     EventQueue.invokeLater(new Runnable() {
@@ -97,7 +106,26 @@ public class CameraAnalyze {
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    new RobotDetection(jFrame,camHeight,camWidth,cameraScreen,capture,webCamImage,correctedImage).start();
+                                    ballDetectionOn=true;
+                                }
+                            }).start();
+                        }
+                    });
+                }
+            });
+
+            robotDetectionButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    EventQueue.invokeLater(new Runnable() {
+                        // Overriding existing run() method
+
+                        @Override
+                        public void run() {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    robotDetectionOn=true;
                                 }
                             }).start();
                         }
@@ -149,7 +177,8 @@ public class CameraAnalyze {
 
             buttons.add(colorFilterButton);
             buttons.add(colorDetection);
-            buttons.add(robotDetection);
+            buttons.add(robotDetectionButton);
+            buttons.add(ballDetectionButton);
             buttons.add(connectToRobot);
             jFrame.add(buttons);
 
@@ -171,6 +200,75 @@ public class CameraAnalyze {
                 // read image to matrix
                 capture.read(webCamImage);
                 image = webCamImage;
+
+
+                java.util.List<Rect> blue = new ArrayList<>();
+                java.util.List<Rect> green = new ArrayList<>();
+                java.util.List<Rect> ballRects = new ArrayList<>();
+
+
+                if(robotDetectionOn){
+                    List<Rect>[] robotRects = robotDetection.detect(image);
+                    blue = robotRects[1];
+                    green = robotRects[0];
+
+                }
+
+                if(ballDetectionOn){
+                    ballRects = ballDetection.detect(image);
+                }
+
+                // draw rectangles
+
+                // Ball rects
+                for(Rect boundingRect : ballRects) {
+                    Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), new Scalar(0, 0, 255), 1);
+                    putText(image, "Ball", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+                }
+
+                // Blue rects
+                for(Rect boundingRect : blue) {
+                    Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), new Scalar(0, 0, 255), 1);
+                    putText(image, "blue", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+                }
+                for(Rect boundingRect : green) {
+                    Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), new Scalar(0, 0, 255), 1);
+                    putText(image, "green", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+                }
+
+                if(!green.isEmpty() && !blue.isEmpty()) {
+                    for (Rect blueBoundingRect : blue) {
+                        for (Rect greenBoundingRect : green) {
+
+                            Point blueCenter = new Point(blueBoundingRect.x + blueBoundingRect.width * 0.5, blueBoundingRect.y + blueBoundingRect.height * 0.5);
+                            Point greenCenter = new Point(greenBoundingRect.x + greenBoundingRect.width * 0.5, greenBoundingRect.y + greenBoundingRect.height * 0.5);
+                            circle(webCamImage, blueCenter, 1, new Scalar(0, 0, 255), 1);
+                            circle(webCamImage, greenCenter, 1, new Scalar(0, 0, 255), 1);
+
+                            Point centerOfLine = new Point((blueCenter.x + greenCenter.x) * 0.5, (blueCenter.y + greenCenter.y) * 0.5);
+
+                            Point vectorFromBlueToGreen = new Point(greenCenter.x - blueCenter.x, greenCenter.y - blueCenter.y);
+                            int lengthOfVector = (int) Math.sqrt(vectorFromBlueToGreen.x * vectorFromBlueToGreen.x + vectorFromBlueToGreen.y * vectorFromBlueToGreen.y);
+
+                            Point perpendicularVector = new Point(vectorFromBlueToGreen.y, -vectorFromBlueToGreen.x);
+
+                            Point arrowPoint = new Point(centerOfLine.x + perpendicularVector.x, centerOfLine.y + perpendicularVector.y);
+
+
+                            circle(webCamImage, centerOfLine, 2, new Scalar(0, 0, 255), 2);
+
+
+                            line(webCamImage, blueCenter, greenCenter, new Scalar(0, 0, 255), 1);
+                            arrowedLine(webCamImage, centerOfLine, arrowPoint, new Scalar(0, 0, 255), 1);
+
+                        }
+                    }
+                }
+
+
+
+
+/*
                 if (colorFilter) {
                     //Post proccessing to smooth the image
                     Mat postImage = new Mat();
@@ -180,6 +278,8 @@ public class CameraAnalyze {
                     //Revert to original picture as HSV
                     Imgproc.cvtColor(postImage, image, Imgproc.COLOR_BGR2HSV);
                 }
+
+ */
                 // convert matrix to byte
                 final MatOfByte buf = new MatOfByte();
                 Imgcodecs.imencode(".jpg", image, buf);
@@ -197,7 +297,7 @@ public class CameraAnalyze {
                     CameraUI();
                     setup = true;
                 } else {
-                    //cameraScreen.setIcon(icon);
+                    cameraScreen.setIcon(icon);
                     correctedImage = image;
                 }
 
@@ -236,12 +336,12 @@ public class CameraAnalyze {
             jFrame.add(colorCameraScreen);
             JPanel sliders = new JPanel();
             sliders.setLayout(new GridLayout(2, 6));
-            JSlider hueMin = new JSlider(0, 256, 0);
-            JSlider hueMax = new JSlider(0, 256, 255);
-            JSlider satMin = new JSlider(0, 256, 0);
-            JSlider satMax = new JSlider(0, 256, 255);
-            JSlider valMin = new JSlider(0, 256, 0);
-            JSlider valMax = new JSlider(0, 256, 255);
+            JSlider hueMin = new JSlider(0, 255, 0);
+            JSlider hueMax = new JSlider(0, 255, 0);
+            JSlider satMin = new JSlider(0, 255, 0);
+            JSlider satMax = new JSlider(0, 255, 180);
+            JSlider valMin = new JSlider(0, 255, 0);
+            JSlider valMax = new JSlider(0, 255, 255);
             JLabel hueMinName = new JLabel("Hue Min (B Min)");
             JLabel hueMaxName = new JLabel("Hue Max (B Max)");
             JLabel satMinName = new JLabel("Sat Min (G Min)");
