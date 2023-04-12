@@ -14,10 +14,16 @@ import static java.lang.Thread.sleep;
 
 public class Legofir {
 
+    // Mapping
+
     LinkedList<TennisBall> ballarray = new LinkedList<>();
     Map map = new Map(180, 120, ballarray);
+
+    // Sensors
+
     public EV3UltrasonicSensor ultrasonicSensor;
     public EV3GyroSensor ev3GyroSensor;
+
     // Motors
     RMIRegulatedMotor left;
     RMIRegulatedMotor right;
@@ -31,8 +37,6 @@ public class Legofir {
     int defaultAccelerationHarvester;
     int defaultAccelerationWheel;
     int defaultAccelerationBallDropper;
-
-    // Sensors
 
     public Legofir(RMIRegulatedMotor left, RMIRegulatedMotor right, RMIRegulatedMotor harvester, RMIRegulatedMotor balldropper, int defaultSpeedHarvester, int defaultSpeedWheel, int defaultSpeedBallDropper, int defaultAccelerationHarvester, int defaultAccelerationWheel, int defaultAccelerationBallDropper, EV3UltrasonicSensor ultrasonicSensor, EV3GyroSensor ev3GyroSensorz) {
         this.left = left;
