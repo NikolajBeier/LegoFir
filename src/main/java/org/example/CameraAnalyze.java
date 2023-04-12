@@ -3,6 +3,7 @@ package org.example;
 
 import lejos.robotics.ColorDetector;
 import nu.pattern.OpenCV;
+import org.example.ui.ConnectToRobot;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
@@ -63,6 +64,7 @@ public class CameraAnalyze {
         Button colorDetection;
         Button robotDetection;
         Button colorFilterButton;
+        Button connectToRobot;
 
 
         public boolean getDetectColor() {
@@ -80,6 +82,7 @@ public class CameraAnalyze {
             buttons = new JPanel(new GridLayout(0, 2));
             colorDetection = new Button("Color Detection");
             robotDetection = new Button("Robot Detection");
+            connectToRobot = new Button("Connect Robot");
 
             buttons.setBounds(camWidth / 2 - 100, camHeight, 150, 40);
 
@@ -119,6 +122,23 @@ public class CameraAnalyze {
                     });
                 }
             });
+            connectToRobot.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    EventQueue.invokeLater(new Runnable() {
+                        // Overriding existing run() method
+                        @Override
+                        public void run() {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    new ConnectToRobot();
+                                }
+                            }).start();
+                        }
+                    });
+                }
+            });
             colorFilterButton = new Button("Color Filter");
             colorFilterButton.addActionListener(new ActionListener() {
                 @Override
@@ -130,6 +150,7 @@ public class CameraAnalyze {
             buttons.add(colorFilterButton);
             buttons.add(colorDetection);
             buttons.add(robotDetection);
+            buttons.add(connectToRobot);
             jFrame.add(buttons);
 
             jFrame.setSize(new Dimension(camWidth, camHeight + 65));

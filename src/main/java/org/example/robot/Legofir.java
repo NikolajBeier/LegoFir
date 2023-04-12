@@ -22,6 +22,7 @@ public class Legofir {
     // Sensors
 
     public EV3UltrasonicSensor ultrasonicSensor;
+
     // Motors
     RMIRegulatedMotor left;
     RMIRegulatedMotor right;
@@ -37,9 +38,6 @@ public class Legofir {
     int defaultAccelerationBallDropper;
 
     RMISampleProvider sampleProvider;
-
-
-
 
     public Legofir(RMIRegulatedMotor left, RMIRegulatedMotor right, RMIRegulatedMotor harvester, RMIRegulatedMotor balldropper, int defaultSpeedHarvester, int defaultSpeedWheel, int defaultSpeedBallDropper, int defaultAccelerationHarvester, int defaultAccelerationWheel, int defaultAccelerationBallDropper, EV3UltrasonicSensor ultrasonicSensor, RMISampleProvider ev3GyroSensor) {
         this.left = left;
