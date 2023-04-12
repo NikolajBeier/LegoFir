@@ -1,6 +1,6 @@
 package org.example;
 
-import org.opencv.core.Mat;
+/*import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.videoio.VideoCapture;
@@ -54,3 +54,5 @@ public class Camera extends JFrame {
         }
     }
 }
+
+ */

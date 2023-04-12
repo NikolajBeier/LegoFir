@@ -1,6 +1,5 @@
 package org.example;
 
-import com.github.sarxos.webcam.Webcam;
 //import nu.pattern.OpenCV;
 import org.example.mapping.Dijkstras_Algorithm;
 import org.example.mapping.Map;

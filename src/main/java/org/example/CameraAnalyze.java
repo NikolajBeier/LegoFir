@@ -1,8 +1,8 @@
 
 package org.example;
 
+import lejos.robotics.ColorDetector;
 import nu.pattern.OpenCV;
-import org.bytedeco.javacpp.opencv_core;
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
@@ -15,12 +15,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import static org.bytedeco.javacpp.opencv_core.cvScalar;
 
 public class CameraAnalyze {
     JFrame jFrame = new JFrame();
     JPanel jPanel = new JPanel();
     private JLabel cameraScreen;
+
 
 
     public CameraAnalyze() {
@@ -61,6 +61,7 @@ public class CameraAnalyze {
         private boolean colorFilter = false;
         JPanel buttons;
         Button colorDetection;
+        Button robotDetection;
         Button colorFilterButton;
 
 
@@ -78,8 +79,28 @@ public class CameraAnalyze {
 
             buttons = new JPanel(new GridLayout(0, 2));
             colorDetection = new Button("Color Detection");
+            robotDetection = new Button("Robot Detection");
+
             buttons.setBounds(camWidth / 2 - 100, camHeight, 150, 40);
 
+            robotDetection.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    EventQueue.invokeLater(new Runnable() {
+                        // Overriding existing run() method
+
+                        @Override
+                        public void run() {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    new RobotDetection(jFrame,camHeight,camWidth,cameraScreen,capture,webCamImage,correctedImage).start();
+                                }
+                            }).start();
+                        }
+                    });
+                }
+            });
             colorDetection.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -108,6 +129,7 @@ public class CameraAnalyze {
 
             buttons.add(colorFilterButton);
             buttons.add(colorDetection);
+            buttons.add(robotDetection);
             jFrame.add(buttons);
 
             jFrame.setSize(new Dimension(camWidth, camHeight + 65));
@@ -154,7 +176,7 @@ public class CameraAnalyze {
                     CameraUI();
                     setup = true;
                 } else {
-                    cameraScreen.setIcon(icon);
+                    //cameraScreen.setIcon(icon);
                     correctedImage = image;
                 }
 
