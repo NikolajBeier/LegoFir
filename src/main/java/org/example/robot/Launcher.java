@@ -19,8 +19,9 @@ public class Launcher implements Program {
     Themes themes = new Themes();
 
 
-    public Launcher(RemoteEV3 ev3){
+    public Launcher(RemoteEV3 ev3, Legofir dude){
         this.ev3 = ev3;
+        this.dude=dude;
     }
     public void setupRobot(){
         ev3.setDefault();
@@ -53,8 +54,8 @@ public class Launcher implements Program {
 
         bArray = new MyBehavior[]{
                 new DriveTowardsBall(dude),
-                new AvoidCollision(dude),
-                new StopBehaviour(),
+                /*new AvoidCollision(dude),*/
+                //new StopBehaviour(),
         };
         arby = new Arbitrator(bArray);
 

@@ -1,10 +1,10 @@
 package org.example.ui;
 
 import lejos.remote.ev3.RemoteEV3;
+import org.example.robot.Legofir;
 import org.example.robot.Program;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,7 +14,7 @@ import java.awt.event.WindowEvent;
 public class RunProgram {
     JFrame mainFrame = new JFrame();
     Thread program;
-    public RunProgram(RemoteEV3 ev3, Program chosenProgram){
+    public RunProgram(RemoteEV3 ev3, Program chosenProgram, Legofir dude){
         program = new Thread(chosenProgram::launch);
         mainFrame.setSize(1000,750);
         mainFrame.setLayout(new BorderLayout());
@@ -30,7 +30,7 @@ public class RunProgram {
         disconnect.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new SelectPrograms(ev3);
+                new SelectPrograms(ev3, dude);
                 chosenProgram.disconnect();
                 mainFrame.dispose();
             }

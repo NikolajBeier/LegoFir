@@ -2,7 +2,9 @@ package org.example.robot.behaviour;
 
 
 import lejos.robotics.SampleProvider;
+import org.example.mapping.RobotPosition;
 import org.example.robot.Legofir;
+import org.opencv.core.Point;
 
 
 public class DriveTowardsBall implements MyBehavior{
@@ -33,9 +35,20 @@ public class DriveTowardsBall implements MyBehavior{
     @Override
     public void action() {
         suppressed=false;
-        int currentAngle= dude.GetAngle();
+        //int currentAngle= dude.GetAngle();
 
-        int cameraAngleToNextBall=45; // TODO: get angle from camera
+        RobotPosition currentPosition = dude.getMap().getRobotPosition();
+        int nextBallX=dude.getMap().getBalls().get(0).getX();
+        int nextBallY=dude.getMap().getBalls().get(0).getY();
+
+        int currentAngle = currentPosition.getHeadingInDegrees();
+
+        // vektor fra currentPosition(x,y) til (nextBallX,nextBallY)
+        Point ballVector = new Point(nextBallX-currentPosition.getX(),nextBallY-currentPosition.getY());
+
+        // Vinkel af vektor...
+
+        int cameraAngleToNextBall = (int)Math.atan(ballVector.y/ballVector.x); // TODO: get angle from camera
 
         int angleToNextBall=currentAngle+cameraAngleToNextBall;
 

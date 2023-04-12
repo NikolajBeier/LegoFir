@@ -3,11 +3,7 @@ import lejos.remote.ev3.RemoteEV3;
 import org.example.robot.Launcher;
 import org.example.robot.Legofir;
 import org.example.ui.ConnectToRobot;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.util.Scanner;
 
 import static org.junit.Assert.*;
 
@@ -23,7 +19,8 @@ public class LegoFirTest {
 
     @Test
     public void connectingToRobotTest(){
-        ConnectToRobot connectToRobot = new ConnectToRobot();
+        Legofir dude=null;
+        ConnectToRobot connectToRobot = new ConnectToRobot(dude);
         connectToRobot.connectToRobot(ip);
         // Wait for 0.5 seconds
         try {
@@ -36,9 +33,10 @@ public class LegoFirTest {
     }
     @Test
     public void driveForwardTest() {
+        Legofir dude=null;
 
         // Connect to robot
-        ConnectToRobot connectToRobot = new ConnectToRobot();
+        ConnectToRobot connectToRobot = new ConnectToRobot(dude);
         connectToRobot.connectToRobot(ip);
         // Wait for 0.5 seconds
         try {
@@ -49,7 +47,7 @@ public class LegoFirTest {
         RemoteEV3 ev3 = connectToRobot.getEv3();
 
         // Create launcher and robot object
-        Launcher launcher = new Launcher(ev3);
+        Launcher launcher = new Launcher(ev3, dude);
         launcher.setupRobot();
         Legofir robot = launcher.getDude();
 
@@ -70,8 +68,10 @@ public class LegoFirTest {
     }
     @Test
     public void turnRightTest() {
+        Legofir dude=null;
+
         // Connect to robot
-        ConnectToRobot connectToRobot = new ConnectToRobot();
+        ConnectToRobot connectToRobot = new ConnectToRobot(dude);
         connectToRobot.connectToRobot(ip);
         // Wait for 0.5 seconds
         try {
@@ -82,7 +82,7 @@ public class LegoFirTest {
         RemoteEV3 ev3 = connectToRobot.getEv3();
 
         // Create launcher and robot object
-        Launcher launcher = new Launcher(ev3);
+        Launcher launcher = new Launcher(ev3, dude);
         launcher.setupRobot();
         Legofir robot = launcher.getDude();
 

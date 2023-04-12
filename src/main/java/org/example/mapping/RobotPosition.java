@@ -1,6 +1,7 @@
 package org.example.mapping;
 
 import org.opencv.core.Point;
+import java.lang.Math;
 
 public class RobotPosition {
 
@@ -24,5 +25,9 @@ public class RobotPosition {
 
     public Point getHeading() {
         return heading;
+    }
+
+    public int getHeadingInDegrees() {
+        return (int) Math.atan(heading.y/heading.x);
     }
 }

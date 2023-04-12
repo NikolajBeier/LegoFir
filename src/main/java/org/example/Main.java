@@ -4,6 +4,7 @@ package org.example;
 import org.example.mapping.Dijkstras_Algorithm;
 import org.example.mapping.Map;
 import org.example.mapping.TennisBall;
+import org.example.robot.Legofir;
 import org.example.ui.ConnectToRobot;
 import org.example.ui.Visualization;
 import org.opencv.core.Core;
@@ -20,6 +21,7 @@ import java.util.LinkedList;
 
 public class Main {
     public static void main(String[] args) {
+        Legofir dude=null;
         JFrame jFrame = new JFrame();
         jFrame.setSize(300, 175);
         JButton visualization = new JButton("Visualization");
@@ -29,14 +31,14 @@ public class Main {
         visualization.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                startVisualization();
+                startVisualization(dude);
                 jFrame.dispose();
             }
         });
         connect.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                startConnectingToRobot();
+                startConnectingToRobot(dude);
                 jFrame.dispose();
             }
         });
@@ -47,7 +49,7 @@ public class Main {
                     // Overriding existing run() method
                     @Override public void run()
                     {
-                        final CameraAnalyze camera = new CameraAnalyze();
+                        final CameraAnalyze camera = new CameraAnalyze(dude);
 
                         // Start camera in thread
                         new Thread(new Runnable() {
@@ -79,13 +81,13 @@ public class Main {
         jFrame.setVisible(true);
     }
 
-        public static void startConnectingToRobot() {
-            ConnectToRobot connectToRobot = new ConnectToRobot();
+        public static void startConnectingToRobot(Legofir dude) {
+            ConnectToRobot connectToRobot = new ConnectToRobot(dude);
         }
-        public static void startVisualization () {
+        public static void startVisualization (Legofir dude) {
             Visualization visualization = new Visualization();
         }
-        public static void startCameraAnalyze(){
-            CameraAnalyze cameraAnalyze = new CameraAnalyze();
+        public static void startCameraAnalyze(Legofir dude){
+            CameraAnalyze cameraAnalyze = new CameraAnalyze(dude);
         }
     }

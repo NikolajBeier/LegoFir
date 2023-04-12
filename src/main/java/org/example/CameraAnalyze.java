@@ -2,6 +2,7 @@
 package org.example;
 
 import nu.pattern.OpenCV;
+import org.example.robot.Legofir;
 import org.example.ui.ConnectToRobot;
 import org.opencv.core.*;
 import org.opencv.core.Point;
@@ -24,10 +25,12 @@ public class CameraAnalyze {
     JFrame jFrame = new JFrame();
     JPanel jPanel = new JPanel();
     private JLabel cameraScreen;
+    Legofir dude;
 
 
 
-    public CameraAnalyze() {
+    public CameraAnalyze(Legofir dude) {
+        this.dude=dude;
         OpenCV.loadLocally();
         Camera camera = new Camera(jFrame);
         EventQueue.invokeLater(new Runnable() {
@@ -160,7 +163,7 @@ public class CameraAnalyze {
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    new ConnectToRobot();
+                                    new ConnectToRobot(dude);
                                 }
                             }).start();
                         }
@@ -208,14 +211,14 @@ public class CameraAnalyze {
 
 
                 if(robotDetectionOn){
-                    List<Rect>[] robotRects = robotDetection.detect(image);
+                    List<Rect>[] robotRects = robotDetection.detect(image,dude);
                     blue = robotRects[1];
                     green = robotRects[0];
 
                 }
 
                 if(ballDetectionOn){
-                    ballRects = ballDetection.detect(image);
+                    ballRects = ballDetection.detect(image,dude);
                 }
 
                 // draw rectangles

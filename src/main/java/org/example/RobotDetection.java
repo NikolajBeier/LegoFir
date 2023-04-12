@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.robot.Legofir;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 
@@ -22,9 +23,9 @@ public class RobotDetection {
     ImageIcon icon;
     Mat greenMask = new Mat();
     Mat blueMask = new Mat();
-    int greenHueMin = 35;
-    int greenHueMax = 75;
-    int greenSatMin = 50;
+    int greenHueMin = 30;
+    int greenHueMax = 80;
+    int greenSatMin = 30;
     int greenSatMax = 255;
 
     int blueHueMin = 105;
@@ -34,7 +35,7 @@ public class RobotDetection {
 
     int valMin = 20;
     int valMax = 255;
-    public List<Rect>[] detect(Mat image) {
+    public List<Rect>[] detect(Mat image, Legofir dude) {
         List<Rect> greens = new ArrayList<>();
         List<Rect> blues = new ArrayList<>();
 
@@ -91,27 +92,26 @@ public class RobotDetection {
 
         if(!greenContour.isEmpty() || !blueContour.isEmpty()) {
             for (MatOfPoint contour : greenContour) {
-                if(contourArea(contour) > 500) {
+                if(contourArea(contour) > 400) {
                     Rect greenBoundingRect = boundingRect(contour);
                     greens.add(greenBoundingRect);
                 }
             }
             for (MatOfPoint contour : blueContour) {
-                if(contourArea(contour) > 500) {
+                if(contourArea(contour) > 400) {
                     Rect blueBoundingRect = boundingRect(contour);
                     blues.add(blueBoundingRect);
                 }
             }
 
-            /*
+
             if(!greens.isEmpty() && !blues.isEmpty()) {
                 for (Rect blueBoundingRect : blues) {
                     for(Rect greenBoundingRect : greens) {
 
                         Point blueCenter = new Point(blueBoundingRect.x + blueBoundingRect.width * 0.5, blueBoundingRect.y + blueBoundingRect.height * 0.5);
                         Point greenCenter = new Point(greenBoundingRect.x + greenBoundingRect.width * 0.5, greenBoundingRect.y + greenBoundingRect.height * 0.5);
-                        circle(webCamImage, blueCenter, 1, new Scalar(0, 0, 255), 1);
-                        circle(webCamImage, greenCenter, 1, new Scalar(0, 0, 255), 1);
+
 
                         Point centerOfLine = new Point((blueCenter.x + greenCenter.x) * 0.5, (blueCenter.y + greenCenter.y) * 0.5);
 
@@ -122,12 +122,8 @@ public class RobotDetection {
 
                         Point arrowPoint = new Point(centerOfLine.x + perpendicularVector.x, centerOfLine.y + perpendicularVector.y);
 
-
-                        circle(webCamImage, centerOfLine, 2, new Scalar(0, 0, 255), 2);
-
-
-                        line(webCamImage, blueCenter, greenCenter, new Scalar(0, 0, 255), 1);
-                        arrowedLine(webCamImage, centerOfLine, arrowPoint, new Scalar(0, 0, 255), 1);
+                        if(dude!=null)
+                        dude.getMap().setRobotPosition((int)centerOfLine.x,(int)centerOfLine.y,perpendicularVector);
                     }
 
 
@@ -135,7 +131,7 @@ public class RobotDetection {
 
             }
 
-             */
+
         }
 
 

@@ -186,4 +186,8 @@ public class Legofir {
         stopBallDropper();
         closePorts();
     }
+
+    public Map getMap() {
+        return map;
+    }
 }

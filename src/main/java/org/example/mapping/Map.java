@@ -10,6 +10,14 @@ public class Map {
     int y;
     int size;
 
+    public RobotPosition getRobotPosition() {
+        return robotPosition;
+    }
+
+    public LinkedList<TennisBall> getBalls() {
+        return balls;
+    }
+
     RobotPosition robotPosition;
     LinkedList<TennisBall> balls;
 
@@ -32,5 +40,9 @@ public class Map {
         robotPosition.x = x;
         robotPosition.y = y;
         robotPosition.heading = heading;
+    }
+
+    public void removeAllBalls() {
+        balls.clear();
     }
 }
