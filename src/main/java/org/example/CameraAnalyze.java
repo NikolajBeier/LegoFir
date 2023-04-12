@@ -22,6 +22,7 @@ public class CameraAnalyze {
     private JLabel cameraScreen;
 
 
+
     public CameraAnalyze() {
         OpenCV.loadLocally();
         Camera camera = new Camera(jFrame);
@@ -175,7 +176,7 @@ public class CameraAnalyze {
                     CameraUI();
                     setup = true;
                 } else {
-                    cameraScreen.setIcon(icon);
+                    //cameraScreen.setIcon(icon);
                     correctedImage = image;
                 }
 
