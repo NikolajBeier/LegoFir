@@ -4,13 +4,18 @@ import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.remote.ev3.RMIRegulatedMotor;
 import lejos.robotics.SampleProvider;
+import org.example.mapping.Map;
+import org.example.mapping.TennisBall;
 
 import java.rmi.RemoteException;
+import java.util.LinkedList;
 
 import static java.lang.Thread.sleep;
 
 public class Legofir {
 
+    LinkedList<TennisBall> ballarray = new LinkedList<>();
+    Map map = new Map(180, 120, ballarray);
     public EV3UltrasonicSensor ultrasonicSensor;
     public EV3GyroSensor ev3GyroSensor;
     // Motors

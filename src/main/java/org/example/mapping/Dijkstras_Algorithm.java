@@ -1,5 +1,6 @@
 package org.example.mapping;
 
+import org.opencv.core.Point;
 import org.w3c.dom.Node;
 
 import java.util.HashSet;
@@ -8,7 +9,9 @@ import java.util.Set;
 
 public class Dijkstras_Algorithm {
 
-    RobotPosition startPos = new RobotPosition(0, 0);
+    Point point;
+
+    RobotPosition startPos = new RobotPosition(0, 0, point );
     TennisBall tennis1 = new TennisBall(10, 10);
     TennisBall tennis2 = new TennisBall(20, 20);
     TennisBall tennis3 = new TennisBall(30, 30);

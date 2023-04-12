@@ -1,5 +1,7 @@
 package org.example.mapping;
 
+import org.opencv.core.Point;
+
 import java.util.LinkedList;
 
 public class Map {
@@ -28,8 +30,9 @@ public class Map {
         balls.add(tennisball);
     }
 
-    public void setRobotPosition(int x, int y){
+    public void setRobotPosition(int x, int y, Point heading){
         robotPosition.x = x;
         robotPosition.y = y;
+        robotPosition.heading = heading;
     }
 }

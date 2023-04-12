@@ -21,8 +21,6 @@ import java.util.LinkedList;
 
 public class Main {
     public static void main(String[] args) {
-        LinkedList<TennisBall> ballarray = new LinkedList<>();
-        Map map = new Map(180, 120, ballarray);
         JFrame jFrame = new JFrame();
         jFrame.setSize(300, 175);
         JButton visualization = new JButton("Visualization");
