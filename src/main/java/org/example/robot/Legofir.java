@@ -16,8 +16,7 @@ public class Legofir {
 
     // Mapping
 
-    LinkedList<TennisBall> ballarray = new LinkedList<>();
-    Map map = new Map(180, 120, ballarray);
+    Map map = new Map(180, 120);
 
     // Sensors
 

@@ -16,14 +16,12 @@ public class Dijkstras_Algorithm {
     TennisBall tennis2 = new TennisBall(20, 20);
     TennisBall tennis3 = new TennisBall(30, 30);
 
-    LinkedList<TennisBall> ballarray = new LinkedList<>();
 
 
-
-    Map map = new Map(180, 120, ballarray);
+    Map map = new Map(180, 120);
     TennisBall defaultsize = new TennisBall(map.x, map.y);
 
-    TennisBall[] Queue = new TennisBall[ballarray.size()];
+    //TennisBall[] Queue = new TennisBall[ballarray.size()];
 
 
 

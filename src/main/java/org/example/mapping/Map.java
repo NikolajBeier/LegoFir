@@ -13,11 +13,9 @@ public class Map {
     RobotPosition robotPosition;
     LinkedList<TennisBall> balls;
 
-
-    public Map(int x, int y, LinkedList<TennisBall> balls) {
+    public Map(int x, int y) {
         this.x = x;
         this.y = y;
-        this.balls = balls;
         this.size = x*y;
     }
 
