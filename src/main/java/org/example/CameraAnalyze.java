@@ -23,7 +23,6 @@ public class CameraAnalyze {
     private JLabel cameraScreen;
 
 
-
     public CameraAnalyze() {
         OpenCV.loadLocally();
         Camera camera = new Camera(jFrame);
@@ -66,6 +65,10 @@ public class CameraAnalyze {
         Button ballDetectionButton;
         BallDetection ballDetection = new BallDetection();
         Boolean ballDetectionOn = false;
+
+        EdgeDetection edgeDetection = new EdgeDetection();
+
+        Boolean edgeDetectionOn = false;
         Button colorFilterButton;
 
 
@@ -99,7 +102,9 @@ public class CameraAnalyze {
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    ballDetectionOn=true;
+                                    ballDetectionOn = true;
+                                    edgeDetectionOn = true;
+
                                 }
                             }).start();
                         }
@@ -118,7 +123,7 @@ public class CameraAnalyze {
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    new RobotDetection(jFrame,camHeight,camWidth,cameraScreen,capture,webCamImage,correctedImage).start();
+                                    new RobotDetection(jFrame, camHeight, camWidth, cameraScreen, capture, webCamImage, correctedImage).start();
                                 }
                             }).start();
                         }
@@ -181,14 +186,14 @@ public class CameraAnalyze {
 
                 //java.util.List<Rect> robotRects = RobotDetection.detect(image);
 
-                if(ballDetectionOn){
+                if (ballDetectionOn) {
                     ballRects = ballDetection.detect(image);
                 }
 
                 // draw rectangles
 
                 // Ball rects
-                for(Rect boundingRect : ballRects) {
+                for (Rect boundingRect : ballRects) {
                     Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), new Scalar(0, 0, 255), 1);
                     putText(image, "Ball", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
                 }
@@ -250,7 +255,7 @@ public class CameraAnalyze {
         }
 
         public void ColorDetector() {
-            JPanel mainPanel = new JPanel(new GridLayout(0,2));
+            JPanel mainPanel = new JPanel(new GridLayout(0, 2));
             JPanel buttonsSliders = new JPanel();
             int width = Toolkit.getDefaultToolkit().getScreenSize().width;
             int height = Toolkit.getDefaultToolkit().getScreenSize().height;
@@ -291,11 +296,11 @@ public class CameraAnalyze {
             jFrame.add(sliders);
 
 
-            mainPanel.setPreferredSize(new Dimension(width, height-130));
+            mainPanel.setPreferredSize(new Dimension(width, height - 130));
             mainPanel.add(cameraScreen);
             mainPanel.add(colorCameraScreen);
 
-            buttonsSliders.setPreferredSize(new Dimension(width,130));
+            buttonsSliders.setPreferredSize(new Dimension(width, 130));
             buttonsSliders.add(buttons);
             buttonsSliders.add(sliders);
 
