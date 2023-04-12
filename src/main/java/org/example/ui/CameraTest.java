@@ -1,6 +1,5 @@
 package org.example.ui;
-/*
-import com.flickr4java.flickr.cameras.Camera;
+
 import nu.pattern.OpenCV;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -123,6 +122,3 @@ public class CameraTest extends JFrame {
             });
         }
 }
-
-
- */

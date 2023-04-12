@@ -1,58 +1,47 @@
 package org.example.robot.behaviour;
 
-
 import lejos.robotics.SampleProvider;
 import lejos.robotics.subsumption.Behavior;
-import lejos.utility.Delay;
 import org.example.robot.Legofir;
-
-import java.util.logging.Logger;
 
 
 public class DriveTowardsBall implements MyBehavior{
+    private static int HALF_SECOND = 500;
+    //private static final Logger log = org.slf4j.LoggerFactory.getLogger(GyroSensorDemo3.class);
     Boolean suppressed = false;
     Legofir dude;
     Boolean stopCondition = false;
-    public DriveTowardsBall(Legofir dude){
-        this.dude=dude;
-    }
 
+    final SampleProvider  sp = dude.ev3GyroSensor.getAngleMode();
+    int value =0;
+    int iterationcounter =0;
 
-
-
+    /*
+    while(true){
+        float[] sample = new float[sp.sampleSize()];
+        sp.fetchSample(sample,0);
+        value=(int) sample[0];
+        
+        log.in
+    }*/
 
     @Override
     public boolean takeControl() {
-            if(stopCondition){
-                System.out.println("DriveTowardsBall.takeControl() = " + false);
-                return false;
-            }
-            System.out.println("DriveTowardsBall.takeControl() = " + true);
-            return true;
-        }
-
-
-    @Override
-    public void action() {
-        suppressed=false;
-        while (!suppressed){
-            System.out.println(dude.GetAngle());
-
-            dude.turnRight();
-
-
-
-        }
+        return false;
     }
 
     @Override
-    public void suppress(){
-        suppressed = true;
+    public void action() {
+
+    }
+
+    @Override
+    public void suppress() {
+
     }
 
     @Override
     public void setStopCondition(Boolean stopCondition) {
-        this.stopCondition=stopCondition;
 
     }
 }
