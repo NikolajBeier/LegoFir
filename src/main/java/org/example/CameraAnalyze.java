@@ -87,7 +87,13 @@ public class CameraAnalyze {
             jFrame.setLayout(null);
 
             cameraScreen = new JLabel();
-            cameraScreen.setBounds(0, 0, camWidth, camHeight);
+            int screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
+            int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
+            if(camWidth>screenWidth || camHeight>screenHeight){
+                cameraScreen.setBounds(0, 0, screenWidth-10, screenHeight-30);
+            } else {
+                cameraScreen.setBounds(0, 0, camWidth, camHeight);
+            }
             jFrame.add(cameraScreen);
 
             buttons = new JPanel(new GridLayout(0, 2));
@@ -335,7 +341,11 @@ public class CameraAnalyze {
             jFrame.getContentPane().removeAll();
 
             JLabel colorCameraScreen = new JLabel();
-            colorCameraScreen.setBounds(0, 0, camWidth, camHeight);
+            if(camWidth>width|| camHeight>height){
+                colorCameraScreen.setBounds(0, 0, width-10, height-30);
+            } else {
+                colorCameraScreen.setBounds(0, 0, camWidth, camHeight);
+            }
             jFrame.add(colorCameraScreen);
             JPanel sliders = new JPanel();
             sliders.setLayout(new GridLayout(2, 6));
