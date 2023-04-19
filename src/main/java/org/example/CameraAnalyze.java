@@ -89,12 +89,7 @@ public class CameraAnalyze {
             cameraScreen = new JLabel();
             int screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
             int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
-            if(camWidth>screenWidth || camHeight>screenHeight){
-                cameraScreen.setBounds(0, 0, screenWidth-10, screenHeight-30);
-            } else {
-                cameraScreen.setBounds(0, 0, camWidth, camHeight);
-            }
-            jFrame.add(cameraScreen);
+
 
             buttons = new JPanel(new GridLayout(0, 2));
             colorDetection = new Button("Color Detection");
@@ -102,7 +97,15 @@ public class CameraAnalyze {
             robotDetectionButton = new Button("Robot Detection");
             ballDetectionButton = new Button("Ball Detection");
 
-            buttons.setBounds(camWidth / 2 - 100, camHeight, 150, 40);
+
+            if(camWidth>screenWidth || camHeight>screenHeight){
+                cameraScreen.setBounds(0, 0, screenWidth, screenHeight-200);
+                buttons.setBounds(screenWidth / 2 - 100, screenHeight-200, 150, 40);
+            } else {
+                cameraScreen.setBounds(0, 0, camWidth, camHeight);
+                buttons.setBounds(camWidth / 2 - 100, camHeight, 150, 40);
+            }
+            jFrame.add(cameraScreen);
 
             ballDetectionButton.addActionListener(new ActionListener() {
                 @Override
@@ -342,7 +345,7 @@ public class CameraAnalyze {
 
             JLabel colorCameraScreen = new JLabel();
             if(camWidth>width|| camHeight>height){
-                colorCameraScreen.setBounds(0, 0, width-10, height-30);
+                colorCameraScreen.setBounds(0, 0, width, height-200);
             } else {
                 colorCameraScreen.setBounds(0, 0, camWidth, camHeight);
             }
