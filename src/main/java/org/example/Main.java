@@ -15,7 +15,7 @@ import java.awt.event.WindowEvent;
 
 public class Main {
     public static void main(String[] args) {
-        Legofir dude=null;
+        Legofir dude= new Legofir();
         JFrame jFrame = new JFrame();
         jFrame.setSize(300, 175);
         JButton visualization = new JButton("Visualization");
