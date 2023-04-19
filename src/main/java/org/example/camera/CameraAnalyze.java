@@ -1,5 +1,5 @@
 
-package org.example;
+package org.example.camera;
 
 import nu.pattern.OpenCV;
 import org.example.robot.Legofir;

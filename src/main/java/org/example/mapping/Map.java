@@ -45,4 +45,25 @@ public class Map {
     public void removeAllBalls() {
         balls.clear();
     }
+
+    public TennisBall getNextBall() {
+
+
+
+        // find the tennis ball closest to the robot
+        TennisBall closestBall = getBalls().get(0);
+        double closestDistance = Integer.MAX_VALUE;
+
+        for(TennisBall tennisball : balls) {
+            // Distance between two points:
+            double distance = Math.sqrt((tennisball.x-getRobotPosition().x)*(tennisball.x-getRobotPosition().x)+(tennisball.y-getRobotPosition().y)*(tennisball.y-getRobotPosition().y));
+            if(distance<closestDistance) {
+                closestDistance = distance;
+                closestBall = tennisball;
+            }
+        }
+
+
+        return closestBall;
+    }
 }

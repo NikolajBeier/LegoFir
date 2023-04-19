@@ -41,14 +41,15 @@ public class Launcher implements Program {
 
 
         // Create the sensor objects
+        /*
         EV3UltrasonicSensor ultrasonicSensor = new EV3UltrasonicSensor(ev3.getPort("S1"));
         // EV3 create sensor
         RMISampleProvider ev3GyroSensor = ev3.createSampleProvider("S3", "lejos.hardware.sensor.EV3GyroSensor", "Angle");
-
         System.out.println("sensors connected");
+         */
 
         // Robot object
-        dude = new Legofir(left,right,harvester, balldropper,1440,720,720,1000,1000, 1000, ultrasonicSensor,ev3GyroSensor);
+        dude = new Legofir(left,right,harvester, balldropper,1440,720,720,1000,1000, 1000);
     }
     public void launchRobot() {
 

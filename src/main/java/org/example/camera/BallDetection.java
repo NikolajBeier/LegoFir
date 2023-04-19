@@ -1,4 +1,4 @@
-package org.example;
+package org.example.camera;
 
 import org.example.robot.Legofir;
 import org.opencv.core.*;
@@ -44,18 +44,20 @@ public class BallDetection {
 
 // find contours
         Imgproc.findContours(whiteMask, whiteContour, whiteHierarchy, RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-        if (dude != null)
-        dude.getMap().removeAllBalls();
+        //if (dude != null)
+        //dude.getMap().removeAllBalls();
 
         if(!whiteContour.isEmpty()){
             for(MatOfPoint contour : whiteContour){
                 if(Imgproc.contourArea(contour) > 150){
                     Rect boundingRect = Imgproc.boundingRect(contour);
                     balls.add(boundingRect);
-                    if(dude!=null)
-                    dude.getMap().addBallCord((int)(boundingRect.x+boundingRect.width*0.5), (int)(boundingRect.y+ boundingRect.height*0.5));
+                    //dude.getMap().addBallCord((int)(boundingRect.x+boundingRect.width*0.5), (int)(boundingRect.y+ boundingRect.height*0.5));
                 }
             }
+        }
+        if(dude!=null) {
+            dude.addBalls(balls);
         }
         return balls;
     }

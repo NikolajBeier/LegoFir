@@ -39,20 +39,7 @@ public class AvoidCollision implements MyBehavior {
             System.out.println("DetectCollision.takeControl() = " + false);
             return false;
         }
-        try {
-            if(!dude.ultrasonicSensor.isEnabled()){
-                System.out.println("DetectCollision.takeControl() = " + false);
-                return false;
-            }
-            SampleProvider sampleProvider = dude.ultrasonicSensor.getDistanceMode();
-            float[] sample = new float[sampleProvider.sampleSize()];
-            sampleProvider.fetchSample(sample, 0);
-            float distanceValue = sample[0];
-            System.out.println("DetectCollision.takeControl() = " + (distanceValue <= AVOID_DISTANCE));
-            return (distanceValue <= AVOID_DISTANCE);
-        } catch (NullPointerException e) {
-            System.out.println("DetectCollision.takeControl() = " + false);
-            return false;
-        }
+        else return false;
+        // TODO: LOGIK
     }
 }

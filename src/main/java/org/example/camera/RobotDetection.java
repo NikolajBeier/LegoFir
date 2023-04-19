@@ -1,4 +1,4 @@
-package org.example;
+package org.example.camera;
 
 import org.example.robot.Legofir;
 import org.opencv.core.*;
