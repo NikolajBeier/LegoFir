@@ -1,18 +1,22 @@
 package org.example.robot;
 
-import lejos.hardware.sensor.EV3GyroSensor;
-import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.remote.ev3.RMIRegulatedMotor;
-import lejos.remote.ev3.RMISampleProvider;
-import lejos.robotics.SampleProvider;
+import org.example.mapping.Map;
+import org.opencv.core.Rect;
 
 import java.rmi.RemoteException;
+import java.util.List;
 
 import static java.lang.Thread.sleep;
 
 public class Legofir {
 
-    public EV3UltrasonicSensor ultrasonicSensor;
+    // Mapping
+
+    Map map = new Map(180, 120);
+
+    // Sensors
+
     // Motors
     RMIRegulatedMotor left;
     RMIRegulatedMotor right;
@@ -27,12 +31,7 @@ public class Legofir {
     int defaultAccelerationWheel;
     int defaultAccelerationBallDropper;
 
-    RMISampleProvider sampleProvider;
-
-
-    // Sensors
-
-    public Legofir(RMIRegulatedMotor left, RMIRegulatedMotor right, RMIRegulatedMotor harvester, RMIRegulatedMotor balldropper, int defaultSpeedHarvester, int defaultSpeedWheel, int defaultSpeedBallDropper, int defaultAccelerationHarvester, int defaultAccelerationWheel, int defaultAccelerationBallDropper, EV3UltrasonicSensor ultrasonicSensor, RMISampleProvider ev3GyroSensor) {
+    public Legofir(RMIRegulatedMotor left, RMIRegulatedMotor right, RMIRegulatedMotor harvester, RMIRegulatedMotor balldropper, int defaultSpeedHarvester, int defaultSpeedWheel, int defaultSpeedBallDropper, int defaultAccelerationHarvester, int defaultAccelerationWheel, int defaultAccelerationBallDropper) {
         this.left = left;
         this.right = right;
         this.harvester = harvester;
@@ -43,8 +42,6 @@ public class Legofir {
         this.defaultAccelerationWheel = defaultAccelerationWheel;
         this.defaultSpeedBallDropper = defaultSpeedBallDropper;
         this.defaultAccelerationBallDropper = defaultAccelerationBallDropper;
-        this.ultrasonicSensor = ultrasonicSensor;
-        this.sampleProvider=ev3GyroSensor;
     }
 
     public void moveForward(){
@@ -136,15 +133,7 @@ public class Legofir {
         stopBallDropper();
     }
 
-    public int GetAngle(){
 
-        try {
-            return (int) sampleProvider.fetchSample()[0];
-        } catch (RemoteException e) {
-            closePorts();
-        }
-        return 0;
-    }
 
 
     public void closePorts(){
@@ -153,11 +142,7 @@ public class Legofir {
             left.close();
             right.close();
             balldropper.close();
-            ultrasonicSensor.disable();
-            while(ultrasonicSensor.isEnabled()) {
-                System.out.println("venter på at ultrasonicSensor skal lukke");
-            }
-            ultrasonicSensor.close();
+
             System.out.println("lukket alle motorer og sensorer");
         } catch (RemoteException e) {
             System.out.println("Kunne ikke lukke motorer");
@@ -178,5 +163,27 @@ public class Legofir {
         stopHarvester();
         stopBallDropper();
         closePorts();
+    }
+
+    public Map getMap() {
+        return map;
+    }
+
+    public void addBalls(List<Rect> balls) {
+        // replace old balls with new ones
+        int numOfOldBalls = map.getBalls().size();
+
+        for (Rect ball : balls) {
+            map.addBallCord((int)(ball.x+ball.width*0.5), (int)(ball.y+ ball.height*0.5));
+        }
+        for (int i = 0; i < numOfOldBalls; i++) {
+            map.getBalls().removeFirst();
+
+        }
+
+    }
+
+    public int getAngle() {
+        return map.getRobotPosition().getHeadingInDegrees();
     }
 }

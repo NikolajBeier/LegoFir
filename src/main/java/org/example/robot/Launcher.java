@@ -19,8 +19,9 @@ public class Launcher implements Program {
     Themes themes = new Themes();
 
 
-    public Launcher(RemoteEV3 ev3){
+    public Launcher(RemoteEV3 ev3, Legofir dude){
         this.ev3 = ev3;
+        this.dude=dude;
     }
     public void setupRobot(){
         ev3.setDefault();
@@ -40,21 +41,22 @@ public class Launcher implements Program {
 
 
         // Create the sensor objects
+        /*
         EV3UltrasonicSensor ultrasonicSensor = new EV3UltrasonicSensor(ev3.getPort("S1"));
         // EV3 create sensor
         RMISampleProvider ev3GyroSensor = ev3.createSampleProvider("S3", "lejos.hardware.sensor.EV3GyroSensor", "Angle");
-
         System.out.println("sensors connected");
+         */
 
         // Robot object
-        dude = new Legofir(left,right,harvester, balldropper,1440,720,720,1000,1000, 1000, ultrasonicSensor,ev3GyroSensor);
+        dude = new Legofir(left,right,harvester, balldropper,1440,720,720,1000,1000, 1000);
     }
     public void launchRobot() {
 
         bArray = new MyBehavior[]{
                 new DriveTowardsBall(dude),
-                new AvoidCollision(dude),
-                new StopBehaviour(),
+                /*new AvoidCollision(dude),*/
+                //new StopBehaviour(),
         };
         arby = new Arbitrator(bArray);
 

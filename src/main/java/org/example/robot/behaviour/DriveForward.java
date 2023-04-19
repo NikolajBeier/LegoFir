@@ -13,7 +13,6 @@ public class DriveForward implements MyBehavior {
     Legofir legofir;
     Boolean stopCondition = false;
 
-
     public DriveForward(Legofir legofir){
         this.legofir = legofir;
     }

@@ -2,6 +2,7 @@ package org.example.ui;
 
 import lejos.remote.ev3.RemoteEV3;
 import org.example.robot.Launcher;
+import org.example.robot.Legofir;
 import org.example.robot.Program;
 import org.example.robot.WASDController;
 
@@ -24,7 +25,9 @@ public class ConnectToRobot {
     JButton jButton;
     JButton stopConnecting;
     JTextArea jTextArea;
-    public ConnectToRobot(){
+    Legofir dude;
+    public ConnectToRobot(Legofir dude){
+        this.dude=dude;
         jFrame.setSize(1000, 750);
         jFrame.setLayout(new GridLayout(5,2));
         JTextField jTextField = new JTextField("172.20.10.9");
@@ -81,7 +84,7 @@ public class ConnectToRobot {
                 public void run() {
                     try{
                         ev3 = new RemoteEV3(ip);
-                        new SelectPrograms(ev3);
+                        new SelectPrograms(ev3,dude);
                         jFrame.dispose();
                     } catch(Exception e){
                         e.printStackTrace();

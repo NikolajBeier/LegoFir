@@ -1,7 +1,9 @@
 
-package org.example;
+package org.example.camera;
 
 import nu.pattern.OpenCV;
+import org.example.robot.Legofir;
+import org.example.ui.ConnectToRobot;
 import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -24,10 +26,12 @@ public class CameraAnalyze {
     JFrame jFrame = new JFrame();
     JPanel jPanel = new JPanel();
     private JLabel cameraScreen;
+    Legofir dude;
 
 
 
-    public CameraAnalyze() {
+    public CameraAnalyze(Legofir dude) {
+        this.dude=dude;
         OpenCV.loadLocally();
         Camera camera = new Camera(jFrame);
         EventQueue.invokeLater(new Runnable() {
@@ -76,6 +80,7 @@ public class CameraAnalyze {
         EdgeDetection edgeDetection = new EdgeDetection();
         Boolean edgeDetectionOn = false;
         Button colorFilterButton;
+        Button connectToRobot;
 
 
         public boolean getDetectColor() {
@@ -92,6 +97,7 @@ public class CameraAnalyze {
 
             buttons = new JPanel(new GridLayout(0, 2));
             colorDetection = new Button("Color Detection");
+            connectToRobot = new Button("Connect Robot");
             robotDetectionButton = new Button("Robot Detection");
             ballDetectionButton = new Button("Ball Detection");
             edgeDetectionButton = new Button("Edge Detection");
@@ -171,6 +177,23 @@ public class CameraAnalyze {
                     });
                 }
             });
+            connectToRobot.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    EventQueue.invokeLater(new Runnable() {
+                        // Overriding existing run() method
+                        @Override
+                        public void run() {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    new ConnectToRobot(dude);
+                                }
+                            }).start();
+                        }
+                    });
+                }
+            });
             colorFilterButton = new Button("Color Filter");
             colorFilterButton.addActionListener(new ActionListener() {
                 @Override
@@ -184,6 +207,7 @@ public class CameraAnalyze {
             buttons.add(robotDetectionButton);
             buttons.add(ballDetectionButton);
             buttons.add(edgeDetectionButton);
+            buttons.add(connectToRobot);
             jFrame.add(buttons);
 
             jFrame.setSize(new Dimension(camWidth, camHeight + 65));
@@ -213,14 +237,14 @@ public class CameraAnalyze {
 
 
                 if(robotDetectionOn){
-                    List<Rect>[] robotRects = robotDetection.detect(image);
+                    List<Rect>[] robotRects = robotDetection.detect(image,dude);
                     blue = robotRects[1];
                     green = robotRects[0];
 
                 }
 
-                if (ballDetectionOn) {
-                    ballRects = ballDetection.detect(image);
+                if(ballDetectionOn){
+                    ballRects = ballDetection.detect(image,dude);
                 }
                 if (edgeDetectionOn){
                     edgeRects= edgeDetection.detect(image);

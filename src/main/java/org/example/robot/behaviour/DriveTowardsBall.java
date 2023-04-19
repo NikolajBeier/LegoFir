@@ -2,11 +2,14 @@ package org.example.robot.behaviour;
 
 
 import lejos.robotics.SampleProvider;
+import org.example.mapping.RobotPosition;
+import org.example.mapping.TennisBall;
 import org.example.robot.Legofir;
+import org.opencv.core.Point;
 
 
 public class DriveTowardsBall implements MyBehavior{
-    Boolean suppressed = false;
+    volatile Boolean suppressed = false;
     Legofir dude;
     Boolean stopCondition = false;
 
@@ -33,34 +36,59 @@ public class DriveTowardsBall implements MyBehavior{
     @Override
     public void action() {
         suppressed=false;
-        int currentAngle= dude.GetAngle();
+        while(!suppressed) {
 
-        int cameraAngleToNextBall=45; // TODO: get angle from camera
+            RobotPosition currentPosition = dude.getMap().getRobotPosition();
+            TennisBall nextBall = dude.getMap().getNextBall();
 
-        int angleToNextBall=currentAngle+cameraAngleToNextBall;
+            int nextBallX = nextBall.getX();
+            int nextBallY = nextBall.getY();
 
-        if(cameraAngleToNextBall>0){
-            while(currentAngle<=angleToNextBall){
-                dude.turnLeft();
-                currentAngle=dude.GetAngle();
-                System.out.println("Turning Left. CurrentAngle = " + currentAngle);
+            int currentAngle = dude.getAngle();
+
+            // vektor fra currentPosition(x,y) til (nextBallX,nextBallY)
+            Point ballVector = new Point(nextBallX - currentPosition.getX(), nextBallY - currentPosition.getY());
+
+            // Vinkel af vektor...
+
+            int cameraAngleToNextBall = (int) Math.atan(ballVector.y / ballVector.x);
+
+            int angleToNextBall = currentAngle + cameraAngleToNextBall;
+
+            if (cameraAngleToNextBall > 0) {
+                while (currentAngle <= angleToNextBall) {
+                    dude.turnLeft();
+                    currentAngle = dude.getAngle();
+                    System.out.println("Turning Left. CurrentAngle = " + currentAngle);
+                }
             }
-        }
-        if(cameraAngleToNextBall<0){
-            while(currentAngle>=angleToNextBall){
-                dude.turnRight();
-                currentAngle=dude.GetAngle();
-                System.out.println("Turning Right. CurrentAngle = " + currentAngle);
+            if (cameraAngleToNextBall < 0) {
+                while (currentAngle >= angleToNextBall) {
+                    dude.turnRight();
+                    currentAngle = dude.getAngle();
+                    System.out.println("Turning Right. CurrentAngle = " + currentAngle);
 
+                }
             }
-        }
-        // køre frem så længe vi må.
-        while (!suppressed){
+
+
+            // Heading found, now go forward
+
             dude.beginHarvester();
             dude.moveForward();
+
+            // Waits to be suppressed or until the robot is close enough to the ball for it to be assumed picked up or pushed away.
+            while (!suppressed) {
+                if (dude.getMap().getRobotPosition().getX() < nextBallX + 5 && dude.getMap().getRobotPosition().getX() > nextBallX - 5) {
+                    if (dude.getMap().getRobotPosition().getY() < nextBallY + 5 && dude.getMap().getRobotPosition().getY() > nextBallY - 5) {
+                        break;
+                    }
+                }
+            }
+
+            dude.stopHarvester();
+            dude.stopWheels();
         }
-        dude.stopHarvester();
-        dude.stopWheels();
     }
 
     @Override

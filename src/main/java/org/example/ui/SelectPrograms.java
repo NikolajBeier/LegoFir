@@ -2,18 +2,19 @@ package org.example.ui;
 
 import lejos.remote.ev3.RemoteEV3;
 import org.example.robot.Launcher;
+import org.example.robot.Legofir;
 import org.example.robot.Program;
 import org.example.robot.WASDController;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class SelectPrograms {
     Program chosenProgram;
-    public SelectPrograms(RemoteEV3 ev3){
+    Legofir dude;
+    public SelectPrograms(RemoteEV3 ev3, Legofir dude){
+        this.dude=dude;
         JFrame jFrame = new JFrame();
         jFrame.setSize(1000, 750);
         jFrame.setLayout(new BorderLayout());
@@ -23,7 +24,7 @@ public class SelectPrograms {
         jFrame.add(jLabel, BorderLayout.CENTER, SwingConstants.CENTER);
 
         //Programs hardcoded
-        Launcher launcher = new Launcher(ev3);
+        Launcher launcher = new Launcher(ev3,dude);
         programs.add(launcher);
         WASDController wasdController = new WASDController(ev3);
         programs.add(wasdController);
