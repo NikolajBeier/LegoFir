@@ -12,6 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.SecureCacheResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,8 +67,10 @@ public class CameraAnalyze {
         Button colorDetection;
         Button robotDetectionButton;
         Button ballDetectionButton;
+        Button edgeDetectionButton;
         BallDetection ballDetection = new BallDetection();
         RobotDetection robotDetection = new RobotDetection();
+
         Boolean ballDetectionOn = false;
         Boolean robotDetectionOn = false;
         EdgeDetection edgeDetection = new EdgeDetection();
@@ -91,6 +94,7 @@ public class CameraAnalyze {
             colorDetection = new Button("Color Detection");
             robotDetectionButton = new Button("Robot Detection");
             ballDetectionButton = new Button("Ball Detection");
+            edgeDetectionButton = new Button("Edge Detection");
 
             buttons.setBounds(camWidth / 2 - 100, camHeight, 150, 40);
 
@@ -106,7 +110,7 @@ public class CameraAnalyze {
                                 @Override
                                 public void run() {
                                     ballDetectionOn = true;
-                                    edgeDetectionOn = true;
+
 
                                 }
                             }).start();
@@ -127,6 +131,22 @@ public class CameraAnalyze {
                                 @Override
                                 public void run() {
                                     robotDetectionOn=true;
+                                }
+                            }).start();
+                        }
+                    });
+                }
+            });
+            edgeDetectionButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    EventQueue.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    edgeDetectionOn=true;
                                 }
                             }).start();
                         }
@@ -163,6 +183,7 @@ public class CameraAnalyze {
             buttons.add(colorDetection);
             buttons.add(robotDetectionButton);
             buttons.add(ballDetectionButton);
+            buttons.add(edgeDetectionButton);
             jFrame.add(buttons);
 
             jFrame.setSize(new Dimension(camWidth, camHeight + 65));
@@ -188,6 +209,7 @@ public class CameraAnalyze {
                 java.util.List<Rect> blue = new ArrayList<>();
                 java.util.List<Rect> green = new ArrayList<>();
                 java.util.List<Rect> ballRects = new ArrayList<>();
+                java.util.List<Rect> edgeRects = new ArrayList<>();
 
 
                 if(robotDetectionOn){
@@ -200,6 +222,9 @@ public class CameraAnalyze {
                 if (ballDetectionOn) {
                     ballRects = ballDetection.detect(image);
                 }
+                if (edgeDetectionOn){
+                    edgeRects= edgeDetection.detect(image);
+                }
 
                 // draw rectangles
 
@@ -207,6 +232,11 @@ public class CameraAnalyze {
                 for (Rect boundingRect : ballRects) {
                     Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), new Scalar(0, 0, 255), 1);
                     putText(image, "Ball", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+                }
+                // Edge rects
+                for (Rect boundingRect : edgeRects){
+                    Imgproc.rectangle(image,boundingRect.tl(),boundingRect.br(), new Scalar(0,0,255),1);
+                    putText(image, "Edge",boundingRect.tl(), FONT_HERSHEY_SIMPLEX,1,new Scalar(0,0,255),2);
                 }
 
                 // Blue rects
