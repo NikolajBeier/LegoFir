@@ -1,13 +1,13 @@
 package org.example.camera;
 
+import org.example.robot.Legofir;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.opencv.imgproc.Imgproc.RETR_EXTERNAL;
-import static org.opencv.imgproc.Imgproc.contourArea;
+import static org.opencv.imgproc.Imgproc.*;
 
 public class EdgeDetection {
 
@@ -26,14 +26,14 @@ public class EdgeDetection {
     int redValueMin = 50;
     int redValueMax=255;
 
-    public List<MatOfPoint> detect(Mat image) {
-        List<MatOfPoint> edges = new ArrayList<>();
+    public Rect detect(Mat image, Legofir dude) {
+        Rect edgeRect;
         Imgproc.cvtColor(image, hlsimage, Imgproc.COLOR_BGR2HLS);
         Core.inRange(hlsimage, new Scalar(redHueMin, redSatMin, redValueMin), new Scalar(redHueMax, redSatMax, redValueMax), redMask);
 
 
         // init
-        ArrayList<MatOfPoint> redContour = new ArrayList<>();
+        List<MatOfPoint> redContour = new ArrayList<>();
         Mat redHierarchy = new Mat();
 
 
@@ -42,14 +42,21 @@ public class EdgeDetection {
         if (!redContour.isEmpty()) {
             for (MatOfPoint contour : redContour) {
                  if(contourArea(contour) > 500) {
-                     MatOfPoint boundingContour = contour;
-                    edges.add(boundingContour);
+                     edgeRect = boundingRect(contour);
+                     Point topLeft = edgeRect.tl();
+                     Point bottomRight = edgeRect.br();
+                     Point topRight = new Point(bottomRight.x, topLeft.y);
+                     Point bottomLeft = new Point(topLeft.x, bottomRight.y);
+                     int height = edgeRect.height;
+                     int width = edgeRect.width;
+                     dude.getMap().setEdge(topLeft, topRight, bottomLeft, bottomRight, height, width);
+                     return edgeRect;
                 }
 
 
             }
         }
-        return edges;
+        return null;
     }
 
 }

@@ -2,14 +2,17 @@ package org.example.robot;
 
 import lejos.remote.ev3.RMIRegulatedMotor;
 import org.example.mapping.Map;
+import org.example.mapping.TennisBall;
 import org.opencv.core.Rect;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Thread.sleep;
 
 public class Legofir {
+    RobotState state = RobotState.IDLE;
 
     // Mapping
 
@@ -58,6 +61,13 @@ public class Legofir {
 
     public void setDefaultSpeedWheel(int defaultSpeedWheel) {
         this.defaultSpeedWheel = defaultSpeedWheel;
+        try {
+            left.setSpeed(defaultSpeedWheel);
+            right.setSpeed(defaultSpeedWheel);
+
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void setDefaultSpeedBallDropper(int defaultSpeedBallDropper) {
@@ -85,6 +95,7 @@ public class Legofir {
     }
 
     public void moveForward(){
+        state=RobotState.MOVING_FORWARD;
         try {
             left.backward();
             right.backward();
@@ -94,7 +105,10 @@ public class Legofir {
     }
 
     public void turnLeft(){
+        state=RobotState.TURNING_LEFT;
         try {
+            left.setSpeed(80);
+            right.setSpeed(80);
             left.forward();
             right.backward();
         } catch (RemoteException e) {
@@ -103,7 +117,10 @@ public class Legofir {
     }
 
     public void turnRight(){
+        state=RobotState.TURNING_RIGHT;
         try{
+            left.setSpeed(80);
+            right.setSpeed(80);
             left.backward();
             right.forward();
         } catch (RemoteException e) {
@@ -114,14 +131,17 @@ public class Legofir {
     public void beginHarvester(){
         try {
             System.out.println(harvester.getSpeed());
-            harvester.forward();
+            harvester.backward();
         } catch (RemoteException e) {
             stopAll();
         }
     }
 
     public void stopWheels(){
+        state=RobotState.IDLE;
         try {
+            left.setSpeed(defaultSpeedWheel);
+            right.setSpeed(defaultSpeedWheel);
             left.stop(true);
             right.stop(true);
         } catch (RemoteException e) {
@@ -211,19 +231,19 @@ public class Legofir {
 
     public void addBalls(List<Rect> balls) {
         // replace old balls with new ones
-        int numOfOldBalls = map.getBalls().size();
+        List<TennisBall> newList = new ArrayList<>();
 
         for (Rect ball : balls) {
-            map.addBallCord((int)(ball.x+ball.width*0.5), (int)(ball.y+ ball.height*0.5));
+            newList.add(new TennisBall((int)(ball.x+ball.width*0.5), (int)(ball.y+ ball.height*0.5)));
         }
-        for (int i = 0; i < numOfOldBalls; i++) {
-            map.getBalls().removeFirst();
-
-        }
-
+        map.setBalls(newList);
     }
 
-    public int getAngle() {
+    public double getAngle() {
         return map.getRobotPosition().getHeadingInDegrees();
+    }
+
+    public RobotState getState() {
+        return state;
     }
 }
