@@ -52,7 +52,7 @@ public class DriveTowardsBall implements MyBehavior{
 
             // Vinkel af vektor...
 
-            currentAngle= Math.atan2(ballVector.y, ballVector.x);
+            angleToNextBall= Math.atan2(ballVector.y, ballVector.x);
 
             System.out.println("before turning: "+currentAngle + " " + angleToNextBall);
 
