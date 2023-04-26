@@ -219,6 +219,7 @@ public class CameraAnalyze {
 
                 currentBehaviour = dude.getCurrentBehaviourName();
 
+
                 capture.read(webCamImage);
                 resize(webCamImage, image, new Size(1280, 720));
                 //image = webCamImage;
