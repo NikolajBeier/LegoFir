@@ -62,7 +62,7 @@ public class CameraTest extends JFrame {
         // Creating a camera
         public void startCamera()
         {
-            capture = new VideoCapture(0);
+            capture = new VideoCapture(1);
             image = new Mat();
             byte[] imageData;
 

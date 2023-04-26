@@ -202,7 +202,8 @@ public class CameraAnalyze {
             while (true) {
                 // read image to matrix
                 capture.read(webCamImage);
-                image = webCamImage;
+                resize(webCamImage, image, new Size(1280, 720));
+                //image = webCamImage;
 
 
                 java.util.List<Rect> blue = new ArrayList<>();
@@ -245,8 +246,8 @@ public class CameraAnalyze {
 
                             Point blueCenter = new Point(blueBoundingRect.x + blueBoundingRect.width * 0.5, blueBoundingRect.y + blueBoundingRect.height * 0.5);
                             Point greenCenter = new Point(greenBoundingRect.x + greenBoundingRect.width * 0.5, greenBoundingRect.y + greenBoundingRect.height * 0.5);
-                            circle(webCamImage, blueCenter, 1, new Scalar(0, 0, 255), 1);
-                            circle(webCamImage, greenCenter, 1, new Scalar(0, 0, 255), 1);
+                            circle(image, blueCenter, 1, new Scalar(0, 0, 255), 1);
+                            circle(image, greenCenter, 1, new Scalar(0, 0, 255), 1);
 
                             Point centerOfLine = new Point((blueCenter.x + greenCenter.x) * 0.5, (blueCenter.y + greenCenter.y) * 0.5);
 
@@ -258,11 +259,12 @@ public class CameraAnalyze {
                             Point arrowPoint = new Point(centerOfLine.x + perpendicularVector.x, centerOfLine.y + perpendicularVector.y);
 
 
-                            circle(webCamImage, centerOfLine, 2, new Scalar(0, 0, 255), 2);
+                            circle(image, centerOfLine, 2, new Scalar(0, 0, 255), 2);
 
 
-                            line(webCamImage, blueCenter, greenCenter, new Scalar(0, 0, 255), 1);
-                            arrowedLine(webCamImage, centerOfLine, arrowPoint, new Scalar(0, 0, 255), 1);
+                            line(image, blueCenter, greenCenter, new Scalar(0, 0, 255), 1);
+                            System.out.println("Blue: " + blueCenter.toString() + " Green: " + greenCenter.toString() + " Center: " + centerOfLine.toString() + " Arrow: " + arrowPoint.toString());
+                            arrowedLine(image, centerOfLine, arrowPoint, new Scalar(0, 0, 255), 1);
 
                         }
                     }
