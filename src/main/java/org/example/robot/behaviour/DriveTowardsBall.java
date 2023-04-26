@@ -1,7 +1,6 @@
 package org.example.robot.behaviour;
 
 
-import lejos.robotics.SampleProvider;
 import org.example.mapping.RobotPosition;
 import org.example.mapping.TennisBall;
 import org.example.robot.Legofir;
@@ -55,21 +54,10 @@ public class DriveTowardsBall implements MyBehavior{
 
             int angleToNextBall = currentAngle + cameraAngleToNextBall;
 
-            if (cameraAngleToNextBall > 0) {
-                while (currentAngle <= angleToNextBall) {
-                    dude.turnLeft();
-                    currentAngle = dude.getAngle();
-                    System.out.println("Turning Left. CurrentAngle = " + currentAngle);
-                }
-            }
-            if (cameraAngleToNextBall < 0) {
-                while (currentAngle >= angleToNextBall) {
-                    dude.turnRight();
-                    currentAngle = dude.getAngle();
-                    System.out.println("Turning Right. CurrentAngle = " + currentAngle);
+            turnLeftTowardsBall(currentAngle,cameraAngleToNextBall,angleToNextBall);
+            turnRightTowardsBall(currentAngle,cameraAngleToNextBall,angleToNextBall);
 
-                }
-            }
+
 
 
             // Heading found, now go forward
@@ -79,8 +67,10 @@ public class DriveTowardsBall implements MyBehavior{
 
             // Waits to be suppressed or until the robot is close enough to the ball for it to be assumed picked up or pushed away.
             while (!suppressed) {
-                if (dude.getMap().getRobotPosition().getX() < nextBallX + 5 && dude.getMap().getRobotPosition().getX() > nextBallX - 5) {
-                    if (dude.getMap().getRobotPosition().getY() < nextBallY + 5 && dude.getMap().getRobotPosition().getY() > nextBallY - 5) {
+                System.out.println("Driving towards ball: Robot Position: x=" + dude.getMap().getRobotPosition().getX() + ", y=" + dude.getMap().getRobotPosition().getY() + ", heading=" + dude.getMap().getRobotPosition().getHeading());
+                System.out.println("Driving towards ball: Next Ball Position: x=" + nextBallX + ", y=" + nextBallY);
+                if (dude.getMap().getRobotPosition().getX() < nextBallX + 25 && dude.getMap().getRobotPosition().getX() > nextBallX - 25) {
+                    if (dude.getMap().getRobotPosition().getY() < nextBallY + 25 && dude.getMap().getRobotPosition().getY() > nextBallY - 25) {
                         break;
                     }
                 }
@@ -91,6 +81,9 @@ public class DriveTowardsBall implements MyBehavior{
         }
     }
 
+
+
+
     @Override
     public void suppress(){
         suppressed = true;
@@ -100,5 +93,28 @@ public class DriveTowardsBall implements MyBehavior{
     public void setStopCondition(Boolean stopCondition) {
         this.stopCondition=stopCondition;
         suppressed= true;
+    }
+
+    private void turnLeftTowardsBall(int currentAngle, int cameraAngleToNextBall, int angleToNextBall) {
+        if (cameraAngleToNextBall > 0) {
+            // Turn left towards ball
+            dude.turnLeft();
+            while (currentAngle <= angleToNextBall) {
+                currentAngle = dude.getAngle();
+                System.out.println("Turning Left. CurrentAngle = " + currentAngle);
+            }
+            // Stop turning
+            dude.stopWheels();
+        }
+    }
+    private void turnRightTowardsBall(int currentAngle, int cameraAngleToNextBall, int angleToNextBall) {
+        if (cameraAngleToNextBall < 0) {
+            dude.turnRight();
+            while (currentAngle >= angleToNextBall) {
+                currentAngle = dude.getAngle();
+                System.out.println("Turning Right. CurrentAngle = " + currentAngle);
+            }
+            dude.stopWheels();
+        }
     }
 }

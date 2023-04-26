@@ -31,17 +31,57 @@ public class Legofir {
     int defaultAccelerationWheel;
     int defaultAccelerationBallDropper;
 
-    public Legofir(RMIRegulatedMotor left, RMIRegulatedMotor right, RMIRegulatedMotor harvester, RMIRegulatedMotor balldropper, int defaultSpeedHarvester, int defaultSpeedWheel, int defaultSpeedBallDropper, int defaultAccelerationHarvester, int defaultAccelerationWheel, int defaultAccelerationBallDropper) {
+    boolean launched;
+
+    public Legofir() {
+    }
+
+    public void setLeft(RMIRegulatedMotor left) {
         this.left = left;
+    }
+
+    public void setRight(RMIRegulatedMotor right) {
         this.right = right;
+    }
+
+    public void setHarvester(RMIRegulatedMotor harvester) {
         this.harvester = harvester;
+    }
+
+    public void setBalldropper(RMIRegulatedMotor balldropper) {
         this.balldropper = balldropper;
+    }
+
+    public void setDefaultSpeedHarvester(int defaultSpeedHarvester) {
         this.defaultSpeedHarvester = defaultSpeedHarvester;
-        this.defaultAccelerationHarvester = defaultAccelerationHarvester;
+    }
+
+    public void setDefaultSpeedWheel(int defaultSpeedWheel) {
         this.defaultSpeedWheel = defaultSpeedWheel;
-        this.defaultAccelerationWheel = defaultAccelerationWheel;
+    }
+
+    public void setDefaultSpeedBallDropper(int defaultSpeedBallDropper) {
         this.defaultSpeedBallDropper = defaultSpeedBallDropper;
+    }
+
+    public void setDefaultAccelerationHarvester(int defaultAccelerationHarvester) {
+        this.defaultAccelerationHarvester = defaultAccelerationHarvester;
+    }
+
+    public void setDefaultAccelerationWheel(int defaultAccelerationWheel) {
+        this.defaultAccelerationWheel = defaultAccelerationWheel;
+    }
+
+    public void setDefaultAccelerationBallDropper(int defaultAccelerationBallDropper) {
         this.defaultAccelerationBallDropper = defaultAccelerationBallDropper;
+    }
+
+    public void setLaunched(boolean launched) {
+        this.launched = launched;
+    }
+
+    public boolean isLaunched() {
+        return launched;
     }
 
     public void moveForward(){
