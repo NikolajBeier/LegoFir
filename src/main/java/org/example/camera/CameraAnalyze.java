@@ -14,7 +14,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.SecureCacheResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,10 +73,10 @@ public class CameraAnalyze {
         Button edgeDetectionButton;
         BallDetection ballDetection = new BallDetection();
         RobotDetection robotDetection = new RobotDetection();
-
+        EdgeDetection edgeDetection = new EdgeDetection();
         Boolean ballDetectionOn = false;
         Boolean robotDetectionOn = false;
-        EdgeDetection edgeDetection = new EdgeDetection();
+
         Boolean edgeDetectionOn = false;
         Button colorFilterButton;
         Button connectToRobot;
@@ -233,7 +232,7 @@ public class CameraAnalyze {
                 java.util.List<Rect> blue = new ArrayList<>();
                 java.util.List<Rect> green = new ArrayList<>();
                 java.util.List<Rect> ballRects = new ArrayList<>();
-                java.util.List<Rect> edgeRects = new ArrayList<>();
+                java.util.List<MatOfPoint> edgeContour = new ArrayList<>();
 
 
                 if(robotDetectionOn){
@@ -247,7 +246,7 @@ public class CameraAnalyze {
                     ballRects = ballDetection.detect(image,dude);
                 }
                 if (edgeDetectionOn){
-                    edgeRects= edgeDetection.detect(image);
+                    edgeContour= edgeDetection.detect(image);
                 }
 
                 // draw rectangles
@@ -257,10 +256,10 @@ public class CameraAnalyze {
                     Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), new Scalar(0, 0, 255), 1);
                     putText(image, "Ball", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
                 }
+
                 // Edge rects
-                for (Rect boundingRect : edgeRects){
-                    Imgproc.rectangle(image,boundingRect.tl(),boundingRect.br(), new Scalar(0,0,255),1);
-                    putText(image, "Edge",boundingRect.tl(), FONT_HERSHEY_SIMPLEX,1,new Scalar(0,0,255),2);
+                for (MatOfPoint boundingContour  : edgeContour ){
+                    Imgproc.drawContours(image,edgeContour,2, new Scalar(0,0,255),2);
                 }
 
                 // Blue rects
@@ -371,6 +370,7 @@ public class CameraAnalyze {
             JLabel colorCameraScreen = new JLabel();
             colorCameraScreen.setBounds(0, 0, camWidth, camHeight);
             jFrame.add(colorCameraScreen);
+            JButton findValues = new JButton("Find Values");
             JPanel sliders = new JPanel();
             sliders.setLayout(new GridLayout(2, 6));
             JSlider hueMin = new JSlider(0, 255, 0);
@@ -399,6 +399,19 @@ public class CameraAnalyze {
             sliders.add(valMax);
             sliders.setBounds(0, camHeight, camWidth, 100);
             jFrame.add(sliders);
+
+            findValues.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("Hue Min: "+hueMin.getValue());
+                    System.out.println("Hue Max: "+hueMax.getValue());
+                    System.out.println("Sat Min: "+satMin.getValue());
+                    System.out.println("Sat Max: "+satMax.getValue());
+                    System.out.println("Val Min: "+valMin.getValue());
+                    System.out.println("Val Max: "+valMax.getValue());
+                }
+            });
+            buttonsSliders.add(findValues);
 
 
             mainPanel.setPreferredSize(new Dimension(width, height - 130));
