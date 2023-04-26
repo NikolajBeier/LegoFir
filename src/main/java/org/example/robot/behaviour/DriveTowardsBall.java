@@ -1,14 +1,14 @@
 package org.example.robot.behaviour;
 
 
-import lejos.robotics.SampleProvider;
 import org.example.mapping.RobotPosition;
+import org.example.mapping.TennisBall;
 import org.example.robot.Legofir;
 import org.opencv.core.Point;
 
 
 public class DriveTowardsBall implements MyBehavior{
-    Boolean suppressed = false;
+    volatile Boolean suppressed = false;
     Legofir dude;
     Boolean stopCondition = false;
 
@@ -35,46 +35,54 @@ public class DriveTowardsBall implements MyBehavior{
     @Override
     public void action() {
         suppressed=false;
-        //int currentAngle= dude.GetAngle();
+        while(!suppressed) {
 
-        RobotPosition currentPosition = dude.getMap().getRobotPosition();
-        int nextBallX=dude.getMap().getBalls().get(0).getX();
-        int nextBallY=dude.getMap().getBalls().get(0).getY();
+            RobotPosition currentPosition = dude.getMap().getRobotPosition();
+            TennisBall nextBall = dude.getMap().getNextBall();
 
-        int currentAngle = currentPosition.getHeadingInDegrees();
+            int nextBallX = nextBall.getX();
+            int nextBallY = nextBall.getY();
 
-        // vektor fra currentPosition(x,y) til (nextBallX,nextBallY)
-        Point ballVector = new Point(nextBallX-currentPosition.getX(),nextBallY-currentPosition.getY());
+            int currentAngle = dude.getAngle();
 
-        // Vinkel af vektor...
+            // vektor fra currentPosition(x,y) til (nextBallX,nextBallY)
+            Point ballVector = new Point(nextBallX - currentPosition.getX(), nextBallY - currentPosition.getY());
 
-        int cameraAngleToNextBall = (int)Math.atan(ballVector.y/ballVector.x); // TODO: get angle from camera
+            // Vinkel af vektor...
 
-        int angleToNextBall=currentAngle+cameraAngleToNextBall;
+            int cameraAngleToNextBall = (int) Math.atan(ballVector.y / ballVector.x);
 
-        if(cameraAngleToNextBall>0){
-            while(currentAngle<=angleToNextBall){
-                dude.turnLeft();
-                currentAngle=dude.GetAngle();
-                System.out.println("Turning Left. CurrentAngle = " + currentAngle);
-            }
-        }
-        if(cameraAngleToNextBall<0){
-            while(currentAngle>=angleToNextBall){
-                dude.turnRight();
-                currentAngle=dude.GetAngle();
-                System.out.println("Turning Right. CurrentAngle = " + currentAngle);
+            int angleToNextBall = currentAngle + cameraAngleToNextBall;
 
-            }
-        }
-        // køre frem så længe vi må.
-        while (!suppressed){
+            turnLeftTowardsBall(currentAngle,cameraAngleToNextBall,angleToNextBall);
+            turnRightTowardsBall(currentAngle,cameraAngleToNextBall,angleToNextBall);
+
+
+
+
+            // Heading found, now go forward
+
             dude.beginHarvester();
             dude.moveForward();
+
+            // Waits to be suppressed or until the robot is close enough to the ball for it to be assumed picked up or pushed away.
+            while (!suppressed) {
+                System.out.println("Driving towards ball: Robot Position: x=" + dude.getMap().getRobotPosition().getX() + ", y=" + dude.getMap().getRobotPosition().getY() + ", heading=" + dude.getMap().getRobotPosition().getHeading());
+                System.out.println("Driving towards ball: Next Ball Position: x=" + nextBallX + ", y=" + nextBallY);
+                if (dude.getMap().getRobotPosition().getX() < nextBallX + 25 && dude.getMap().getRobotPosition().getX() > nextBallX - 25) {
+                    if (dude.getMap().getRobotPosition().getY() < nextBallY + 25 && dude.getMap().getRobotPosition().getY() > nextBallY - 25) {
+                        break;
+                    }
+                }
+            }
+
+            dude.stopHarvester();
+            dude.stopWheels();
         }
-        dude.stopHarvester();
-        dude.stopWheels();
     }
+
+
+
 
     @Override
     public void suppress(){
@@ -85,5 +93,28 @@ public class DriveTowardsBall implements MyBehavior{
     public void setStopCondition(Boolean stopCondition) {
         this.stopCondition=stopCondition;
         suppressed= true;
+    }
+
+    private void turnLeftTowardsBall(int currentAngle, int cameraAngleToNextBall, int angleToNextBall) {
+        if (cameraAngleToNextBall > 0) {
+            // Turn left towards ball
+            dude.turnLeft();
+            while (currentAngle <= angleToNextBall) {
+                currentAngle = dude.getAngle();
+                System.out.println("Turning Left. CurrentAngle = " + currentAngle);
+            }
+            // Stop turning
+            dude.stopWheels();
+        }
+    }
+    private void turnRightTowardsBall(int currentAngle, int cameraAngleToNextBall, int angleToNextBall) {
+        if (cameraAngleToNextBall < 0) {
+            dude.turnRight();
+            while (currentAngle >= angleToNextBall) {
+                currentAngle = dude.getAngle();
+                System.out.println("Turning Right. CurrentAngle = " + currentAngle);
+            }
+            dude.stopWheels();
+        }
     }
 }

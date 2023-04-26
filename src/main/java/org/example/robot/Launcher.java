@@ -24,13 +24,8 @@ public class Launcher implements Program {
         this.dude=dude;
     }
     public void setupRobot(){
+
         ev3.setDefault();
-        Audio sound = ev3.getAudio();
-        sound.setVolume(15);
-        themes.ImperialTheme(ev3);
-
-
-        System.out.println("Når vi her?");
 
         // Create the motor objects
         RMIRegulatedMotor right = ev3.createRegulatedMotor("A", 'L');
@@ -41,15 +36,35 @@ public class Launcher implements Program {
 
 
         // Create the sensor objects
+        /*
         EV3UltrasonicSensor ultrasonicSensor = new EV3UltrasonicSensor(ev3.getPort("S1"));
         // EV3 create sensor
         RMISampleProvider ev3GyroSensor = ev3.createSampleProvider("S3", "lejos.hardware.sensor.EV3GyroSensor", "Angle");
-
         System.out.println("sensors connected");
+         */
 
         // Robot object
-        dude = new Legofir(left,right,harvester, balldropper,1440,720,720,1000,1000, 1000, ultrasonicSensor,ev3GyroSensor);
-    }
+        //dude = new Legofir(left,right,harvester, balldropper,1440,720,720,1000,1000, 1000);
+        dude.setLeft(left);
+        dude.setRight(right);
+        dude.setHarvester(harvester);
+        dude.setBalldropper(balldropper);
+        dude.setDefaultSpeedHarvester(1440);
+        dude.setDefaultSpeedWheel(240);
+        dude.setDefaultSpeedBallDropper(720);
+        dude.setDefaultAccelerationHarvester(1000);
+        dude.setDefaultAccelerationWheel(500);
+        dude.setDefaultAccelerationBallDropper(1000);
+        dude.setLaunched(true);
+
+        Audio sound = ev3.getAudio();
+        sound.setVolume(15);
+        themes.ImperialTheme(ev3);
+
+
+        System.out.println("Når vi her?");
+
+           }
     public void launchRobot() {
 
         bArray = new MyBehavior[]{

@@ -1,15 +1,10 @@
 package org.example;
 
 //import nu.pattern.OpenCV;
-import org.example.mapping.Dijkstras_Algorithm;
-import org.example.mapping.Map;
-import org.example.mapping.TennisBall;
+import org.example.camera.CameraAnalyze;
 import org.example.robot.Legofir;
 import org.example.ui.ConnectToRobot;
 import org.example.ui.Visualization;
-import org.opencv.core.Core;
-import org.opencv.core.CvType;
-import org.opencv.core.Mat;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,11 +12,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.LinkedList;
 
 public class Main {
     public static void main(String[] args) {
-        Legofir dude=null;
+        Legofir dude= new Legofir();
         JFrame jFrame = new JFrame();
         jFrame.setSize(300, 175);
         JButton visualization = new JButton("Visualization");

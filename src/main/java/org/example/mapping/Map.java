@@ -18,8 +18,8 @@ public class Map {
         return balls;
     }
 
-    RobotPosition robotPosition;
-    LinkedList<TennisBall> balls;
+    RobotPosition robotPosition = new RobotPosition();
+    LinkedList<TennisBall> balls = new LinkedList<>();
 
     public Map(int x, int y) {
         this.x = x;
@@ -44,5 +44,26 @@ public class Map {
 
     public void removeAllBalls() {
         balls.clear();
+    }
+
+    public TennisBall getNextBall() {
+
+
+
+        // find the tennis ball closest to the robot
+        TennisBall closestBall = new TennisBall(0,0);
+        double closestDistance = Integer.MAX_VALUE;
+
+        for(TennisBall tennisball : balls) {
+            // Distance between two points:
+            double distance = Math.sqrt((tennisball.x-getRobotPosition().x)*(tennisball.x-getRobotPosition().x)+(tennisball.y-getRobotPosition().y)*(tennisball.y-getRobotPosition().y));
+            if(distance<closestDistance) {
+                closestDistance = distance;
+                closestBall = tennisball;
+            }
+        }
+
+
+        return closestBall;
     }
 }

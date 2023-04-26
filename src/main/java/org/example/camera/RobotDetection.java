@@ -1,4 +1,4 @@
-package org.example;
+package org.example.camera;
 
 import org.example.robot.Legofir;
 import org.opencv.core.*;
@@ -122,7 +122,7 @@ public class RobotDetection {
 
                         Point arrowPoint = new Point(centerOfLine.x + perpendicularVector.x, centerOfLine.y + perpendicularVector.y);
 
-                        if(dude!=null)
+                        if(dude.isLaunched())
                         dude.getMap().setRobotPosition((int)centerOfLine.x,(int)centerOfLine.y,perpendicularVector);
                     }
 
