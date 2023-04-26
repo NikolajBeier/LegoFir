@@ -3,6 +3,7 @@ package org.example.camera;
 
 import nu.pattern.OpenCV;
 import org.example.robot.Legofir;
+import org.example.ui.Calibration.CalibrationTool;
 import org.example.ui.ConnectToRobot;
 import org.opencv.core.*;
 import org.opencv.core.Point;
@@ -75,6 +76,7 @@ public class CameraAnalyze {
         Boolean ballDetectionOn = false;
         Boolean robotDetectionOn = false;
         Button colorFilterButton;
+        Button calibrationTool;
         Button connectToRobot;
 
 
@@ -96,6 +98,7 @@ public class CameraAnalyze {
             connectToRobot = new Button("Connect Robot");
             robotDetectionButton = new Button("Robot Detection");
             ballDetectionButton = new Button("Ball Detection");
+            calibrationTool = new Button("Calibration Tool");
 
 
             if(camWidth>screenWidth || camHeight>screenHeight){
@@ -186,6 +189,7 @@ public class CameraAnalyze {
                     colorFilter = !colorFilter;
                 }
             });
+
 
             buttons.add(colorFilterButton);
             buttons.add(colorDetection);
@@ -382,8 +386,8 @@ public class CameraAnalyze {
             jFrame.add(sliders);
 
 
-            mainPanel.setPreferredSize(new Dimension(width, height-130));
-            mainPanel.add(cameraScreen);
+                mainPanel.setPreferredSize(new Dimension(width, height-130));
+                mainPanel.add(cameraScreen);
             mainPanel.add(colorCameraScreen);
 
             buttonsSliders.setPreferredSize(new Dimension(width,130));

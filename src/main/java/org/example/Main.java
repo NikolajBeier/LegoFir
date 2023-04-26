@@ -3,6 +3,7 @@ package org.example;
 //import nu.pattern.OpenCV;
 import org.example.camera.CameraAnalyze;
 import org.example.robot.Legofir;
+import org.example.ui.Calibration.CalibrationTool;
 import org.example.ui.ConnectToRobot;
 import org.example.ui.Visualization;
 
@@ -57,6 +58,20 @@ public class Main {
                 jFrame.dispose();
             }
         });
+        JButton calibrationTool = new JButton("Calibration Tool");
+        calibrationTool.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Start camera in thread
+                EventQueue.invokeLater(new Runnable() {
+                    // Overriding existing run() method
+                    @Override public void run()
+                    {
+                        final CalibrationTool calibrationTool = new CalibrationTool();
+                    }
+                });
+            }
+        });
         JLabel header = new JLabel("GolfBot UI", SwingConstants.CENTER);
         header.setPreferredSize(new Dimension(300, 75));
         jFrame.add(header, BorderLayout.NORTH);
@@ -65,6 +80,7 @@ public class Main {
         buttons.add(connect);
         buttons.add(visualization);
         buttons.add(camera);
+        buttons.add(calibrationTool);
         jFrame.add(buttons, BorderLayout.CENTER);
         jFrame.addWindowListener(new WindowAdapter() {
             @Override
