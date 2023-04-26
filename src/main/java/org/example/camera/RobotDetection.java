@@ -23,13 +23,13 @@ public class RobotDetection {
     ImageIcon icon;
     Mat greenMask = new Mat();
     Mat blueMask = new Mat();
-    int greenHueMin = 30;
-    int greenHueMax = 80;
-    int greenSatMin = 30;
+    int greenHueMin = 40;
+    int greenHueMax = 90;
+    int greenSatMin = 10;
     int greenSatMax = 255;
 
-    int blueHueMin = 105;
-    int blueHueMax = 130;
+    int blueHueMin = 95;
+    int blueHueMax = 135;
     int blueSatMin = 50;
     int blueSatMax = 255;
 

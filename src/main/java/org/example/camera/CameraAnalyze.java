@@ -14,6 +14,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,6 +73,7 @@ public class CameraAnalyze {
         Button ballDetectionButton;
         Button edgeDetectionButton;
         BallDetection ballDetection = new BallDetection();
+        OrangeBallDetection orangeBallDetection = new OrangeBallDetection();
         RobotDetection robotDetection = new RobotDetection();
         EdgeDetection edgeDetection = new EdgeDetection();
         Boolean ballDetectionOn = false;
@@ -226,12 +228,13 @@ public class CameraAnalyze {
             while (true) {
                 // read image to matrix
                 capture.read(webCamImage);
-                image = webCamImage;
+                resize(webCamImage,image,new Size(1200,720));
 
 
                 java.util.List<Rect> blue = new ArrayList<>();
                 java.util.List<Rect> green = new ArrayList<>();
                 java.util.List<Rect> ballRects = new ArrayList<>();
+                java.util.List<Rect> orangeBallRects = new ArrayList<>();
                 java.util.List<MatOfPoint> edgeContour = new ArrayList<>();
 
 
@@ -243,8 +246,10 @@ public class CameraAnalyze {
                 }
 
                 if(ballDetectionOn){
+                    orangeBallRects = orangeBallDetection.detect(image,dude);
                     ballRects = ballDetection.detect(image,dude);
                 }
+
                 if (edgeDetectionOn){
                     edgeContour= edgeDetection.detect(image);
                 }
@@ -252,6 +257,11 @@ public class CameraAnalyze {
                 // draw rectangles
 
                 // Ball rects
+                for (Rect bouningRect : orangeBallRects){
+                    Imgproc.rectangle(image,bouningRect.tl(),bouningRect.br(),new Scalar(0,0,255, 1));
+                    putText(image, "Orange ball",bouningRect.tl(), FONT_HERSHEY_SIMPLEX,1,new Scalar(0,0,255),2);
+                }
+
                 for (Rect boundingRect : ballRects) {
                     Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), new Scalar(0, 0, 255), 1);
                     putText(image, "Ball", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
@@ -278,8 +288,8 @@ public class CameraAnalyze {
 
                             Point blueCenter = new Point(blueBoundingRect.x + blueBoundingRect.width * 0.5, blueBoundingRect.y + blueBoundingRect.height * 0.5);
                             Point greenCenter = new Point(greenBoundingRect.x + greenBoundingRect.width * 0.5, greenBoundingRect.y + greenBoundingRect.height * 0.5);
-                            circle(webCamImage, blueCenter, 1, new Scalar(0, 0, 255), 1);
-                            circle(webCamImage, greenCenter, 1, new Scalar(0, 0, 255), 1);
+                            circle(image, blueCenter, 1, new Scalar(0, 0, 255), 1);
+                            circle(image, greenCenter, 1, new Scalar(0, 0, 255), 1);
 
                             Point centerOfLine = new Point((blueCenter.x + greenCenter.x) * 0.5, (blueCenter.y + greenCenter.y) * 0.5);
 

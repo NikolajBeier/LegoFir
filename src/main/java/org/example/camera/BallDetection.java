@@ -30,6 +30,9 @@ public class BallDetection {
     int lMin = 210;
     int lMax = 255;
 
+
+
+
     public List<Rect> detect(Mat image, Legofir dude) {
 
         List<Rect> balls = new ArrayList<>();
@@ -49,7 +52,7 @@ public class BallDetection {
 
         if(!whiteContour.isEmpty()){
             for(MatOfPoint contour : whiteContour){
-                if(Imgproc.contourArea(contour) > 150){
+                if(Imgproc.contourArea(contour) > 100&& Imgproc.contourArea(contour)<600){
                     Rect boundingRect = Imgproc.boundingRect(contour);
                     balls.add(boundingRect);
                     //dude.getMap().addBallCord((int)(boundingRect.x+boundingRect.width*0.5), (int)(boundingRect.y+ boundingRect.height*0.5));

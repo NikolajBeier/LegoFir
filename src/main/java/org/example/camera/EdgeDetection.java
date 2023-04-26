@@ -19,7 +19,7 @@ public class EdgeDetection {
 
     Mat hlsimage = new Mat();
     Mat redMask = new Mat();
-    int redHueMin = 5;
+    int redHueMin = 175;
     int redHueMax = 15 ;
     int redSatMin = 50;
     int redSatMax = 255;
@@ -28,7 +28,7 @@ public class EdgeDetection {
 
     public List<MatOfPoint> detect(Mat image) {
         List<MatOfPoint> edges = new ArrayList<>();
-        Imgproc.cvtColor(image, hlsimage, Imgproc.COLOR_BGR2HLS);
+        Imgproc.cvtColor(image, hlsimage, Imgproc.COLOR_BGR2HSV);
         Core.inRange(hlsimage, new Scalar(redHueMin, redSatMin, redValueMin), new Scalar(redHueMax, redSatMax, redValueMax), redMask);
 
 
