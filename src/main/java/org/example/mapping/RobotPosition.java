@@ -9,10 +9,8 @@ public class RobotPosition {
     int y;
     Point heading;
 
-    public RobotPosition(int x, int y, Point heading) {
-        this.x = x;
-        this.y = y;
-        this.heading = heading;
+    public RobotPosition() {
+
     }
 
     public int getX() {

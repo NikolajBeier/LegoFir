@@ -93,8 +93,9 @@ public class CameraAnalyze {
             jFrame.setLayout(null);
 
             cameraScreen = new JLabel();
-            cameraScreen.setBounds(0, 0, camWidth, camHeight);
-            jFrame.add(cameraScreen);
+            int screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
+            int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
+
 
             buttons = new JPanel(new GridLayout(0, 2));
             colorDetection = new Button("Color Detection");
@@ -103,7 +104,15 @@ public class CameraAnalyze {
             ballDetectionButton = new Button("Ball Detection");
             edgeDetectionButton = new Button("Edge Detection");
 
-            buttons.setBounds(camWidth / 2 - 100, camHeight, 150, 40);
+
+            if(camWidth>screenWidth || camHeight>screenHeight){
+                cameraScreen.setBounds(0, 0, screenWidth, screenHeight-200);
+                buttons.setBounds(screenWidth / 2 - 100, screenHeight-200, 150, 40);
+            } else {
+                cameraScreen.setBounds(0, 0, camWidth, camHeight);
+                buttons.setBounds(camWidth / 2 - 100, camHeight, 150, 40);
+            }
+            jFrame.add(cameraScreen);
 
             ballDetectionButton.addActionListener(new ActionListener() {
                 @Override
@@ -228,7 +237,8 @@ public class CameraAnalyze {
             while (true) {
                 // read image to matrix
                 capture.read(webCamImage);
-                resize(webCamImage,image,new Size(1200,720));
+                resize(webCamImage, image, new Size(1280, 720));
+                //image = webCamImage;
 
 
                 java.util.List<Rect> blue = new ArrayList<>();
@@ -301,11 +311,12 @@ public class CameraAnalyze {
                             Point arrowPoint = new Point(centerOfLine.x + perpendicularVector.x, centerOfLine.y + perpendicularVector.y);
 
 
-                            circle(webCamImage, centerOfLine, 2, new Scalar(0, 0, 255), 2);
+                            circle(image, centerOfLine, 2, new Scalar(0, 0, 255), 2);
 
 
-                            line(webCamImage, blueCenter, greenCenter, new Scalar(0, 0, 255), 1);
-                            arrowedLine(webCamImage, centerOfLine, arrowPoint, new Scalar(0, 0, 255), 1);
+                            line(image, blueCenter, greenCenter, new Scalar(0, 0, 255), 1);
+                            System.out.println("Blue: " + blueCenter.toString() + " Green: " + greenCenter.toString() + " Center: " + centerOfLine.toString() + " Arrow: " + arrowPoint.toString());
+                            arrowedLine(image, centerOfLine, arrowPoint, new Scalar(0, 0, 255), 1);
 
                         }
                     }
@@ -378,7 +389,11 @@ public class CameraAnalyze {
             jFrame.getContentPane().removeAll();
 
             JLabel colorCameraScreen = new JLabel();
-            colorCameraScreen.setBounds(0, 0, camWidth, camHeight);
+            if(camWidth>width|| camHeight>height){
+                colorCameraScreen.setBounds(0, 0, width, height-200);
+            } else {
+                colorCameraScreen.setBounds(0, 0, camWidth, camHeight);
+            }
             jFrame.add(colorCameraScreen);
             JButton findValues = new JButton("Find Values");
             JPanel sliders = new JPanel();

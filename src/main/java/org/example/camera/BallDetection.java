@@ -59,7 +59,7 @@ public class BallDetection {
                 }
             }
         }
-        if(dude!=null) {
+        if(dude.isLaunched()) {
             dude.addBalls(balls);
         }
         return balls;

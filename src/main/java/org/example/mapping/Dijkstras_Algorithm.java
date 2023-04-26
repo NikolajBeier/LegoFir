@@ -11,7 +11,7 @@ public class Dijkstras_Algorithm {
 
     Point point;
 
-    RobotPosition startPos = new RobotPosition(0, 0, point );
+    RobotPosition startPos = new RobotPosition();
     TennisBall tennis1 = new TennisBall(10, 10);
     TennisBall tennis2 = new TennisBall(20, 20);
     TennisBall tennis3 = new TennisBall(30, 30);
