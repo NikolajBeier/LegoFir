@@ -8,6 +8,7 @@ import static java.lang.Thread.sleep;
 public class DropBalls implements MyBehavior {
 
     Legofir dude;
+    String BehaviorName = "DropBalls";
     Boolean suppressed = false;
     Boolean stopCondition = false;
 
@@ -21,6 +22,7 @@ public class DropBalls implements MyBehavior {
     @Override
     public void action() {
         suppressed = false;
+        dude.setCurrentBehaviourName(BehaviorName);
         if(!suppressed){
             dude.openCheeks();
             try {

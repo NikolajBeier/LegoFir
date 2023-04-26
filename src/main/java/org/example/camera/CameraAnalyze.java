@@ -66,6 +66,7 @@ public class CameraAnalyze {
 
         private boolean detectColor = false;
         private boolean colorFilter = false;
+        JPanel information;
         JPanel buttons;
         Button colorDetection;
         Button robotDetectionButton;
@@ -76,6 +77,7 @@ public class CameraAnalyze {
         Boolean robotDetectionOn = false;
         Button colorFilterButton;
         Button connectToRobot;
+        String currentBehaviour = dude.getCurrentBehaviourName();
 
 
         public boolean getDetectColor() {
@@ -84,7 +86,7 @@ public class CameraAnalyze {
 
         public void CameraUI() {
             // Designing UI
-            jFrame.setLayout(null);
+            jFrame.setLayout(new BorderLayout());
 
             cameraScreen = new JLabel();
             int screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
@@ -92,6 +94,7 @@ public class CameraAnalyze {
 
 
             buttons = new JPanel(new GridLayout(0, 2));
+            information = new JPanel(new GridLayout(0,1));
             colorDetection = new Button("Color Detection");
             connectToRobot = new Button("Connect Robot");
             robotDetectionButton = new Button("Robot Detection");
@@ -105,7 +108,7 @@ public class CameraAnalyze {
                 cameraScreen.setBounds(0, 0, camWidth, camHeight);
                 buttons.setBounds(camWidth / 2 - 100, camHeight, 150, 40);
             }
-            jFrame.add(cameraScreen);
+            jFrame.add(cameraScreen, BorderLayout.CENTER);
 
             ballDetectionButton.addActionListener(new ActionListener() {
                 @Override
@@ -186,13 +189,16 @@ public class CameraAnalyze {
                     colorFilter = !colorFilter;
                 }
             });
+            JLabel goofy = new JLabel("Current Behaviour: " + currentBehaviour);
 
             buttons.add(colorFilterButton);
             buttons.add(colorDetection);
             buttons.add(robotDetectionButton);
             buttons.add(ballDetectionButton);
             buttons.add(connectToRobot);
-            jFrame.add(buttons);
+            information.add(goofy);
+            jFrame.add(buttons, BorderLayout.SOUTH);
+            jFrame.add(information,BorderLayout.EAST);
 
             jFrame.setSize(new Dimension(camWidth, camHeight + 65));
             jFrame.setLocationRelativeTo(null);
@@ -210,6 +216,9 @@ public class CameraAnalyze {
 
             while (true) {
                 // read image to matrix
+
+                currentBehaviour = dude.getCurrentBehaviourName();
+
                 capture.read(webCamImage);
                 resize(webCamImage, image, new Size(1280, 720));
                 //image = webCamImage;

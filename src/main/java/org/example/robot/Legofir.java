@@ -33,6 +33,8 @@ public class Legofir {
 
     boolean launched;
 
+    String currentBehaviourName = "None";
+
     public Legofir() {
     }
 
@@ -82,6 +84,14 @@ public class Legofir {
 
     public boolean isLaunched() {
         return launched;
+    }
+
+    public String getCurrentBehaviourName() {
+        return currentBehaviourName;
+    }
+
+    public void setCurrentBehaviourName(String currentBehaviourName) {
+        this.currentBehaviourName = currentBehaviourName;
     }
 
     public void moveForward(){

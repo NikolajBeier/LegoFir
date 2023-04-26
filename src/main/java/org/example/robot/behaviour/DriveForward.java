@@ -9,6 +9,7 @@ import java.rmi.RemoteException;
 
 public class DriveForward implements MyBehavior {
 
+    String BehaviorName = "DriveForward";
     Boolean suppressed = false;
     Legofir legofir;
     Boolean stopCondition = false;
@@ -41,6 +42,7 @@ public class DriveForward implements MyBehavior {
     @Override
     public void action() {
         suppressed = false;
+        legofir.setCurrentBehaviourName(BehaviorName);
         while(!suppressed) {
             legofir.beginHarvester();
             legofir.moveForward();

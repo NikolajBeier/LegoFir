@@ -1,6 +1,17 @@
 package org.example.robot.behaviour;
 
+import org.example.robot.Legofir;
+
 public class DepositBalls implements MyBehavior {
+    String BehaviorName = "DepositBalls";
+    Legofir dude;
+    Boolean suppressed = false;
+
+    public DepositBalls(Legofir dude) {
+        this.dude = dude;
+    }
+
+
     @Override
     public boolean takeControl() {
         return false;
@@ -8,7 +19,8 @@ public class DepositBalls implements MyBehavior {
 
     @Override
     public void action() {
-
+        suppressed = false;
+        dude.setCurrentBehaviourName(BehaviorName);
     }
 
     @Override

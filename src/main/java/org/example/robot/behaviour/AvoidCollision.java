@@ -5,6 +5,7 @@ import org.example.robot.Legofir;
 
 public class AvoidCollision implements MyBehavior {
 
+    String BehaviorName = "Avoid Collision";
     Legofir dude;
     Boolean suppressed = false;
     final float AVOID_DISTANCE = 0.25f;
@@ -22,6 +23,7 @@ public class AvoidCollision implements MyBehavior {
     @Override
     public void action() {
         suppressed = false;
+        dude.setCurrentBehaviourName(BehaviorName);
         if(!suppressed){
             dude.stopWheels();
             dude.turnRight();
