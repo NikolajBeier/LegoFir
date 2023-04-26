@@ -1,15 +1,18 @@
 package org.example;
 
 import org.opencv.core.*;
+import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
 
 import javax.swing.*;
+import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Objects;
 
-import static org.opencv.imgproc.Imgproc.findContours;
+import static org.opencv.imgproc.Imgproc.*;
 
 public class RobotDetection {
 
@@ -53,85 +56,141 @@ public class RobotDetection {
         jFrame.setVisible(true);
 
         // LOGIC
-        Mat image;
+        Mat hsvImage = new Mat();
         byte[] imageData;
         ImageIcon icon;
-        Mat mask = new Mat();
-        int hueMin = 40;
-        int hueMax = 80;
-        int satMin = 120;
-        int satMax = 255;
-        int valMin = 15;
+        Mat greenMask = new Mat();
+        Mat blueMask = new Mat();
+        int greenHueMin = 35;
+        int greenHueMax = 75;
+        int greenSatMin = 50;
+        int greenSatMax = 255;
+
+        int blueHueMin = 105;
+        int blueHueMax = 130;
+        int blueSatMin = 50;
+        int blueSatMax = 255;
+
+        int valMin = 20;
         int valMax = 255;
 
         while (true) {
             if (capture != null) {
-                image = correctedImage;
-                //Post proccessing to smooth the image
+                Imgproc.cvtColor(webCamImage, hsvImage, Imgproc.COLOR_BGR2HSV);
 
 
-                Scalar minValues = new Scalar(hueMin, satMin, valMin);
-                Scalar maxValues = new Scalar(hueMax, satMax, valMax);
-                Core.inRange(image, minValues, maxValues, mask);
+                Scalar greenMinValues = new Scalar(greenHueMin, greenSatMin, valMin);
+                Scalar greenMaxValues = new Scalar(greenHueMax, greenSatMax, valMax);
+
+                Scalar blueMinValues = new Scalar(blueHueMin, blueSatMin, valMin);
+                Scalar blueMaxValues = new Scalar(blueHueMax, blueSatMax, valMax);
+                Core.inRange(hsvImage, greenMinValues, greenMaxValues, greenMask);
+                Core.inRange(hsvImage, blueMinValues, blueMaxValues, blueMask);
 
 
 
 
-
-
-                Mat blurredImage = new Mat();
-                Mat hsvImage = new Mat();
+/*
                 Mat morphOutput = new Mat();
-
-                // remove some noise
-                Imgproc.blur(webCamImage, blurredImage, new Size(7, 7));
-
-// convert the frame to HSV
-                Imgproc.cvtColor(blurredImage, hsvImage, Imgproc.COLOR_BGR2HSV);
 
 
                 // morphological operators
-// dilate with large element, erode with small ones
+                // dilate with large element, erode with small ones
+
+
                 Mat dilateElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(24, 24));
                 Mat erodeElement = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(12, 12));
 
                 Imgproc.erode(mask, morphOutput, erodeElement);
-                Imgproc.erode(mask, morphOutput, erodeElement);
 
                 Imgproc.dilate(mask, morphOutput, dilateElement);
-                Imgproc.dilate(mask, morphOutput, dilateElement);
+
+
+
+ */
+
+
+
 
 
                 // init
-                ArrayList<MatOfPoint> contours = new ArrayList<>();
-                Mat hierarchy = new Mat();
+                ArrayList<MatOfPoint> greenContour = new ArrayList<>();
+                Mat greenHierarchy = new Mat();
+
+                ArrayList<MatOfPoint> blueContour = new ArrayList<>();
+                Mat blueHierarchy = new Mat();
 
 // find contours
-                Imgproc.findContours(mask, contours, hierarchy, Imgproc.RETR_CCOMP, Imgproc.CHAIN_APPROX_SIMPLE);
+                Imgproc.findContours(greenMask, greenContour, greenHierarchy, RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
+                Imgproc.findContours(blueMask, blueContour, blueHierarchy, RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
 
-// if any contour exist...
-                if (hierarchy.size().height > 0 && hierarchy.size().width > 0)
-                {
-                    // for each contour, display it in blue
-                    for (int idx = 0; idx >= 0; idx = (int) hierarchy.get(0, idx)[0])
-                    {
-                        Imgproc.drawContours(webCamImage, contours, idx, new Scalar(250, 0, 0));
+
+// if any contour exist draw rectangle using the bounding rect
+                Rect greenBoundingRect = null;
+                Rect blueBoundingRect = null;
+                if(!greenContour.isEmpty() || !blueContour.isEmpty()) {
+                    for (MatOfPoint contour : greenContour) {
+                        if(contourArea(contour) > 500) {
+                            greenBoundingRect = boundingRect(contour);
+                            rectangle(webCamImage,new Point(greenBoundingRect.x,greenBoundingRect.y),new Point(greenBoundingRect.x+greenBoundingRect.width,greenBoundingRect.y+greenBoundingRect.height),new Scalar(0,0,255),2);
+                            putText(webCamImage, "Green", new Point(greenBoundingRect.x, greenBoundingRect.y-10), FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+                        }
+                    }
+                    for (MatOfPoint contour : blueContour) {
+                        if(contourArea(contour) > 500) {
+                            blueBoundingRect = boundingRect(contour);
+                            rectangle(webCamImage,new Point(blueBoundingRect.x,blueBoundingRect.y),new Point(blueBoundingRect.x+blueBoundingRect.width,blueBoundingRect.y+blueBoundingRect.height),new Scalar(0,0,255),2);
+                            putText(webCamImage, "Blue", new Point(blueBoundingRect.x, blueBoundingRect.y-10), FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+                        }
+                    }
+
+                    if(greenBoundingRect!=null && blueBoundingRect!=null){
+                        Point blueCenter = new Point(blueBoundingRect.x+blueBoundingRect.width*0.5,blueBoundingRect.y+blueBoundingRect.height*0.5);
+                        Point greenCenter = new Point(greenBoundingRect.x+greenBoundingRect.width*0.5,greenBoundingRect.y+greenBoundingRect.height*0.5);
+                        circle(webCamImage,blueCenter,1,new Scalar(0,0,255),1);
+                        circle(webCamImage,greenCenter,1,new Scalar(0,0,255),1);
+
+                        Point centerOfLine = new Point((blueCenter.x+greenCenter.x)*0.5,(blueCenter.y+greenCenter.y)*0.5);
+
+                        Point vectorFromBlueToGreen = new Point(greenCenter.x-blueCenter.x,greenCenter.y-blueCenter.y);
+                        int lengthOfVector = (int) Math.sqrt(vectorFromBlueToGreen.x*vectorFromBlueToGreen.x+vectorFromBlueToGreen.y*vectorFromBlueToGreen.y);
+
+                        Point perpendicularVector = new Point(vectorFromBlueToGreen.y,-vectorFromBlueToGreen.x);
+
+                        Point arrowPoint = new Point(centerOfLine.x+perpendicularVector.x,centerOfLine.y+perpendicularVector.y);
+
+
+                        circle(webCamImage,centerOfLine,2,new Scalar(0,0,255),2);
+
+
+                        line(webCamImage,blueCenter,greenCenter,new Scalar(0,0,255),1);
+                        arrowedLine(webCamImage,centerOfLine,arrowPoint,new Scalar(0,0,255),1);
                     }
                 }
 
 
+                final MatOfByte webcamBuf = new MatOfByte();
+                Imgcodecs.imencode(".jpg", webCamImage, webcamBuf);
+                byte[] webCamImageArray = webcamBuf.toArray();
+                Icon webCamImageIcon = new ImageIcon(webCamImageArray);
+                cameraScreen.setIcon(webCamImageIcon);
 
 
-                final MatOfByte buf = new MatOfByte();
-                Imgcodecs.imencode(".jpg", morphOutput, buf);
 
-                imageData = buf.toArray();
+
+
+                final MatOfByte maskBuf = new MatOfByte();
+                Imgcodecs.imencode(".jpg", blueMask, maskBuf);
+
+                imageData = maskBuf.toArray();
 
 
                 // Add to JLabel
                 icon = new ImageIcon(imageData);
 
                 robotCameraScreen.setIcon(icon);
+
+
             }
         }
     }
