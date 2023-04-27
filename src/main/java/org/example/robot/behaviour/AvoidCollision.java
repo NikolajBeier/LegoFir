@@ -1,6 +1,7 @@
 package org.example.robot.behaviour;
 
 import org.example.robot.model.Legofir;
+import org.opencv.core.Point;
 
 public class AvoidCollision implements MyBehavior {
 
@@ -63,19 +64,40 @@ public class AvoidCollision implements MyBehavior {
     }
 
     private Boolean checkForBackCollision() {
+        Point heading = dude.getMap().getRobotPosition().getHeading();
+        Point oppositeHeading = new Point(-heading.x, -heading.y);
+        double distance = dude.getMap().distanceToEdge(oppositeHeading);
+        if(distance < AVOID_DISTANCE){
+            return true;
+        }
         return false;
     }
 
     private Boolean checkForLeftCollision() {
+        Point heading = dude.getMap().getRobotPosition().getHeading();
+        Point leftHeading = new Point(-heading.y, heading.x);
+        double distance = dude.getMap().distanceToEdge(leftHeading);
+        if(distance < AVOID_DISTANCE){
+            return true;
+        }
         return false;
     }
 
     private Boolean checkForRightCollision() {
+        Point heading = dude.getMap().getRobotPosition().getHeading();
+        Point rightHeading = new Point(heading.y, -heading.x);
+        double distance = dude.getMap().distanceToEdge(rightHeading);
+        if(distance < AVOID_DISTANCE){
+            return true;
+        }
+
         return false;
     }
 
     private Boolean checkForFrontCollision() {
-        double distance = dude.getMap().frontDistanceToEdge();
+        Point heading = dude.getMap().getRobotPosition().getHeading();
+
+        double distance = dude.getMap().distanceToEdge(heading);
         if(distance < AVOID_DISTANCE){
             return true;
         }
