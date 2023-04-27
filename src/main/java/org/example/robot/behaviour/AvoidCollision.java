@@ -8,7 +8,7 @@ public class AvoidCollision implements MyBehavior {
     String BehaviorName = "Avoid Collision";
     Legofir dude;
     Boolean suppressed = false;
-    final float AVOID_DISTANCE = 50f;
+    final double AVOID_DISTANCE = 50;
     Boolean stopCondition = false;
 
     public AvoidCollision(Legofir dude) {
