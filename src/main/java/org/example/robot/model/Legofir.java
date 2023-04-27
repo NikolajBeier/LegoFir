@@ -1,4 +1,4 @@
-package org.example.robot;
+package org.example.robot.model;
 
 import lejos.remote.ev3.RMIRegulatedMotor;
 import org.example.mapping.Map;
@@ -250,7 +250,7 @@ public class Legofir {
     }
 
     public double getAngle() {
-        return map.getRobotPosition().getHeadingInDegrees();
+        return map.getRobotPosition().getHeadingInRadians();
     }
 
     public RobotState getState() {

@@ -1,6 +1,6 @@
 package org.example.camera;
 
-import org.example.robot.Legofir;
+import org.example.robot.model.Legofir;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 

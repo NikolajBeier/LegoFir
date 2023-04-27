@@ -1,15 +1,13 @@
 package org.example.robot.behaviour;
 
-import lejos.robotics.SampleProvider;
-import org.example.robot.Legofir;
-import org.example.robot.RobotState;
+import org.example.robot.model.Legofir;
 
 public class AvoidCollision implements MyBehavior {
 
     String BehaviorName = "Avoid Collision";
     Legofir dude;
     Boolean suppressed = false;
-    final float AVOID_DISTANCE = 0.25f;
+    final float AVOID_DISTANCE = 50f;
     Boolean stopCondition = false;
 
     public AvoidCollision(Legofir dude) {
@@ -40,7 +38,6 @@ public class AvoidCollision implements MyBehavior {
     public boolean takeControl() {
         Boolean collision = false;
         if(stopCondition){
-            System.out.println("DetectCollision.takeControl() = " + false);
             return false;
         }
         switch(dude.getState()){
@@ -76,7 +73,10 @@ public class AvoidCollision implements MyBehavior {
     }
 
     private Boolean checkForFrontCollision() {
-        dude.getMap().getRobotPosition();
+        double distance = dude.getMap().frontDistanceToEdge();
+        if(distance < AVOID_DISTANCE){
+            return true;
+        }
         return false;
     }
 }

@@ -2,7 +2,7 @@ package org.example.ui;
 
 import lejos.remote.ev3.RemoteEV3;
 import org.example.robot.Launcher;
-import org.example.robot.Legofir;
+import org.example.robot.model.Legofir;
 import org.example.robot.Program;
 import org.example.robot.WASDController;
 

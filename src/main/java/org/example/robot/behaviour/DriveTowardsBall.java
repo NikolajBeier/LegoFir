@@ -3,7 +3,7 @@ package org.example.robot.behaviour;
 
 import org.example.mapping.RobotPosition;
 import org.example.mapping.TennisBall;
-import org.example.robot.Legofir;
+import org.example.robot.model.Legofir;
 import org.opencv.core.Point;
 
 

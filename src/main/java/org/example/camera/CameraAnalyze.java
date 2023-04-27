@@ -3,7 +3,7 @@ package org.example.camera;
 
 import nu.pattern.OpenCV;
 import org.example.mapping.TennisBall;
-import org.example.robot.Legofir;
+import org.example.robot.model.Legofir;
 import org.example.ui.ConnectToRobot;
 import org.opencv.core.*;
 import org.opencv.core.Point;
