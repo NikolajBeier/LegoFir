@@ -68,6 +68,7 @@ public class DriveTowardsBall implements MyBehavior{
             dude.moveForward();
 
             // Waits to be suppressed or until the robot is close enough to the ball for it to be assumed picked up or pushed away.
+            long timeBefore= System.currentTimeMillis();
             while (!suppressed) {
                 //System.out.println("Driving towards ball: Robot Position: x=" + dude.getMap().getRobotPosition().getX() + ", y=" + dude.getMap().getRobotPosition().getY() + ", heading=" + dude.getMap().getRobotPosition().getHeading());
                 //System.out.println("Driving towards ball: Next Ball Position: x=" + nextBallX + ", y=" + nextBallY);
@@ -75,6 +76,9 @@ public class DriveTowardsBall implements MyBehavior{
                     if (dude.getMap().getRobotPosition().getY() < nextBallY + 25 && dude.getMap().getRobotPosition().getY() > nextBallY - 25) {
                         break;
                     }
+                }
+                if(System.currentTimeMillis()-timeBefore>1000){
+                    break;
                 }
             }
 
