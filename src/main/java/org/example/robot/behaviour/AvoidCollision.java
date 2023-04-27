@@ -2,6 +2,7 @@ package org.example.robot.behaviour;
 
 import lejos.robotics.SampleProvider;
 import org.example.robot.Legofir;
+import org.example.robot.RobotState;
 
 public class AvoidCollision implements MyBehavior {
 
@@ -37,11 +38,45 @@ public class AvoidCollision implements MyBehavior {
 
     @Override
     public boolean takeControl() {
+        Boolean collision = false;
         if(stopCondition){
             System.out.println("DetectCollision.takeControl() = " + false);
             return false;
         }
-        else return false;
-        // TODO: LOGIK
+        switch(dude.getState()){
+            case IDLE:
+                break;
+            case MOVING_FORWARD:
+                collision = checkForFrontCollision();
+                break;
+            case TURNING_RIGHT:
+                collision = checkForRightCollision();
+                break;
+            case TURNING_LEFT:
+                collision = checkForLeftCollision();
+                break;
+            case MOVING_BACKWARD:
+                collision = checkForBackCollision();
+                break;
+        }
+
+        return collision;
+    }
+
+    private Boolean checkForBackCollision() {
+        return false;
+    }
+
+    private Boolean checkForLeftCollision() {
+        return false;
+    }
+
+    private Boolean checkForRightCollision() {
+        return false;
+    }
+
+    private Boolean checkForFrontCollision() {
+        dude.getMap().getRobotPosition();
+        return false;
     }
 }

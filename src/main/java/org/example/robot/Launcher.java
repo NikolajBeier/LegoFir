@@ -50,11 +50,11 @@ public class Launcher implements Program {
         dude.setHarvester(harvester);
         dude.setBalldropper(balldropper);
         dude.setDefaultSpeedHarvester(1440);
-        dude.setDefaultSpeedWheel(240);
         dude.setDefaultSpeedBallDropper(720);
         dude.setDefaultAccelerationHarvester(1000);
         dude.setDefaultAccelerationWheel(500);
         dude.setDefaultAccelerationBallDropper(1000);
+        dude.setDefaultSpeedWheel(140);
         dude.setLaunched(true);
 
         Audio sound = ev3.getAudio();

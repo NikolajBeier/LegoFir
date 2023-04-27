@@ -2,6 +2,7 @@
 package org.example.camera;
 
 import nu.pattern.OpenCV;
+import org.example.mapping.TennisBall;
 import org.example.robot.Legofir;
 import org.example.ui.ConnectToRobot;
 import org.opencv.core.*;
@@ -71,10 +72,14 @@ public class CameraAnalyze {
         Button colorDetection;
         Button robotDetectionButton;
         Button ballDetectionButton;
+        Button edgeDetectionButton;
         BallDetection ballDetection = new BallDetection();
         RobotDetection robotDetection = new RobotDetection();
+        EdgeDetection edgeDetection = new EdgeDetection();
         Boolean ballDetectionOn = false;
         Boolean robotDetectionOn = false;
+
+        Boolean edgeDetectionOn = false;
         Button colorFilterButton;
         Button connectToRobot;
         String currentBehaviour = dude.getCurrentBehaviourName();
@@ -99,6 +104,7 @@ public class CameraAnalyze {
             connectToRobot = new Button("Connect Robot");
             robotDetectionButton = new Button("Robot Detection");
             ballDetectionButton = new Button("Ball Detection");
+            edgeDetectionButton = new Button("Edge Detection");
 
 
             if(camWidth>screenWidth || camHeight>screenHeight){
@@ -121,7 +127,9 @@ public class CameraAnalyze {
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    ballDetectionOn=true;
+                                    ballDetectionOn = true;
+
+
                                 }
                             }).start();
                         }
@@ -141,6 +149,22 @@ public class CameraAnalyze {
                                 @Override
                                 public void run() {
                                     robotDetectionOn=true;
+                                }
+                            }).start();
+                        }
+                    });
+                }
+            });
+            edgeDetectionButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    EventQueue.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    edgeDetectionOn=true;
                                 }
                             }).start();
                         }
@@ -195,6 +219,7 @@ public class CameraAnalyze {
             buttons.add(colorDetection);
             buttons.add(robotDetectionButton);
             buttons.add(ballDetectionButton);
+            buttons.add(edgeDetectionButton);
             buttons.add(connectToRobot);
             information.add(goofy);
             jFrame.add(buttons, BorderLayout.SOUTH);
@@ -228,6 +253,7 @@ public class CameraAnalyze {
                 java.util.List<Rect> blue = new ArrayList<>();
                 java.util.List<Rect> green = new ArrayList<>();
                 java.util.List<Rect> ballRects = new ArrayList<>();
+                Rect edge = null;
 
 
                 if(robotDetectionOn){
@@ -240,13 +266,22 @@ public class CameraAnalyze {
                 if(ballDetectionOn){
                     ballRects = ballDetection.detect(image,dude);
                 }
+                if (edgeDetectionOn){
+                    edge= edgeDetection.detect(image,dude);
+                }
 
                 // draw rectangles
 
                 // Ball rects
-                for(Rect boundingRect : ballRects) {
+                for (Rect boundingRect : ballRects) {
                     Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), new Scalar(0, 0, 255), 1);
                     putText(image, "Ball", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+                }
+
+                // Edge rects
+                if(edge!=null){
+                    Imgproc.rectangle(image, edge.tl(), edge.br(), new Scalar(0, 0, 255), 1);
+                    putText(image, "Edge", edge.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
                 }
 
                 // Blue rects
@@ -282,12 +317,25 @@ public class CameraAnalyze {
 
 
                             line(image, blueCenter, greenCenter, new Scalar(0, 0, 255), 1);
-                            System.out.println("Blue: " + blueCenter.toString() + " Green: " + greenCenter.toString() + " Center: " + centerOfLine.toString() + " Arrow: " + arrowPoint.toString());
+                            //System.out.println("Blue: " + blueCenter.toString() + " Green: " + greenCenter.toString() + " Center: " + centerOfLine.toString() + " Arrow: " + arrowPoint.toString());
                             arrowedLine(image, centerOfLine, arrowPoint, new Scalar(0, 0, 255), 1);
+
+                            if(dude!=null) {
+                                TennisBall nextBall = dude.getMap().getNextBall();
+
+                                int nextBallX = nextBall.getX();
+                                int nextBallY = nextBall.getY();
+
+
+                                // vektor fra currentPosition(x,y) til (nextBallX,nextBallY)
+                                Point ballVector = new Point(nextBallX-dude.getMap().getRobotPosition().getX(), nextBallY-dude.getMap().getRobotPosition().getY());
+                                arrowedLine(image,centerOfLine,new Point(nextBallX,nextBallY),new Scalar(0,255,0),1);
+                            }
 
                         }
                     }
                 }
+
 
 
 
@@ -347,7 +395,7 @@ public class CameraAnalyze {
         }
 
         public void ColorDetector() {
-            JPanel mainPanel = new JPanel(new GridLayout(0,2));
+            JPanel mainPanel = new JPanel(new GridLayout(0, 2));
             JPanel buttonsSliders = new JPanel();
             int width = Toolkit.getDefaultToolkit().getScreenSize().width;
             int height = Toolkit.getDefaultToolkit().getScreenSize().height;
@@ -362,6 +410,7 @@ public class CameraAnalyze {
                 colorCameraScreen.setBounds(0, 0, camWidth, camHeight);
             }
             jFrame.add(colorCameraScreen);
+            JButton findValues = new JButton("Find Values");
             JPanel sliders = new JPanel();
             sliders.setLayout(new GridLayout(2, 6));
             JSlider hueMin = new JSlider(0, 255, 0);
@@ -391,12 +440,25 @@ public class CameraAnalyze {
             sliders.setBounds(0, camHeight, camWidth, 100);
             jFrame.add(sliders);
 
+            findValues.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("Hue Min: "+hueMin.getValue());
+                    System.out.println("Hue Max: "+hueMax.getValue());
+                    System.out.println("Sat Min: "+satMin.getValue());
+                    System.out.println("Sat Max: "+satMax.getValue());
+                    System.out.println("Val Min: "+valMin.getValue());
+                    System.out.println("Val Max: "+valMax.getValue());
+                }
+            });
+            buttonsSliders.add(findValues);
 
-            mainPanel.setPreferredSize(new Dimension(width, height-130));
+
+            mainPanel.setPreferredSize(new Dimension(width, height - 130));
             mainPanel.add(cameraScreen);
             mainPanel.add(colorCameraScreen);
 
-            buttonsSliders.setPreferredSize(new Dimension(width,130));
+            buttonsSliders.setPreferredSize(new Dimension(width, 130));
             buttonsSliders.add(buttons);
             buttonsSliders.add(sliders);
 

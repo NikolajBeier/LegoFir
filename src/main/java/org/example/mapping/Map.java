@@ -2,24 +2,27 @@ package org.example.mapping;
 
 import org.opencv.core.Point;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Map {
 
     int x;
     int y;
     int size;
+    Edge edge = new Edge();
 
     public RobotPosition getRobotPosition() {
         return robotPosition;
     }
 
-    public LinkedList<TennisBall> getBalls() {
+    public List<TennisBall> getBalls() {
         return balls;
     }
 
     RobotPosition robotPosition = new RobotPosition();
-    LinkedList<TennisBall> balls = new LinkedList<>();
+    List<TennisBall> balls = new ArrayList<>();
 
     public Map(int x, int y) {
         this.x = x;
@@ -27,9 +30,7 @@ public class Map {
         this.size = x*y;
     }
 
-    public void addBallObject(TennisBall tennisball){
-        balls.add(tennisball);
-    }
+
 
     public void addBallCord(int x, int y){
         TennisBall tennisball = new TennisBall(x,y);
@@ -62,8 +63,22 @@ public class Map {
                 closestBall = tennisball;
             }
         }
+        /*
+        System.out.println("closest distance: "+closestDistance);
+        System.out.println("robot x: "+getRobotPosition().x+" robot y: "+getRobotPosition().y);
+        System.out.println("ball x: "+closestBall.x+" ball y: "+closestBall.y);
+
+         */
 
 
         return closestBall;
+    }
+
+    public void setEdge(Point topLeft, Point topRight, Point bottomLeft, Point bottomRight, int height, int width) {
+        edge.setAll(topLeft, topRight, bottomLeft, bottomRight, height, width);
+    }
+
+    public void setBalls(List<TennisBall> newList) {
+        balls = newList;
     }
 }
