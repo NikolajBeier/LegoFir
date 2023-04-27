@@ -23,10 +23,12 @@ public class AvoidCollision implements MyBehavior {
     public void action() {
         suppressed = false;
         dude.setCurrentBehaviourName(BehaviorName);
-        if(!suppressed){
-            dude.stopWheels();
-            dude.turnRight();
+        dude.turnRight();
+        // Wait for avoidCollision behavior to be done
+        while(!suppressed){
+
         }
+        dude.stopWheels();
     }
 
     @Override

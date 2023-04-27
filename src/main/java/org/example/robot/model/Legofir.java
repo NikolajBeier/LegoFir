@@ -115,7 +115,7 @@ public class Legofir {
     }
 
     public void turnLeft(){
-        state=RobotState.TURNING_LEFT;
+        //state=RobotState.TURNING_LEFT;
         try {
             left.setSpeed(80);
             right.setSpeed(80);
@@ -127,7 +127,7 @@ public class Legofir {
     }
 
     public void turnRight(){
-        state=RobotState.TURNING_RIGHT;
+        //state=RobotState.TURNING_RIGHT;
         try{
             left.setSpeed(80);
             right.setSpeed(80);
