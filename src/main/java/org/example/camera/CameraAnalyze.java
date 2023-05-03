@@ -261,7 +261,6 @@ public class CameraAnalyze {
                 java.util.List<Rect> green = new ArrayList<>();
                 java.util.List<Rect> ballRects = new ArrayList<>();
                 java.util.List<Rect> orangeBallRects = new ArrayList<>();
-                java.util.List<MatOfPoint> edgeContour = new ArrayList<>();
                 Rect edge = null;
 
 
