@@ -1,5 +1,6 @@
 package org.example.camera;
 
+import org.example.mapping.ObjectColor;
 import org.example.robot.model.Legofir;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
@@ -19,17 +20,17 @@ public class EdgeDetection {
 
     Mat hlsimage = new Mat();
     Mat redMask = new Mat();
-    int redHueMin = 5;
-    int redHueMax = 15 ;
-    int redSatMin = 50;
-    int redSatMax = 255;
-    int redValueMin = 50;
-    int redValueMax=255;
+    int hMin = ObjectColor.getEdge().getHueMin();
+    int hMax = ObjectColor.getEdge().getHueMax();
+    int sMin = ObjectColor.getEdge().getSatMin();
+    int sMax = ObjectColor.getEdge().getSatMax();
+    int lMin = ObjectColor.getEdge().getValMin();
+    int lMax = ObjectColor.getEdge().getValMax();
 
     public Rect detect(Mat image, Legofir dude) {
         Rect edgeRect;
         Imgproc.cvtColor(image, hlsimage, Imgproc.COLOR_BGR2HLS);
-        Core.inRange(hlsimage, new Scalar(redHueMin, redSatMin, redValueMin), new Scalar(redHueMax, redSatMax, redValueMax), redMask);
+        Core.inRange(hlsimage, new Scalar(hMin, sMin, lMin), new Scalar(hMax, sMax, lMax), redMask);
 
 
         // init

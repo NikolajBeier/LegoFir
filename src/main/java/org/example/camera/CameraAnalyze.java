@@ -17,6 +17,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,6 +77,7 @@ public class CameraAnalyze {
         Button ballDetectionButton;
         Button edgeDetectionButton;
         BallDetection ballDetection = new BallDetection();
+        OrangeBallDetection orangeBallDetection = new OrangeBallDetection();
         RobotDetection robotDetection = new RobotDetection();
         EdgeDetection edgeDetection = new EdgeDetection();
         Boolean ballDetectionOn = false;
@@ -258,6 +260,8 @@ public class CameraAnalyze {
                 java.util.List<Rect> blue = new ArrayList<>();
                 java.util.List<Rect> green = new ArrayList<>();
                 java.util.List<Rect> ballRects = new ArrayList<>();
+                java.util.List<Rect> orangeBallRects = new ArrayList<>();
+                java.util.List<MatOfPoint> edgeContour = new ArrayList<>();
                 Rect edge = null;
 
 
@@ -269,8 +273,10 @@ public class CameraAnalyze {
                 }
 
                 if(ballDetectionOn){
+                    orangeBallRects = orangeBallDetection.detect(image,dude);
                     ballRects = ballDetection.detect(image,dude);
                 }
+
                 if (edgeDetectionOn){
                     edge= edgeDetection.detect(image,dude);
                 }
@@ -278,6 +284,11 @@ public class CameraAnalyze {
                 // draw rectangles
 
                 // Ball rects
+                for (Rect boundingRect : orangeBallRects){
+                    Imgproc.rectangle(image,boundingRect.tl(),boundingRect.br(),new Scalar(0,0,255, 1));
+                    putText(image, "Orange ball",boundingRect.tl(), FONT_HERSHEY_SIMPLEX,1,new Scalar(0,0,255),2);
+                }
+
                 for (Rect boundingRect : ballRects) {
                     Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), new Scalar(0, 0, 255), 1);
                     putText(image, "Ball", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
@@ -305,7 +316,6 @@ public class CameraAnalyze {
 
                             Point blueCenter = new Point(blueBoundingRect.x + blueBoundingRect.width * 0.5, blueBoundingRect.y + blueBoundingRect.height * 0.5);
                             Point greenCenter = new Point(greenBoundingRect.x + greenBoundingRect.width * 0.5, greenBoundingRect.y + greenBoundingRect.height * 0.5);
-
                             circle(image, blueCenter, 1, new Scalar(0, 0, 255), 1);
                             circle(image, greenCenter, 1, new Scalar(0, 0, 255), 1);
 
@@ -315,7 +325,6 @@ public class CameraAnalyze {
                             int lengthOfVector = (int) Math.sqrt(vectorFromBlueToGreen.x * vectorFromBlueToGreen.x + vectorFromBlueToGreen.y * vectorFromBlueToGreen.y);
 
                             Point perpendicularVector = new Point(vectorFromBlueToGreen.y, -vectorFromBlueToGreen.x);
-
 
                             Point arrowPoint = new Point(centerOfLine.x + perpendicularVector.x, centerOfLine.y + perpendicularVector.y);
 

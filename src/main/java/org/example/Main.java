@@ -2,8 +2,8 @@ package org.example;
 
 //import nu.pattern.OpenCV;
 import org.example.camera.CameraAnalyze;
-import org.example.mapping.ObjectColor;
 import org.example.robot.model.Legofir;
+import org.example.mapping.ObjectColor;
 import org.example.ui.Calibration.CalibrationTool;
 import org.example.ui.ConnectToRobot;
 import org.example.ui.Visualization;

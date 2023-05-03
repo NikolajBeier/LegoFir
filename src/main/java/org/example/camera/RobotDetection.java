@@ -50,7 +50,7 @@ public class RobotDetection {
 
     int blueHueMin = 105;
     int blueHueMax = 130;
-    int blueSatMin = 100;
+    int blueSatMin = 50;
     int blueSatMax = 255;
 
     int valMin = 20;
@@ -147,8 +147,6 @@ public class RobotDetection {
                         Point arrowPoint = new Point(centerOfLine.x + perpendicularVector.x, centerOfLine.y + perpendicularVector.y);
 
                         dude.getMap().setRobotPosition((int)centerOfLine.x,(int)centerOfLine.y,perpendicularVector);
-
-
                     }
 
 
