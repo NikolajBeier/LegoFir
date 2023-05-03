@@ -30,8 +30,8 @@ public class RobotDetection {
 
     int blueHueMin = 95;
     int blueHueMax = 135;
-    int blueSatMin = 50;
-    int blueSatMax = 255;
+    int blueSatMin = 100;
+    int blueSatMax = 200;
 
     int valMin = 20;
     int valMax = 255;

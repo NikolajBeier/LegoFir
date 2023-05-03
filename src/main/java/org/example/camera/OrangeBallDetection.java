@@ -1,6 +1,6 @@
 package org.example.camera;
 
-import org.example.robot.Legofir;
+import org.example.robot.model.Legofir;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 
@@ -14,11 +14,11 @@ public class OrangeBallDetection {
 
     Mat hlsimage = new Mat();
     Mat redMask = new Mat();
-    int redHueMin = 5;
-    int redHueMax = 30 ;
-    int redSatMin = 30;
+    int redHueMin = 0;
+    int redHueMax = 255 ;
+    int redSatMin = 0;
     int redSatMax = 255;
-    int redValueMin = 50;
+    int redValueMin = 0;
     int redValueMax=255;
 
     public List<Rect> detect(Mat image, Legofir dude) {
@@ -41,7 +41,7 @@ public class OrangeBallDetection {
 
         if(!redContour.isEmpty()){
             for(MatOfPoint contour : redContour){
-                if(Imgproc.contourArea(contour) > 100&& Imgproc.contourArea(contour)<600){
+                    if(Imgproc.contourArea(contour) > 0&& Imgproc.contourArea(contour)<1000){
                     Rect boundingRect = Imgproc.boundingRect(contour);
                     orangeBalls.add(boundingRect);
                     //dude.getMap().addBallCord((int)(boundingRect.x+boundingRect.width*0.5), (int)(boundingRect.y+ boundingRect.height*0.5));

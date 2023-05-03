@@ -50,7 +50,7 @@ public class BallDetection {
 
         if(!whiteContour.isEmpty()){
             for(MatOfPoint contour : whiteContour){
-                if(Imgproc.contourArea(contour) > 100&& Imgproc.contourArea(contour)<600){
+                if(Imgproc.contourArea(contour) > 200&& Imgproc.contourArea(contour)<400){
                     Rect boundingRect = Imgproc.boundingRect(contour);
                     balls.add(boundingRect);
                     //dude.getMap().addBallCord((int)(boundingRect.x+boundingRect.width*0.5), (int)(boundingRect.y+ boundingRect.height*0.5));

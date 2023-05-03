@@ -178,7 +178,6 @@ public class CameraAnalyze {
                 public void actionPerformed(ActionEvent e) {
                     EventQueue.invokeLater(new Runnable() {
                         // Overriding existing run() method
-
                         @Override
                         public void run() {
                             new Thread(new Runnable() {
@@ -269,7 +268,7 @@ public class CameraAnalyze {
 
                 if(ballDetectionOn){
                     orangeBallRects = orangeBallDetection.detect(image,dude);
-                    ballRects = ballDetection.detect(image,dude);
+                   // ballRects = ballDetection.detect(image,dude);
                 }
 
                 if (edgeDetectionOn){
@@ -279,9 +278,9 @@ public class CameraAnalyze {
                 // draw rectangles
 
                 // Ball rects
-                for (Rect bouningRect : orangeBallRects){
-                    Imgproc.rectangle(image,bouningRect.tl(),bouningRect.br(),new Scalar(0,0,255, 1));
-                    putText(image, "Orange ball",bouningRect.tl(), FONT_HERSHEY_SIMPLEX,1,new Scalar(0,0,255),2);
+                for (Rect boundingRect : orangeBallRects){
+                    Imgproc.rectangle(image,boundingRect.tl(),boundingRect.br(),new Scalar(0,0,255, 1));
+                    putText(image, "Orange ball",boundingRect.tl(), FONT_HERSHEY_SIMPLEX,1,new Scalar(0,0,255),2);
                 }
 
                 for (Rect boundingRect : ballRects) {
