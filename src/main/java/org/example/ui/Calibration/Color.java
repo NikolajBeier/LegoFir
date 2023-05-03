@@ -7,13 +7,13 @@ public class Color {
 
     }
 
-    public Color(int hueMin, int hueMax, int valMin, int valMax, int satMin, int satMax) {
+    public Color(int hueMin, int hueMax, int satMin, int satMax, int valMin, int valMax) {
         this.hueMin = hueMin;
         this.hueMax = hueMax;
-        this.valMin = valMin;
-        this.valMax = valMax;
         this.satMin = satMin;
         this.satMax = satMax;
+        this.valMin = valMin;
+        this.valMax = valMax;
     }
 
     public int getHueMin() {

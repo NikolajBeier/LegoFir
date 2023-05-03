@@ -2,23 +2,23 @@ package org.example.ui.Calibration;
 
 import nu.pattern.OpenCV;
 import org.example.mapping.ObjectColor;
-import org.example.robot.Legofir;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.video.Video;
+import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.util.ArrayList;
+import java.io.FileWriter;
 
 public class CalibrationTool {
     JFrame mainFrame = new JFrame();
@@ -31,7 +31,10 @@ public class CalibrationTool {
     VideoCapture capture;
     Mat image;
     boolean running = true;
+    boolean hlsImage = false;
     int i = 0;
+
+    JSONObject jsonObject = new JSONObject();
 
     public CalibrationTool() {
         OpenCV.loadLocally();
@@ -149,6 +152,7 @@ public class CalibrationTool {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (i == 0) {
+                    hlsImage =true;
                     title.setText("Calibrate White Balls");
                 } else if (i == 1) {
                     detectWhiteBall();
@@ -166,6 +170,14 @@ public class CalibrationTool {
                     detectGreenRobot();
                     title.setText("Finish");
                 } else {
+                    try{
+                        FileWriter fileWriter = new FileWriter("src/main/java/org/example/ui/Calibration/colors.json");
+                        fileWriter.write(jsonObject.toJSONString());
+                        fileWriter.close();
+                    } catch(Exception exception){
+                        exception.printStackTrace();
+                    }
+                    System.out.println(jsonObject.toJSONString());
                     running = false;
                     mainFrame.dispose();
                     capture.release();
@@ -193,24 +205,29 @@ public class CalibrationTool {
         while(running){
             // read image to matrix
             capture.read(image);
-                Scalar minValues = new Scalar(hueMin.getValue(), satMin.getValue(), valMin.getValue());
-                Scalar maxValues = new Scalar(hueMax.getValue(), satMax.getValue(), valMax.getValue());
-                Core.inRange(image, minValues, maxValues, mask);
+            final MatOfByte buf = new MatOfByte();
+            Imgcodecs.imencode(".jpg",image,buf);
+            imageData = buf.toArray();
+            icon = new ImageIcon(imageData);
+            cameraScreen.setIcon(icon);
+            if(hlsImage){
+                Imgproc.cvtColor(image, image, Imgproc.COLOR_BGR2HLS);
+            } else {
+                Imgproc.cvtColor(image, image, Imgproc.COLOR_BGR2HSV);
+            }
 
-                final MatOfByte buf = new MatOfByte();
-                Imgcodecs.imencode(".jpg", mask, buf);
+            Scalar minValues = new Scalar(hueMin.getValue(), satMin.getValue(), valMin.getValue());
+            Scalar maxValues = new Scalar(hueMax.getValue(), satMax.getValue(), valMax.getValue());
+            Core.inRange(image, minValues, maxValues, mask);
 
-                imageData = buf.toArray();
+            Imgcodecs.imencode(".jpg", mask, buf);
 
-                // Add to JLabel
-                icon = new ImageIcon(imageData);
-                maskedScreen.setIcon(icon);
+            imageData = buf.toArray();
 
+            // Add to JLabel
+            icon = new ImageIcon(imageData);
+            maskedScreen.setIcon(icon);
 
-                Imgcodecs.imencode(".jpg",image,buf);
-                imageData = buf.toArray();
-                icon = new ImageIcon(imageData);
-                cameraScreen.setIcon(icon);
         }
     }
     private void capture(Color element){
@@ -219,21 +236,38 @@ public class CalibrationTool {
     private void detectWhiteBall(){
         capture(whiteBall);
         ObjectColor.setWhiteBall(whiteBall);
+        hlsImage =false;
+        jsonObject.put("WhiteBall", createJSONArray());
     }
     private void detectOrangeBall(){
         capture(orangeBall);
         ObjectColor.setOrangeBall(orangeBall);
+        jsonObject.put("OrangeBall", createJSONArray());
     }
     private void detectEdge(){
         capture(edge);
         ObjectColor.setEdge(edge);
+        jsonObject.put("Edge", createJSONArray());
     }
     private void detectBlueRobot(){
         capture(blueRobot);
         ObjectColor.setBlueRobot(blueRobot);
+        jsonObject.put("BlueRobot", createJSONArray());
     }
     private void detectGreenRobot(){
         capture(greenRobot);
         ObjectColor.setGreenRobot(greenRobot);
+        jsonObject.put("GreenRobot", createJSONArray());
+    }
+
+    private JSONArray createJSONArray(){
+        JSONArray jsonArray = new JSONArray();
+        jsonArray.add(hueMin.getValue());
+        jsonArray.add(hueMax.getValue());
+        jsonArray.add(satMin.getValue());
+        jsonArray.add(satMax.getValue());
+        jsonArray.add(valMin.getValue());
+        jsonArray.add(valMax.getValue());
+        return jsonArray;
     }
 }

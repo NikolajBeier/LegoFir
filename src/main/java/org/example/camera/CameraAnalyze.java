@@ -298,6 +298,7 @@ public class CameraAnalyze {
                 }
 
  */
+
                 // convert matrix to byte
                 final MatOfByte buf = new MatOfByte();
                 Imgcodecs.imencode(".jpg", image, buf);
