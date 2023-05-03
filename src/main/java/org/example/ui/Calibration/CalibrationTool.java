@@ -177,7 +177,6 @@ public class CalibrationTool {
                     } catch(Exception exception){
                         exception.printStackTrace();
                     }
-                    System.out.println(jsonObject.toJSONString());
                     running = false;
                     mainFrame.dispose();
                     capture.release();
