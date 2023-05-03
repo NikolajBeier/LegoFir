@@ -1,5 +1,6 @@
 package org.example.camera;
 
+import org.example.mapping.ObjectColor;
 import org.example.robot.model.Legofir;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;

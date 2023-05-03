@@ -4,7 +4,7 @@ package org.example.camera;
 import nu.pattern.OpenCV;
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
-import org.example.robot.Legofir;
+
 import org.example.ui.Calibration.CalibrationTool;
 import org.example.ui.ConnectToRobot;
 import org.opencv.core.*;
@@ -273,7 +273,7 @@ public class CameraAnalyze {
 
                 if(ballDetectionOn){
                     orangeBallRects = orangeBallDetection.detect(image,dude);
-                   // ballRects = ballDetection.detect(image,dude);
+                    ballRects = ballDetection.detect(image,dude);
                 }
 
                 if (edgeDetectionOn){
