@@ -3,11 +3,12 @@ package org.example.robot.behaviour;
 
 import org.example.mapping.RobotPosition;
 import org.example.mapping.TennisBall;
-import org.example.robot.Legofir;
+import org.example.robot.model.Legofir;
 import org.opencv.core.Point;
 
 
 public class DriveTowardsBall implements MyBehavior{
+    String BehaviorName = "DriveTowardsBall";
     volatile Boolean suppressed = false;
     Legofir dude;
     Boolean stopCondition = false;
@@ -37,6 +38,7 @@ public class DriveTowardsBall implements MyBehavior{
     @Override
     public void action() {
         suppressed=false;
+        dude.setCurrentBehaviourName(BehaviorName);
         while(!suppressed) {
 
             RobotPosition currentPosition = dude.getMap().getRobotPosition();

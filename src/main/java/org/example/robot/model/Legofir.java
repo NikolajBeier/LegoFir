@@ -1,4 +1,4 @@
-package org.example.robot;
+package org.example.robot.model;
 
 import lejos.remote.ev3.RMIRegulatedMotor;
 import org.example.mapping.Map;
@@ -35,6 +35,8 @@ public class Legofir {
     int defaultAccelerationBallDropper;
 
     boolean launched;
+
+    String currentBehaviourName = "None";
 
     public Legofir() {
     }
@@ -94,6 +96,14 @@ public class Legofir {
         return launched;
     }
 
+    public String getCurrentBehaviourName() {
+        return currentBehaviourName;
+    }
+
+    public void setCurrentBehaviourName(String currentBehaviourName) {
+        this.currentBehaviourName = currentBehaviourName;
+    }
+
     public void moveForward(){
         state=RobotState.MOVING_FORWARD;
         try {
@@ -105,7 +115,7 @@ public class Legofir {
     }
 
     public void turnLeft(){
-        state=RobotState.TURNING_LEFT;
+        //state=RobotState.TURNING_LEFT;
         try {
             left.setSpeed(80);
             right.setSpeed(80);
@@ -117,7 +127,7 @@ public class Legofir {
     }
 
     public void turnRight(){
-        state=RobotState.TURNING_RIGHT;
+        //state=RobotState.TURNING_RIGHT;
         try{
             left.setSpeed(80);
             right.setSpeed(80);
@@ -240,7 +250,7 @@ public class Legofir {
     }
 
     public double getAngle() {
-        return map.getRobotPosition().getHeadingInDegrees();
+        return map.getRobotPosition().getHeadingInRadians();
     }
 
     public RobotState getState() {

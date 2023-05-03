@@ -1,7 +1,7 @@
 package robotTest;
 import lejos.remote.ev3.RemoteEV3;
 import org.example.robot.Launcher;
-import org.example.robot.Legofir;
+import org.example.robot.model.Legofir;
 import org.example.ui.ConnectToRobot;
 import org.junit.Test;
 

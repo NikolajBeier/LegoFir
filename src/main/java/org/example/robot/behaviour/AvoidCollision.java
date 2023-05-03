@@ -1,14 +1,14 @@
 package org.example.robot.behaviour;
 
-import lejos.robotics.SampleProvider;
-import org.example.robot.Legofir;
-import org.example.robot.RobotState;
+import org.example.robot.model.Legofir;
+import org.opencv.core.Point;
 
 public class AvoidCollision implements MyBehavior {
 
+    String BehaviorName = "Avoid Collision";
     Legofir dude;
     Boolean suppressed = false;
-    final float AVOID_DISTANCE = 0.25f;
+    final double AVOID_DISTANCE = 50;
     Boolean stopCondition = false;
 
     public AvoidCollision(Legofir dude) {
@@ -23,10 +23,13 @@ public class AvoidCollision implements MyBehavior {
     @Override
     public void action() {
         suppressed = false;
-        if(!suppressed){
-            dude.stopWheels();
-            dude.turnRight();
+        dude.setCurrentBehaviourName(BehaviorName);
+        dude.turnRight();
+        // Wait for avoidCollision behavior to be done
+        while(!suppressed){
+
         }
+        dude.stopWheels();
     }
 
     @Override
@@ -38,7 +41,6 @@ public class AvoidCollision implements MyBehavior {
     public boolean takeControl() {
         Boolean collision = false;
         if(stopCondition){
-            System.out.println("DetectCollision.takeControl() = " + false);
             return false;
         }
         switch(dude.getState()){
@@ -62,19 +64,43 @@ public class AvoidCollision implements MyBehavior {
     }
 
     private Boolean checkForBackCollision() {
+        Point heading = dude.getMap().getRobotPosition().getHeading();
+        Point oppositeHeading = new Point(-heading.x, -heading.y);
+        double distance = dude.getMap().distanceToEdge(oppositeHeading);
+        if(distance < AVOID_DISTANCE){
+            return true;
+        }
         return false;
     }
 
     private Boolean checkForLeftCollision() {
+        Point heading = dude.getMap().getRobotPosition().getHeading();
+        Point leftHeading = new Point(-heading.y, heading.x);
+        double distance = dude.getMap().distanceToEdge(leftHeading);
+        if(distance < AVOID_DISTANCE){
+            return true;
+        }
         return false;
     }
 
     private Boolean checkForRightCollision() {
+        Point heading = dude.getMap().getRobotPosition().getHeading();
+        Point rightHeading = new Point(heading.y, -heading.x);
+        double distance = dude.getMap().distanceToEdge(rightHeading);
+        if(distance < AVOID_DISTANCE){
+            return true;
+        }
+
         return false;
     }
 
     private Boolean checkForFrontCollision() {
-        dude.getMap().getRobotPosition();
+        Point heading = dude.getMap().getRobotPosition().getHeading();
+
+        double distance = dude.getMap().distanceToEdge(heading);
+        if(distance < AVOID_DISTANCE){
+            return true;
+        }
         return false;
     }
 }

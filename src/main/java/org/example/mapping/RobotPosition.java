@@ -33,7 +33,7 @@ public class RobotPosition {
         return heading;
     }
 
-    public double getHeadingInDegrees() {
+    public double getHeadingInRadians() {
         //System.out.println("math Atan: "+Math.atan(heading.y/heading.x));
         //System.out.println("math toDegrees: "+Math.toDegrees(Math.atan(heading.y/heading.x)));
         return Math.atan2(heading.y,heading.x);
