@@ -1,5 +1,6 @@
 package org.example.camera;
 
+import org.example.mapping.ObjectColor;
 import org.example.robot.model.Legofir;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
@@ -23,6 +24,25 @@ public class RobotDetection {
     ImageIcon icon;
     Mat greenMask = new Mat();
     Mat blueMask = new Mat();
+    int greenHueMin = ObjectColor.getGreenRobot().getHueMin();
+    int greenHueMax = ObjectColor.getGreenRobot().getHueMax();
+    int greenSatMin = ObjectColor.getGreenRobot().getSatMin();
+    int greenSatMax = ObjectColor.getGreenRobot().getSatMax();
+    int greenValMin = ObjectColor.getGreenRobot().getValMin();
+    int greenValMax = ObjectColor.getGreenRobot().getValMax();
+
+    int blueHueMin = ObjectColor.getBlueRobot().getHueMin();
+    int blueHueMax = ObjectColor.getBlueRobot().getHueMax();
+    int blueSatMin = ObjectColor.getBlueRobot().getSatMin();
+    int blueSatMax = ObjectColor.getBlueRobot().getSatMax();
+
+    int blueValMin = ObjectColor.getBlueRobot().getValMin();
+    int blueValMax = ObjectColor.getBlueRobot().getValMax();
+
+    /*
+    int valMin = 20;
+    int valMax = 255;
+
     int greenHueMin = 30;
     int greenHueMax = 80;
     int greenSatMin = 30;
@@ -35,6 +55,7 @@ public class RobotDetection {
 
     int valMin = 20;
     int valMax = 255;
+     */
     public List<Rect>[] detect(Mat image, Legofir dude) {
         List<Rect> greens = new ArrayList<>();
         List<Rect> blues = new ArrayList<>();
@@ -42,11 +63,11 @@ public class RobotDetection {
         Imgproc.cvtColor(image, hsvImage, Imgproc.COLOR_BGR2HSV);
 
 
-        Scalar greenMinValues = new Scalar(greenHueMin, greenSatMin, valMin);
-        Scalar greenMaxValues = new Scalar(greenHueMax, greenSatMax, valMax);
+        Scalar greenMinValues = new Scalar(greenHueMin, greenSatMin, greenValMin);
+        Scalar greenMaxValues = new Scalar(greenHueMax, greenSatMax, greenValMax);
 
-        Scalar blueMinValues = new Scalar(blueHueMin, blueSatMin, valMin);
-        Scalar blueMaxValues = new Scalar(blueHueMax, blueSatMax, valMax);
+        Scalar blueMinValues = new Scalar(blueHueMin, blueSatMin, blueValMin);
+        Scalar blueMaxValues = new Scalar(blueHueMax, blueSatMax, blueValMax);
         Core.inRange(hsvImage, greenMinValues, greenMaxValues, greenMask);
         Core.inRange(hsvImage, blueMinValues, blueMaxValues, blueMask);
 
