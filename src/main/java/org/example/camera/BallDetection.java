@@ -21,12 +21,20 @@ public class BallDetection {
     // LOGIC
     Mat hlsImage = new Mat();
     Mat whiteMask = new Mat();
-    int hMin = 0;
+
+    int hMin = ObjectColor.getWhiteBall().getHueMin();
+    int hMax = ObjectColor.getWhiteBall().getHueMax();
+    int sMin = ObjectColor.getWhiteBall().getSatMin();
+    int sMax = ObjectColor.getWhiteBall().getSatMax();
+    int lMin = ObjectColor.getWhiteBall().getValMin();
+    int lMax = ObjectColor.getWhiteBall().getValMax();
+
+    /*int hMin = 0;
     int hMax = 255;
     int sMin = 0;
     int sMax = 255;
     int lMin = 210;
-    int lMax = 255;
+    int lMax = 255;*/
 
 
 

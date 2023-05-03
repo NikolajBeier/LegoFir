@@ -4,6 +4,8 @@ package org.example.camera;
 import nu.pattern.OpenCV;
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
+import org.example.robot.Legofir;
+import org.example.ui.Calibration.CalibrationTool;
 import org.example.ui.ConnectToRobot;
 import org.opencv.core.*;
 import org.opencv.core.Point;
@@ -83,6 +85,7 @@ public class CameraAnalyze {
 
         Boolean edgeDetectionOn = false;
         Button colorFilterButton;
+        Button calibrationTool;
         Button connectToRobot;
         String currentBehaviour = dude.getCurrentBehaviourName();
 
@@ -107,6 +110,7 @@ public class CameraAnalyze {
             robotDetectionButton = new Button("Robot Detection");
             ballDetectionButton = new Button("Ball Detection");
             edgeDetectionButton = new Button("Edge Detection");
+            calibrationTool = new Button("Calibration Tool");
 
 
             if(camWidth>screenWidth || camHeight>screenHeight){
@@ -215,6 +219,7 @@ public class CameraAnalyze {
                 }
             });
             JLabel goofy = new JLabel("Current Behaviour: " + currentBehaviour);
+
 
             buttons.add(colorFilterButton);
             buttons.add(colorDetection);
@@ -362,6 +367,7 @@ public class CameraAnalyze {
                 }
 
  */
+
                 // convert matrix to byte
                 final MatOfByte buf = new MatOfByte();
                 Imgcodecs.imencode(".jpg", image, buf);
@@ -464,6 +470,8 @@ public class CameraAnalyze {
             buttonsSliders.add(findValues);
 
 
+                mainPanel.setPreferredSize(new Dimension(width, height-130));
+                mainPanel.add(cameraScreen);
             mainPanel.setPreferredSize(new Dimension(width, height - 130));
             mainPanel.add(cameraScreen);
             mainPanel.add(colorCameraScreen);
