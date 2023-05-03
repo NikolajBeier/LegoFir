@@ -2,6 +2,7 @@
 package org.example.camera;
 
 import nu.pattern.OpenCV;
+import org.example.mapping.TennisBall;
 import org.example.robot.Legofir;
 import org.example.ui.ConnectToRobot;
 import org.opencv.core.*;
@@ -246,6 +247,7 @@ public class CameraAnalyze {
                 java.util.List<Rect> ballRects = new ArrayList<>();
                 java.util.List<Rect> orangeBallRects = new ArrayList<>();
                 java.util.List<MatOfPoint> edgeContour = new ArrayList<>();
+                Rect edge = null;
 
 
                 if(robotDetectionOn){
@@ -261,7 +263,7 @@ public class CameraAnalyze {
                 }
 
                 if (edgeDetectionOn){
-                    edgeContour= edgeDetection.detect(image);
+                    edge= edgeDetection.detect(image,dude);
                 }
 
                 // draw rectangles
@@ -278,8 +280,9 @@ public class CameraAnalyze {
                 }
 
                 // Edge rects
-                for (MatOfPoint boundingContour  : edgeContour ){
-                    Imgproc.drawContours(image,edgeContour,2, new Scalar(0,0,255),2);
+                if(edge!=null){
+                    Imgproc.rectangle(image, edge.tl(), edge.br(), new Scalar(0, 0, 255), 1);
+                    putText(image, "Edge", edge.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
                 }
 
                 // Blue rects
@@ -315,12 +318,25 @@ public class CameraAnalyze {
 
 
                             line(image, blueCenter, greenCenter, new Scalar(0, 0, 255), 1);
-                            System.out.println("Blue: " + blueCenter.toString() + " Green: " + greenCenter.toString() + " Center: " + centerOfLine.toString() + " Arrow: " + arrowPoint.toString());
+                            //System.out.println("Blue: " + blueCenter.toString() + " Green: " + greenCenter.toString() + " Center: " + centerOfLine.toString() + " Arrow: " + arrowPoint.toString());
                             arrowedLine(image, centerOfLine, arrowPoint, new Scalar(0, 0, 255), 1);
+
+                            if(dude!=null) {
+                                TennisBall nextBall = dude.getMap().getNextBall();
+
+                                int nextBallX = nextBall.getX();
+                                int nextBallY = nextBall.getY();
+
+
+                                // vektor fra currentPosition(x,y) til (nextBallX,nextBallY)
+                                Point ballVector = new Point(nextBallX-dude.getMap().getRobotPosition().getX(), nextBallY-dude.getMap().getRobotPosition().getY());
+                                arrowedLine(image,centerOfLine,new Point(nextBallX,nextBallY),new Scalar(0,255,0),1);
+                            }
 
                         }
                     }
                 }
+
 
 
 
