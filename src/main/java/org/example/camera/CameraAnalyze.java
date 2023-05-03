@@ -5,6 +5,7 @@ import nu.pattern.OpenCV;
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
 import org.example.ui.ConnectToRobot;
+import org.example.utility.Geometry;
 import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -300,6 +301,7 @@ public class CameraAnalyze {
 
                             Point blueCenter = new Point(blueBoundingRect.x + blueBoundingRect.width * 0.5, blueBoundingRect.y + blueBoundingRect.height * 0.5);
                             Point greenCenter = new Point(greenBoundingRect.x + greenBoundingRect.width * 0.5, greenBoundingRect.y + greenBoundingRect.height * 0.5);
+
                             circle(image, blueCenter, 1, new Scalar(0, 0, 255), 1);
                             circle(image, greenCenter, 1, new Scalar(0, 0, 255), 1);
 
@@ -309,6 +311,7 @@ public class CameraAnalyze {
                             int lengthOfVector = (int) Math.sqrt(vectorFromBlueToGreen.x * vectorFromBlueToGreen.x + vectorFromBlueToGreen.y * vectorFromBlueToGreen.y);
 
                             Point perpendicularVector = new Point(vectorFromBlueToGreen.y, -vectorFromBlueToGreen.x);
+
 
                             Point arrowPoint = new Point(centerOfLine.x + perpendicularVector.x, centerOfLine.y + perpendicularVector.y);
 
@@ -326,9 +329,14 @@ public class CameraAnalyze {
                                 int nextBallX = nextBall.getX();
                                 int nextBallY = nextBall.getY();
 
+                                // vektor fra currentPosition(x,y) til (nextBallX,nextBallY)
+
+                                // Vinkel af vektor...
+
 
                                 // vektor fra currentPosition(x,y) til (nextBallX,nextBallY)
                                 Point ballVector = new Point(nextBallX-dude.getMap().getRobotPosition().getX(), nextBallY-dude.getMap().getRobotPosition().getY());
+
                                 arrowedLine(image,centerOfLine,new Point(nextBallX,nextBallY),new Scalar(0,255,0),1);
                             }
 

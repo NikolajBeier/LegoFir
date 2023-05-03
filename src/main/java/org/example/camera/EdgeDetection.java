@@ -43,10 +43,10 @@ public class EdgeDetection {
             for (MatOfPoint contour : redContour) {
                  if(contourArea(contour) > 500) {
                      edgeRect = boundingRect(contour);
-                     Point topLeft = edgeRect.tl();
-                     Point bottomRight = edgeRect.br();
-                     Point topRight = new Point(bottomRight.x, topLeft.y);
-                     Point bottomLeft = new Point(topLeft.x, bottomRight.y);
+                     Point topLeft = new Point(edgeRect.tl().x, -edgeRect.tl().y);
+                     Point bottomRight = new Point(edgeRect.br().x, -edgeRect.br().y);
+                     Point topRight = new Point(bottomRight.x, -topLeft.y);
+                     Point bottomLeft = new Point(topLeft.x, -bottomRight.y);
                      int height = edgeRect.height;
                      int width = edgeRect.width;
                      dude.getMap().setEdge(topLeft, topRight, bottomLeft, bottomRight, height, width);

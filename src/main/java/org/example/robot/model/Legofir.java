@@ -59,6 +59,11 @@ public class Legofir {
 
     public void setDefaultSpeedHarvester(int defaultSpeedHarvester) {
         this.defaultSpeedHarvester = defaultSpeedHarvester;
+        try {
+            harvester.setSpeed(defaultSpeedHarvester);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void setDefaultSpeedWheel(int defaultSpeedWheel) {
@@ -148,7 +153,7 @@ public class Legofir {
     }
 
     public void stopWheels(){
-        state=RobotState.IDLE;
+        //state=RobotState.IDLE;
         try {
             left.setSpeed(defaultSpeedWheel);
             right.setSpeed(defaultSpeedWheel);
@@ -244,7 +249,7 @@ public class Legofir {
         List<TennisBall> newList = new ArrayList<>();
 
         for (Rect ball : balls) {
-            newList.add(new TennisBall((int)(ball.x+ball.width*0.5), (int)(ball.y+ ball.height*0.5)));
+            newList.add(new TennisBall((int)(ball.x+ball.width*0.5), (int)(-ball.y- ball.height*0.5)));
         }
         map.setBalls(newList);
     }

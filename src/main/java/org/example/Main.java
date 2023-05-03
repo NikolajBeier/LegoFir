@@ -12,9 +12,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
 
 public class Main {
+    public static Logger logger = Logger.getLogger("Main");
+
     public static void main(String[] args) {
+        FileHandler fh;
+        try {
+            fh = new FileHandler("log.txt");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        logger.addHandler(fh);
         Legofir dude= new Legofir();
         JFrame jFrame = new JFrame();
         jFrame.setSize(300, 175);
