@@ -3,8 +3,8 @@ package org.example.robot.behaviour;
 import lejos.robotics.subsumption.Behavior;
 
 public class StopBehaviour implements MyBehavior {
-    Boolean stopCondition = false;
-    Boolean suppressed = false;
+    boolean stopCondition = false;
+    boolean suppressed = false;
 
     public StopBehaviour() {
         this.suppress();
