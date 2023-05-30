@@ -104,7 +104,7 @@ public class RobotDetection {
         Imgproc.findContours(greenMask, greenContour, greenHierarchy, RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
         Imgproc.findContours(blueMask, blueContour, blueHierarchy, RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
 
-// if any contour exist draw rectangle using the bounding rect
+// if any contour exist draw rectangles using the bounding rect
 
         int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE, maxX = 0, maxY = 0;
 
