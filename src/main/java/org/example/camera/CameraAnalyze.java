@@ -4,6 +4,7 @@ package org.example.camera;
 import nu.pattern.OpenCV;
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
+import org.example.robot.model.RobotState;
 import org.example.ui.Calibration.CalibrationTool;
 import org.example.ui.ConnectToRobot;
 import org.example.utility.Geometry;
@@ -30,7 +31,6 @@ public class CameraAnalyze {
     JPanel jPanel = new JPanel();
     private JLabel cameraScreen;
     Legofir dude;
-
 
 
     public CameraAnalyze(Legofir dude) {
@@ -88,6 +88,9 @@ public class CameraAnalyze {
         Button calibrationTool;
         Button connectToRobot;
         String currentBehaviour = dude.getCurrentBehaviourName();
+        private RobotState currentState = dude.getState();
+        JLabel robotState = new JLabel();
+
 
 
         public boolean getDetectColor() {
@@ -220,6 +223,8 @@ public class CameraAnalyze {
                 }
             });
             JLabel goofy = new JLabel("Current Behaviour: " + currentBehaviour);
+            robotState = new JLabel("Current Robot State: " + currentState.name());
+
 
 
             buttons.add(colorFilterButton);
@@ -229,6 +234,7 @@ public class CameraAnalyze {
             buttons.add(edgeDetectionButton);
             buttons.add(connectToRobot);
             information.add(goofy);
+            information.add(robotState);
             jFrame.add(buttons, BorderLayout.SOUTH);
             jFrame.add(information,BorderLayout.EAST);
 
@@ -250,6 +256,8 @@ public class CameraAnalyze {
                 // read image to matrix
 
                 currentBehaviour = dude.getCurrentBehaviourName();
+                currentState = dude.getState();
+                robotState.setText("Current Robot State: " + currentState.name());
 
 
                 capture.read(webCamImage);
