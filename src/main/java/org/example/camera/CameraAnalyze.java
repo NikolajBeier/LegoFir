@@ -349,7 +349,7 @@ public class CameraAnalyze {
                                 // vektor fra currentPosition(x,y) til (nextBallX,nextBallY)
                                 Point ballVector = new Point(nextBallX-dude.getMap().getRobotPosition().getX(), nextBallY-dude.getMap().getRobotPosition().getY());
 
-                                arrowedLine(image,centerOfLine,new Point(nextBallX,nextBallY),new Scalar(0,255,0),1);
+                                arrowedLine(image,centerOfLine,new Point(nextBallX,-nextBallY),new Scalar(0,255,0),1);
                             }
 
                         }
