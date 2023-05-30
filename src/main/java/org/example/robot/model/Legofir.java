@@ -1,4 +1,4 @@
-package org.example.robot;
+package org.example.robot.model;
 
 import lejos.remote.ev3.RMIRegulatedMotor;
 import org.example.mapping.Map;
@@ -59,6 +59,11 @@ public class Legofir {
 
     public void setDefaultSpeedHarvester(int defaultSpeedHarvester) {
         this.defaultSpeedHarvester = defaultSpeedHarvester;
+        try {
+            harvester.setSpeed(defaultSpeedHarvester);
+        } catch (RemoteException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void setDefaultSpeedWheel(int defaultSpeedWheel) {
@@ -115,7 +120,7 @@ public class Legofir {
     }
 
     public void turnLeft(){
-        state=RobotState.TURNING_LEFT;
+        //state=RobotState.TURNING_LEFT;
         try {
             left.setSpeed(80);
             right.setSpeed(80);
@@ -127,7 +132,7 @@ public class Legofir {
     }
 
     public void turnRight(){
-        state=RobotState.TURNING_RIGHT;
+        //state=RobotState.TURNING_RIGHT;
         try{
             left.setSpeed(80);
             right.setSpeed(80);
@@ -148,7 +153,7 @@ public class Legofir {
     }
 
     public void stopWheels(){
-        state=RobotState.IDLE;
+        //state=RobotState.IDLE;
         try {
             left.setSpeed(defaultSpeedWheel);
             right.setSpeed(defaultSpeedWheel);
@@ -244,13 +249,13 @@ public class Legofir {
         List<TennisBall> newList = new ArrayList<>();
 
         for (Rect ball : balls) {
-            newList.add(new TennisBall((int)(ball.x+ball.width*0.5), (int)(ball.y+ ball.height*0.5)));
+            newList.add(new TennisBall((int)(ball.x+ball.width*0.5), (int)(-ball.y- ball.height*0.5)));
         }
         map.setBalls(newList);
     }
 
     public double getAngle() {
-        return map.getRobotPosition().getHeadingInDegrees();
+        return map.getRobotPosition().getHeadingInRadians();
     }
 
     public RobotState getState() {

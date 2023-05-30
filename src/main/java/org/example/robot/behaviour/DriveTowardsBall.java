@@ -3,8 +3,11 @@ package org.example.robot.behaviour;
 
 import org.example.mapping.RobotPosition;
 import org.example.mapping.TennisBall;
-import org.example.robot.Legofir;
+import org.example.robot.model.Legofir;
+import org.example.utility.Geometry;
 import org.opencv.core.Point;
+
+import static org.example.Main.logger;
 
 
 public class DriveTowardsBall implements MyBehavior{
@@ -39,7 +42,9 @@ public class DriveTowardsBall implements MyBehavior{
     public void action() {
         suppressed=false;
         dude.setCurrentBehaviourName(BehaviorName);
+        dude.beginHarvester();
         while(!suppressed) {
+
 
             RobotPosition currentPosition = dude.getMap().getRobotPosition();
             TennisBall nextBall = dude.getMap().getNextBall();
@@ -54,9 +59,16 @@ public class DriveTowardsBall implements MyBehavior{
 
             // Vinkel af vektor...
 
-            angleToNextBall= Math.atan2(ballVector.y, ballVector.x);
+            angleToNextBall= Geometry.degreesOfVectorInRadians(ballVector.x,ballVector.y);
 
-            System.out.println("before turning: "+currentAngle + " " + angleToNextBall);
+            //System.out.println("before turning: "+currentAngle + " " + angleToNextBall);
+
+
+            System.out.println("NextBallX: " + nextBallX + ", NextBallY: " + nextBallY);
+            System.out.println("CurrentPositionX: " + currentPosition.getX() + ", CurrentPositionY: " + currentPosition.getY());
+            System.out.println("RobotToBallVectorX " + ballVector.x + ", RobotToBallVectorY" + ballVector.y);
+            System.out.println("Current angle: " + currentAngle);
+            System.out.println("Angle to next ball: " + angleToNextBall);
 
             turnLeftTowardsBall();
             turnRightTowardsBall();
@@ -66,7 +78,6 @@ public class DriveTowardsBall implements MyBehavior{
 
             // Heading found, now go forward
 
-            dude.beginHarvester();
             dude.moveForward();
 
             // Waits to be suppressed or until the robot is close enough to the ball for it to be assumed picked up or pushed away.
@@ -84,9 +95,9 @@ public class DriveTowardsBall implements MyBehavior{
                 }
             }
 
-            dude.stopHarvester();
             dude.stopWheels();
         }
+        dude.stopHarvester();
     }
 
 
@@ -105,7 +116,8 @@ public class DriveTowardsBall implements MyBehavior{
     private void turnLeftTowardsBall() {
         currentAngle = dude.getAngle();
         if (ballIsLeftOfRobotHeading()) {
-            System.out.println("turning left: "+currentAngle + " " + angleToNextBall);
+            logger.info("time: "+System.currentTimeMillis()+". Turning left - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextBall);
+            //System.out.println("turning left: "+currentAngle + " " + angleToNextBall);
             // Turn left towards ball
             dude.turnLeft();
             while (ballIsLeftOfRobotHeading() && currentAngle!= angleToNextBall) {
@@ -113,7 +125,8 @@ public class DriveTowardsBall implements MyBehavior{
                 //System.out.println("Turning Left. CurrentAngle = " + currentAngle);
             }
             // Stop turning
-            System.out.println("turning left: "+currentAngle + " " + angleToNextBall);
+            logger.info("time: "+System.currentTimeMillis()+". Turning left ended - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextBall);
+            //System.out.println("turning left: "+currentAngle + " " + angleToNextBall);
             dude.stopWheels();
         }
     }
@@ -123,14 +136,16 @@ public class DriveTowardsBall implements MyBehavior{
     private void turnRightTowardsBall() {
         currentAngle = dude.getAngle();
         if (!ballIsLeftOfRobotHeading()) {
-            System.out.println("turning right: "+currentAngle + " " + angleToNextBall);
+            logger.info("time: "+System.currentTimeMillis()+". Turning right - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextBall);
+            //System.out.println("turning right: "+currentAngle + " " + angleToNextBall);
 
             dude.turnRight();
             while(!ballIsLeftOfRobotHeading() && currentAngle!= angleToNextBall){
                 currentAngle = dude.getAngle();
                 //System.out.println("Turning Right. CurrentAngle = " + currentAngle);
             }
-            System.out.println("turning right: "+currentAngle + " " + angleToNextBall);
+            logger.info("time: "+System.currentTimeMillis()+". Turning right ended - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextBall);
+            //System.out.println("turning right: "+currentAngle + " " + angleToNextBall);
 
             dude.stopWheels();
         }
@@ -153,7 +168,7 @@ public class DriveTowardsBall implements MyBehavior{
         else if(currentAngle<0){
             oppositeAngleOfRobot=currentAngle+Math.PI;
             // If ball is on the right side of the robot, return false.
-            if(angleToNextBall>currentAngle&&angleToNextBall<oppositeAngleOfRobot){
+            if(angleToNextBall<currentAngle&&angleToNextBall>oppositeAngleOfRobot){
                 return false;
             }
             else{

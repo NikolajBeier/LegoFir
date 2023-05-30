@@ -3,9 +3,10 @@ package org.example.camera;
 
 import nu.pattern.OpenCV;
 import org.example.mapping.TennisBall;
-import org.example.robot.Legofir;
+import org.example.robot.model.Legofir;
 import org.example.ui.Calibration.CalibrationTool;
 import org.example.ui.ConnectToRobot;
+import org.example.utility.Geometry;
 import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -16,6 +17,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,6 +77,7 @@ public class CameraAnalyze {
         Button ballDetectionButton;
         Button edgeDetectionButton;
         BallDetection ballDetection = new BallDetection();
+        OrangeBallDetection orangeBallDetection = new OrangeBallDetection();
         RobotDetection robotDetection = new RobotDetection();
         EdgeDetection edgeDetection = new EdgeDetection();
         Boolean ballDetectionOn = false;
@@ -258,6 +261,7 @@ public class CameraAnalyze {
                 java.util.List<Rect> green = new ArrayList<>();
                 java.util.List<Rect> robot = new ArrayList<>();
                 java.util.List<Rect> ballRects = new ArrayList<>();
+                java.util.List<Rect> orangeBallRects = new ArrayList<>();
                 Rect edge = null;
 
 
@@ -270,8 +274,10 @@ public class CameraAnalyze {
                 }
 
                 if(ballDetectionOn){
+                    orangeBallRects = orangeBallDetection.detect(image,dude);
                     ballRects = ballDetection.detect(image,dude);
                 }
+
                 if (edgeDetectionOn){
                     edge= edgeDetection.detect(image,dude);
                 }
@@ -279,6 +285,11 @@ public class CameraAnalyze {
                 // draw rectangles
 
                 // Ball rects
+                for (Rect boundingRect : orangeBallRects){
+                    Imgproc.rectangle(image,boundingRect.tl(),boundingRect.br(),new Scalar(0,0,255, 1));
+                    putText(image, "Orange ball",boundingRect.tl(), FONT_HERSHEY_SIMPLEX,1,new Scalar(0,0,255),2);
+                }
+
                 for (Rect boundingRect : ballRects) {
                     Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), new Scalar(0, 0, 255), 1);
                     putText(image, "Ball", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
@@ -336,9 +347,14 @@ public class CameraAnalyze {
                                 int nextBallX = nextBall.getX();
                                 int nextBallY = nextBall.getY();
 
+                                // vektor fra currentPosition(x,y) til (nextBallX,nextBallY)
+
+                                // Vinkel af vektor...
+
 
                                 // vektor fra currentPosition(x,y) til (nextBallX,nextBallY)
                                 Point ballVector = new Point(nextBallX-dude.getMap().getRobotPosition().getX(), nextBallY-dude.getMap().getRobotPosition().getY());
+
                                 arrowedLine(image,centerOfLine,new Point(nextBallX,nextBallY),new Scalar(0,255,0),1);
                             }
 

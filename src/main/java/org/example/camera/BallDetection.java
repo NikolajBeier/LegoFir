@@ -1,12 +1,10 @@
 package org.example.camera;
 
 import org.example.mapping.ObjectColor;
-import org.example.robot.Legofir;
+import org.example.robot.model.Legofir;
 import org.opencv.core.*;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +37,9 @@ public class BallDetection {
     int lMin = 210;
     int lMax = 255;*/
 
+
+
+
     public List<Rect> detect(Mat image, Legofir dude) {
 
         List<Rect> balls = new ArrayList<>();
@@ -58,7 +59,7 @@ public class BallDetection {
 
         if(!whiteContour.isEmpty()){
             for(MatOfPoint contour : whiteContour){
-                if(Imgproc.contourArea(contour) > 150){
+                if(Imgproc.contourArea(contour) > 200&& Imgproc.contourArea(contour)<400){
                     Rect boundingRect = Imgproc.boundingRect(contour);
                     balls.add(boundingRect);
                     //dude.getMap().addBallCord((int)(boundingRect.x+boundingRect.width*0.5), (int)(boundingRect.y+ boundingRect.height*0.5));

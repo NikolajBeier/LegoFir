@@ -1,7 +1,7 @@
 package org.example.camera;
 
 import org.example.mapping.ObjectColor;
-import org.example.robot.Legofir;
+import org.example.robot.model.Legofir;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 
@@ -140,10 +140,10 @@ public class RobotDetection {
                 for (Rect blueBoundingRect : blues) {
                     for(Rect greenBoundingRect : greens) {
 
-                        Point blueCenter = new Point(blueBoundingRect.x + blueBoundingRect.width * 0.5, blueBoundingRect.y + blueBoundingRect.height * 0.5);
+                        Point blueCenter = new Point(blueBoundingRect.x + blueBoundingRect.width * 0.5, -blueBoundingRect.y - blueBoundingRect.height * 0.5);
                         dude.getMap().getRobotPosition().setLeftSideX((int)blueCenter.x);
                         dude.getMap().getRobotPosition().setLeftSideY((int)blueCenter.y);
-                        Point greenCenter = new Point(greenBoundingRect.x + greenBoundingRect.width * 0.5, greenBoundingRect.y + greenBoundingRect.height * 0.5);
+                        Point greenCenter = new Point(greenBoundingRect.x + greenBoundingRect.width * 0.5, -greenBoundingRect.y - greenBoundingRect.height * 0.5);
                         dude.getMap().getRobotPosition().setRightSideX((int)greenCenter.x);
                         dude.getMap().getRobotPosition().setRightSideY((int)greenCenter.y);
 
@@ -152,7 +152,7 @@ public class RobotDetection {
                         Point vectorFromBlueToGreen = new Point(greenCenter.x - blueCenter.x, greenCenter.y - blueCenter.y);
                         int lengthOfVector = (int) Math.sqrt(vectorFromBlueToGreen.x * vectorFromBlueToGreen.x + vectorFromBlueToGreen.y * vectorFromBlueToGreen.y);
 
-                        Point perpendicularVector = new Point(vectorFromBlueToGreen.y, -vectorFromBlueToGreen.x);
+                        Point perpendicularVector = new Point(-vectorFromBlueToGreen.y, vectorFromBlueToGreen.x);
 
                         Point arrowPoint = new Point(centerOfLine.x + perpendicularVector.x, centerOfLine.y + perpendicularVector.y);
 

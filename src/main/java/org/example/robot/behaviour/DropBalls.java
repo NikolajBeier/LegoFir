@@ -1,8 +1,6 @@
 package org.example.robot.behaviour;
 
-import lejos.robotics.SampleProvider;
-import lejos.robotics.subsumption.Behavior;
-import org.example.robot.Legofir;
+import org.example.robot.model.Legofir;
 import static java.lang.Thread.sleep;
 
 public class DropBalls implements MyBehavior {

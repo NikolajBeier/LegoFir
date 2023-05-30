@@ -1,12 +1,12 @@
 package org.example.robot;
 
 import lejos.hardware.Audio;
-import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.remote.ev3.RMIRegulatedMotor;
-import lejos.remote.ev3.RMISampleProvider;
 import lejos.remote.ev3.RemoteEV3;
 import lejos.robotics.subsumption.Arbitrator;
 import org.example.robot.behaviour.*;
+import org.example.robot.model.Legofir;
+import org.example.robot.music.Themes;
 
 import static java.lang.Thread.sleep;
 
@@ -69,7 +69,7 @@ public class Launcher implements Program {
 
         bArray = new MyBehavior[]{
                 new DriveTowardsBall(dude),
-                /*new AvoidCollision(dude),*/
+                //new AvoidCollision(dude),
                 //new StopBehaviour(),
         };
         arby = new Arbitrator(bArray);

@@ -1,5 +1,6 @@
 package org.example.mapping;
 
+import org.example.utility.Geometry;
 import org.opencv.core.Point;
 import java.lang.Math;
 
@@ -33,10 +34,9 @@ public class RobotPosition {
         return heading;
     }
 
-    public double getHeadingInDegrees() {
-        //System.out.println("math Atan: "+Math.atan(heading.y/heading.x));
-        //System.out.println("math toDegrees: "+Math.toDegrees(Math.atan(heading.y/heading.x)));
-        return Math.atan2(heading.y,heading.x);
+    public double getHeadingInRadians() {
+        //System.out.println("heading x: " + heading.x + " heading y: " + heading.y);
+        return Geometry.degreesOfVectorInRadians(heading.x,heading.y);
     }
     public void setRightSideX(int rightSideX) {
         this.rightSideX = rightSideX;

@@ -1,6 +1,6 @@
 package org.example.robot.behaviour;
 
-import org.example.robot.Legofir;
+import org.example.robot.model.Legofir;
 
 public class DepositBalls implements MyBehavior {
     String BehaviorName = "DepositBalls";
