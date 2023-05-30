@@ -256,12 +256,14 @@ public class CameraAnalyze {
 
                 java.util.List<Rect> blue = new ArrayList<>();
                 java.util.List<Rect> green = new ArrayList<>();
+                java.util.List<Rect> robot = new ArrayList<>();
                 java.util.List<Rect> ballRects = new ArrayList<>();
                 Rect edge = null;
 
 
                 if(robotDetectionOn){
                     List<Rect>[] robotRects = robotDetection.detect(image,dude);
+                    robot = robotRects[2];
                     blue = robotRects[1];
                     green = robotRects[0];
 
@@ -296,6 +298,10 @@ public class CameraAnalyze {
                 for(Rect boundingRect : green) {
                     Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), new Scalar(0, 0, 255), 1);
                     putText(image, "green", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+                }
+                for(Rect boundingRect : robot) {
+                    Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), new Scalar(0, 0, 255), 1);
+                    putText(image, "robot", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
                 }
 
                 if(!green.isEmpty() && !blue.isEmpty()) {

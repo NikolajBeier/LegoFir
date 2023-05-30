@@ -59,6 +59,7 @@ public class RobotDetection {
     public List<Rect>[] detect(Mat image, Legofir dude) {
         List<Rect> greens = new ArrayList<>();
         List<Rect> blues = new ArrayList<>();
+        List<Rect> combined = new ArrayList<>();
 
         Imgproc.cvtColor(image, hsvImage, Imgproc.COLOR_BGR2HSV);
 
@@ -93,37 +94,46 @@ public class RobotDetection {
 
  */
 
-
-
-
-
         // init
         ArrayList<MatOfPoint> greenContour = new ArrayList<>();
         Mat greenHierarchy = new Mat();
 
         ArrayList<MatOfPoint> blueContour = new ArrayList<>();
         Mat blueHierarchy = new Mat();
-
 // find contours
         Imgproc.findContours(greenMask, greenContour, greenHierarchy, RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
         Imgproc.findContours(blueMask, blueContour, blueHierarchy, RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
 
-
 // if any contour exist draw rectangle using the bounding rect
+
+        int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE, maxX = 0, maxY = 0;
 
         if(!greenContour.isEmpty() || !blueContour.isEmpty()) {
             for (MatOfPoint contour : greenContour) {
                 if(contourArea(contour) > 400) {
                     Rect greenBoundingRect = boundingRect(contour);
                     greens.add(greenBoundingRect);
+
+                    minX = Math.min(greenBoundingRect.x, minX);
+                    minY = Math.min(greenBoundingRect.y, minY);
+                    maxX = Math.max(greenBoundingRect.x + greenBoundingRect.width, maxX);
+                    maxY = Math.max(greenBoundingRect.y + greenBoundingRect.height, maxY);
                 }
             }
             for (MatOfPoint contour : blueContour) {
                 if(contourArea(contour) > 400) {
                     Rect blueBoundingRect = boundingRect(contour);
                     blues.add(blueBoundingRect);
+
+                    minX = Math.min(blueBoundingRect.x, minX);
+                    minY = Math.min(blueBoundingRect.y, minY);
+                    maxX = Math.max(blueBoundingRect.x + blueBoundingRect.width, maxX);
+                    maxY = Math.max(blueBoundingRect.y + blueBoundingRect.height, maxY);
                 }
             }
+
+            Rect combinedRect = new Rect(minX, minY, maxX - minX, maxY - minY);
+            combined.add(combinedRect);
 
 
             if(!greens.isEmpty() && !blues.isEmpty()) {
@@ -158,9 +168,10 @@ public class RobotDetection {
         }
 
 
-        List<Rect>[] returnvalue = new List[2];
+        List<Rect>[] returnvalue = new List[3];
         returnvalue[0] = greens;
         returnvalue[1] = blues;
+        returnvalue[2] = combined;
         return returnvalue;
     }
 }
