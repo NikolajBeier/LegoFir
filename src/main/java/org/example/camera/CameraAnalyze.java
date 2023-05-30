@@ -88,6 +88,7 @@ public class CameraAnalyze {
         Button calibrationTool;
         Button connectToRobot;
         String currentBehaviour = dude.getCurrentBehaviourName();
+        int currentBallAmount = dude.getMap().getBalls().size();
 
 
         public boolean getDetectColor() {
@@ -220,6 +221,7 @@ public class CameraAnalyze {
                 }
             });
             JLabel goofy = new JLabel("Current Behaviour: " + currentBehaviour);
+            JLabel goofy2 = new JLabel("Amount of balls left: "+currentBallAmount);
 
 
             buttons.add(colorFilterButton);
@@ -229,6 +231,7 @@ public class CameraAnalyze {
             buttons.add(edgeDetectionButton);
             buttons.add(connectToRobot);
             information.add(goofy);
+            information.add(goofy2);
             jFrame.add(buttons, BorderLayout.SOUTH);
             jFrame.add(information,BorderLayout.EAST);
 
@@ -250,6 +253,7 @@ public class CameraAnalyze {
                 // read image to matrix
 
                 currentBehaviour = dude.getCurrentBehaviourName();
+                currentBallAmount = dude.getMap().getBalls().size();
 
 
                 capture.read(webCamImage);
