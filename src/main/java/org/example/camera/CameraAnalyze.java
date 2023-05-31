@@ -258,7 +258,8 @@ public class CameraAnalyze {
             ImageIcon icon;
 
             while (true) {
-                // read image to matrix
+
+                // update UI with relevant information
 
                 currentBehaviour = dude.getCurrentBehaviourName();
                 robotBehaviour.setText("Current Behaviour: " + currentBehaviour);
@@ -267,6 +268,8 @@ public class CameraAnalyze {
                 currentBallAmount = dude.getMap().getBalls().size();
                 ballAmount.setText("Amount of balls left: "+currentBallAmount);
 
+
+                // read image to matrix
 
                 capture.read(webCamImage);
                 resize(webCamImage, image, new Size(1280, 720));
