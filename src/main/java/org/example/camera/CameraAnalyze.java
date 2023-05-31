@@ -4,6 +4,7 @@ package org.example.camera;
 import nu.pattern.OpenCV;
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
+import org.example.robot.model.RobotState;
 import org.example.ui.Calibration.CalibrationTool;
 import org.example.ui.ConnectToRobot;
 import org.example.utility.Geometry;
@@ -30,7 +31,6 @@ public class CameraAnalyze {
     JPanel jPanel = new JPanel();
     private JLabel cameraScreen;
     Legofir dude;
-
 
 
     public CameraAnalyze(Legofir dude) {
@@ -87,8 +87,14 @@ public class CameraAnalyze {
         Button colorFilterButton;
         Button calibrationTool;
         Button connectToRobot;
-        String currentBehaviour = dude.getCurrentBehaviourName();
-        int currentBallAmount = dude.getMap().getBalls().size();
+        private String currentBehaviour = dude.getCurrentBehaviourName();
+        private int currentBallAmount = dude.getMap().getBalls().size();
+        private RobotState currentState = dude.getState();
+        JLabel robotState = new JLabel();
+        JLabel ballAmount = new JLabel();
+        JLabel robotBehaviour = new JLabel();
+
+
 
 
         public boolean getDetectColor() {
@@ -220,8 +226,9 @@ public class CameraAnalyze {
                     colorFilter = !colorFilter;
                 }
             });
-            JLabel goofy = new JLabel("Current Behaviour: " + currentBehaviour);
-            JLabel goofy2 = new JLabel("Amount of balls left: "+currentBallAmount);
+            robotBehaviour = new JLabel("Current Behaviour: " + currentBehaviour);
+            robotState = new JLabel("Current Robot State: " + currentState.name());
+            ballAmount = new JLabel("Amount of balls left: "+currentBallAmount);
 
 
             buttons.add(colorFilterButton);
@@ -230,8 +237,9 @@ public class CameraAnalyze {
             buttons.add(ballDetectionButton);
             buttons.add(edgeDetectionButton);
             buttons.add(connectToRobot);
-            information.add(goofy);
-            information.add(goofy2);
+            information.add(robotBehaviour);
+            information.add(robotState);
+            information.add(ballAmount);
             jFrame.add(buttons, BorderLayout.SOUTH);
             jFrame.add(information,BorderLayout.EAST);
 
@@ -253,7 +261,11 @@ public class CameraAnalyze {
                 // read image to matrix
 
                 currentBehaviour = dude.getCurrentBehaviourName();
+                robotBehaviour.setText("Current Behaviour: " + currentBehaviour);
+                currentState = dude.getState();
+                robotState.setText("Current Robot State: " + currentState.name());
                 currentBallAmount = dude.getMap().getBalls().size();
+                ballAmount.setText("Amount of balls left: "+currentBallAmount);
 
 
                 capture.read(webCamImage);
@@ -359,7 +371,7 @@ public class CameraAnalyze {
                                 // vektor fra currentPosition(x,y) til (nextBallX,nextBallY)
                                 Point ballVector = new Point(nextBallX-dude.getMap().getRobotPosition().getX(), nextBallY-dude.getMap().getRobotPosition().getY());
 
-                                arrowedLine(image,centerOfLine,new Point(nextBallX,nextBallY),new Scalar(0,255,0),1);
+                                arrowedLine(image,centerOfLine,new Point(nextBallX,-nextBallY),new Scalar(0,255,0),1);
                             }
 
                         }

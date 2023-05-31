@@ -7,8 +7,8 @@ public class DropBalls implements MyBehavior {
 
     Legofir dude;
     String BehaviorName = "DropBalls";
-    Boolean suppressed = false;
-    Boolean stopCondition = false;
+    boolean suppressed = false;
+    boolean stopCondition = false;
 
     int test = 1;
 

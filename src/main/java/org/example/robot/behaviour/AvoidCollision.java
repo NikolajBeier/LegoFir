@@ -9,9 +9,9 @@ public class AvoidCollision implements MyBehavior {
 
     String BehaviorName = "Avoid Collision";
     Legofir dude;
-    Boolean suppressed = false;
+    boolean suppressed = false;
     final double AVOID_DISTANCE = 5;
-    Boolean stopCondition = false;
+    boolean stopCondition = false;
 
     public AvoidCollision(Legofir dude) {
         this.dude = dude;
