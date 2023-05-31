@@ -2,6 +2,7 @@
 package org.example.camera;
 
 import nu.pattern.OpenCV;
+import org.example.mapping.RobotPosition;
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
 import org.example.robot.model.RobotState;
@@ -90,9 +91,11 @@ public class CameraAnalyze {
         private String currentBehaviour = dude.getCurrentBehaviourName();
         private int currentBallAmount = dude.getMap().getBalls().size();
         private RobotState currentState = dude.getState();
+        private RobotPosition currentPostion = dude.getMap().getRobotPosition();
         JLabel robotState = new JLabel();
         JLabel ballAmount = new JLabel();
         JLabel robotBehaviour = new JLabel();
+        JLabel robotPosition = new JLabel();
 
 
 
@@ -227,6 +230,7 @@ public class CameraAnalyze {
                 }
             });
             robotBehaviour = new JLabel("Current Behaviour: " + currentBehaviour);
+            robotPosition = new JLabel("Current Position: x = " + currentPostion.getX() + ", y = "+ currentPostion.getY());
             robotState = new JLabel("Current Robot State: " + currentState.name());
             ballAmount = new JLabel("Amount of balls left: "+currentBallAmount);
 
@@ -240,6 +244,7 @@ public class CameraAnalyze {
             information.add(robotBehaviour);
             information.add(robotState);
             information.add(ballAmount);
+            information.add(robotPosition);
             jFrame.add(buttons, BorderLayout.SOUTH);
             jFrame.add(information,BorderLayout.EAST);
 
@@ -267,6 +272,8 @@ public class CameraAnalyze {
                 robotState.setText("Current Robot State: " + currentState.name());
                 currentBallAmount = dude.getMap().getBalls().size();
                 ballAmount.setText("Amount of balls left: "+currentBallAmount);
+                currentPostion = dude.getMap().getRobotPosition();
+                robotPosition.setText("Current Position: x = " + currentPostion.getX() + ", y = "+ currentPostion.getY());
 
 
                 // read image to matrix
