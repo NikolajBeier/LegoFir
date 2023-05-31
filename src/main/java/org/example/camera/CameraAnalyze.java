@@ -243,7 +243,7 @@ public class CameraAnalyze {
             jFrame.add(buttons, BorderLayout.SOUTH);
             jFrame.add(information,BorderLayout.EAST);
 
-            jFrame.setSize(new Dimension(camWidth, camHeight + 65));
+            jFrame.setSize(new Dimension(camWidth + 180, camHeight + 65));
             jFrame.setLocationRelativeTo(null);
             jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             jFrame.setVisible(true);
