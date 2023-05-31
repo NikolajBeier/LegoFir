@@ -271,6 +271,35 @@ public class CameraAnalyze {
                 java.util.List<Rect> orangeBallRects = new ArrayList<>();
                 Rect edge = null;
 
+                if (edgeDetectionOn){
+                    edge= edgeDetection.detect(image,dude);
+
+                    Point[] edgePoints = new Point[4];
+
+                    edgePoints[0] = new Point(edge.x, edge.y);
+                    edgePoints[1] = new Point(edge.width, edge.y);
+                    edgePoints[2] = new Point(edge.x, edge.height);
+                    edgePoints[2] = new Point(edge.width, edge.height);
+
+                    MatOfPoint2f src = new MatOfPoint2f(
+                            edgePoints[0],
+                            edgePoints[1],
+                            edgePoints[2],
+                            edgePoints[3]);
+
+                    MatOfPoint2f dst = new MatOfPoint2f(
+                            new Point(0,0),
+                            new Point(image.width(),0),
+                            new Point(0,image.height()),
+                            new Point(image.width(),image.height())
+
+                    );
+
+                    Mat warpMat = Imgproc.getPerspectiveTransform(src,dst);
+                    Imgproc.warpPerspective(image, image, warpMat, image.size());
+
+                }
+
 
                 if(robotDetectionOn){
                     List<Rect>[] robotRects = robotDetection.detect(image,dude);
@@ -282,10 +311,6 @@ public class CameraAnalyze {
                 if(ballDetectionOn){
                     orangeBallRects = orangeBallDetection.detect(image,dude);
                     ballRects = ballDetection.detect(image,dude);
-                }
-
-                if (edgeDetectionOn){
-                    edge= edgeDetection.detect(image,dude);
                 }
 
                 // draw rectangles
