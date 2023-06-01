@@ -15,8 +15,12 @@ public class RobotPosition {
     int rightSideY;
     int leftSideX;
     int leftSideY;
+    int frontSideX;
+    int frontSideY;
+    int backSideX;
+    int backSideY;
 
-    Point heading;
+    Point heading = new Point(0,0);
 
     public RobotPosition() {
 
@@ -53,4 +57,20 @@ public class RobotPosition {
     public void setLeftSideY(int leftSideY) {
         this.leftSideY = leftSideY;
     }
+
+    public int getFrontSideX() {return frontSideX;}
+
+    public void setFrontSideX(int frontSideX) {this.frontSideX = frontSideX;}
+
+    public int getFrontSideY() {return frontSideY;}
+
+    public void setFrontSideY(int frontSideY) {this.frontSideY = frontSideY;}
+
+    public int getBackSideX() {return backSideX;}
+
+    public void setBackSideX(int backSideX) {this.backSideX = backSideX;}
+
+    public int getBackSideY() {return backSideY;}
+
+    public void setBackSideY(int backSideY) {this.backSideY = backSideY;}
 }

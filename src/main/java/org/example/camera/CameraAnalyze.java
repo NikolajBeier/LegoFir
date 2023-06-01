@@ -282,6 +282,8 @@ public class CameraAnalyze {
                 resize(webCamImage, image, new Size(1280, 720));
                 //image = webCamImage;
 
+                //image = Imgcodecs.imread("beforebefore.jpg");
+
 
                 java.util.List<Rect> blue = new ArrayList<>();
                 java.util.List<Rect> green = new ArrayList<>();
@@ -340,6 +342,15 @@ public class CameraAnalyze {
                     Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), new Scalar(0, 0, 255), 1);
                     putText(image, "robot", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
                 }
+                // back and front points of robot
+                Point front = new Point(dude.getMap().getRobotPosition().getFrontSideX(), -dude.getMap().getRobotPosition().getFrontSideY());
+                Imgproc.circle(image, front, 1, new Scalar(0, 0, 255), -1);
+                Imgproc.putText(image, "Front", front, Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+
+                Point back = new Point(dude.getMap().getRobotPosition().getBackSideX(), -dude.getMap().getRobotPosition().getBackSideY());
+                Imgproc.circle(image, back, 1, new Scalar(0, 0, 255), -1);
+                Imgproc.putText(image, "Back", back, Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+
 
                 if(!green.isEmpty() && !blue.isEmpty()) {
                     for (Rect blueBoundingRect : blue) {
