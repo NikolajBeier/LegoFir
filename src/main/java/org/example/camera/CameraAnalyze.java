@@ -2,8 +2,10 @@
 package org.example.camera;
 
 import nu.pattern.OpenCV;
+import org.example.mapping.RobotPosition;
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
+import org.example.robot.model.RobotState;
 import org.example.ui.Calibration.CalibrationTool;
 import org.example.ui.ConnectToRobot;
 import org.example.utility.Geometry;
@@ -30,7 +32,6 @@ public class CameraAnalyze {
     JPanel jPanel = new JPanel();
     private JLabel cameraScreen;
     Legofir dude;
-
 
 
     public CameraAnalyze(Legofir dude) {
@@ -87,7 +88,16 @@ public class CameraAnalyze {
         Button colorFilterButton;
         Button calibrationTool;
         Button connectToRobot;
-        String currentBehaviour = dude.getCurrentBehaviourName();
+        private String currentBehaviour = dude.getCurrentBehaviourName();
+        private int currentBallAmount = dude.getMap().getBalls().size();
+        private RobotState currentState = dude.getState();
+        private RobotPosition currentPostion = dude.getMap().getRobotPosition();
+        JLabel robotState = new JLabel();
+        JLabel ballAmount = new JLabel();
+        JLabel robotBehaviour = new JLabel();
+        JLabel robotPosition = new JLabel();
+
+
 
 
         public boolean getDetectColor() {
@@ -219,7 +229,10 @@ public class CameraAnalyze {
                     colorFilter = !colorFilter;
                 }
             });
-            JLabel goofy = new JLabel("Current Behaviour: " + currentBehaviour);
+            robotBehaviour = new JLabel("Current Behaviour: " + currentBehaviour);
+            robotPosition = new JLabel("Current Position: x = " + currentPostion.getX() + ", y = "+ currentPostion.getY());
+            robotState = new JLabel("Current Robot State: " + currentState.name());
+            ballAmount = new JLabel("Amount of balls left: "+currentBallAmount);
 
 
             buttons.add(colorFilterButton);
@@ -228,11 +241,14 @@ public class CameraAnalyze {
             buttons.add(ballDetectionButton);
             buttons.add(edgeDetectionButton);
             buttons.add(connectToRobot);
-            information.add(goofy);
+            information.add(robotBehaviour);
+            information.add(robotState);
+            information.add(ballAmount);
+            information.add(robotPosition);
             jFrame.add(buttons, BorderLayout.SOUTH);
             jFrame.add(information,BorderLayout.EAST);
 
-            jFrame.setSize(new Dimension(camWidth, camHeight + 65));
+            jFrame.setSize(new Dimension(camWidth + 180, camHeight + 65));
             jFrame.setLocationRelativeTo(null);
             jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             jFrame.setVisible(true);
@@ -247,10 +263,20 @@ public class CameraAnalyze {
             ImageIcon icon;
 
             while (true) {
-                // read image to matrix
+
+                // update UI with relevant information
 
                 currentBehaviour = dude.getCurrentBehaviourName();
+                robotBehaviour.setText("Current Behaviour: " + currentBehaviour);
+                currentState = dude.getState();
+                robotState.setText("Current Robot State: " + currentState.name());
+                currentBallAmount = dude.getMap().getBalls().size();
+                ballAmount.setText("Amount of balls left: "+currentBallAmount);
+                currentPostion = dude.getMap().getRobotPosition();
+                robotPosition.setText("Current Position: x = " + currentPostion.getX() + ", y = "+ currentPostion.getY());
 
+
+                // read image to matrix
 
                 capture.read(webCamImage);
                 resize(webCamImage, image, new Size(1280, 720));
@@ -259,6 +285,7 @@ public class CameraAnalyze {
 
                 java.util.List<Rect> blue = new ArrayList<>();
                 java.util.List<Rect> green = new ArrayList<>();
+                java.util.List<Rect> robot = new ArrayList<>();
                 java.util.List<Rect> ballRects = new ArrayList<>();
                 java.util.List<Rect> orangeBallRects = new ArrayList<>();
                 Rect edge = null;
@@ -266,6 +293,7 @@ public class CameraAnalyze {
 
                 if(robotDetectionOn){
                     List<Rect>[] robotRects = robotDetection.detect(image,dude);
+                    robot = robotRects[2];
                     blue = robotRects[1];
                     green = robotRects[0];
 
@@ -305,7 +333,7 @@ public class CameraAnalyze {
                     putText(image, "Exit Left", dude.getMap().getDepositPoint().getLeftExitTopRight(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 255, 0), 2);
                 }
 
-                // Blue rects
+                // Blue, green and robot rects
                 for(Rect boundingRect : blue) {
                     Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), new Scalar(0, 0, 255), 1);
                     putText(image, "blue", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
@@ -313,6 +341,10 @@ public class CameraAnalyze {
                 for(Rect boundingRect : green) {
                     Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), new Scalar(0, 0, 255), 1);
                     putText(image, "green", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+                }
+                for(Rect boundingRect : robot) {
+                    Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), new Scalar(0, 0, 255), 1);
+                    putText(image, "robot", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
                 }
 
                 if(!green.isEmpty() && !blue.isEmpty()) {
@@ -355,7 +387,7 @@ public class CameraAnalyze {
                                 // vektor fra currentPosition(x,y) til (nextBallX,nextBallY)
                                 Point ballVector = new Point(nextBallX-dude.getMap().getRobotPosition().getX(), nextBallY-dude.getMap().getRobotPosition().getY());
 
-                                arrowedLine(image,centerOfLine,new Point(nextBallX,nextBallY),new Scalar(0,255,0),1);
+                                arrowedLine(image,centerOfLine,new Point(nextBallX,-nextBallY),new Scalar(0,255,0),1);
                             }
 
                         }

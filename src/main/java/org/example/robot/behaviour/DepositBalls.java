@@ -5,7 +5,7 @@ import org.example.robot.model.Legofir;
 public class DepositBalls implements MyBehavior {
     String BehaviorName = "DepositBalls";
     Legofir dude;
-    Boolean suppressed = false;
+    boolean suppressed = false;
 
     public DepositBalls(Legofir dude) {
         this.dude = dude;

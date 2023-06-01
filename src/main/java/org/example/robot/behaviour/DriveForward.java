@@ -7,9 +7,9 @@ import static java.lang.Thread.sleep;
 public class DriveForward implements MyBehavior {
 
     String BehaviorName = "DriveForward";
-    Boolean suppressed = false;
+    boolean suppressed = false;
     Legofir legofir;
-    Boolean stopCondition = false;
+    boolean stopCondition = false;
 
     public DriveForward(Legofir legofir){
         this.legofir = legofir;
