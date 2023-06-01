@@ -93,8 +93,8 @@ public class Map {
         Point leftSide = new Point(robotPosition.leftSideX, robotPosition.leftSideY);
 
         // Lines of the robot
-        Line2D leftRobotLine = new Line2D.Double(leftSide.x, leftSide.y, leftSide.x+1000*heading.x, leftSide.y+1000*heading.y);
-        Line2D rightRobotLine = new Line2D.Double(rightSide.x, rightSide.y, rightSide.x+1000*heading.x, rightSide.y+1000*heading.y);
+        Line2D leftRobotLine = new Line2D.Double(leftSide.x, leftSide.y, leftSide.x+10000*heading.x, leftSide.y+10000*heading.y);
+        Line2D rightRobotLine = new Line2D.Double(rightSide.x, rightSide.y, rightSide.x+10000*heading.x, rightSide.y+10000*heading.y);
 
         // Edge points of the map
 

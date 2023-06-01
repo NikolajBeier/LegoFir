@@ -11,12 +11,12 @@ public class RobotPosition {
 
 
 
-    int rightSideX;
-    int rightSideY;
-    int leftSideX;
-    int leftSideY;
+    public int rightSideX;
+    public int rightSideY;
+    public int leftSideX;
+    public int leftSideY;
 
-    Point heading;
+    Point heading=new Point(0,0);
 
     public RobotPosition() {
 

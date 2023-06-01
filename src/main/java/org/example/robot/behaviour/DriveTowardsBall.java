@@ -31,13 +31,13 @@ public class DriveTowardsBall implements MyBehavior{
 
     @Override
     public boolean takeControl() {
-            if(stopCondition){
-                System.out.println("DriveTowardsBall.takeControl() = " + false);
-                return false;
-            }
-            System.out.println("DriveTowardsBall.takeControl() = " + true);
-            return true;
+        if(stopCondition){
+            System.out.println("DriveTowardsBall.takeControl() = " + false);
+            return false;
         }
+        System.out.println("DriveTowardsBall.takeControl() = " + true);
+        return true;
+    }
 
 
     @Override
@@ -101,7 +101,7 @@ public class DriveTowardsBall implements MyBehavior{
                 }
                 dude.beginHarvester();
                 timeBefore= System.currentTimeMillis();
-                while(true){
+                while(!suppressed){
                     if (System.currentTimeMillis() - timeBefore > 1000) {
                         break;
                     }
@@ -110,8 +110,8 @@ public class DriveTowardsBall implements MyBehavior{
             }
 
             dude.stopWheels();
+            System.out.println("DriveTowardsBall.action() - suppressed: " + suppressed);
         }
-        dude.stopHarvester();
     }
 
 
@@ -135,7 +135,7 @@ public class DriveTowardsBall implements MyBehavior{
             //System.out.println("turning left: "+currentAngle + " " + angleToNextBall);
             // Turn left towards ball
             dude.turnLeft();
-            while (ballIsLeftOfRobotHeading() && currentAngle!= angleToNextBall) {
+            while (ballIsLeftOfRobotHeading() && currentAngle!= angleToNextBall && !suppressed) {
                 currentAngle = dude.getAngle();
                 //System.out.println("Turning Left. CurrentAngle = " + currentAngle);
             }
@@ -155,7 +155,7 @@ public class DriveTowardsBall implements MyBehavior{
             //System.out.println("turning right: "+currentAngle + " " + angleToNextBall);
 
             dude.turnRight();
-            while(!ballIsLeftOfRobotHeading() && currentAngle!= angleToNextBall){
+            while(!ballIsLeftOfRobotHeading() && currentAngle!= angleToNextBall && !suppressed){
                 currentAngle = dude.getAngle();
                 //System.out.println("Turning Right. CurrentAngle = " + currentAngle);
             }

@@ -1,6 +1,7 @@
 package org.example.robot.behaviour;
 
 import org.example.robot.model.Legofir;
+import org.example.robot.model.RobotState;
 import org.opencv.core.Point;
 
 import static org.example.Main.logger;
@@ -10,7 +11,7 @@ public class AvoidCollision implements MyBehavior {
     String BehaviorName = "Avoid Collision";
     Legofir dude;
     boolean suppressed = false;
-    final double AVOID_DISTANCE = 250;
+    final double AVOID_DISTANCE = 150;
     boolean stopCondition = false;
 
     public AvoidCollision(Legofir dude) {
@@ -27,12 +28,59 @@ public class AvoidCollision implements MyBehavior {
         suppressed = false;
         dude.setCurrentBehaviourName(BehaviorName);
         logger.info("Avoiding Collision now");
-        dude.turnRight();
-        // Wait for avoidCollision behavior to be done
-        while(!suppressed){
-
-        }
         dude.stopWheels();
+        dude.stopHarvester();
+        long startTime = System.currentTimeMillis();
+
+        // Evasive maneuver
+        if(checkForFrontCollision()){
+            System.out.println("avoiding front collision");
+            dude.moveBackward();
+            while(System.currentTimeMillis()-startTime > 1000){}
+            dude.stopWheels();
+            dude.turnRight();
+            while(System.currentTimeMillis()-startTime > 2000){}
+            dude.stopWheels();
+            dude.moveForward();
+            while(System.currentTimeMillis()-startTime > 2000){}
+            dude.stopWheels();
+        }
+        else if(checkForLeftCollision()){
+            System.out.println("avoiding left collision");
+            dude.moveBackward();
+            while(System.currentTimeMillis()-startTime > 1000){}
+            dude.stopWheels();
+            dude.turnRight();
+            while(System.currentTimeMillis()-startTime > 2000){}
+            dude.stopWheels();
+            dude.moveForward();
+            while(System.currentTimeMillis()-startTime > 2000){}
+            dude.stopWheels();
+        }
+        else if(checkForRightCollision()){
+            System.out.println("avoiding right collision");
+            dude.moveBackward();
+            while(System.currentTimeMillis()-startTime > 1000){}
+            dude.stopWheels();
+            dude.turnLeft();
+            while(System.currentTimeMillis()-startTime > 2000){}
+            dude.stopWheels();
+            dude.moveForward();
+            while(System.currentTimeMillis()-startTime > 2000){}
+            dude.stopWheels();
+        }
+        else if(checkForBackCollision()){
+            System.out.println("avoiding back collision");
+            dude.moveForward();
+            while(System.currentTimeMillis()-startTime > 1000){}
+            dude.stopWheels();
+            dude.turnRight();
+            while(System.currentTimeMillis()-startTime > 2000){}
+            dude.stopWheels();
+            dude.moveBackward();
+            while(System.currentTimeMillis()-startTime > 2000){}
+            dude.stopWheels();
+        }
     }
 
     @Override

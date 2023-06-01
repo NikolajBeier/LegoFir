@@ -29,7 +29,8 @@ public class EdgeDetection {
 
     public Rect detect(Mat image, Legofir dude) {
         Rect edgeRect;
-        Imgproc.cvtColor(image, hlsimage, Imgproc.COLOR_BGR2HLS);
+        //Imgproc.cvtColor(image, hlsimage, Imgproc.COLOR_BGR2HLS);
+        hlsimage=image;
         Core.inRange(hlsimage, new Scalar(hMin, sMin, lMin), new Scalar(hMax, sMax, lMax), redMask);
 
 
@@ -46,8 +47,8 @@ public class EdgeDetection {
                      edgeRect = boundingRect(contour);
                      Point topLeft = new Point(edgeRect.tl().x, -edgeRect.tl().y);
                      Point bottomRight = new Point(edgeRect.br().x, -edgeRect.br().y);
-                     Point topRight = new Point(bottomRight.x, -topLeft.y);
-                     Point bottomLeft = new Point(topLeft.x, -bottomRight.y);
+                     Point topRight = new Point(bottomRight.x, topLeft.y);
+                     Point bottomLeft = new Point(topLeft.x, bottomRight.y);
                      int height = edgeRect.height;
                      int width = edgeRect.width;
                      dude.getMap().setEdge(topLeft, topRight, bottomLeft, bottomRight, height, width);
