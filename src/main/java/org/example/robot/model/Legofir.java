@@ -247,12 +247,21 @@ public class Legofir {
     public void addBalls(List<Rect> balls) {
         // replace old balls with new ones
         List<TennisBall> newList = new ArrayList<>();
-
         for (Rect ball : balls) {
             newList.add(new TennisBall((int)(ball.x+ball.width*0.5), (int)(-ball.y- ball.height*0.5)));
         }
         map.setBalls(newList);
     }
+    public void addOrangeBalls(List<Rect> balls) {
+        // replace old balls with new ones
+        List<TennisBall> newOrangeList = new ArrayList<>();
+        for (Rect ball : balls) {
+            newOrangeList.add(new TennisBall((int)(ball.x+ball.width*0.5), (int)(-ball.y- ball.height*0.5)));
+        }
+        map.setOrangeBalls(newOrangeList);
+    }
+
+
 
     public double getAngle() {
         return map.getRobotPosition().getHeadingInRadians();

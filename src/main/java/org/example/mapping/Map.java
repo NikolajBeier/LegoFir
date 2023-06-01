@@ -1,13 +1,10 @@
 package org.example.mapping;
 
-import lejos.robotics.geometry.Line;
 import org.example.utility.Geometry;
 import org.opencv.core.Point;
-import org.opencv.core.Rect;
 
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import static org.example.utility.Geometry.*;
@@ -20,6 +17,7 @@ public class Map {
     Edge edge = new Edge();
     RobotPosition robotPosition = new RobotPosition();
     List<TennisBall> balls = new ArrayList<>();
+    List<TennisBall> orangeBalls = new ArrayList<>();
 
     public Map(int x, int y) {
         this.x = x;
@@ -49,7 +47,12 @@ public class Map {
         TennisBall closestBall = new TennisBall(0,0);
         double closestDistance = Integer.MAX_VALUE;
 
-        for(TennisBall tennisball : balls) {
+        if (!orangeBalls.isEmpty()) {
+            for (TennisBall orangeTennisBall :orangeBalls){
+                closestBall = orangeTennisBall ;
+            }
+        }else
+            for(TennisBall tennisball : balls) {
             // Distance between two points:
             double distance = Math.sqrt((tennisball.x-getRobotPosition().x)*(tennisball.x-getRobotPosition().x)+(tennisball.y-getRobotPosition().y)*(tennisball.y-getRobotPosition().y));
             double robotAngle = getRobotPosition().getHeadingInRadians();
@@ -79,6 +82,11 @@ public class Map {
     public void setBalls(List<TennisBall> newList) {
         balls = newList;
     }
+    public void setOrangeBalls(List<TennisBall> newOrangeList) {
+        balls = newOrangeList;
+    }
+
+
 
     public Edge getEdge() {
         return edge;

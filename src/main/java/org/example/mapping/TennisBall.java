@@ -18,4 +18,7 @@ public class TennisBall {
     public int getY() {
         return y;
     }
+
 }
+
+
