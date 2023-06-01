@@ -83,7 +83,7 @@ public class Map {
         balls = newList;
     }
     public void setOrangeBalls(List<TennisBall> newOrangeList) {
-        balls = newOrangeList;
+        orangeBalls = newOrangeList;
     }
 
 
@@ -153,6 +153,9 @@ public class Map {
 
     public List<TennisBall> getBalls() {
         return balls;
+    }
+    public List<TennisBall> getOrangeBalls(){
+        return orangeBalls;
     }
 
 }

@@ -15,6 +15,7 @@ public class DepositBalls implements MyBehavior {
     @Override
     public boolean takeControl() {
         return false;
+        //Todo when robot reaches point it takes command and turns ass towards exit and starts backing up
     }
 
     @Override

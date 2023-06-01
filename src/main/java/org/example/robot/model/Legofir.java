@@ -142,6 +142,15 @@ public class Legofir {
             stopAll();
         }
     }
+    public void moveBackward(){
+        state=RobotState.MOVING_BACKWARD;
+        try {
+            left.forward();
+            right.forward();
+        } catch (RemoteException e) {
+            stopAll();
+        }
+    }
 
     public void beginHarvester(){
         try {
