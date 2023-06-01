@@ -1,11 +1,8 @@
 package org.example.robot.behaviour;
 
 
-import org.example.mapping.RobotPosition;
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
-import org.example.utility.Geometry;
-import org.opencv.core.Point;
 
 import static org.example.Main.logger;
 import static org.example.utility.Geometry.distanceBetweenPoints;
