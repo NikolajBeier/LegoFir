@@ -19,7 +19,7 @@ public class Map {
     Edge edge = new Edge();
     RobotPosition robotPosition = new RobotPosition();
     List<TennisBall> balls = new ArrayList<>();
-
+    DepositPoint depositPoint = new DepositPoint(this.edge);
     public Map(int x, int y) {
         this.x = x;
         this.y = y;
@@ -74,7 +74,10 @@ public class Map {
     public void setBalls(List<TennisBall> newList) {
         balls = newList;
     }
-
+    public void calcDepositPoints(){
+        this.depositPoint.calcExit();
+        this.depositPoint.setCoords();
+    }
     public Edge getEdge() {
         return edge;
     }
@@ -133,7 +136,9 @@ public class Map {
 
         return shortestDistance;
     }
-
+    public DepositPoint getDepositPoint(){
+        return this.depositPoint;
+    }
     public RobotPosition getRobotPosition() {
         return robotPosition;
     }
