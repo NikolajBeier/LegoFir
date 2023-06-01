@@ -120,7 +120,7 @@ public class Legofir {
     }
 
     public void turnLeft(){
-        //state=RobotState.TURNING_LEFT;
+        state=RobotState.TURNING_LEFT;
         try {
             left.setSpeed(50);
             right.setSpeed(50);
@@ -132,7 +132,7 @@ public class Legofir {
     }
 
     public void turnRight(){
-        //state=RobotState.TURNING_RIGHT;
+        state=RobotState.TURNING_RIGHT;
         try{
             left.setSpeed(50);
             right.setSpeed(50);
@@ -153,7 +153,7 @@ public class Legofir {
     }
 
     public void stopWheels(){
-        //state=RobotState.IDLE;
+        state=RobotState.IDLE;
         try {
             left.setSpeed(defaultSpeedWheel);
             right.setSpeed(defaultSpeedWheel);
