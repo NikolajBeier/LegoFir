@@ -10,7 +10,7 @@ public class AvoidCollision implements MyBehavior {
     String BehaviorName = "Avoid Collision";
     Legofir dude;
     boolean suppressed = false;
-    final double AVOID_DISTANCE = 5;
+    final double AVOID_DISTANCE = 250;
     boolean stopCondition = false;
 
     public AvoidCollision(Legofir dude) {
@@ -63,6 +63,7 @@ public class AvoidCollision implements MyBehavior {
                 break;
         }
 
+        System.out.println("AvoidCollision.takeControl() = " + collision);
         return collision;
     }
 
@@ -101,10 +102,8 @@ public class AvoidCollision implements MyBehavior {
         Point heading = dude.getMap().getRobotPosition().getHeading();
 
         double distance = dude.getMap().distanceToEdge(heading);
-        //logger.info("time: "+System.currentTimeMillis()+" Checking for front collision - Distance to edge: " + distance);
-        //logger.info("time: "+System.currentTimeMillis()+" Checking for front collision - Avoid distance: "+ AVOID_DISTANCE);
-        //System.out.println("Distance to edge: " + distance);
-        //System.out.println("Avoid distance: "+ AVOID_DISTANCE);
+        System.out.println("Distance to edge: " + distance);
+        System.out.println("Avoid distance: "+ AVOID_DISTANCE);
         if(distance < AVOID_DISTANCE){
             return true;
         }

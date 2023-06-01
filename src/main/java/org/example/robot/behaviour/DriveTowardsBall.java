@@ -119,6 +119,7 @@ public class DriveTowardsBall implements MyBehavior{
 
     @Override
     public void suppress(){
+        System.out.println("DriveTowardsBall.suppress()");
         suppressed = true;
     }
 
