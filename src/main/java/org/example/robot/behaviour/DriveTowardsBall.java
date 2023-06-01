@@ -44,11 +44,13 @@ public class DriveTowardsBall implements MyBehavior{
     public void action() {
         suppressed=false;
         dude.setCurrentBehaviourName(BehaviorName);
+        TennisBall nextBall = dude.getMap().getNextBall();
         while(!suppressed) {
 
 
             RobotPosition currentPosition = dude.getMap().getRobotPosition();
-            TennisBall nextBall = dude.getMap().getNextBall();
+
+
 
             int nextBallX = nextBall.getX();
             int nextBallY = nextBall.getY();
@@ -103,6 +105,7 @@ public class DriveTowardsBall implements MyBehavior{
                 timeBefore= System.currentTimeMillis();
                 while(true){
                     if (System.currentTimeMillis() - timeBefore > 1000) {
+                        nextBall=dude.getMap().getNextBall();
                         break;
                     }
                 }

@@ -334,7 +334,6 @@ public class CameraAnalyze {
                             line(image, blueCenter, greenCenter, new Scalar(0, 0, 255), 1);
                             //System.out.println("Blue: " + blueCenter.toString() + " Green: " + greenCenter.toString() + " Center: " + centerOfLine.toString() + " Arrow: " + arrowPoint.toString());
                             arrowedLine(image, centerOfLine, arrowPoint, new Scalar(0, 0, 255), 1);
-
                             if(dude!=null) {
                                 TennisBall nextBall = dude.getMap().getNextBall();
 
