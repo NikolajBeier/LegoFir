@@ -148,6 +148,8 @@ public class RobotDetection {
                         dude.getMap().getRobotPosition().setRightSideY((int)greenCenter.y);
 
                         Point centerOfLine = new Point((blueCenter.x + greenCenter.x) * 0.5, (blueCenter.y + greenCenter.y) * 0.5);
+                        Point leftHarvesterStart = new Point(centerOfLine.x *0.3, centerOfLine.y*0.3);
+                        Point rightHarvesterStart = new Point(centerOfLine.x *-0.3, centerOfLine.y*-0.3);
 
                         Point vectorFromBlueToGreen = new Point(greenCenter.x - blueCenter.x, greenCenter.y - blueCenter.y);
                         int lengthOfVector = (int) Math.sqrt(vectorFromBlueToGreen.x * vectorFromBlueToGreen.x + vectorFromBlueToGreen.y * vectorFromBlueToGreen.y);

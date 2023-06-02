@@ -46,7 +46,9 @@ public class DepositPoint {
         this.leftExitBottomLeft = new Point(temp.x-5,temp.y-5);
 
     }
-
+    public Point getCenterLeft() {
+        return centerLeft;
+    }
     public Point getLeftExitBottomLeft() {
         return leftExitBottomLeft;
     }
