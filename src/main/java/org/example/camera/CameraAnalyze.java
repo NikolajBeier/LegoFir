@@ -327,9 +327,14 @@ public class CameraAnalyze {
                     putText(image, "Edge", edge.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
                 }
                 if(edge != null){
-                    Imgproc.rectangle(image,dude.getMap().getDepositPoint().getRightExitTopRight(),dude.getMap().getDepositPoint().getRightExitBottomLeft(),new Scalar(255,0,0));
+                    Point tr = new Point(dude.getMap().getDepositPoint().getRightExitTopRight().x, dude.getMap().getDepositPoint().getRightExitTopRight().y);
+                    Point bl = new Point(dude.getMap().getDepositPoint().getRightExitBottomLeft().x, dude.getMap().getDepositPoint().getRightExitBottomLeft().y);
+                    Imgproc.rectangle(image,tr,bl,new Scalar(255,0,0));
                     putText(image, "Exit Right", dude.getMap().getDepositPoint().getRightExitTopRight(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(255, 0, 0), 2);
-                    Imgproc.rectangle(image,dude.getMap().getDepositPoint().getLeftExitTopRight(),dude.getMap().getDepositPoint().getLeftExitBottomLeft(),new Scalar(0,255,0));
+                    tr = new Point(dude.getMap().getDepositPoint().getLeftExitTopRight().x,dude.getMap().getDepositPoint().getLeftExitTopRight().y);
+                    bl = new Point(dude.getMap().getDepositPoint().getLeftExitBottomLeft().x,dude.getMap().getDepositPoint().getLeftExitBottomLeft().y);
+
+                    Imgproc.rectangle(image,tr,bl,new Scalar(0,255,0));
                     putText(image, "Exit Left", dude.getMap().getDepositPoint().getLeftExitTopRight(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 255, 0), 2);
                 }
 
