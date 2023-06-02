@@ -6,12 +6,11 @@ import org.example.mapping.RobotPosition;
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
 import org.example.robot.model.RobotState;
-import org.example.ui.Calibration.CalibrationTool;
 import org.example.ui.ConnectToRobot;
-import org.example.utility.Geometry;
 import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.CLAHE;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
 
@@ -19,7 +18,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -280,8 +278,8 @@ public class CameraAnalyze {
 
                 capture.read(webCamImage);
                 resize(webCamImage, image, new Size(1280, 720));
-                //image = webCamImage;
-
+                // image = webCamImage;
+                // image = removeglare(image);
 
                 java.util.List<Rect> blue = new ArrayList<>();
                 java.util.List<Rect> green = new ArrayList<>();
@@ -534,8 +532,6 @@ public class CameraAnalyze {
                 if (capture != null) {
                     image = correctedImage;
                     //Post proccessing to smooth the image
-
-
                     Scalar minValues = new Scalar(hueMin.getValue(), satMin.getValue(), valMin.getValue());
                     Scalar maxValues = new Scalar(hueMax.getValue(), satMax.getValue(), valMax.getValue());
                     Core.inRange(image, minValues, maxValues, mask);
@@ -551,6 +547,12 @@ public class CameraAnalyze {
                     colorCameraScreen.setIcon(icon);
                 }
             }
+        }
+        public Mat removeglare(Mat image){
+            Mat corrected = new Mat();
+            CLAHE rg = createCLAHE();
+            rg.apply(image, corrected);
+            return corrected;
         }
     }
 }
