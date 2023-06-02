@@ -49,6 +49,7 @@ public class DriveTowardsBall implements MyBehavior {
             // Waits to be suppressed or until the robot is close enough to the ball for it to be assumed picked up or pushed away.
             if (navigation.distanceToPoint < 150) {
                 long timeBefore = System.currentTimeMillis();
+                dude.beginHarvester();
                 while (!suppressed) {
                 /*
                 if (dude.getMap().getRobotPosition().getX() < nextBallX + 25 && dude.getMap().getRobotPosition().getX() > nextBallX - 25) {
@@ -57,13 +58,13 @@ public class DriveTowardsBall implements MyBehavior {
                     }
                 }
                  */
-                    if (System.currentTimeMillis() - timeBefore > 3000) {
+                    if (System.currentTimeMillis() - timeBefore > 2000) {
                         break;
                     }
                 }
-                dude.beginHarvester();
+
                 timeBefore = System.currentTimeMillis();
-                while (true) {
+                while (!suppressed) {
                     if (System.currentTimeMillis() - timeBefore > 1000) {
                         nextBall = dude.getMap().getNextBall();
                         break;
@@ -72,8 +73,8 @@ public class DriveTowardsBall implements MyBehavior {
                 dude.stopHarvester();
             }
 
-            dude.stopWheels();
         }
+        dude.stopWheels();
         dude.stopHarvester();
     }
 
