@@ -36,13 +36,13 @@ public class AvoidCollision implements MyBehavior {
         if(checkForFrontCollision()){
             System.out.println("avoiding front collision");
             dude.moveBackward();
-            while(!checkForFrontCollision()){}
+            while(checkForFrontCollision() && !checkForBackCollision()){}
             dude.stopWheels();
             dude.turnRight();
-            while(System.currentTimeMillis()-startTime > 7000){}
+            while(!checkForRightCollision()){}
             dude.stopWheels();
             dude.moveForward();
-            while(System.currentTimeMillis()-startTime > 9000){}
+            while(!checkForFrontCollision()){}
             dude.stopWheels();
         }
         else if(checkForLeftCollision()){

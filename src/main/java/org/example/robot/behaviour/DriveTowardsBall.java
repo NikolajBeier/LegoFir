@@ -198,6 +198,6 @@ public class DriveTowardsBall implements MyBehavior{
         }
     }
     private boolean isApproximatelySameAngle(){
-        return ((Math.abs(currentAngle-angleToNextBall) < 0.25) || (currentAngle>3 && angleToNextBall<-3));
+        return ((Math.abs(currentAngle-angleToNextBall) < 0.35) || (currentAngle>3 && angleToNextBall<-3));
     }
 }
