@@ -118,6 +118,15 @@ public class Legofir {
             stopAll();
         }
     }
+    public void moveBackward(){
+        state=RobotState.MOVING_BACKWARD;
+        try {
+            left.forward();
+            right.forward();
+        } catch (RemoteException e) {
+            stopAll();
+        }
+    }
 
     public void turnLeft(){
         state=RobotState.TURNING_LEFT;
@@ -153,7 +162,7 @@ public class Legofir {
     }
 
     public void stopWheels(){
-        state=RobotState.IDLE;
+        //state=RobotState.IDLE;
         try {
             left.setSpeed(defaultSpeedWheel);
             right.setSpeed(defaultSpeedWheel);

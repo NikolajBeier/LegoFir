@@ -1,10 +1,13 @@
 package org.example.robot.behaviour;
 
 import lejos.robotics.subsumption.Behavior;
+import org.example.robot.model.Legofir;
 
 public class StopBehaviour implements MyBehavior {
-    boolean stopCondition = false;
-    boolean suppressed = false;
+    Legofir dude;
+    Boolean stopCondition = false;
+    Boolean suppressed = false;
+    String BehaviorName = "StopBehaviour";
 
     public StopBehaviour() {
         this.suppress();
@@ -31,9 +34,10 @@ public class StopBehaviour implements MyBehavior {
         return true;
     }
 
-    // This behavior does nothing
+    // This behavior does nothing other than setting the behaviour in the UI
     @Override
     public void action() {
+        dude.setCurrentBehaviourName(BehaviorName);
     }
 
 }

@@ -38,7 +38,7 @@ public class EdgeDetection {
     public Rect detect(Mat image, Legofir dude) {
         Rect edgeRect;
         //Imgproc.cvtColor(image, hlsimage, Imgproc.COLOR_BGR2HLS);
-        hlsimage = image;
+        hlsimage=image;
         Core.inRange(hlsimage, new Scalar(hMin, sMin, lMin), new Scalar(hMax, sMax, lMax), redMask);
 
         Imgcodecs.imwrite("previous.jpg", redMask);
@@ -56,11 +56,12 @@ public class EdgeDetection {
                      edgeRect = boundingRect(contour);
                      Point topLeft = new Point(edgeRect.tl().x, -edgeRect.tl().y);
                      Point bottomRight = new Point(edgeRect.br().x, -edgeRect.br().y);
-                     Point topRight = new Point(bottomRight.x, -topLeft.y);
-                     Point bottomLeft = new Point(topLeft.x, -bottomRight.y);
+                     Point topRight = new Point(bottomRight.x, topLeft.y);
+                     Point bottomLeft = new Point(topLeft.x, bottomRight.y);
                      int height = edgeRect.height;
                      int width = edgeRect.width;
                      dude.getMap().setEdge(topLeft, topRight, bottomLeft, bottomRight, height, width);
+                     dude.getMap().calcDepositPoints();
                      return edgeRect;
                 }
 
@@ -176,6 +177,7 @@ public class EdgeDetection {
             }
 
             dude.getMap().setEdge(returnValues[1], returnValues[3], returnValues[0], returnValues[2], (int)distanceBetweenPoints(returnValues[1], returnValues[0]), (int)distanceBetweenPoints(returnValues[1], returnValues[3]));
+            dude.getMap().calcDepositPoints();
             return returnValues;
         }
         return null;

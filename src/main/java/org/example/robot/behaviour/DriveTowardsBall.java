@@ -4,6 +4,7 @@ package org.example.robot.behaviour;
 import org.example.mapping.RobotPosition;
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
+import org.example.robot.model.RobotState;
 import org.example.utility.Geometry;
 import org.opencv.core.Point;
 
@@ -31,13 +32,13 @@ public class DriveTowardsBall implements MyBehavior{
 
     @Override
     public boolean takeControl() {
-            if(stopCondition){
-                System.out.println("DriveTowardsBall.takeControl() = " + false);
-                return false;
-            }
-            System.out.println("DriveTowardsBall.takeControl() = " + true);
-            return true;
+        if(stopCondition){
+            System.out.println("DriveTowardsBall.takeControl() = " + false);
+            return false;
         }
+        System.out.println("DriveTowardsBall.takeControl() = " + true);
+        return true;
+    }
 
 
     @Override
@@ -72,6 +73,7 @@ public class DriveTowardsBall implements MyBehavior{
             //if current angle is not close to angle to next ball
             System.out.println("isApproximatelySameAngle: "+isApproximatelySameAngle());
             if( !isApproximatelySameAngle() ){
+                dude.stopWheels();
                 //turn towards ball
                 if(ballIsLeftOfRobotHeading()){
                     turnLeftTowardsBall();
@@ -79,9 +81,9 @@ public class DriveTowardsBall implements MyBehavior{
                     turnRightTowardsBall();
                 }
             }
-
-            // Heading found, now go forward
             dude.moveForward();
+
+
 
             // Waits to be suppressed or until the robot is close enough to the ball for it to be assumed picked up or pushed away.
 
@@ -101,17 +103,16 @@ public class DriveTowardsBall implements MyBehavior{
                 }
                 dude.beginHarvester();
                 timeBefore= System.currentTimeMillis();
-                while(true){
+                while(!suppressed){
                     if (System.currentTimeMillis() - timeBefore > 1000) {
                         break;
                     }
                 }
                 dude.stopHarvester();
             }
-
-            dude.stopWheels();
+            System.out.println("DriveTowardsBall.action() - suppressed: " + suppressed);
         }
-        dude.stopHarvester();
+        dude.stopWheels();
     }
 
 
@@ -119,6 +120,7 @@ public class DriveTowardsBall implements MyBehavior{
 
     @Override
     public void suppress(){
+        System.out.println("DriveTowardsBall.suppress()");
         suppressed = true;
     }
 
@@ -134,7 +136,7 @@ public class DriveTowardsBall implements MyBehavior{
             //System.out.println("turning left: "+currentAngle + " " + angleToNextBall);
             // Turn left towards ball
             dude.turnLeft();
-            while (ballIsLeftOfRobotHeading() && currentAngle!= angleToNextBall) {
+            while (ballIsLeftOfRobotHeading() && currentAngle!= angleToNextBall && !suppressed) {
                 currentAngle = dude.getAngle();
                 //System.out.println("Turning Left. CurrentAngle = " + currentAngle);
             }
@@ -154,7 +156,7 @@ public class DriveTowardsBall implements MyBehavior{
             //System.out.println("turning right: "+currentAngle + " " + angleToNextBall);
 
             dude.turnRight();
-            while(!ballIsLeftOfRobotHeading() && currentAngle!= angleToNextBall){
+            while(!ballIsLeftOfRobotHeading() && currentAngle!= angleToNextBall && !suppressed){
                 currentAngle = dude.getAngle();
                 //System.out.println("Turning Right. CurrentAngle = " + currentAngle);
             }
@@ -196,6 +198,6 @@ public class DriveTowardsBall implements MyBehavior{
         }
     }
     private boolean isApproximatelySameAngle(){
-        return ((Math.abs(currentAngle-angleToNextBall) < 0.25) || (currentAngle>3 && angleToNextBall<-3));
+        return ((Math.abs(currentAngle-angleToNextBall) < 0.35) || (currentAngle>3 && angleToNextBall<-3));
     }
 }

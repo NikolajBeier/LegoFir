@@ -19,7 +19,7 @@ public class Map {
     Edge edge = new Edge();
     RobotPosition robotPosition = new RobotPosition();
     List<TennisBall> balls = new ArrayList<>();
-
+    DepositPoint depositPoint = new DepositPoint(this.edge);
     public Map(int x, int y) {
         this.x = x;
         this.y = y;
@@ -74,7 +74,10 @@ public class Map {
     public void setBalls(List<TennisBall> newList) {
         balls = newList;
     }
-
+    public void calcDepositPoints(){
+        this.depositPoint.calcExit();
+        this.depositPoint.setCoords();
+    }
     public Edge getEdge() {
         return edge;
     }
@@ -93,8 +96,8 @@ public class Map {
         Point leftSide = new Point(robotPosition.leftSideX, robotPosition.leftSideY);
 
         // Lines of the robot
-        Line2D leftRobotLine = new Line2D.Double(leftSide.x, leftSide.y, leftSide.x+1000*heading.x, leftSide.y+1000*heading.y);
-        Line2D rightRobotLine = new Line2D.Double(rightSide.x, rightSide.y, rightSide.x+1000*heading.x, rightSide.y+1000*heading.y);
+        Line2D leftRobotLine = new Line2D.Double(leftSide.x, leftSide.y, leftSide.x+10000*heading.x, leftSide.y+10000*heading.y);
+        Line2D rightRobotLine = new Line2D.Double(rightSide.x, rightSide.y, rightSide.x+10000*heading.x, rightSide.y+10000*heading.y);
 
         // Edge points of the map
 
@@ -133,7 +136,9 @@ public class Map {
 
         return shortestDistance;
     }
-
+    public DepositPoint getDepositPoint(){
+        return this.depositPoint;
+    }
     public RobotPosition getRobotPosition() {
         return robotPosition;
     }
