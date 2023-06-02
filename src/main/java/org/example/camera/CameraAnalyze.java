@@ -284,6 +284,8 @@ public class CameraAnalyze {
                 resize(webCamImage, image, new Size(1280, 720));
                 //image = webCamImage;
 
+                //image = Imgcodecs.imread("beforebefore.jpg");
+
 
                 java.util.List<Rect> blue = new ArrayList<>();
                 java.util.List<Rect> green = new ArrayList<>();
@@ -328,6 +330,12 @@ public class CameraAnalyze {
                     Imgproc.rectangle(image, edge.tl(), edge.br(), new Scalar(0, 0, 255), 1);
                     putText(image, "Edge", edge.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
                 }
+                if(edge != null){
+                    Imgproc.rectangle(image,dude.getMap().getDepositPoint().getRightExitTopRight(),dude.getMap().getDepositPoint().getRightExitBottomLeft(),new Scalar(255,0,0));
+                    putText(image, "Exit Right", dude.getMap().getDepositPoint().getRightExitTopRight(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(255, 0, 0), 2);
+                    Imgproc.rectangle(image,dude.getMap().getDepositPoint().getLeftExitTopRight(),dude.getMap().getDepositPoint().getLeftExitBottomLeft(),new Scalar(0,255,0));
+                    putText(image, "Exit Left", dude.getMap().getDepositPoint().getLeftExitTopRight(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 255, 0), 2);
+                }
 
                 // Blue, green and robot rects
                 for(Rect boundingRect : blue) {
@@ -342,6 +350,15 @@ public class CameraAnalyze {
                     Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), new Scalar(0, 0, 255), 1);
                     putText(image, "robot", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
                 }
+                // back and front points of robot
+                Point front = new Point(dude.getMap().getRobotPosition().getFrontSideX(), -dude.getMap().getRobotPosition().getFrontSideY());
+                Imgproc.circle(image, front, 1, new Scalar(0, 0, 255), -1);
+                Imgproc.putText(image, "Front", front, Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+
+                Point back = new Point(dude.getMap().getRobotPosition().getBackSideX(), -dude.getMap().getRobotPosition().getBackSideY());
+                Imgproc.circle(image, back, 1, new Scalar(0, 0, 255), -1);
+                Imgproc.putText(image, "Back", back, Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+
 
                 if(!green.isEmpty() && !blue.isEmpty()) {
                     for (Rect blueBoundingRect : blue) {
