@@ -249,7 +249,6 @@ public class CameraAnalyze {
             Mat image = new Mat();
             byte[] imageData;
 
-
             ImageIcon icon;
 
             while (true) {
@@ -260,9 +259,10 @@ public class CameraAnalyze {
                 robotState.setText("Current Robot State: " + currentState.name());
 
 
-                capture.read(webCamImage);
-                resize(webCamImage, image, new Size(1280, 720));
+                //capture.read(webCamImage);
+                //resize(webCamImage, image, new Size(1280, 720));
                 //image = webCamImage;
+                image = Imgcodecs.imread("beforebefore.jpg");
 
 
                 java.util.List<Rect> blue = new ArrayList<>();
@@ -274,27 +274,19 @@ public class CameraAnalyze {
                 Point[] edgeIntersections = null;
 
                 if (edgeDetectionOn){
-                    edge = edgeDetection.detect(image,dude);
+                    //edge = edgeDetection.detect(image,dude);
 
 
-                    edgeIntersections = edgeDetection.intersectionDetect(image);
-
+                    edgeIntersections = edgeDetection.intersectionDetect(image, dude);
 
 
                     /*
-                    if(edge!=null) {
-                        Point[] edgePoints = new Point[4];
-
-                        edgePoints[0] = new Point(edge.x, edge.y);
-                        edgePoints[1] = new Point(edge.width, edge.y);
-                        edgePoints[2] = new Point(edge.x, edge.height);
-                        edgePoints[3] = new Point(edge.width, edge.height);
-
+                    if(edgeIntersections!=null) {
                         MatOfPoint2f src = new MatOfPoint2f(
-                                edgePoints[0],
-                                edgePoints[1],
-                                edgePoints[2],
-                                edgePoints[3]);
+                                edgeIntersections[1],
+                                edgeIntersections[3],
+                                edgeIntersections[0],
+                                edgeIntersections[2]);
 
                         MatOfPoint2f dst = new MatOfPoint2f(
                                 new Point(0, 0),
@@ -306,8 +298,8 @@ public class CameraAnalyze {
 
                         Mat warpMat = Imgproc.getPerspectiveTransform(src, dst);
                         Imgproc.warpPerspective(image, image, warpMat, image.size());
-                    }*/
-
+                    }
+                    */
 
                 }
 
