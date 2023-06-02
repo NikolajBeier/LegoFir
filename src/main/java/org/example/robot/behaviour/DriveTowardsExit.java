@@ -17,6 +17,7 @@ public class DriveTowardsExit implements MyBehavior{
     double currentAngle;
     double angleToExit;
     double distanceToExit;
+    Navigation navigation = new Navigation();
 
     public DriveTowardsExit(Legofir dude){
         this.dude=dude;
@@ -25,7 +26,7 @@ public class DriveTowardsExit implements MyBehavior{
 
     @Override
     public boolean takeControl() {
-        if (dude.getMap().getBalls().isEmpty()){
+        if (dude.getMap().getOrangeBalls().isEmpty()&&dude.getMap().getBalls().isEmpty()){
             return true;
         }
         return false;
