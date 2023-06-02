@@ -89,6 +89,7 @@ public class DriveTowardsBall implements MyBehavior{
 
             if(distanceToBall<150) {
                 long timeBefore= System.currentTimeMillis();
+                dude.beginHarvester();
                 while (!suppressed) {
                 /*
                 if (dude.getMap().getRobotPosition().getX() < nextBallX + 25 && dude.getMap().getRobotPosition().getX() > nextBallX - 25) {
@@ -101,7 +102,6 @@ public class DriveTowardsBall implements MyBehavior{
                         break;
                     }
                 }
-                dude.beginHarvester();
                 timeBefore= System.currentTimeMillis();
                 while(!suppressed){
                     if (System.currentTimeMillis() - timeBefore > 1000) {

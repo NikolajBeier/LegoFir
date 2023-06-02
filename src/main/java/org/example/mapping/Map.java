@@ -50,7 +50,7 @@ public class Map {
 
         for(TennisBall tennisball : balls) {
             // Distance between two points:
-            double distance = Math.sqrt((tennisball.x-getRobotPosition().x)*(tennisball.x-getRobotPosition().x)+(tennisball.y-getRobotPosition().y)*(tennisball.y-getRobotPosition().y));
+            double distance = Math.sqrt((tennisball.x-getRobotPosition().frontSideX)*(tennisball.x-getRobotPosition().frontSideX)+(tennisball.y-getRobotPosition().frontSideY)*(tennisball.y-getRobotPosition().frontSideY));
             if(distance<closestDistance) {
                 closestDistance = distance;
                 closestBall = tennisball;
