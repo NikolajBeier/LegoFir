@@ -328,6 +328,12 @@ public class CameraAnalyze {
                     Imgproc.rectangle(image, edge.tl(), edge.br(), new Scalar(0, 0, 255), 1);
                     putText(image, "Edge", edge.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
                 }
+                if(edge != null){
+                    Imgproc.rectangle(image,dude.getMap().getDepositPoint().getRightExitTopRight(),dude.getMap().getDepositPoint().getRightExitBottomLeft(),new Scalar(255,0,0));
+                    putText(image, "Exit Right", dude.getMap().getDepositPoint().getRightExitTopRight(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(255, 0, 0), 2);
+                    Imgproc.rectangle(image,dude.getMap().getDepositPoint().getLeftExitTopRight(),dude.getMap().getDepositPoint().getLeftExitBottomLeft(),new Scalar(0,255,0));
+                    putText(image, "Exit Left", dude.getMap().getDepositPoint().getLeftExitTopRight(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 255, 0), 2);
+                }
 
                 // Blue, green and robot rects
                 for(Rect boundingRect : blue) {
