@@ -3,6 +3,7 @@ package org.example.robot.behaviour;
 
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
+import org.opencv.core.Point;
 
 import static org.example.Main.logger;
 import static org.example.utility.Geometry.distanceBetweenPoints;
@@ -15,8 +16,7 @@ public class DriveTowardsBall implements MyBehavior {
     boolean stopCondition = false;
     double currentAngle;
     double angleToNextBall;
-    double distanceToBall;
-    Navigation navigation;
+    Navigation navigation = new Navigation();
 
     public DriveTowardsBall(Legofir dude) {
         this.dude = dude;
@@ -40,15 +40,12 @@ public class DriveTowardsBall implements MyBehavior {
         dude.setCurrentBehaviourName(BehaviorName);
         TennisBall nextBall = dude.getMap().getNextBall();
         while (!suppressed) {
-
-            navigation.checkDirection(nextBall);
-
-
+            System.out.println("DrivTowardBallAction");
+            navigation.checkDirection(nextBall, dude);
             dude.moveForward();
 
             // Waits to be suppressed or until the robot is close enough to the ball for it to be assumed picked up or pushed away.
-
-            if (distanceToBall < 150) {
+            if (navigation.distanceToPoint < 150) {
                 long timeBefore = System.currentTimeMillis();
                 while (!suppressed) {
                 /*

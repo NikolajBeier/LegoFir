@@ -52,18 +52,20 @@ public class Map {
             for (TennisBall orangeTennisBall :orangeBalls){
                 closestBall = orangeTennisBall ;
             }
-        }else
+        }else{
             for(TennisBall tennisball : balls) {
             // Distance between two points:
             double distance = Math.sqrt((tennisball.x-getRobotPosition().x)*(tennisball.x-getRobotPosition().x)+(tennisball.y-getRobotPosition().y)*(tennisball.y-getRobotPosition().y));
             double robotAngle = getRobotPosition().getHeadingInRadians();
             double ballAngle = Geometry.degreesOfVectorInRadians(tennisball.x,tennisball.y);
             if(distance<closestDistance && distance<100 && ballAngle<robotAngle+0.25 || ballAngle>robotAngle-0.25 ) {
+
                 //TODO skal lave noget kode der sørger for at robotten ikke kører ind i bolden
             } else if(distance<closestDistance  ) {
                 closestDistance = distance;
                 closestBall = tennisball;
             }
+        }
         }
         /*
         System.out.println("closest distance: "+closestDistance);

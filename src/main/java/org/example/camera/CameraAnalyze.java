@@ -1,6 +1,7 @@
 
 package org.example.camera;
 
+import lejos.hardware.lcd.Image;
 import nu.pattern.OpenCV;
 import org.example.mapping.RobotPosition;
 import org.example.mapping.TennisBall;
@@ -90,6 +91,7 @@ public class CameraAnalyze {
         Button connectToRobot;
         private String currentBehaviour = dude.getCurrentBehaviourName();
         private int currentBallAmount = dude.getMap().getBalls().size();
+        private int currentOrangeBallAmount=dude.getMap().getOrangeBalls().size();
         private RobotState currentState = dude.getState();
         private RobotPosition currentPostion = dude.getMap().getRobotPosition();
         JLabel robotState = new JLabel();
@@ -232,7 +234,7 @@ public class CameraAnalyze {
             robotBehaviour = new JLabel("Current Behaviour: " + currentBehaviour);
             robotPosition = new JLabel("Current Position: x = " + currentPostion.getX() + ", y = "+ currentPostion.getY());
             robotState = new JLabel("Current Robot State: " + currentState.name());
-            ballAmount = new JLabel("Amount of balls left: "+currentBallAmount);
+            ballAmount = new JLabel("Amount of balls left: "+currentBallAmount+currentOrangeBallAmount);
 
 
             buttons.add(colorFilterButton);
@@ -271,7 +273,9 @@ public class CameraAnalyze {
                 currentState = dude.getState();
                 robotState.setText("Current Robot State: " + currentState.name());
                 currentBallAmount = dude.getMap().getBalls().size();
-                ballAmount.setText("Amount of balls left: "+currentBallAmount);
+                currentOrangeBallAmount=dude.getMap().getOrangeBalls().size();
+
+                ballAmount.setText("Amount of balls left: "+(currentBallAmount+currentOrangeBallAmount));
                 currentPostion = dude.getMap().getRobotPosition();
                 robotPosition.setText("Current Position: x = " + currentPostion.getX() + ", y = "+ currentPostion.getY());
 
@@ -331,6 +335,7 @@ public class CameraAnalyze {
                     putText(image, "Exit Right", dude.getMap().getDepositPoint().getRightExitTopRight(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(255, 0, 0), 2);
                     Imgproc.rectangle(image,dude.getMap().getDepositPoint().getLeftExitTopRight(),dude.getMap().getDepositPoint().getLeftExitBottomLeft(),new Scalar(0,255,0));
                     putText(image, "Exit Left", dude.getMap().getDepositPoint().getLeftExitTopRight(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 255, 0), 2);
+                    Imgproc.line(image, dude.getMap().getDepositPoint().getCenterLeft(), dude.getMap().getDepositPoint().getCenterRight(),new Scalar(0,0,255) );
                 }
 
                 // Blue, green and robot rects

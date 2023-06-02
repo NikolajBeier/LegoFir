@@ -11,19 +11,18 @@ import static org.example.utility.Geometry.distanceBetweenPoints;
 
 
 public class Navigation {
-
-    Legofir dude;
     double currentAngle;
-    double distanceToPoint;
+    Legofir dude;
+     public double distanceToPoint;
 
     double angleToNextPoint;
 
-    public void checkDirection( TennisBall nextPoint) {
-
+    public void checkDirection( TennisBall nextPoint, Legofir dude) {
+        this.dude=dude;
 
         RobotPosition currentPosition = dude.getMap().getRobotPosition();
 
-
+        System.out.println("we get here");
         int nextPointX = nextPoint.getX();
         int nextPointY = nextPoint.getY();
 
