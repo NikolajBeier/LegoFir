@@ -75,7 +75,7 @@ public class EdgeDetection {
 
     public Point[] intersectionDetect(Mat image, Legofir dude) {
         //Imgproc.cvtColor(image, hlsimage, Imgproc.COLOR_BGR2HLS);
-        Core.inRange(image, new Scalar(0, 0, 150), new Scalar(160, 105, 255), redMask);
+        Core.inRange(image, new Scalar(hMin, sMin, lMin), new Scalar(hMax, sMax, lMax), redMask);
 
         // Apply Hough Line Transform
         Mat lines = new Mat();
@@ -165,7 +165,7 @@ public class EdgeDetection {
                 Point tempPoint = new Point(returnValues[i].x, -returnValues[i].y);
 
                 //Show numbers on corners
-                Imgproc.putText(image, Integer.toString(i), tempPoint, FONT_HERSHEY_SIMPLEX, 2,new Scalar(0,0,255),2);
+                //Imgproc.putText(image, Integer.toString(i), tempPoint, FONT_HERSHEY_SIMPLEX, 2,new Scalar(0,0,255),2);
 
                 Imgproc.circle(
                         image,                 //Matrix obj of the image
