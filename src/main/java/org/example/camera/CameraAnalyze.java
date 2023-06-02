@@ -357,7 +357,7 @@ public class CameraAnalyze {
                     Imgproc.rectangle(image, edge.tl(), edge.br(), new Scalar(0, 0, 255), 1);
                     putText(image, "Edge", edge.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
                 }
-                if(edge != null){
+                if(edgeDetectionOn){
                     Point tr = new Point(dude.getMap().getDepositPoint().getRightExitTopRight().x, (-1)*dude.getMap().getDepositPoint().getRightExitTopRight().y);
                     Point bl = new Point(dude.getMap().getDepositPoint().getRightExitBottomLeft().x, (-1)*dude.getMap().getDepositPoint().getRightExitBottomLeft().y);
                     Imgproc.rectangle(image,tr,bl,new Scalar(255,0,0));
