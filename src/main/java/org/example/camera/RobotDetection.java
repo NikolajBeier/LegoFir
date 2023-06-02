@@ -2,6 +2,7 @@ package org.example.camera;
 
 import org.example.mapping.ObjectColor;
 import org.example.robot.model.Legofir;
+import org.example.utility.Geometry;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 
@@ -133,6 +134,7 @@ public class RobotDetection {
             }
 
             Rect combinedRect = new Rect(minX, minY, maxX - minX, maxY - minY);
+
             combined.add(combinedRect);
 
 
@@ -159,6 +161,28 @@ public class RobotDetection {
                         Point arrowPoint = new Point(centerOfLine.x + perpendicularVector.x, centerOfLine.y + perpendicularVector.y);
 
                         dude.getMap().setRobotPosition((int)centerOfLine.x,(int)centerOfLine.y,perpendicularVector);
+
+                        // calculate front and back points of robot
+
+                        Point center = new Point(dude.getMap().getRobotPosition().getX(), -dude.getMap().getRobotPosition().getY());
+                        double ratioBelow = 15.0;
+                        double ratioAbove = 20.0;
+                        double distanceBetweenColors = Geometry.distanceBetweenPoints(blueCenter, greenCenter);
+
+                        double totalHeight = distanceBetweenColors * (ratioBelow + ratioAbove) / 15.0;
+
+                        double angleRad = dude.getMap().getRobotPosition().getHeadingInRadians();
+
+                        double deltaTop = totalHeight * ratioAbove / (ratioBelow + ratioAbove);
+                        double deltaBottom = totalHeight * ratioBelow / (ratioBelow + ratioAbove);
+
+                        Point front = new Point(center.x - deltaTop * -Math.cos(angleRad), center.y - deltaTop * Math.sin(angleRad));
+                        Point back = new Point(center.x + deltaBottom * -Math.cos(angleRad), center.y + deltaBottom * Math.sin(angleRad));
+
+                        dude.getMap().getRobotPosition().setFrontSideX((int)front.x);
+                        dude.getMap().getRobotPosition().setFrontSideY((int)-front.y);
+                        dude.getMap().getRobotPosition().setBackSideX((int)back.x);
+                        dude.getMap().getRobotPosition().setBackSideY((int)-back.y);
                     }
 
 

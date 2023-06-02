@@ -162,7 +162,7 @@ public class Legofir {
     }
 
     public void stopWheels(){
-        state=RobotState.IDLE;
+        //state=RobotState.IDLE;
         try {
             left.setSpeed(defaultSpeedWheel);
             right.setSpeed(defaultSpeedWheel);

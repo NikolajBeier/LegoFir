@@ -52,9 +52,9 @@ public class Launcher implements Program {
         dude.setDefaultSpeedHarvester(1440);
         dude.setDefaultSpeedBallDropper(720);
         dude.setDefaultAccelerationHarvester(1000);
-        dude.setDefaultAccelerationWheel(500);
+        dude.setDefaultAccelerationWheel(400);
         dude.setDefaultAccelerationBallDropper(1000);
-        dude.setDefaultSpeedWheel(140);
+        dude.setDefaultSpeedWheel(250);
         dude.setLaunched(true);
 
         Audio sound = ev3.getAudio();
@@ -69,7 +69,7 @@ public class Launcher implements Program {
 
         bArray = new MyBehavior[]{
                 new DriveTowardsBall(dude),
-                //new AvoidCollision(dude),
+                new AvoidCollision(dude),
                 //new StopBehaviour(),
         };
         arby = new Arbitrator(bArray);

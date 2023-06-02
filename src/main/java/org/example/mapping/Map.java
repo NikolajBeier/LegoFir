@@ -50,7 +50,7 @@ public class Map {
 
         for(TennisBall tennisball : balls) {
             // Distance between two points:
-            double distance = Math.sqrt((tennisball.x-getRobotPosition().x)*(tennisball.x-getRobotPosition().x)+(tennisball.y-getRobotPosition().y)*(tennisball.y-getRobotPosition().y));
+            double distance = Math.sqrt((tennisball.x-getRobotPosition().frontSideX)*(tennisball.x-getRobotPosition().frontSideX)+(tennisball.y-getRobotPosition().frontSideY)*(tennisball.y-getRobotPosition().frontSideY));
             if(distance<closestDistance) {
                 closestDistance = distance;
                 closestBall = tennisball;
@@ -96,8 +96,8 @@ public class Map {
         Point leftSide = new Point(robotPosition.leftSideX, robotPosition.leftSideY);
 
         // Lines of the robot
-        Line2D leftRobotLine = new Line2D.Double(leftSide.x, leftSide.y, leftSide.x+1000*heading.x, leftSide.y+1000*heading.y);
-        Line2D rightRobotLine = new Line2D.Double(rightSide.x, rightSide.y, rightSide.x+1000*heading.x, rightSide.y+1000*heading.y);
+        Line2D leftRobotLine = new Line2D.Double(leftSide.x, leftSide.y, leftSide.x+10000*heading.x, leftSide.y+10000*heading.y);
+        Line2D rightRobotLine = new Line2D.Double(rightSide.x, rightSide.y, rightSide.x+10000*heading.x, rightSide.y+10000*heading.y);
 
         // Edge points of the map
 
