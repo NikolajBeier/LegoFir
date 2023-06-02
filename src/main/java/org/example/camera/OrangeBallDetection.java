@@ -49,7 +49,7 @@ public class OrangeBallDetection {
             }
         }
         if(dude!=null) {
-            dude.addBalls(orangeBalls);
+            dude.addOrangeBalls(orangeBalls);
         }
         return orangeBalls;
     }

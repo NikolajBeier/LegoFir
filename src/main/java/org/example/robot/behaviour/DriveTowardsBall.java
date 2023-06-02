@@ -1,7 +1,6 @@
 package org.example.robot.behaviour;
 
 
-import org.example.mapping.RobotPosition;
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
 import org.example.robot.model.RobotState;
@@ -12,22 +11,18 @@ import static org.example.Main.logger;
 import static org.example.utility.Geometry.distanceBetweenPoints;
 
 
-public class DriveTowardsBall implements MyBehavior{
+public class DriveTowardsBall implements MyBehavior {
     String BehaviorName = "DriveTowardsBall";
     boolean suppressed = false;
     Legofir dude;
     boolean stopCondition = false;
     double currentAngle;
     double angleToNextBall;
-    double distanceToBall;
+    Navigation navigation = new Navigation();
 
-
-    public DriveTowardsBall(Legofir dude){
-        this.dude=dude;
+    public DriveTowardsBall(Legofir dude) {
+        this.dude = dude;
     }
-
-
-
 
 
     @Override
@@ -43,13 +38,49 @@ public class DriveTowardsBall implements MyBehavior{
 
     @Override
     public void action() {
-        suppressed=false;
+        suppressed = false;
         dude.setCurrentBehaviourName(BehaviorName);
-        while(!suppressed) {
+        TennisBall nextBall = dude.getMap().getNextBall();
+        while (!suppressed) {
+            System.out.println("DrivTowardBallAction");
+            navigation.checkDirection(nextBall, dude);
+            dude.moveForward();
 
+            // Waits to be suppressed or until the robot is close enough to the ball for it to be assumed picked up or pushed away.
+            if (navigation.distanceToPoint < 150) {
+                long timeBefore = System.currentTimeMillis();
+                while (!suppressed) {
+                /*
+                if (dude.getMap().getRobotPosition().getX() < nextBallX + 25 && dude.getMap().getRobotPosition().getX() > nextBallX - 25) {
+                    if (dude.getMap().getRobotPosition().getY() < nextBallY + 25 && dude.getMap().getRobotPosition().getY() > nextBallY - 25) {
+                        break;
+                    }
+                }
+                 */
+                    if (System.currentTimeMillis() - timeBefore > 3000) {
+                        break;
+                    }
+                }
+                dude.beginHarvester();
+                timeBefore = System.currentTimeMillis();
+                while (true) {
+                    if (System.currentTimeMillis() - timeBefore > 1000) {
+                        nextBall = dude.getMap().getNextBall();
+                        break;
+                    }
+                }
+                dude.stopHarvester();
+            }
 
+            dude.stopWheels();
+        }
+        dude.stopHarvester();
+    }
+
+    /*
             RobotPosition currentPosition = dude.getMap().getRobotPosition();
-            TennisBall nextBall = dude.getMap().getNextBall();
+
+
 
             int nextBallX = nextBall.getX();
             int nextBallY = nextBall.getY();
@@ -71,7 +102,7 @@ public class DriveTowardsBall implements MyBehavior{
 
 
             //if current angle is not close to angle to next ball
-            System.out.println("isApproximatelySameAngle: "+isApproximatelySameAngle());
+         /*   System.out.println("isApproximatelySameAngle: "+isApproximatelySameAngle());
             if( !isApproximatelySameAngle() ){
                 dude.stopWheels();
                 //turn towards ball
@@ -98,13 +129,14 @@ public class DriveTowardsBall implements MyBehavior{
                     }
                 }
                  */
-                    if (System.currentTimeMillis() - timeBefore > 3000) {
+               /*     if (System.currentTimeMillis() - timeBefore > 3000) {
                         break;
                     }
                 }
                 timeBefore= System.currentTimeMillis();
                 while(!suppressed){
                     if (System.currentTimeMillis() - timeBefore > 1000) {
+                        nextBall=dude.getMap().getNextBall();
                         break;
                     }
                 }
@@ -117,7 +149,7 @@ public class DriveTowardsBall implements MyBehavior{
 
 
 
-
+*/
     @Override
     public void suppress(){
         System.out.println("DriveTowardsBall.suppress()");
@@ -129,6 +161,7 @@ public class DriveTowardsBall implements MyBehavior{
         this.stopCondition=stopCondition;
         suppressed= true;
     }
+
     private void turnLeftTowardsBall() {
         currentAngle = dude.getAngle();
         if (ballIsLeftOfRobotHeading()) {
@@ -200,4 +233,5 @@ public class DriveTowardsBall implements MyBehavior{
     private boolean isApproximatelySameAngle(){
         return ((Math.abs(currentAngle-angleToNextBall) < 0.3) || (currentAngle>3 && angleToNextBall<-3) || (currentAngle>3 && angleToNextBall>-3));
     }
+
 }

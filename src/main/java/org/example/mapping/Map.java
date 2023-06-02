@@ -1,12 +1,10 @@
 package org.example.mapping;
 
-import lejos.robotics.geometry.Line;
+import org.example.utility.Geometry;
 import org.opencv.core.Point;
-import org.opencv.core.Rect;
 
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import static org.example.utility.Geometry.*;
@@ -19,6 +17,8 @@ public class Map {
     Edge edge = new Edge();
     RobotPosition robotPosition = new RobotPosition();
     List<TennisBall> balls = new ArrayList<>();
+    List<TennisBall> orangeBalls = new ArrayList<>();
+
     DepositPoint depositPoint = new DepositPoint(this.edge);
     public Map(int x, int y) {
         this.x = x;
@@ -48,13 +48,24 @@ public class Map {
         TennisBall closestBall = new TennisBall(0,0);
         double closestDistance = Integer.MAX_VALUE;
 
-        for(TennisBall tennisball : balls) {
+        if (!orangeBalls.isEmpty()) {
+            for (TennisBall orangeTennisBall :orangeBalls){
+                closestBall = orangeTennisBall ;
+            }
+        }else{
+            for(TennisBall tennisball : balls) {
             // Distance between two points:
             double distance = Math.sqrt((tennisball.x-getRobotPosition().frontSideX)*(tennisball.x-getRobotPosition().frontSideX)+(tennisball.y-getRobotPosition().frontSideY)*(tennisball.y-getRobotPosition().frontSideY));
-            if(distance<closestDistance) {
+            double robotAngle = getRobotPosition().getHeadingInRadians();
+            double ballAngle = Geometry.degreesOfVectorInRadians(tennisball.x,tennisball.y);
+            if(distance<closestDistance && distance<100 && ballAngle<robotAngle+0.25 || ballAngle>robotAngle-0.25 ) {
+
+                //TODO skal lave noget kode der sørger for at robotten ikke kører ind i bolden
+            } else if(distance<closestDistance  ) {
                 closestDistance = distance;
                 closestBall = tennisball;
             }
+        }
         }
         /*
         System.out.println("closest distance: "+closestDistance);
@@ -74,6 +85,12 @@ public class Map {
     public void setBalls(List<TennisBall> newList) {
         balls = newList;
     }
+    public void setOrangeBalls(List<TennisBall> newOrangeList) {
+        orangeBalls = newOrangeList;
+    }
+
+
+
     public void calcDepositPoints(){
         this.depositPoint.calcExit();
         this.depositPoint.setCoords();
@@ -145,6 +162,9 @@ public class Map {
 
     public List<TennisBall> getBalls() {
         return balls;
+    }
+    public List<TennisBall> getOrangeBalls(){
+        return orangeBalls;
     }
 
 }

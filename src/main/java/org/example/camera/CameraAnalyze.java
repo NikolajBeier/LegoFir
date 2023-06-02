@@ -1,6 +1,7 @@
 
 package org.example.camera;
 
+import lejos.hardware.lcd.Image;
 import nu.pattern.OpenCV;
 import org.example.mapping.Edge;
 import org.example.mapping.Map;
@@ -92,6 +93,7 @@ public class CameraAnalyze {
         Button connectToRobot;
         private String currentBehaviour = dude.getCurrentBehaviourName();
         private int currentBallAmount = dude.getMap().getBalls().size();
+        private int currentOrangeBallAmount=dude.getMap().getOrangeBalls().size();
         private RobotState currentState = dude.getState();
         private RobotPosition currentPostion = dude.getMap().getRobotPosition();
         JLabel robotState = new JLabel();
@@ -234,7 +236,7 @@ public class CameraAnalyze {
             robotBehaviour = new JLabel("Current Behaviour: " + currentBehaviour);
             robotPosition = new JLabel("Current Position: x = " + currentPostion.getX() + ", y = "+ currentPostion.getY());
             robotState = new JLabel("Current Robot State: " + currentState.name());
-            ballAmount = new JLabel("Amount of balls left: "+currentBallAmount);
+            ballAmount = new JLabel("Amount of balls left: "+currentBallAmount+currentOrangeBallAmount);
 
 
             //buttons.add(colorFilterButton);
@@ -272,7 +274,8 @@ public class CameraAnalyze {
                 currentState = dude.getState();
                 robotState.setText("Current Robot State: " + currentState.name());
                 currentBallAmount = dude.getMap().getBalls().size();
-                ballAmount.setText("Amount of balls left: "+currentBallAmount);
+                currentOrangeBallAmount=dude.getMap().getOrangeBalls().size();
+                ballAmount.setText("Amount of balls left: "+(currentBallAmount+currentOrangeBallAmount));
                 currentPostion = dude.getMap().getRobotPosition();
                 robotPosition.setText("Current Position: x = " + currentPostion.getX() + ", y = "+ currentPostion.getY());
 
@@ -417,7 +420,6 @@ public class CameraAnalyze {
                             line(image, blueCenter, greenCenter, new Scalar(0, 0, 255), 1);
                             //System.out.println("Blue: " + blueCenter.toString() + " Green: " + greenCenter.toString() + " Center: " + centerOfLine.toString() + " Arrow: " + arrowPoint.toString());
                             arrowedLine(image, centerOfLine, arrowPoint, new Scalar(0, 0, 255), 1);
-
                             if(dude!=null) {
                                 TennisBall nextBall = dude.getMap().getNextBall();
 
