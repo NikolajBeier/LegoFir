@@ -4,6 +4,7 @@ package org.example.robot.behaviour;
 import org.example.mapping.RobotPosition;
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
+import org.example.robot.model.RobotState;
 import org.example.utility.Geometry;
 import org.opencv.core.Point;
 
@@ -72,6 +73,7 @@ public class DriveTowardsBall implements MyBehavior{
             //if current angle is not close to angle to next ball
             System.out.println("isApproximatelySameAngle: "+isApproximatelySameAngle());
             if( !isApproximatelySameAngle() ){
+                dude.stopWheels();
                 //turn towards ball
                 if(ballIsLeftOfRobotHeading()){
                     turnLeftTowardsBall();
@@ -79,9 +81,9 @@ public class DriveTowardsBall implements MyBehavior{
                     turnRightTowardsBall();
                 }
             }
-
-            // Heading found, now go forward
             dude.moveForward();
+
+
 
             // Waits to be suppressed or until the robot is close enough to the ball for it to be assumed picked up or pushed away.
 
@@ -108,10 +110,9 @@ public class DriveTowardsBall implements MyBehavior{
                 }
                 dude.stopHarvester();
             }
-
-            dude.stopWheels();
             System.out.println("DriveTowardsBall.action() - suppressed: " + suppressed);
         }
+        dude.stopWheels();
     }
 
 
