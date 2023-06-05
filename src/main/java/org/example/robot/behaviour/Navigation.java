@@ -120,7 +120,7 @@ public class Navigation {
         }
     }
     private boolean isApproximatelySameAngle(){
-        return ((Math.abs(currentAngle-angleToNextPoint) < 0.3) || (currentAngle>3 && angleToNextPoint<-3) || (currentAngle<-3 && angleToNextPoint>3));
+        return ((Math.abs(currentAngle-angleToNextPoint) < 0.25) || (currentAngle>3 && angleToNextPoint<-3) || (currentAngle<-3 && angleToNextPoint>3));
     }
 }
 

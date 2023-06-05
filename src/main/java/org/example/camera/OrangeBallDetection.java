@@ -28,7 +28,7 @@ public class OrangeBallDetection {
         List<Rect> orangeBalls = new ArrayList<>();
 
         Imgproc.cvtColor(image, hsvImage, Imgproc.COLOR_BGR2HSV);
-        Core.inRange(image,new Scalar(hMin,sMin,lMin),new Scalar(hMax,sMax,lMax),redMask);
+        Core.inRange(hsvImage,new Scalar(hMin,sMin,lMin),new Scalar(hMax,sMax,lMax),redMask);
 
 
         ArrayList<MatOfPoint> redContour = new ArrayList<>();

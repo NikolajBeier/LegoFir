@@ -52,9 +52,9 @@ public class Launcher implements Program {
         dude.setDefaultSpeedHarvester(1440);
         dude.setDefaultSpeedBallDropper(720);
         dude.setDefaultAccelerationHarvester(1000);
-        dude.setDefaultAccelerationWheel(400);
+        dude.setDefaultAccelerationWheel(50);
         dude.setDefaultAccelerationBallDropper(1000);
-        dude.setDefaultSpeedWheel(250);
+        dude.setDefaultSpeedWheel(200);
         dude.setLaunched(true);
 
         /*
