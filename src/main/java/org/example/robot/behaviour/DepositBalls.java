@@ -7,6 +7,8 @@ public class DepositBalls implements MyBehavior {
     Legofir dude;
     boolean suppressed = false;
 
+    Navigation navigation = new Navigation();
+
     public DepositBalls(Legofir dude) {
         this.dude = dude;
     }
@@ -22,6 +24,10 @@ public class DepositBalls implements MyBehavior {
     public void action() {
         suppressed = false;
         dude.setCurrentBehaviourName(BehaviorName);
+        while(!suppressed){
+            //Todo get point
+            navigation.checkDirection();
+        }
     }
 
     @Override

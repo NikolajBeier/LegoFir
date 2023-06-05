@@ -48,6 +48,7 @@ public class Map {
         TennisBall closestBall = new TennisBall(0,0);
         double closestDistance = Integer.MAX_VALUE;
 
+        //  checks if there is a orange ball sets it as closestball
         if (!orangeBalls.isEmpty()) {
             for (TennisBall orangeTennisBall :orangeBalls){
                 closestBall = orangeTennisBall ;
@@ -58,6 +59,7 @@ public class Map {
             double distance = Math.sqrt((tennisball.x-getRobotPosition().frontSideX)*(tennisball.x-getRobotPosition().frontSideX)+(tennisball.y-getRobotPosition().frontSideY)*(tennisball.y-getRobotPosition().frontSideY));
             double robotAngle = getRobotPosition().getHeadingInRadians();
             double ballAngle = Geometry.degreesOfVectorInRadians(tennisball.x,tennisball.y);
+            // checks if ball is right next to robot and chooses another ball
             if(distance<closestDistance && distance<100 && ballAngle<robotAngle+0.25 || ballAngle>robotAngle-0.25 ) {
 
                 //TODO skal lave noget kode der sørger for at robotten ikke kører ind i bolden

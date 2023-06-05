@@ -13,7 +13,7 @@ import static org.example.utility.Geometry.distanceBetweenPoints;
 public class Navigation {
     double currentAngle;
     Legofir dude;
-     public double distanceToPoint;
+     double  distanceToPoint;
 
     double angleToNextPoint;
 
@@ -121,6 +121,10 @@ public class Navigation {
     }
     private boolean isApproximatelySameAngle(){
         return ((Math.abs(currentAngle-angleToNextPoint) < 0.3) || (currentAngle>3 && angleToNextPoint<-3) || (currentAngle<-3 && angleToNextPoint>3));
+    }
+
+    public double getDistanceToPoint() {
+        return distanceToPoint;
     }
 }
 
