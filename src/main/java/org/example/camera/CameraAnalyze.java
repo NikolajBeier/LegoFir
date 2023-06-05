@@ -88,6 +88,7 @@ public class CameraAnalyze {
         OrangeBallDetection orangeBallDetection = new OrangeBallDetection();
         RobotDetection robotDetection = new RobotDetection();
         EdgeDetection edgeDetection = new EdgeDetection();
+        ObstacleDetection obstacleDetection = new ObstacleDetection();
         Boolean ballDetectionOn = false;
         Boolean robotDetectionOn = false;
 
@@ -300,12 +301,17 @@ public class CameraAnalyze {
                 Rect edge = null;
 
                 Point[] edgeIntersections = null;
+                Point topObstacle = null;
+                Point bottomObstacle = null;
+                Point leftObstacle = null;
+                Point rightObstacle = null;
 
                 if (edgeDetectionOn){
                     //edge = edgeDetection.detect(image,dude);
 
 
                     edgeIntersections = edgeDetection.intersectionDetect(image, dude);
+                    obstacleDetection.detect(image,topObstacle,bottomObstacle,leftObstacle,rightObstacle, dude);
 
 
                     /*
@@ -373,6 +379,10 @@ public class CameraAnalyze {
 
                     Imgproc.rectangle(image,tr,bl,new Scalar(0,255,0));
                     putText(image, "Exit Left", tr, Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 255, 0), 2);
+
+                    // draw obstacle
+                    line(image, new Point(dude.getMap().getObstacle().getTopPoint().x,-dude.getMap().getObstacle().getTopPoint().y), new Point(dude.getMap().getObstacle().getBottomPoint().x,-dude.getMap().getObstacle().getBottomPoint().y), new Scalar(0, 255, 0), 2, 8, 0);
+                    line(image, new Point(dude.getMap().getObstacle().getLeftPoint().x,-dude.getMap().getObstacle().getLeftPoint().y), new Point(dude.getMap().getObstacle().getRightPoint().x,-dude.getMap().getObstacle().getRightPoint().y), new Scalar(0, 255, 0), 2, 8, 0);
                 }
 
                 // Blue, green and robot rects
@@ -471,6 +481,7 @@ public class CameraAnalyze {
                 }
 
  */
+
 
                 // convert matrix to byte
                 final MatOfByte buf = new MatOfByte();

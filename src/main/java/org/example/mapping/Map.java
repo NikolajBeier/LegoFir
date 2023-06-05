@@ -15,6 +15,7 @@ public class Map {
     int y;
     int size;
     Edge edge = new Edge();
+    Obstacle obstacle = new Obstacle();
     RobotPosition robotPosition = new RobotPosition();
     List<TennisBall> balls = new ArrayList<>();
     List<TennisBall> orangeBalls = new ArrayList<>();
@@ -168,4 +169,14 @@ public class Map {
         return orangeBalls;
     }
 
+    public void setObstacle(Point topPoint, Point bottomPoint, Point leftPoint, Point rightPoint) {
+        obstacle.setTopPoint(topPoint);
+        obstacle.setBottomPoint(bottomPoint);
+        obstacle.setLeftPoint(leftPoint);
+        obstacle.setRightPoint(rightPoint);
+    }
+
+    public Obstacle getObstacle() {
+        return obstacle;
+    }
 }
