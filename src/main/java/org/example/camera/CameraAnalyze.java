@@ -19,6 +19,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.opencv.imgproc.Imgproc.*;
@@ -277,6 +278,7 @@ public class CameraAnalyze {
                 // read image to matrix
 
                 capture.read(webCamImage);
+                webCamImage = clahe(webCamImage);
                 resize(webCamImage, image, new Size(1280, 720));
                 // image = webCamImage;
                 // image = removeglare(image);
@@ -554,6 +556,20 @@ public class CameraAnalyze {
             rg.apply(image, corrected);
             return corrected;
         }
+    }
+
+    private Mat clahe(Mat capture) {
+        List<Mat> channels = new LinkedList<>();
+        Core.split(capture,channels);
+        CLAHE clahe = Imgproc.createCLAHE();
+        clahe.setClipLimit(0);
+        //System.out.println(capture);
+        Mat destimage = new Mat();
+        clahe.apply(channels.get(0),destimage);
+        Core.merge(channels,capture);
+        //cvtColor(capture,destimage, 0);
+
+        return destimage;
     }
 }
 
