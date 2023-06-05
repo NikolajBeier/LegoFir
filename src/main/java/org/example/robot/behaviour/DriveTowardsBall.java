@@ -18,10 +18,11 @@ public class DriveTowardsBall implements MyBehavior {
     boolean stopCondition = false;
     double currentAngle;
     double angleToNextBall;
-    Navigation navigation = new Navigation();
+    Navigation navigation;
 
     public DriveTowardsBall(Legofir dude) {
         this.dude = dude;
+        navigation= new Navigation(dude);
     }
 
 
@@ -43,11 +44,11 @@ public class DriveTowardsBall implements MyBehavior {
         TennisBall nextBall = dude.getMap().getNextBall();
         while (!suppressed) {
             System.out.println("DrivTowardBallAction");
-            navigation.checkDirection(nextBall, dude);
+            navigation.checkDirection(nextBall);
             dude.moveForward();
 
             // Waits to be suppressed or until the robot is close enough to the ball for it to be assumed picked up or pushed away.
-            if (navigation.distanceToPoint < 150) {
+            if (navigation.getDistanceToPoint() < 50) {
                 long timeBefore = System.currentTimeMillis();
                 dude.beginHarvester();
                 while (!suppressed) {
@@ -59,20 +60,13 @@ public class DriveTowardsBall implements MyBehavior {
                 }
                  */
                     if (System.currentTimeMillis() - timeBefore > 2000) {
+                        nextBall= dude.getMap().getNextBall();
                         break;
                     }
                 }
 
-                timeBefore = System.currentTimeMillis();
-                while (!suppressed) {
-                    if (System.currentTimeMillis() - timeBefore > 1000) {
-                        nextBall = dude.getMap().getNextBall();
-                        break;
-                    }
-                }
                 dude.stopHarvester();
             }
-
         }
         dude.stopWheels();
         dude.stopHarvester();

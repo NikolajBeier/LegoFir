@@ -131,8 +131,8 @@ public class Legofir {
     public void turnLeft(){
         state=RobotState.TURNING_LEFT;
         try {
-            left.setSpeed(50);
-            right.setSpeed(50);
+            left.setSpeed(35);
+            right.setSpeed(35);
             left.forward();
             right.backward();
         } catch (RemoteException e) {
@@ -143,8 +143,8 @@ public class Legofir {
     public void turnRight(){
         state=RobotState.TURNING_RIGHT;
         try{
-            left.setSpeed(50);
-            right.setSpeed(50);
+            left.setSpeed(35);
+            right.setSpeed(35);
             left.backward();
             right.forward();
         } catch (RemoteException e) {

@@ -59,11 +59,12 @@ public class Map {
             double distance = Math.sqrt((tennisball.x-getRobotPosition().frontSideX)*(tennisball.x-getRobotPosition().frontSideX)+(tennisball.y-getRobotPosition().frontSideY)*(tennisball.y-getRobotPosition().frontSideY));
             double robotAngle = getRobotPosition().getHeadingInRadians();
             double ballAngle = Geometry.degreesOfVectorInRadians(tennisball.x,tennisball.y);
+            /*
             // checks if ball is right next to robot and chooses another ball
             if(distance<closestDistance && distance<100 && ballAngle<robotAngle+0.25 || ballAngle>robotAngle-0.25 ) {
 
                 //TODO skal lave noget kode der sørger for at robotten ikke kører ind i bolden
-            } else if(distance<closestDistance  ) {
+            } else*/ if(distance<closestDistance  ) {
                 closestDistance = distance;
                 closestBall = tennisball;
             }
