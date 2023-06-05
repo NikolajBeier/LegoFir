@@ -4,12 +4,10 @@ import org.example.mapping.ObjectColor;
 import org.example.robot.model.Legofir;
 import org.opencv.core.*;
 import org.opencv.core.Point;
-import org.opencv.highgui.HighGui;
+
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
-import javax.swing.*;
-import java.awt.*;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,11 +80,11 @@ public class EdgeDetection {
         Imgproc.HoughLines(redMask, lines, 1, Math.PI / 180, 10 , 0, 0);
 
         // This will ensure only the top 4 lines are processed
-        List<Double> rhoList = new ArrayList<Double>();
+        List<Double> rhoList = new ArrayList<>();
 
         double difference = 50;
-        List<Line2D> edges = new ArrayList<Line2D>();
-        List<Point> intersection = new ArrayList<Point>();
+        List<Line2D> edges = new ArrayList<>();
+        List<Point> intersection = new ArrayList<>();
 
 
         for (int i = 0; i < lines.rows() && i < 10; i++) {

@@ -16,10 +16,10 @@ public class DepositPoint {
     }
 
     public void calcExit() {
-        double xright = 0;
-        double yright = 0;
-        double xleft = 0;
-        double yleft = 0;
+        double xright;
+        double yright;
+        double xleft ;
+        double yleft ;
 
         Point edgepoint = this.edge.getTopRight();
         Point edgepoint2 = this.edge.getBottomRight();

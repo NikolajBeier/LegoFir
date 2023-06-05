@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.io.FileReader;
-import java.lang.reflect.Array;
+
 
 public class Main {
     public static Logger logger = Logger.getLogger("Main");

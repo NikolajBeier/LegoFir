@@ -6,7 +6,7 @@ import org.example.utility.Geometry;
 import org.opencv.core.*;
 import org.opencv.imgproc.Imgproc;
 
-import javax.swing.*;
+//import javax.swing.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +21,8 @@ public class RobotDetection {
 
     // LOGIC
     Mat hsvImage = new Mat();
-    byte[] imageData;
-    ImageIcon icon;
+    /*byte[] imageData;
+    ImageIcon icon;*/
     Mat greenMask = new Mat();
     Mat blueMask = new Mat();
     int greenHueMin = ObjectColor.getGreenRobot().getHueMin();

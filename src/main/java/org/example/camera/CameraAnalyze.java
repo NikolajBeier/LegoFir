@@ -1,7 +1,6 @@
 
 package org.example.camera;
 
-import lejos.hardware.lcd.Image;
 import nu.pattern.OpenCV;
 import org.example.mapping.Edge;
 import org.example.mapping.Map;
@@ -9,9 +8,9 @@ import org.example.mapping.RobotPosition;
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
 import org.example.robot.model.RobotState;
-import org.example.ui.Calibration.CalibrationTool;
+
 import org.example.ui.ConnectToRobot;
-import org.example.utility.Geometry;
+
 import org.opencv.core.*;
 import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
@@ -42,7 +41,7 @@ public class CameraAnalyze {
 
 
     public CameraAnalyze(Legofir dude) {
-        this.dude=dude;
+        this.dude = dude;
         OpenCV.loadLocally();
         Camera camera = new Camera(jFrame);
         EventQueue.invokeLater(new Runnable() {
@@ -97,15 +96,13 @@ public class CameraAnalyze {
         Button connectToRobot;
         private String currentBehaviour = dude.getCurrentBehaviourName();
         private int currentBallAmount = dude.getMap().getBalls().size();
-        private int currentOrangeBallAmount=dude.getMap().getOrangeBalls().size();
+        private int currentOrangeBallAmount = dude.getMap().getOrangeBalls().size();
         private RobotState currentState = dude.getState();
         private RobotPosition currentPostion = dude.getMap().getRobotPosition();
         JLabel robotState = new JLabel();
         JLabel ballAmount = new JLabel();
         JLabel robotBehaviour = new JLabel();
         JLabel robotPosition = new JLabel();
-
-
 
 
         public boolean getDetectColor() {
@@ -122,7 +119,7 @@ public class CameraAnalyze {
 
 
             buttons = new JPanel(new GridLayout(0, 2));
-            information = new JPanel(new GridLayout(0,1));
+            information = new JPanel(new GridLayout(0, 1));
             colorDetection = new Button("Color Detection");
             connectToRobot = new Button("Connect Robot");
             robotDetectionButton = new Button("Robot Detection");
@@ -131,9 +128,9 @@ public class CameraAnalyze {
             calibrationTool = new Button("Calibration Tool");
 
 
-            if(camWidth>screenWidth || camHeight>screenHeight){
-                cameraScreen.setBounds(0, 0, screenWidth, screenHeight-200);
-                buttons.setBounds(screenWidth / 2 - 100, screenHeight-200, 150, 40);
+            if (camWidth > screenWidth || camHeight > screenHeight) {
+                cameraScreen.setBounds(0, 0, screenWidth, screenHeight - 200);
+                buttons.setBounds(screenWidth / 2 - 100, screenHeight - 200, 150, 40);
             } else {
                 cameraScreen.setBounds(0, 0, camWidth, camHeight);
                 buttons.setBounds(camWidth / 2 - 100, camHeight, 150, 40);
@@ -172,7 +169,7 @@ public class CameraAnalyze {
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    robotDetectionOn=true;
+                                    robotDetectionOn = true;
                                 }
                             }).start();
                         }
@@ -188,7 +185,7 @@ public class CameraAnalyze {
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    edgeDetectionOn=true;
+                                    edgeDetectionOn = true;
                                 }
                             }).start();
                         }
@@ -238,9 +235,9 @@ public class CameraAnalyze {
                 }
             });
             robotBehaviour = new JLabel("Current Behaviour: " + currentBehaviour);
-            robotPosition = new JLabel("Current Position: x = " + currentPostion.getX() + ", y = "+ currentPostion.getY());
+            robotPosition = new JLabel("Current Position: x = " + currentPostion.getX() + ", y = " + currentPostion.getY());
             robotState = new JLabel("Current Robot State: " + currentState.name());
-            ballAmount = new JLabel("Amount of balls left: "+currentBallAmount+currentOrangeBallAmount);
+            ballAmount = new JLabel("Amount of balls left: " + currentBallAmount + currentOrangeBallAmount);
 
 
             //buttons.add(colorFilterButton);
@@ -254,7 +251,7 @@ public class CameraAnalyze {
             information.add(ballAmount);
             information.add(robotPosition);
             jFrame.add(buttons, BorderLayout.SOUTH);
-            jFrame.add(information,BorderLayout.EAST);
+            jFrame.add(information, BorderLayout.EAST);
 
             jFrame.setSize(new Dimension(camWidth + 180, camHeight + 65));
             jFrame.setLocationRelativeTo(null);
@@ -278,10 +275,10 @@ public class CameraAnalyze {
                 currentState = dude.getState();
                 robotState.setText("Current Robot State: " + currentState.name());
                 currentBallAmount = dude.getMap().getBalls().size();
-                currentOrangeBallAmount=dude.getMap().getOrangeBalls().size();
-                ballAmount.setText("Amount of balls left: "+(currentBallAmount+currentOrangeBallAmount));
+                currentOrangeBallAmount = dude.getMap().getOrangeBalls().size();
+                ballAmount.setText("Amount of balls left: " + (currentBallAmount + currentOrangeBallAmount));
                 currentPostion = dude.getMap().getRobotPosition();
-                robotPosition.setText("Current Position: x = " + currentPostion.getX() + ", y = "+ currentPostion.getY());
+                robotPosition.setText("Current Position: x = " + currentPostion.getX() + ", y = " + currentPostion.getY());
 
 
                 // read image to matrix
@@ -301,7 +298,7 @@ public class CameraAnalyze {
 
                 Point[] edgeIntersections = null;
 
-                if (edgeDetectionOn){
+                if (edgeDetectionOn) {
                     //edge = edgeDetection.detect(image,dude);
 
 
@@ -332,25 +329,25 @@ public class CameraAnalyze {
                 }
 
 
-                if(robotDetectionOn){
-                    List<Rect>[] robotRects = robotDetection.detect(image,dude);
+                if (robotDetectionOn) {
+                    List<Rect>[] robotRects = robotDetection.detect(image, dude);
                     robot = robotRects[2];
                     blue = robotRects[1];
                     green = robotRects[0];
 
                 }
 
-                if(ballDetectionOn){
-                    orangeBallRects = orangeBallDetection.detect(image,dude);
-                    ballRects = ballDetection.detect(image,dude);
+                if (ballDetectionOn) {
+                    orangeBallRects = orangeBallDetection.detect(image, dude);
+                    ballRects = ballDetection.detect(image, dude);
                 }
 
                 // draw rectangles
 
                 // Ball rects
-                for (Rect boundingRect : orangeBallRects){
-                    Imgproc.rectangle(image,boundingRect.tl(),boundingRect.br(),new Scalar(0,0,255, 1));
-                    putText(image, "Orange ball",boundingRect.tl(), FONT_HERSHEY_SIMPLEX,1,new Scalar(0,0,255),2);
+                for (Rect boundingRect : orangeBallRects) {
+                    Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), new Scalar(0, 0, 255, 1));
+                    putText(image, "Orange ball", boundingRect.tl(), FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
                 }
 
                 for (Rect boundingRect : ballRects) {
@@ -359,32 +356,32 @@ public class CameraAnalyze {
                 }
 
                 // Edge rects
-                if(edge!=null){
+                if (edge != null) {
                     Imgproc.rectangle(image, edge.tl(), edge.br(), new Scalar(0, 0, 255), 1);
                     putText(image, "Edge", edge.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
                 }
-                if(edgeDetectionOn){
-                    Point tr = new Point(dude.getMap().getDepositPoint().getRightExitTopRight().x, (-1)*dude.getMap().getDepositPoint().getRightExitTopRight().y);
-                    Point bl = new Point(dude.getMap().getDepositPoint().getRightExitBottomLeft().x, (-1)*dude.getMap().getDepositPoint().getRightExitBottomLeft().y);
-                    Imgproc.rectangle(image,tr,bl,new Scalar(255,0,0));
+                if (edgeDetectionOn) {
+                    Point tr = new Point(dude.getMap().getDepositPoint().getRightExitTopRight().x, (-1) * dude.getMap().getDepositPoint().getRightExitTopRight().y);
+                    Point bl = new Point(dude.getMap().getDepositPoint().getRightExitBottomLeft().x, (-1) * dude.getMap().getDepositPoint().getRightExitBottomLeft().y);
+                    Imgproc.rectangle(image, tr, bl, new Scalar(255, 0, 0));
                     putText(image, "Exit Right", tr, Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(255, 0, 0), 2);
-                    tr = new Point(dude.getMap().getDepositPoint().getLeftExitTopRight().x,(-1)*dude.getMap().getDepositPoint().getLeftExitTopRight().y);
-                    bl = new Point(dude.getMap().getDepositPoint().getLeftExitBottomLeft().x,(-1)*dude.getMap().getDepositPoint().getLeftExitBottomLeft().y);
+                    tr = new Point(dude.getMap().getDepositPoint().getLeftExitTopRight().x, (-1) * dude.getMap().getDepositPoint().getLeftExitTopRight().y);
+                    bl = new Point(dude.getMap().getDepositPoint().getLeftExitBottomLeft().x, (-1) * dude.getMap().getDepositPoint().getLeftExitBottomLeft().y);
 
-                    Imgproc.rectangle(image,tr,bl,new Scalar(0,255,0));
+                    Imgproc.rectangle(image, tr, bl, new Scalar(0, 255, 0));
                     putText(image, "Exit Left", tr, Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 255, 0), 2);
                 }
 
                 // Blue, green and robot rects
-                for(Rect boundingRect : blue) {
+                for (Rect boundingRect : blue) {
                     Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), new Scalar(0, 0, 255), 1);
                     putText(image, "blue", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
                 }
-                for(Rect boundingRect : green) {
+                for (Rect boundingRect : green) {
                     Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), new Scalar(0, 0, 255), 1);
                     putText(image, "green", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
                 }
-                for(Rect boundingRect : robot) {
+                for (Rect boundingRect : robot) {
                     Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), new Scalar(0, 0, 255), 1);
                     putText(image, "robot", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
                 }
@@ -398,7 +395,7 @@ public class CameraAnalyze {
                 Imgproc.putText(image, "Back", back, Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
 
 
-                if(!green.isEmpty() && !blue.isEmpty()) {
+                if (!green.isEmpty() && !blue.isEmpty()) {
                     for (Rect blueBoundingRect : blue) {
                         for (Rect greenBoundingRect : green) {
 
@@ -424,7 +421,7 @@ public class CameraAnalyze {
                             //System.out.println("Blue: " + blueCenter.toString() + " Green: " + greenCenter.toString() + " Center: " + centerOfLine.toString() + " Arrow: " + arrowPoint.toString());
                             arrowedLine(image, centerOfLine, arrowPoint, new Scalar(0, 0, 255), 1);
 
-                            if(dude!=null) {
+                            if (dude != null) {
                                 TennisBall nextBall = dude.getMap().getNextBall();
 
                                 int nextBallX = nextBall.getX();
@@ -436,23 +433,23 @@ public class CameraAnalyze {
 
 
                                 // vektor fra currentPosition(x,y) til (nextBallX,nextBallY)
-                                Point ballVector = new Point(nextBallX-dude.getMap().getRobotPosition().getX(), nextBallY-dude.getMap().getRobotPosition().getY());
+                                Point ballVector = new Point(nextBallX - dude.getMap().getRobotPosition().getX(), nextBallY - dude.getMap().getRobotPosition().getY());
 
-                                arrowedLine(image,centerOfLine,new Point(nextBallX,-nextBallY),new Scalar(0,255,0),1);
+                                arrowedLine(image, centerOfLine, new Point(nextBallX, -nextBallY), new Scalar(0, 255, 0), 1);
                             }
 
                         }
                     }
                 }
-                if(robotDetectionOn && edgeDetectionOn){
+                if (robotDetectionOn && edgeDetectionOn) {
                     Point heading = dude.getMap().getRobotPosition().getHeading();
                     Point rightHeading = new Point(heading.y, -heading.x);
                     Point leftHeading = new Point(-heading.y, heading.x);
                     Point backHeading = new Point(-heading.x, -heading.y);
-                    drawLinesToEdge(image,rightHeading,0,"right");
-                    drawLinesToEdge(image,leftHeading,1,"left");
-                    drawLinesToEdge(image,backHeading,2,"back");
-                    drawLinesToEdge(image,heading,3,"front");
+                    drawLinesToEdge(image, rightHeading, 0, "right");
+                    drawLinesToEdge(image, leftHeading, 1, "left");
+                    drawLinesToEdge(image, backHeading, 2, "back");
+                    drawLinesToEdge(image, heading, 3, "front");
                 }
 
 
@@ -529,10 +526,10 @@ public class CameraAnalyze {
             Point leftSide = new Point(robotPosition.leftSideX, robotPosition.leftSideY);
 
             // Lines of the robot
-            Line2D leftRobotLine = new Line2D.Double(leftSide.x, leftSide.y, leftSide.x+10000*heading.x, leftSide.y+10000*heading.y);
-            Line2D rightRobotLine = new Line2D.Double(rightSide.x, rightSide.y, rightSide.x+10000*heading.x, rightSide.y+10000*heading.y);
-            line(image,new Point(leftSide.x, -leftSide.y),new Point(leftSide.x+10000*heading.x, -leftSide.y-10000*heading.y),new Scalar(0,255,0),1);
-            line(image,new Point(rightSide.x, -rightSide.y),new Point(rightSide.x+10000*heading.x, -rightSide.y-10000*heading.y),new Scalar(0,255,0),1);
+            Line2D leftRobotLine = new Line2D.Double(leftSide.x, leftSide.y, leftSide.x + 10000 * heading.x, leftSide.y + 10000 * heading.y);
+            Line2D rightRobotLine = new Line2D.Double(rightSide.x, rightSide.y, rightSide.x + 10000 * heading.x, rightSide.y + 10000 * heading.y);
+            line(image, new Point(leftSide.x, -leftSide.y), new Point(leftSide.x + 10000 * heading.x, -leftSide.y - 10000 * heading.y), new Scalar(0, 255, 0), 1);
+            line(image, new Point(rightSide.x, -rightSide.y), new Point(rightSide.x + 10000 * heading.x, -rightSide.y - 10000 * heading.y), new Scalar(0, 255, 0), 1);
 
             // Edge points of the map
 
@@ -540,16 +537,14 @@ public class CameraAnalyze {
             Point topRight = edge.getTopRight();
             Point bottomLeft = edge.getBottomLeft();
             Point bottomRight = edge.getBottomRight();
-            circle(image,new Point(topLeft.x,-topLeft.y),25,new Scalar(255,0,0),1);
-            putText(image,"TopLeft",new Point(topLeft.x,-topLeft.y),FONT_HERSHEY_PLAIN,1,new Scalar(255,0,0));
-            circle(image,new Point(topRight.x,-topRight.y),25,new Scalar(255,0,0),1);
-            putText(image,"TopRight",new Point(topRight.x,-topRight.y),FONT_HERSHEY_PLAIN,1,new Scalar(255,0,0));
-            circle(image,new Point(bottomLeft.x,-bottomLeft.y),25,new Scalar(255,0,0),1);
-            putText(image,"BottomLeft",new Point(bottomLeft.x,-bottomLeft.y),FONT_HERSHEY_PLAIN,1,new Scalar(255,0,0));
-            circle(image,new Point(bottomRight.x,-bottomRight.y),25,new Scalar(255,0,0),1);
-            putText(image,"bottomRight",new Point(bottomRight.x,-bottomRight.y),FONT_HERSHEY_PLAIN,1,new Scalar(255,0,0));
-
-
+            circle(image, new Point(topLeft.x, -topLeft.y), 25, new Scalar(255, 0, 0), 1);
+            putText(image, "TopLeft", new Point(topLeft.x, -topLeft.y), FONT_HERSHEY_PLAIN, 1, new Scalar(255, 0, 0));
+            circle(image, new Point(topRight.x, -topRight.y), 25, new Scalar(255, 0, 0), 1);
+            putText(image, "TopRight", new Point(topRight.x, -topRight.y), FONT_HERSHEY_PLAIN, 1, new Scalar(255, 0, 0));
+            circle(image, new Point(bottomLeft.x, -bottomLeft.y), 25, new Scalar(255, 0, 0), 1);
+            putText(image, "BottomLeft", new Point(bottomLeft.x, -bottomLeft.y), FONT_HERSHEY_PLAIN, 1, new Scalar(255, 0, 0));
+            circle(image, new Point(bottomRight.x, -bottomRight.y), 25, new Scalar(255, 0, 0), 1);
+            putText(image, "bottomRight", new Point(bottomRight.x, -bottomRight.y), FONT_HERSHEY_PLAIN, 1, new Scalar(255, 0, 0));
 
 
             // Lines of the map
@@ -565,25 +560,25 @@ public class CameraAnalyze {
 
             // Looks through all 4 edges, calculates the distance from the two robot sides to the edge,
             // and if the distance found is shorter than the currently shortest distance, it is set as the new shortest distance.
-            for(Line2D edge1 : edges){
-                if(rightRobotLine.intersectsLine(edge1)){
-                    distanceFromRightSideRobotToEdge=distanceBetweenPoints(rightSide,intersection(rightRobotLine, edge1));
-                    circle(image,new Point(intersection(rightRobotLine, edge1).x,-intersection(rightRobotLine, edge1).y),25,new Scalar(255,0,0),1);
-                    putText(image,Integer.toString((int)distanceFromRightSideRobotToEdge),new Point(intersection(rightRobotLine, edge1).x,-intersection(rightRobotLine, edge1).y),FONT_HERSHEY_PLAIN,2,new Scalar(255,0,0));
-                    if(distanceFromRightSideRobotToEdge<shortestDistance){
+            for (Line2D edge1 : edges) {
+                if (rightRobotLine.intersectsLine(edge1)) {
+                    distanceFromRightSideRobotToEdge = distanceBetweenPoints(rightSide, intersection(rightRobotLine, edge1));
+                    circle(image, new Point(intersection(rightRobotLine, edge1).x, -intersection(rightRobotLine, edge1).y), 25, new Scalar(255, 0, 0), 1);
+                    putText(image, Integer.toString((int) distanceFromRightSideRobotToEdge), new Point(intersection(rightRobotLine, edge1).x, -intersection(rightRobotLine, edge1).y), FONT_HERSHEY_PLAIN, 2, new Scalar(255, 0, 0));
+                    if (distanceFromRightSideRobotToEdge < shortestDistance) {
                         shortestDistance = distanceFromRightSideRobotToEdge;
                     }
                 }
-                if(leftRobotLine.intersectsLine(edge1)){
-                    distanceFromLeftSideRobotToEdge=distanceBetweenPoints(leftSide,intersection(leftRobotLine, edge1));
-                    circle(image,new Point(intersection(leftRobotLine, edge1).x,-intersection(leftRobotLine, edge1).y),25,new Scalar(255,0,0),1);
-                    putText(image,Integer.toString((int)distanceFromLeftSideRobotToEdge),new Point(intersection(leftRobotLine, edge1).x,-intersection(leftRobotLine, edge1).y),FONT_HERSHEY_PLAIN,2,new Scalar(255,0,0));
-                    if(distanceFromLeftSideRobotToEdge<shortestDistance){
+                if (leftRobotLine.intersectsLine(edge1)) {
+                    distanceFromLeftSideRobotToEdge = distanceBetweenPoints(leftSide, intersection(leftRobotLine, edge1));
+                    circle(image, new Point(intersection(leftRobotLine, edge1).x, -intersection(leftRobotLine, edge1).y), 25, new Scalar(255, 0, 0), 1);
+                    putText(image, Integer.toString((int) distanceFromLeftSideRobotToEdge), new Point(intersection(leftRobotLine, edge1).x, -intersection(leftRobotLine, edge1).y), FONT_HERSHEY_PLAIN, 2, new Scalar(255, 0, 0));
+                    if (distanceFromLeftSideRobotToEdge < shortestDistance) {
                         shortestDistance = distanceFromLeftSideRobotToEdge;
                     }
                 }
             }
-            putText(image,"Shortest Distance "+direction+" direction: "+Integer.toString((int)shortestDistance),new Point(100,100+i*100),FONT_HERSHEY_PLAIN,2,new Scalar(255,0,0));
+            putText(image, "Shortest Distance " + direction + " direction: " + Integer.toString((int) shortestDistance), new Point(100, 100 + i * 100), FONT_HERSHEY_PLAIN, 2, new Scalar(255, 0, 0));
 
         }
 
@@ -597,8 +592,8 @@ public class CameraAnalyze {
             jFrame.getContentPane().removeAll();
 
             JLabel colorCameraScreen = new JLabel();
-            if(camWidth>width|| camHeight>height){
-                colorCameraScreen.setBounds(0, 0, width, height-200);
+            if (camWidth > width || camHeight > height) {
+                colorCameraScreen.setBounds(0, 0, width, height - 200);
             } else {
                 colorCameraScreen.setBounds(0, 0, camWidth, camHeight);
             }
@@ -636,19 +631,19 @@ public class CameraAnalyze {
             findValues.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    System.out.println("Hue Min: "+hueMin.getValue());
-                    System.out.println("Hue Max: "+hueMax.getValue());
-                    System.out.println("Sat Min: "+satMin.getValue());
-                    System.out.println("Sat Max: "+satMax.getValue());
-                    System.out.println("Val Min: "+valMin.getValue());
-                    System.out.println("Val Max: "+valMax.getValue());
+                    System.out.println("Hue Min: " + hueMin.getValue());
+                    System.out.println("Hue Max: " + hueMax.getValue());
+                    System.out.println("Sat Min: " + satMin.getValue());
+                    System.out.println("Sat Max: " + satMax.getValue());
+                    System.out.println("Val Min: " + valMin.getValue());
+                    System.out.println("Val Max: " + valMax.getValue());
                 }
             });
             buttonsSliders.add(findValues);
 
 
-                mainPanel.setPreferredSize(new Dimension(width, height-130));
-                mainPanel.add(cameraScreen);
+            mainPanel.setPreferredSize(new Dimension(width, height - 130));
+            mainPanel.add(cameraScreen);
             mainPanel.setPreferredSize(new Dimension(width, height - 130));
             mainPanel.add(cameraScreen);
             mainPanel.add(colorCameraScreen);
@@ -692,26 +687,21 @@ public class CameraAnalyze {
                 }
             }
         }
-        public Mat removeglare(Mat image){
-            Mat corrected = new Mat();
-            CLAHE rg = createCLAHE();
-            rg.apply(image, corrected);
-            return corrected;
-        }
+
     }
 
     private Mat clahe(Mat capture) {
         List<Mat> channels = new LinkedList<>();
-        Core.split(capture,channels);
+        Core.split(capture, channels);
         CLAHE clahe = Imgproc.createCLAHE();
-        Size point = new Size(new Point(1,1));
+        Size point = new Size(new Point(1, 1));
         clahe.setClipLimit(4);
         clahe.setTilesGridSize(point);
         //System.out.println(capture);
         Mat destimage = new Mat();
-        clahe.apply(channels.get(0),destimage);
-        Core.merge(channels,capture);
-        cvtColor(capture,destimage, 1);
+        clahe.apply(channels.get(0), destimage);
+        Core.merge(channels, capture);
+        cvtColor(capture, destimage, 1);
 
         return destimage;
     }

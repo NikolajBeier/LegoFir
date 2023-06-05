@@ -72,7 +72,7 @@ public class ConnectToRobot {
     }
     public void connectToRobot(String ip){
         connecting = new Thread(new Runnable() {
-                String returnValue;
+               // String returnValue;
                 @Override
                 public void run() {
                     try{
