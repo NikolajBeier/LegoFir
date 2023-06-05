@@ -562,12 +562,14 @@ public class CameraAnalyze {
         List<Mat> channels = new LinkedList<>();
         Core.split(capture,channels);
         CLAHE clahe = Imgproc.createCLAHE();
-        clahe.setClipLimit(0);
+        Size point = new Size(new Point(1,1));
+        clahe.setClipLimit(4);
+        clahe.setTilesGridSize(point);
         //System.out.println(capture);
         Mat destimage = new Mat();
         clahe.apply(channels.get(0),destimage);
         Core.merge(channels,capture);
-        //cvtColor(capture,destimage, 0);
+        cvtColor(capture,destimage, 1);
 
         return destimage;
     }
