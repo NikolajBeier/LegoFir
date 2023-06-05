@@ -50,10 +50,10 @@ public class Launcher implements Program {
         dude.setHarvester(harvester);
         dude.setBalldropper(balldropper);
         dude.setDefaultSpeedHarvester(1440);
-        dude.setDefaultSpeedBallDropper(720);
+        dude.setDefaultSpeedBallDropper(5000);
         dude.setDefaultAccelerationHarvester(1000);
         dude.setDefaultAccelerationWheel(50);
-        dude.setDefaultAccelerationBallDropper(1000);
+        dude.setDefaultAccelerationBallDropper(5000);
         dude.setDefaultSpeedWheel(200);
         dude.setLaunched(true);
 
@@ -72,8 +72,9 @@ public class Launcher implements Program {
 
         bArray = new MyBehavior[]{
                 new DriveTowardsBall(dude),
-                new AvoidCollision(dude),
-                //new StopBehaviour(),
+                 new AvoidCollision(dude),
+                new StopBehaviour(),
+                //new DropBalls(dude)
         };
         arby = new Arbitrator(bArray);
 
