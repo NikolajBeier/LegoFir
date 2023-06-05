@@ -567,7 +567,10 @@ public class CameraAnalyze {
             Line2D.Double[] edges = {new Line2D.Double(topLeft.x, topLeft.y, topRight.x, topRight.y),
                     new Line2D.Double(bottomLeft.x, bottomLeft.y, bottomRight.x, bottomRight.y),
                     new Line2D.Double(topLeft.x, topLeft.y, bottomLeft.x, bottomLeft.y),
-                    new Line2D.Double(topRight.x, topRight.y, bottomRight.x, bottomRight.y)};
+                    new Line2D.Double(topRight.x, topRight.y, bottomRight.x, bottomRight.y),
+                    new Line2D.Double(dude.getMap().getObstacle().getRightPoint().x, dude.getMap().getObstacle().getRightPoint().y, dude.getMap().getObstacle().getLeftPoint().x, dude.getMap().getObstacle().getLeftPoint().y),
+                    new Line2D.Double(dude.getMap().getObstacle().getTopPoint().x, dude.getMap().getObstacle().getTopPoint().y, dude.getMap().getObstacle().getBottomPoint().x, dude.getMap().getObstacle().getBottomPoint().y)
+            };
 
             double distanceFromRightSideRobotToEdge = Double.MAX_VALUE;
             double distanceFromLeftSideRobotToEdge = Double.MAX_VALUE;

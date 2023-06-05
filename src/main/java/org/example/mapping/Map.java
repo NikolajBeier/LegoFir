@@ -129,7 +129,10 @@ public class Map {
         Line2D.Double[] edges = {new Line2D.Double(topLeft.x, topLeft.y, topRight.x, topRight.y),
                 new Line2D.Double(bottomLeft.x, bottomLeft.y, bottomRight.x, bottomRight.y),
                 new Line2D.Double(topLeft.x, topLeft.y, bottomLeft.x, bottomLeft.y),
-                new Line2D.Double(topRight.x, topRight.y, bottomRight.x, bottomRight.y)};
+                new Line2D.Double(topRight.x, topRight.y, bottomRight.x, bottomRight.y),
+                new Line2D.Double(obstacle.getRightPoint().x, obstacle.getRightPoint().y, obstacle.getLeftPoint().x, obstacle.getLeftPoint().y),
+                new Line2D.Double(obstacle.getTopPoint().x, obstacle.getTopPoint().y, obstacle.getBottomPoint().x, obstacle.getBottomPoint().y)
+        };
 
         double distanceFromRightSideRobotToEdge = Double.MAX_VALUE;
         double distanceFromLeftSideRobotToEdge = Double.MAX_VALUE;
