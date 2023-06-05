@@ -112,8 +112,6 @@ public class AvoidCollision implements MyBehavior {
                 collision = checkForBackCollision();
                 break;
         }
-
-        System.out.println("AvoidCollision.takeControl() = " + collision);
         return collision;
     }
 

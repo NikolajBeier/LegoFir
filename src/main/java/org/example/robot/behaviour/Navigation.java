@@ -11,14 +11,15 @@ import static org.example.utility.Geometry.distanceBetweenPoints;
 
 
 public class Navigation {
-    double currentAngle;
+    double currentAngle=0;
     Legofir dude;
-     public double distanceToPoint;
-
-    double angleToNextPoint;
-
-    public void checkDirection( TennisBall nextPoint, Legofir dude) {
+    double distanceToPoint=0;
+    double angleToNextPoint=0;
+    public Navigation(Legofir dude){
         this.dude=dude;
+    }
+
+    public void checkDirection(TennisBall nextPoint) {
 
         RobotPosition currentPosition = dude.getMap().getRobotPosition();
 
@@ -27,7 +28,7 @@ public class Navigation {
         int nextPointY = nextPoint.getY();
 
         currentAngle = dude.getAngle();
-        distanceToPoint = distanceBetweenPoints(new Point(currentPosition.getX(), currentPosition.getY()), new Point(nextPointX, nextPointY));
+        distanceToPoint = distanceBetweenPoints(new Point(currentPosition.getFrontSideX(), currentPosition.getFrontSideY()), new Point(nextPointX, nextPointY));
 
         // vektor fra currentPosition(x,y) til (nextBallX,nextBallY)
         Point Pointvector = new Point(nextPointX - currentPosition.getX(), nextPointY - currentPosition.getY());
@@ -65,10 +66,10 @@ public class Navigation {
                 currentAngle = dude.getAngle();
                 //System.out.println("Turning Left. CurrentAngle = " + currentAngle);
             }
+            dude.stopWheels();
             // Stop turning
             logger.info("time: "+System.currentTimeMillis()+". Turning left ended - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
             //System.out.println("turning left: "+currentAngle + " " + angleToNextBall);
-            dude.stopWheels();
         }
     }
     private boolean ballIsLeftOfRobotHeading() {
@@ -113,14 +114,19 @@ public class Navigation {
                 currentAngle = dude.getAngle();
                 //System.out.println("Turning Right. CurrentAngle = " + currentAngle);
             }
+            dude.stopWheels();
+
             logger.info("time: "+System.currentTimeMillis()+". Turning right ended - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
             //System.out.println("turning right: "+currentAngle + " " + angleToNextBall);
 
-            dude.stopWheels();
         }
     }
     private boolean isApproximatelySameAngle(){
-        return ((Math.abs(currentAngle-angleToNextPoint) < 0.25) || (currentAngle>3 && angleToNextPoint<-3) || (currentAngle<-3 && angleToNextPoint>3));
+        return ((Math.abs(currentAngle-angleToNextPoint) < 0.2) || (currentAngle>3 && angleToNextPoint<-3) || (currentAngle<-3 && angleToNextPoint>3));
+    }
+
+    public double getDistanceToPoint() {
+        return distanceToPoint;
     }
 }
 
