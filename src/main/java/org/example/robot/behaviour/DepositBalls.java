@@ -8,17 +8,25 @@ public class DepositBalls implements MyBehavior {
     Legofir dude;
     boolean suppressed = false;
 
-    Navigation navigation = new Navigation(dude);
+    Navigation navigation;
 
     public DepositBalls(Legofir dude) {
         this.dude = dude;
+        navigation = new Navigation(dude);
     }
 
-
+    //Todo when robot reaches point it takes command and turns ass towards exit and starts backing up
     @Override
     public boolean takeControl() {
-        return false;
-        //Todo when robot reaches point it takes command and turns ass towards exit and starts backing up
+// makes a square around the waypoint so that when the robot enters the square and there are no more balls on the field DepositBalls take control
+        if (dude.getMap().getRobotPosition().getX() + 25 > dude.getMap().getWayPoint().x&&
+                dude.getMap().getRobotPosition().getX() - 25 < dude.getMap().getWayPoint().x &&
+                dude.getMap().getRobotPosition().getY() + 25 > dude.getMap().getWayPoint().y &&
+                dude.getMap().getRobotPosition().getY() - 25 < dude.getMap().getWayPoint().y &&
+                dude.getMap().getBalls().isEmpty() && dude.getMap().getOrangeBalls().isEmpty()) {
+            return true;
+        } else
+            return false;
     }
 
     @Override
@@ -27,8 +35,8 @@ public class DepositBalls implements MyBehavior {
         dude.setCurrentBehaviourName(BehaviorName);
         Point point = dude.getMap().getDepositPoint().getCenterRight();
         //Todo create real point
-        point.x = point.x+50;
-        while(!suppressed){
+        point.x = point.x + 50;
+        while (!suppressed) {
             navigation.checkDirection(point);
             dude.moveBackward();
         }

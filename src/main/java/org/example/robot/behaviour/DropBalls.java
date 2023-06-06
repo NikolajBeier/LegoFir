@@ -9,11 +9,13 @@ public class DropBalls implements MyBehavior {
     String BehaviorName = "DropBalls";
     boolean suppressed = false;
     boolean stopCondition = false;
+    Navigation navigation;
 
     int test = 1;
 
     public DropBalls(Legofir dude) {
         this.dude = dude;
+        navigation = new Navigation(dude);
     }
 
 
@@ -22,6 +24,8 @@ public class DropBalls implements MyBehavior {
         suppressed = false;
         dude.setCurrentBehaviourName(BehaviorName);
         if(!suppressed){
+
+            navigation.checkDirection(dude.getMap().getDepositPoint().getCenterRight());
             dude.openCheeks();
             try {
                 sleep(10000);
@@ -46,7 +50,15 @@ public class DropBalls implements MyBehavior {
 
     @Override
     public boolean takeControl() {
-        return (test > 0);
+        if (dude.getMap().getRobotPosition().getX() + 25 > dude.getMap().getWayPoint().x&&
+                dude.getMap().getRobotPosition().getX() - 25 < dude.getMap().getWayPoint().x &&
+                dude.getMap().getRobotPosition().getY() + 25 > dude.getMap().getWayPoint().y &&
+                dude.getMap().getRobotPosition().getY() - 25 < dude.getMap().getWayPoint().y &&
+                dude.getMap().getBalls().isEmpty() && dude.getMap().getOrangeBalls().isEmpty()) {
+            return true;
+        } else
+            return false;
+    }
     }
 
-}
+

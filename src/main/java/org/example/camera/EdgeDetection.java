@@ -62,6 +62,7 @@ public class EdgeDetection {
                      int width = edgeRect.width;
                      dude.getMap().setEdge(topLeft, topRight, bottomLeft, bottomRight, height, width);
                      dude.getMap().calcDepositPoints();
+                     dude.getMap().setWayPoint(dude.getMap().getDepositPoint().getCenterRight().x-100, dude.getMap().getDepositPoint().getCenterRight().y);
                      return edgeRect;
                 }
 

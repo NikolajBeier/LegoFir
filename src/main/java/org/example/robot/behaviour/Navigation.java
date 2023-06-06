@@ -78,13 +78,6 @@ public class Navigation {
         Point Pointvector = new Point(nextPointX - currentPosition.getX(), nextPointY - currentPosition.getY());
         // Vinkel af vektor...
         angleToNextPoint = Geometry.degreesOfVectorInRadians(Pointvector.x, Pointvector.y);
-/*
-            System.out.println("NextBallX: " + nextBallX + ", NextBallY: " + nextBallY);
-            System.out.println("CurrentPositionX: " + currentPosition.getX() + ", CurrentPositionY: " + currentPosition.getY());
-            System.out.println("RobotToBallVectorX " + ballVector.x + ", RobotToBallVectorY" + ballVector.y);
-            System.out.println("Current angle: " + currentAngle);
-            System.out.println("Angle to next ball: " + angleToNextBall);
- */
 
 
         //if current angle is not close to angle to next ball

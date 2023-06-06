@@ -1,5 +1,6 @@
 package org.example.mapping;
 
+import lejos.robotics.navigation.Waypoint;
 import org.example.utility.Geometry;
 import org.opencv.core.Point;
 
@@ -20,20 +21,31 @@ public class Map {
     List<TennisBall> orangeBalls = new ArrayList<>();
 
     DepositPoint depositPoint = new DepositPoint(this.edge);
+
+    public Point getWayPoint() {
+        return wayPoint;
+    }
+
+    public void setWayPoint(double x, double y) {
+        this.wayPoint.x = x;
+        this.wayPoint.y = y;
+    }
+
+    Point wayPoint;
+
     public Map(int x, int y) {
         this.x = x;
         this.y = y;
-        this.size = x*y;
+        this.size = x * y;
     }
 
 
-
-    public void addBallCord(int x, int y){
-        TennisBall tennisball = new TennisBall(x,y);
+    public void addBallCord(int x, int y) {
+        TennisBall tennisball = new TennisBall(x, y);
         balls.add(tennisball);
     }
 
-    public void setRobotPosition(int x, int y, Point heading){
+    public void setRobotPosition(int x, int y, Point heading) {
         robotPosition.x = x;
         robotPosition.y = y;
         robotPosition.heading = heading;
@@ -45,30 +57,31 @@ public class Map {
 
     public TennisBall getNextBall() {
         // find the tennis ball closest to the robot
-        TennisBall closestBall = new TennisBall(0,0);
+        TennisBall closestBall = new TennisBall(0, 0);
         double closestDistance = Integer.MAX_VALUE;
 
         //  checks if there is a orange ball sets it as closestball
         if (!orangeBalls.isEmpty()) {
-            for (TennisBall orangeTennisBall :orangeBalls){
-                closestBall = orangeTennisBall ;
+            for (TennisBall orangeTennisBall : orangeBalls) {
+                closestBall = orangeTennisBall;
             }
-        }else{
-            for(TennisBall tennisball : balls) {
-            // Distance between two points:
-            double distance = Math.sqrt((tennisball.x-getRobotPosition().frontSideX)*(tennisball.x-getRobotPosition().frontSideX)+(tennisball.y-getRobotPosition().frontSideY)*(tennisball.y-getRobotPosition().frontSideY));
-            double robotAngle = getRobotPosition().getHeadingInRadians();
-            double ballAngle = Geometry.degreesOfVectorInRadians(tennisball.x,tennisball.y);
+        } else {
+            for (TennisBall tennisball : balls) {
+                // Distance between two points:
+                double distance = Math.sqrt((tennisball.x - getRobotPosition().frontSideX) * (tennisball.x - getRobotPosition().frontSideX) + (tennisball.y - getRobotPosition().frontSideY) * (tennisball.y - getRobotPosition().frontSideY));
+                double robotAngle = getRobotPosition().getHeadingInRadians();
+                double ballAngle = Geometry.degreesOfVectorInRadians(tennisball.x, tennisball.y);
             /*
             // checks if ball is right next to robot and chooses another ball
             if(distance<closestDistance && distance<100 && ballAngle<robotAngle+0.25 || ballAngle>robotAngle-0.25 ) {
 
                 //TODO skal lave noget kode der sørger for at robotten ikke kører ind i bolden
-            } else*/ if(distance<closestDistance  ) {
-                closestDistance = distance;
-                closestBall = tennisball;
+            } else*/
+                if (distance < closestDistance) {
+                    closestDistance = distance;
+                    closestBall = tennisball;
+                }
             }
-        }
         }
         /*
         System.out.println("closest distance: "+closestDistance);
@@ -88,22 +101,24 @@ public class Map {
     public void setBalls(List<TennisBall> newList) {
         balls = newList;
     }
+
     public void setOrangeBalls(List<TennisBall> newOrangeList) {
         orangeBalls = newOrangeList;
     }
 
 
-
-    public void calcDepositPoints(){
+    public void calcDepositPoints() {
         this.depositPoint.calcExit();
         this.depositPoint.setCoords();
     }
+
     public Edge getEdge() {
         return edge;
     }
 
     /**
      * Looks at two vectors from the two sides of the robot with the same heading as the robot. Returns the shortest distance on either of these vectors to the edge of the map.
+     *
      * @return
      */
     public double distanceToEdge(Point heading) {
@@ -116,8 +131,8 @@ public class Map {
         Point leftSide = new Point(robotPosition.leftSideX, robotPosition.leftSideY);
 
         // Lines of the robot
-        Line2D leftRobotLine = new Line2D.Double(leftSide.x, leftSide.y, leftSide.x+10000*heading.x, leftSide.y+10000*heading.y);
-        Line2D rightRobotLine = new Line2D.Double(rightSide.x, rightSide.y, rightSide.x+10000*heading.x, rightSide.y+10000*heading.y);
+        Line2D leftRobotLine = new Line2D.Double(leftSide.x, leftSide.y, leftSide.x + 10000 * heading.x, leftSide.y + 10000 * heading.y);
+        Line2D rightRobotLine = new Line2D.Double(rightSide.x, rightSide.y, rightSide.x + 10000 * heading.x, rightSide.y + 10000 * heading.y);
 
         // Edge points of the map
 
@@ -139,16 +154,16 @@ public class Map {
 
         // Looks through all 4 edges, calculates the distance from the two robot sides to the edge,
         // and if the distance found is shorter than the currently shortest distance, it is set as the new shortest distance.
-        for(Line2D edge : edges){
-            if(rightRobotLine.intersectsLine(edge)){
-                distanceFromRightSideRobotToEdge=distanceBetweenPoints(rightSide,intersection(rightRobotLine, edge));
-                if(distanceFromRightSideRobotToEdge<shortestDistance){
+        for (Line2D edge : edges) {
+            if (rightRobotLine.intersectsLine(edge)) {
+                distanceFromRightSideRobotToEdge = distanceBetweenPoints(rightSide, intersection(rightRobotLine, edge));
+                if (distanceFromRightSideRobotToEdge < shortestDistance) {
                     shortestDistance = distanceFromRightSideRobotToEdge;
                 }
             }
-            if(leftRobotLine.intersectsLine(edge)){
-                distanceFromLeftSideRobotToEdge=distanceBetweenPoints(leftSide,intersection(leftRobotLine, edge));
-                if(distanceFromLeftSideRobotToEdge<shortestDistance){
+            if (leftRobotLine.intersectsLine(edge)) {
+                distanceFromLeftSideRobotToEdge = distanceBetweenPoints(leftSide, intersection(leftRobotLine, edge));
+                if (distanceFromLeftSideRobotToEdge < shortestDistance) {
                     shortestDistance = distanceFromLeftSideRobotToEdge;
                 }
             }
@@ -156,9 +171,12 @@ public class Map {
 
         return shortestDistance;
     }
-    public DepositPoint getDepositPoint(){
+
+    public DepositPoint getDepositPoint() {
         return this.depositPoint;
     }
+
+
     public RobotPosition getRobotPosition() {
         return robotPosition;
     }
@@ -166,8 +184,10 @@ public class Map {
     public List<TennisBall> getBalls() {
         return balls;
     }
-    public List<TennisBall> getOrangeBalls(){
+
+    public List<TennisBall> getOrangeBalls() {
         return orangeBalls;
     }
+
 
 }

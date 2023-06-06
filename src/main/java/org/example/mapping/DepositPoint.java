@@ -64,4 +64,9 @@ public class DepositPoint {
     public Point getRightExitTopRight() {
         return rightExitTopRight;
     }
+
+    public Point getCenterRight() {
+        return centerRight;
+    }
 }
+
