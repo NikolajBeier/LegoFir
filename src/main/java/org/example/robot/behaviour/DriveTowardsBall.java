@@ -43,7 +43,8 @@ public class DriveTowardsBall implements MyBehavior {
             TennisBall nextBall = dude.getMap().getNextBall();
             navigation.driveTowardsBall(nextBall, suppressed);
         }
-
+        dude.stopWheels();
+        dude.stopHarvester();
     }
     @Override
     public void suppress(){

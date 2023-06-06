@@ -32,8 +32,10 @@ public class Navigation {
 
         // vektor fra currentPosition(x,y) til (nextBallX,nextBallY)
         Point Pointvector = new Point(nextPointX - currentPosition.getX(), nextPointY - currentPosition.getY());
-        // Vinkel af vektor...
+        // Vinkel af vektor..x.
         angleToNextPoint = Geometry.degreesOfVectorInRadians(Pointvector.x, Pointvector.y);
+        System.out.println("angleToNextPoint = " + angleToNextPoint);
+        System.out.println("currentAngle = " + currentAngle);
 
         if (!isApproximatelySameAngle()) {
             //turn towards ball
@@ -120,18 +122,13 @@ public class Navigation {
     }
 
     public void driveTowardsBall(TennisBall nextBall,boolean suppressed) {
-        while (!suppressed) {
-            turnTowards(nextBall);
-            if(!isMovingForward()){
-                dude.moveForward();
-            }
+        turnTowards(nextBall);
+        dude.moveForward();
 
-            if (closeToBall()) {
-                pickUpBall(suppressed);
-            }
+        if (closeToBall(nextBall)) {
+            pickUpBall(suppressed);
         }
-        dude.stopWheels();
-        dude.stopHarvester();
+
     }
 
     private void pickUpBall(boolean suppressed) {
@@ -145,7 +142,9 @@ public class Navigation {
         dude.stopHarvester();
     }
 
-    private boolean closeToBall() {
+    private boolean closeToBall(TennisBall nextBall) {
+        distanceToPoint=distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(),dude.getMap().getRobotPosition().getFrontSideY()),new Point(nextBall.getX(),nextBall.getY()));
+        System.out.println("distance to ball: "+distanceToPoint);
         return distanceToPoint < 50;
     }
 
