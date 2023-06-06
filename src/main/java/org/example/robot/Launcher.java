@@ -73,6 +73,7 @@ public class Launcher implements Program {
                 new DepositBalls(dude),
                 new DriveTowardsBall(dude),
                 new AvoidCollision(dude),
+                new DriveTowardsExit(dude),
                 //new StopBehaviour(),
         };
         arby = new Arbitrator(bArray);
