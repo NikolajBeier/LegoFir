@@ -23,12 +23,14 @@ public class DropBalls implements MyBehavior {
         dude.setCurrentBehaviourName(BehaviorName);
         if(!suppressed){
             dude.openCheeks();
+            dude.beginHarvester();
             try {
-                sleep(10000);
+                sleep(40000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             dude.closeCheeks();
+            dude.stopHarvester();
             dude.closePorts();
 
         }
@@ -46,7 +48,8 @@ public class DropBalls implements MyBehavior {
 
     @Override
     public boolean takeControl() {
-        return (test > 0);
+        /// needs to be somehthing else
+        return true;
     }
 
 }

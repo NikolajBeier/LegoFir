@@ -50,16 +50,19 @@ public class Launcher implements Program {
         dude.setHarvester(harvester);
         dude.setBalldropper(balldropper);
         dude.setDefaultSpeedHarvester(1440);
-        dude.setDefaultSpeedBallDropper(720);
+        dude.setDefaultSpeedBallDropper(5000);
         dude.setDefaultAccelerationHarvester(1000);
-        dude.setDefaultAccelerationWheel(400);
-        dude.setDefaultAccelerationBallDropper(1000);
-        dude.setDefaultSpeedWheel(250);
+        dude.setDefaultAccelerationWheel(50);
+        dude.setDefaultAccelerationBallDropper(5000);
+        dude.setDefaultSpeedWheel(200);
         dude.setLaunched(true);
 
+        /*
         Audio sound = ev3.getAudio();
         sound.setVolume(15);
         themes.ImperialTheme(ev3);
+
+         */
 
 
         System.out.println("Når vi her?");
@@ -70,8 +73,9 @@ public class Launcher implements Program {
         bArray = new MyBehavior[]{
                 new DriveTowardsBall(dude),
                 new AvoidCollision(dude),
-                new DriveTowardsExit(dude),
-                //new StopBehaviour(),
+                new StopBehaviour(),
+                new DriveTowardsExit(dude)
+                //new DropBalls(dude)
         };
         arby = new Arbitrator(bArray);
 
