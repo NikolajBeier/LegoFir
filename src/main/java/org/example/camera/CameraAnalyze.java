@@ -347,55 +347,62 @@ public class CameraAnalyze {
 
                 // draw rectangles
 
+                // Scalar definitions
+                
+                Scalar redcolor = new Scalar(0,0,255);
+                Scalar bluecolor = new Scalar(255,0,0);
+                Scalar greencolor = new Scalar(0,255,0);
+
                 // Ball rects
+
                 for (Rect boundingRect : orangeBallRects){
-                    Imgproc.rectangle(image,boundingRect.tl(),boundingRect.br(),new Scalar(0,0,255, 1));
-                    putText(image, "Orange ball",boundingRect.tl(), FONT_HERSHEY_SIMPLEX,1,new Scalar(0,0,255),2);
+                    Imgproc.rectangle(image,boundingRect.tl(),boundingRect.br(),redcolor, 1);
+                    putText(image, "Orange ball",boundingRect.tl(), FONT_HERSHEY_SIMPLEX,1,redcolor,2);
                 }
 
                 for (Rect boundingRect : ballRects) {
-                    Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), new Scalar(0, 0, 255), 1);
-                    putText(image, "Ball", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+                    Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), redcolor, 1);
+                    putText(image, "Ball", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, redcolor, 2);
                 }
 
                 // Edge rects
                 if(edge!=null){
-                    Imgproc.rectangle(image, edge.tl(), edge.br(), new Scalar(0, 0, 255), 1);
-                    putText(image, "Edge", edge.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+                    Imgproc.rectangle(image, edge.tl(), edge.br(), redcolor, 1);
+                    putText(image, "Edge", edge.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, redcolor, 2);
                 }
                 if(edgeDetectionOn){
                     Point tr = new Point(dude.getMap().getDepositPoint().getRightExitTopRight().x, (-1)*dude.getMap().getDepositPoint().getRightExitTopRight().y);
                     Point bl = new Point(dude.getMap().getDepositPoint().getRightExitBottomLeft().x, (-1)*dude.getMap().getDepositPoint().getRightExitBottomLeft().y);
                     Imgproc.rectangle(image,tr,bl,new Scalar(255,0,0));
-                    putText(image, "Exit Right", tr, Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(255, 0, 0), 2);
+                    putText(image, "Exit Right", tr, Imgproc.FONT_HERSHEY_SIMPLEX, 1, bluecolor, 2);
                     tr = new Point(dude.getMap().getDepositPoint().getLeftExitTopRight().x,(-1)*dude.getMap().getDepositPoint().getLeftExitTopRight().y);
                     bl = new Point(dude.getMap().getDepositPoint().getLeftExitBottomLeft().x,(-1)*dude.getMap().getDepositPoint().getLeftExitBottomLeft().y);
 
                     Imgproc.rectangle(image,tr,bl,new Scalar(0,255,0));
-                    putText(image, "Exit Left", tr, Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 255, 0), 2);
+                    putText(image, "Exit Left", tr, Imgproc.FONT_HERSHEY_SIMPLEX, 1, greencolor, 2);
                 }
 
                 // Blue, green and robot rects
                 for(Rect boundingRect : blue) {
-                    Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), new Scalar(0, 0, 255), 1);
-                    putText(image, "blue", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+                    Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), redcolor, 1);
+                    putText(image, "blue", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, redcolor, 2);
                 }
                 for(Rect boundingRect : green) {
-                    Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), new Scalar(0, 0, 255), 1);
-                    putText(image, "green", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+                    Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), redcolor, 1);
+                    putText(image, "green", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1,redcolor, 2);
                 }
                 for(Rect boundingRect : robot) {
-                    Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), new Scalar(0, 0, 255), 1);
-                    putText(image, "robot", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+                    Imgproc.rectangle(image, boundingRect.tl(), boundingRect.br(), redcolor, 1);
+                    putText(image, "robot", boundingRect.tl(), Imgproc.FONT_HERSHEY_SIMPLEX, 1, redcolor, 2);
                 }
                 // back and front points of robot
                 Point front = new Point(dude.getMap().getRobotPosition().getFrontSideX(), -dude.getMap().getRobotPosition().getFrontSideY());
-                Imgproc.circle(image, front, 1, new Scalar(0, 0, 255), -1);
-                Imgproc.putText(image, "Front", front, Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+                Imgproc.circle(image, front, 1, redcolor, -1);
+                Imgproc.putText(image, "Front", front, Imgproc.FONT_HERSHEY_SIMPLEX, 1, redcolor, 2);
 
                 Point back = new Point(dude.getMap().getRobotPosition().getBackSideX(), -dude.getMap().getRobotPosition().getBackSideY());
-                Imgproc.circle(image, back, 1, new Scalar(0, 0, 255), -1);
-                Imgproc.putText(image, "Back", back, Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 2);
+                Imgproc.circle(image, back, 1, redcolor, -1);
+                Imgproc.putText(image, "Back", back, Imgproc.FONT_HERSHEY_SIMPLEX, 1, redcolor, 2);
 
 
                 if(!green.isEmpty() && !blue.isEmpty()) {
