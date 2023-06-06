@@ -12,12 +12,14 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-public class WASDController implements Program{
+public class WASDController implements Program {
     RemoteEV3 ev3;
     JFrame jFrame = new JFrame();
-    public WASDController(RemoteEV3 ev3){
+
+    public WASDController(RemoteEV3 ev3) {
         this.ev3 = ev3;
     }
+
     public void EV3Controller() throws Exception {
         jFrame.removeAll();
         jFrame.revalidate();
@@ -25,8 +27,8 @@ public class WASDController implements Program{
         Audio sound = ev3.getAudio();
         sound.systemSound(0);
         RMIRegulatedMotor a = ev3.createRegulatedMotor("A", 'L');
-        RMIRegulatedMotor b =ev3.createRegulatedMotor("D", 'L');
-        RMIRegulatedMotor harvester =ev3.createRegulatedMotor("B", 'M');
+        RMIRegulatedMotor b = ev3.createRegulatedMotor("D", 'L');
+        RMIRegulatedMotor harvester = ev3.createRegulatedMotor("B", 'M');
         harvester.setAcceleration(1000);
         a.setAcceleration(1000);
         b.setAcceleration(1000);
@@ -35,8 +37,8 @@ public class WASDController implements Program{
         b.setSpeed(1080);
         JLabel jLabel = new JLabel("Hola");
 
-        JSlider jSpeed = new JSlider(JSlider.HORIZONTAL, 0,7200, 1080);
-        JSlider jAcc = new JSlider(JSlider.HORIZONTAL, 0,7200, 1080);
+        JSlider jSpeed = new JSlider(JSlider.HORIZONTAL, 0, 7200, 1080);
+        JSlider jAcc = new JSlider(JSlider.HORIZONTAL, 0, 7200, 1080);
         jSpeed.setMinorTickSpacing(10);
         jAcc.setMinorTickSpacing(10);
         Hashtable<Integer, JLabel> labels = new Hashtable<>();
@@ -53,11 +55,11 @@ public class WASDController implements Program{
         jSpeed.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                try{
+                try {
                     harvester.setSpeed(jSpeed.getValue());
                     a.setSpeed(jSpeed.getValue());
                     b.setSpeed(jSpeed.getValue());
-                }catch(Exception j){
+                } catch (Exception j) {
                     j.printStackTrace();
                 }
             }
@@ -65,11 +67,11 @@ public class WASDController implements Program{
         jAcc.addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                try{
+                try {
                     harvester.setAcceleration(jAcc.getValue());
                     a.setAcceleration(jAcc.getValue());
                     b.setAcceleration(jAcc.getValue());
-                }catch(Exception j){
+                } catch (Exception j) {
                     j.printStackTrace();
                 }
             }
@@ -92,7 +94,7 @@ public class WASDController implements Program{
                     a.close();
                     b.close();
                     harvester.close();
-                }catch(Exception j){
+                } catch (Exception j) {
                     j.printStackTrace();
                 }
                 System.exit(0);
@@ -103,7 +105,7 @@ public class WASDController implements Program{
         jFrame.add(jSpeed);
         jFrame.add(jAcc);
         jFrame.add(controlRobot);
-        jButton.setPreferredSize(new Dimension(100,50));
+        jButton.setPreferredSize(new Dimension(100, 50));
         jFrame.add(jButton);
         jFrame.addKeyListener(new KeyAdapter() {
             boolean isUpPressed = false;
@@ -112,6 +114,7 @@ public class WASDController implements Program{
             boolean isRightPressed = false;
             boolean singleMovement = false;
             boolean multiMovement = false;
+
             @Override
             public void keyPressed(KeyEvent e) {
                 switch (e.getKeyCode()) {
@@ -121,7 +124,7 @@ public class WASDController implements Program{
                     case KeyEvent.VK_RIGHT -> isRightPressed = true;
                 }
                 try {
-                    if(!multiMovement) {
+                    if (!multiMovement) {
                         if (isUpPressed && isRightPressed) {
                             jLabel.setText("Fremad + højre");
                             a.backward();
@@ -134,7 +137,7 @@ public class WASDController implements Program{
                             a.forward();
                         }
                         multiMovement = true;
-                    } else if(!singleMovement) {
+                    } else if (!singleMovement) {
                         a.setSpeed(jSpeed.getValue());
                         b.setSpeed(jSpeed.getValue());
                         if (isUpPressed) {
@@ -156,10 +159,11 @@ public class WASDController implements Program{
                         }
                         singleMovement = true;
                     }
-                }catch(Exception j) {
+                } catch (Exception j) {
                     j.printStackTrace();
                 }
             }
+
             @Override
             public void keyReleased(KeyEvent e) {
                 switch (e.getKeyCode()) {
@@ -189,17 +193,18 @@ public class WASDController implements Program{
                         isRightPressed = false;
                     }
                 }
-            }});
+            }
+        });
 
         jFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                if(JOptionPane.showConfirmDialog(null, "Shutdown robot connection?")==0){
+                if (JOptionPane.showConfirmDialog(null, "Shutdown robot connection?") == 0) {
                     try {
                         a.close();
                         b.close();
                         harvester.close();
-                    }catch(Exception j){
+                    } catch (Exception j) {
                         j.printStackTrace();
                     }
                     System.exit(0);

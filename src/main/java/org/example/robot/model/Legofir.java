@@ -191,16 +191,10 @@ public class Legofir {
 
     public void openCheeks(){
         try{
-            balldropper.rotate(180);
+            balldropper.backward();
         } catch (RemoteException e) {
             stopAll();
         }
-        try {
-            sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        stopBallDropper();
     }
 
     public void closeCheeks(){

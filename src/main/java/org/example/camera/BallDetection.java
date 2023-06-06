@@ -38,14 +38,12 @@ public class BallDetection {
     int lMax = 255;*/
 
 
-
-
     public List<Rect> detect(Mat image, Legofir dude) {
 
         List<Rect> balls = new ArrayList<>();
 
         Imgproc.cvtColor(image, hlsImage, Imgproc.COLOR_BGR2HLS);
-        Core.inRange(hlsImage,new Scalar(hMin,lMin,sMin),new Scalar(hMax,lMax,sMax),whiteMask);
+        Core.inRange(hlsImage, new Scalar(hMin, lMin, sMin), new Scalar(hMax, lMax, sMax), whiteMask);
 
         // init
         ArrayList<MatOfPoint> whiteContour = new ArrayList<>();
@@ -57,16 +55,16 @@ public class BallDetection {
         //if (dude != null)
         //dude.getMap().removeAllBalls();
 
-        if(!whiteContour.isEmpty()){
-            for(MatOfPoint contour : whiteContour){
-                if(Imgproc.contourArea(contour) > 200&& Imgproc.contourArea(contour)<400){
+        if (!whiteContour.isEmpty()) {
+            for (MatOfPoint contour : whiteContour) {
+                if (Imgproc.contourArea(contour) > 200 && Imgproc.contourArea(contour) < 400) {
                     Rect boundingRect = Imgproc.boundingRect(contour);
                     balls.add(boundingRect);
                     //dude.getMap().addBallCord((int)(boundingRect.x+boundingRect.width*0.5), (int)(boundingRect.y+ boundingRect.height*0.5));
                 }
             }
         }
-        if(true) {
+        if (true) {
             dude.addBalls(balls);
         }
         return balls;

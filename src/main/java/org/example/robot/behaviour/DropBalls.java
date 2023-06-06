@@ -27,12 +27,14 @@ public class DropBalls implements MyBehavior {
 
             navigation.checkDirection(dude.getMap().getDepositPoint().getCenterRight());
             dude.openCheeks();
+            dude.beginHarvester();
             try {
-                sleep(10000);
+                sleep(40000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             dude.closeCheeks();
+            dude.stopHarvester();
             dude.closePorts();
 
         }
