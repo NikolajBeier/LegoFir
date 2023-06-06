@@ -70,13 +70,14 @@ public class Launcher implements Program {
     public void launchRobot() {
 
         bArray = new MyBehavior[]{
-                new DepositBalls(dude),
                 new DriveTowardsBall(dude),
                 new AvoidCollision(dude),
                 new DriveTowardsExit(dude),
                 //new StopBehaviour(),
-                new StopBehaviour(),
-                //new DropBalls(dude)
+                new DropBalls(dude),
+                new StopBehaviour()
+
+
         };
         arby = new Arbitrator(bArray);
 

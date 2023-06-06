@@ -39,7 +39,6 @@ public class DriveTowardsExit implements MyBehavior {
         suppressed = false;
         dude.setCurrentBehaviourName(BehaviorName);
         while (!suppressed) {
-
             navigation.checkDirection(dude.getMap().getWayPoint());
             dude.moveBackward();
         }
