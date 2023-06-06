@@ -48,17 +48,18 @@ public class DriveTowardsExit implements MyBehavior{
 
             angleToExit = Geometry.degreesOfVectorInRadians(exitVector.x, exitVector.y);
 
-            if (!isOppositeAngle()){
-                turnLeft();
-            } else {
-                turnRight();
-            }
+                if (exitIsToTheLeft()) {
+                    turnLeft();
+                } else {
+                    turnRight();
+                }
+
             dude.moveBackward();
-            if (navigation.getDistanceToPoint()<50){
+            if (distanceToExit<50){
                 dude.stopWheels();
                 dude.openCheeks();
                 long startTime = System.currentTimeMillis();
-                while (System.currentTimeMillis()-startTime<4000){
+                while (System.currentTimeMillis()-startTime<10000){
                     dude.openCheeks();
                 }
                 setStopCondition(true);
@@ -113,7 +114,7 @@ public class DriveTowardsExit implements MyBehavior{
     private void turnLeft(){
         currentAngle = dude.getAngle();
         dude.turnLeft();
-        while (exitIsToTheLeft()&& currentAngle != angleToExit && !suppressed){
+        while (!( currentAngle <= angleToExit-10||currentAngle>=angleToExit+10) && !suppressed){
             currentAngle = dude.getAngle();
         }
         dude.stopWheels();
@@ -122,9 +123,10 @@ public class DriveTowardsExit implements MyBehavior{
     private void turnRight(){
         currentAngle = dude.getAngle();
         dude.turnRight();
-        while (!exitIsToTheLeft()&& currentAngle != angleToExit && !suppressed){
+        while (!(currentAngle <= angleToExit-10||currentAngle>=angleToExit+10) && !suppressed){
             currentAngle = dude.getAngle();
         }
+        dude.stopWheels();
     }
 
 }
