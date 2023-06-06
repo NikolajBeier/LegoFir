@@ -17,7 +17,7 @@ public class DriveTowardsExit implements MyBehavior{
     double currentAngle;
     double angleToExit;
     double distanceToExit;
-    Navigation navigation;
+    //Navigation navigation;
 
     public DriveTowardsExit(Legofir dude){
         this.dude=dude;
@@ -47,14 +47,16 @@ public class DriveTowardsExit implements MyBehavior{
             Point exitVector = new Point(nextExit.x-currentPosition.getX(), nextExit.y-currentPosition.getY());
 
             angleToExit = Geometry.degreesOfVectorInRadians(exitVector.x, exitVector.y);
-
+if(!isOppositeAngle()){
                 if (exitIsToTheLeft()) {
                     turnLeft();
                 } else {
                     turnRight();
-                }
+                }}
+            while(distanceToExit>50){
+                dude.moveBackward();
+            }
 
-            dude.moveBackward();
             if (distanceToExit<50){
                 dude.stopWheels();
                 dude.openCheeks();
@@ -88,16 +90,16 @@ public class DriveTowardsExit implements MyBehavior{
         if (currentAngle>0){
             oppositeAngle = currentAngle-Math.PI;
             if (angleToExit<currentAngle&& angleToExit>=oppositeAngle){
-                return true;
-            } else {
                 return false;
+            } else {
+                return true;
             }
         } else if (currentAngle<0){
             oppositeAngle = currentAngle+Math.PI;
             if (angleToExit<currentAngle || angleToExit>=oppositeAngle){
-                return false;
-            } else {
                 return true;
+            } else {
+                return false;
             }
         } else{
             if (angleToExit>0){
@@ -109,22 +111,29 @@ public class DriveTowardsExit implements MyBehavior{
         }
     }
     private boolean isOppositeAngle(){
-        return ((Math.abs(currentAngle-angleToExit))>Math.PI/2) || (Math.abs(currentAngle-angleToExit)<-Math.PI/2);
+        return ((Math.abs(currentAngle-angleToExit) < 0.2) || (currentAngle>3 && angleToExit<-3) || (currentAngle<-3 && angleToExit>3));
     }
+
     private void turnLeft(){
         currentAngle = dude.getAngle();
-        dude.turnLeft();
-        while (!( currentAngle <= angleToExit-10||currentAngle>=angleToExit+10) && !suppressed){
-            currentAngle = dude.getAngle();
+        if (exitIsToTheLeft()) {
+            dude.turnLeft();
+            while (!suppressed && isOppositeAngle()) {
+                currentAngle = dude.getAngle();
+                System.out.println("når vi her?");
+            }
+            dude.stopWheels();
         }
-        dude.stopWheels();
-
     }
     private void turnRight(){
         currentAngle = dude.getAngle();
-        dude.turnRight();
-        while (!(currentAngle <= angleToExit-10||currentAngle>=angleToExit+10) && !suppressed){
-            currentAngle = dude.getAngle();
+        if (!exitIsToTheLeft()) {
+            dude.turnRight();
+            while (!suppressed && isOppositeAngle()) {
+                currentAngle = dude.getAngle();
+                System.out.println("nårviher");
+            }
+            dude.stopWheels();
         }
         dude.stopWheels();
     }
