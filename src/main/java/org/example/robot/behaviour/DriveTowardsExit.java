@@ -17,7 +17,7 @@ public class DriveTowardsExit implements MyBehavior{
     double currentAngle;
     double angleToExit;
     double distanceToExit;
-    Navigation navigation = new Navigation();
+    Navigation navigation;
 
     public DriveTowardsExit(Legofir dude){
         this.dude=dude;
@@ -53,8 +53,20 @@ public class DriveTowardsExit implements MyBehavior{
             } else {
                 turnRight();
             }
+            dude.moveBackward();
+            if (navigation.getDistanceToPoint()<50){
+                dude.stopWheels();
+                dude.openCheeks();
+                long startTime = System.currentTimeMillis();
+                while (System.currentTimeMillis()-startTime<4000){
+                    dude.openCheeks();
+                }
+                setStopCondition(true);
+                dude.stopAll();
+            }
+
         }
-        dude.moveBackward();
+
     }
 
 
