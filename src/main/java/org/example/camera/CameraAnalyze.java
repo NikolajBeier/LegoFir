@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import static org.example.robot.model.RobotState.TURNING_RIGHT;
 import static org.example.utility.Geometry.distanceBetweenPoints;
 import static org.example.utility.Geometry.intersection;
 import static org.opencv.imgproc.Imgproc.*;
@@ -269,6 +270,7 @@ public class CameraAnalyze {
             byte[] imageData;
 
             ImageIcon icon;
+            int counter=0;
 
             while (true) {
 
@@ -306,7 +308,7 @@ public class CameraAnalyze {
                 Point leftObstacle = null;
                 Point rightObstacle = null;
 
-                if (edgeDetectionOn){
+                if (edgeDetectionOn && counter%100==0){
                     //edge = edgeDetection.detect(image,dude);
 
 
@@ -455,14 +457,7 @@ public class CameraAnalyze {
                     }
                 }
                 if(robotDetectionOn && edgeDetectionOn){
-                    Point heading = dude.getMap().getRobotPosition().getHeading();
-                    Point rightHeading = new Point(heading.y, -heading.x);
-                    Point leftHeading = new Point(-heading.y, heading.x);
-                    Point backHeading = new Point(-heading.x, -heading.y);
-                    drawLinesToEdge(image,rightHeading,0,"right");
-                    drawLinesToEdge(image,leftHeading,1,"left");
-                    drawLinesToEdge(image,backHeading,2,"back");
-                    drawLinesToEdge(image,heading,3,"front");
+                    drawCollisionDetection(image);
                 }
 
 
@@ -522,10 +517,48 @@ public class CameraAnalyze {
                         }
                     }
                 }*/
+                counter++;
             }
         }
 
-        private void drawLinesToEdge(Mat image, Point heading, int i, String direction) {
+        private void drawCollisionDetection(Mat image) {
+            Point heading = dude.getMap().getRobotPosition().getHeading();
+            Point rightHeading = new Point(heading.y, -heading.x);
+            Point leftHeading = new Point(-heading.y, heading.x);
+            Point backHeading = new Point(-heading.x, -heading.y);
+            Point leftSide = new Point(dude.getMap().getRobotPosition().leftSideX, dude.getMap().getRobotPosition().leftSideY);
+            Point rightSide = new Point(dude.getMap().getRobotPosition().rightSideX, dude.getMap().getRobotPosition().rightSideY);
+            Point frontSide = new Point(dude.getMap().getRobotPosition().getFrontSideX(), dude.getMap().getRobotPosition().getFrontSideY());
+            Point backSide = new Point(dude.getMap().getRobotPosition().getBackSideX(), dude.getMap().getRobotPosition().getBackSideY());
+            Point middle = new Point(dude.getMap().getRobotPosition().getX(), dude.getMap().getRobotPosition().getY());
+
+            switch(dude.getState()){
+                case MOVING_BACKWARD: {
+                    drawLinesToEdge(image,backHeading,leftSide);
+                    drawLinesToEdge(image,backHeading,rightSide);
+                    drawLinesToEdge(image,backHeading,middle);
+                    break;
+                }
+                case MOVING_FORWARD: {
+                    drawLinesToEdge(image,heading,leftSide);
+                    drawLinesToEdge(image,heading,rightSide);
+                    drawLinesToEdge(image,heading,middle);
+                    break;
+                }
+                case TURNING_LEFT: {
+                    drawLinesToEdge(image,leftHeading,frontSide);
+                    drawLinesToEdge(image,rightHeading,backSide);
+                    break;
+                }
+                case TURNING_RIGHT: {
+                    drawLinesToEdge(image,rightHeading,frontSide);
+                    drawLinesToEdge(image,leftHeading,backSide);
+                    break;
+                }
+            }
+        }
+
+        private void drawLinesToEdge(Mat image, Point heading, Point startingPoint) {
             Map currentMap = dude.getMap();
             RobotPosition robotPosition = currentMap.getRobotPosition();
             Edge edge = currentMap.getEdge();
@@ -533,17 +566,11 @@ public class CameraAnalyze {
 
             // Returns the distance of the robot to the edge of the map.
 
-            // Starting point of rightSide vector
-            Point rightSide = new Point(robotPosition.rightSideX, robotPosition.rightSideY);
 
-            // Starting point of leftSide vector
-            Point leftSide = new Point(robotPosition.leftSideX, robotPosition.leftSideY);
 
             // Lines of the robot
-            Line2D leftRobotLine = new Line2D.Double(leftSide.x, leftSide.y, leftSide.x+10000*heading.x, leftSide.y+10000*heading.y);
-            Line2D rightRobotLine = new Line2D.Double(rightSide.x, rightSide.y, rightSide.x+10000*heading.x, rightSide.y+10000*heading.y);
-            line(image,new Point(leftSide.x, -leftSide.y),new Point(leftSide.x+10000*heading.x, -leftSide.y-10000*heading.y),new Scalar(0,255,0),1);
-            line(image,new Point(rightSide.x, -rightSide.y),new Point(rightSide.x+10000*heading.x, -rightSide.y-10000*heading.y),new Scalar(0,255,0),1);
+            Line2D line = new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x+10000*heading.x, startingPoint.y+10000*heading.y);
+            line(image,new Point(startingPoint.x, -startingPoint.y),new Point(startingPoint.x+10000*heading.x, -startingPoint.y-10000*heading.y),new Scalar(0,255,0),1);
 
             // Edge points of the map
 
@@ -551,17 +578,6 @@ public class CameraAnalyze {
             Point topRight = edge.getTopRight();
             Point bottomLeft = edge.getBottomLeft();
             Point bottomRight = edge.getBottomRight();
-            circle(image,new Point(topLeft.x,-topLeft.y),25,new Scalar(255,0,0),1);
-            putText(image,"TopLeft",new Point(topLeft.x,-topLeft.y),FONT_HERSHEY_PLAIN,1,new Scalar(255,0,0));
-            circle(image,new Point(topRight.x,-topRight.y),25,new Scalar(255,0,0),1);
-            putText(image,"TopRight",new Point(topRight.x,-topRight.y),FONT_HERSHEY_PLAIN,1,new Scalar(255,0,0));
-            circle(image,new Point(bottomLeft.x,-bottomLeft.y),25,new Scalar(255,0,0),1);
-            putText(image,"BottomLeft",new Point(bottomLeft.x,-bottomLeft.y),FONT_HERSHEY_PLAIN,1,new Scalar(255,0,0));
-            circle(image,new Point(bottomRight.x,-bottomRight.y),25,new Scalar(255,0,0),1);
-            putText(image,"bottomRight",new Point(bottomRight.x,-bottomRight.y),FONT_HERSHEY_PLAIN,1,new Scalar(255,0,0));
-
-
-
 
             // Lines of the map
             Line2D.Double[] edges = {new Line2D.Double(topLeft.x, topLeft.y, topRight.x, topRight.y),
@@ -572,33 +588,23 @@ public class CameraAnalyze {
                     new Line2D.Double(dude.getMap().getObstacle().getTopPoint().x, dude.getMap().getObstacle().getTopPoint().y, dude.getMap().getObstacle().getBottomPoint().x, dude.getMap().getObstacle().getBottomPoint().y)
             };
 
-            double distanceFromRightSideRobotToEdge = Double.MAX_VALUE;
-            double distanceFromLeftSideRobotToEdge = Double.MAX_VALUE;
+            double distanceFromStartingPointToEdge = Double.MAX_VALUE;
 
             double shortestDistance = Double.MAX_VALUE;
 
             // Looks through all 4 edges, calculates the distance from the two robot sides to the edge,
             // and if the distance found is shorter than the currently shortest distance, it is set as the new shortest distance.
             for(Line2D edge1 : edges){
-                if(rightRobotLine.intersectsLine(edge1)){
-                    distanceFromRightSideRobotToEdge=distanceBetweenPoints(rightSide,intersection(rightRobotLine, edge1));
-                    circle(image,new Point(intersection(rightRobotLine, edge1).x,-intersection(rightRobotLine, edge1).y),25,new Scalar(255,0,0),1);
-                    putText(image,Integer.toString((int)distanceFromRightSideRobotToEdge),new Point(intersection(rightRobotLine, edge1).x,-intersection(rightRobotLine, edge1).y),FONT_HERSHEY_PLAIN,2,new Scalar(255,0,0));
-                    if(distanceFromRightSideRobotToEdge<shortestDistance){
-                        shortestDistance = distanceFromRightSideRobotToEdge;
-                    }
-                }
-                if(leftRobotLine.intersectsLine(edge1)){
-                    distanceFromLeftSideRobotToEdge=distanceBetweenPoints(leftSide,intersection(leftRobotLine, edge1));
-                    circle(image,new Point(intersection(leftRobotLine, edge1).x,-intersection(leftRobotLine, edge1).y),25,new Scalar(255,0,0),1);
-                    putText(image,Integer.toString((int)distanceFromLeftSideRobotToEdge),new Point(intersection(leftRobotLine, edge1).x,-intersection(leftRobotLine, edge1).y),FONT_HERSHEY_PLAIN,2,new Scalar(255,0,0));
-                    if(distanceFromLeftSideRobotToEdge<shortestDistance){
-                        shortestDistance = distanceFromLeftSideRobotToEdge;
+                if(line.intersectsLine(edge1)){
+                    distanceFromStartingPointToEdge=distanceBetweenPoints(startingPoint,intersection(line, edge1));
+                    if(distanceFromStartingPointToEdge<shortestDistance){
+                        shortestDistance = distanceFromStartingPointToEdge;
+                        circle(image,new Point(intersection(line, edge1).x,-intersection(line, edge1).y),25,new Scalar(255,0,0),1);
+                        putText(image,Integer.toString((int)shortestDistance),new Point(intersection(line, edge1).x,-intersection(line, edge1).y),FONT_HERSHEY_PLAIN,2,new Scalar(255,0,0));
+
                     }
                 }
             }
-            putText(image,"Shortest Distance "+direction+" direction: "+Integer.toString((int)shortestDistance),new Point(100,100+i*100),FONT_HERSHEY_PLAIN,2,new Scalar(255,0,0));
-
         }
 
         public void ColorDetector() {

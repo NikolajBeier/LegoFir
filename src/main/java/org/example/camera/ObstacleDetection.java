@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.*;
-import static org.opencv.imgproc.Imgproc.line;
+import static org.opencv.imgproc.Imgproc.*;
 
 public class ObstacleDetection {
     Mat hlsimage = new Mat();
@@ -48,6 +48,9 @@ public class ObstacleDetection {
 
         // Clear edges
         croppedMask=redMask.colRange(new Range(offsetX,image.width()-offsetX)).rowRange(new Range(offsetY,image.height()-offsetY));
+
+
+
 
         // Apply Hough Line Transform
         Imgproc.HoughLinesP(croppedMask, lines, 1, Math.PI / 180, 80 , 30, 10);
@@ -92,23 +95,9 @@ public class ObstacleDetection {
         robotRightPoint.y = -rightPoint.y;
 
         dude.getMap().setObstacle(robotTopPoint, robotBottomPoint, robotLeftPoint, robotRightPoint);
-    }
-    private void addLine(double rho, double theta, List<Double> rhoList, List<Line2D> edges, Mat image){
-        double a = cos(theta);
-        double b = sin(theta);
-        double x0 = a*rho;
-        double y0 = b*rho;
-        //Drawing lines on the image
-        Point pt1 = new Point();
-        Point pt2 = new Point();
-        pt1.x = Math.round(x0 + 1000*(-b));
-        pt1.y = Math.round(y0 + 1000*(a));
-        pt2.x = Math.round(x0 - 10000*(-b));
-        pt2.y = Math.round(y0 - 10000 *(a));
-        rhoList.add(rho);
 
-        edges.add(new Line2D.Double(pt1.x, -(pt1.y), pt2.x, -(pt2.y)));
     }
+
 
 
 }

@@ -105,18 +105,10 @@ public class Map {
      * Looks at two vectors from the two sides of the robot with the same heading as the robot. Returns the shortest distance on either of these vectors to the edge of the map.
      * @return
      */
-    public double distanceToEdge(Point heading) {
-        // Returns the distance of the robot to the edge of the map.
+    public double distanceToEdge(Point heading,Point startingPoint) {
 
-        // Starting point of rightSide vector
-        Point rightSide = new Point(robotPosition.rightSideX, robotPosition.rightSideY);
-
-        // Starting point of leftSide vector
-        Point leftSide = new Point(robotPosition.leftSideX, robotPosition.leftSideY);
-
-        // Lines of the robot
-        Line2D leftRobotLine = new Line2D.Double(leftSide.x, leftSide.y, leftSide.x+10000*heading.x, leftSide.y+10000*heading.y);
-        Line2D rightRobotLine = new Line2D.Double(rightSide.x, rightSide.y, rightSide.x+10000*heading.x, rightSide.y+10000*heading.y);
+        // Line shooting out from the starting point
+        Line2D line = new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x+10000*heading.x, startingPoint.y+10000*heading.y);
 
         // Edge points of the map
 
@@ -134,24 +126,16 @@ public class Map {
                 new Line2D.Double(obstacle.getTopPoint().x, obstacle.getTopPoint().y, obstacle.getBottomPoint().x, obstacle.getBottomPoint().y)
         };
 
-        double distanceFromRightSideRobotToEdge = Double.MAX_VALUE;
-        double distanceFromLeftSideRobotToEdge = Double.MAX_VALUE;
-
+        double distanceFromStartingPointToEdge = Double.MAX_VALUE;
         double shortestDistance = Double.MAX_VALUE;
 
         // Looks through all 4 edges, calculates the distance from the two robot sides to the edge,
         // and if the distance found is shorter than the currently shortest distance, it is set as the new shortest distance.
         for(Line2D edge : edges){
-            if(rightRobotLine.intersectsLine(edge)){
-                distanceFromRightSideRobotToEdge=distanceBetweenPoints(rightSide,intersection(rightRobotLine, edge));
-                if(distanceFromRightSideRobotToEdge<shortestDistance){
-                    shortestDistance = distanceFromRightSideRobotToEdge;
-                }
-            }
-            if(leftRobotLine.intersectsLine(edge)){
-                distanceFromLeftSideRobotToEdge=distanceBetweenPoints(leftSide,intersection(leftRobotLine, edge));
-                if(distanceFromLeftSideRobotToEdge<shortestDistance){
-                    shortestDistance = distanceFromLeftSideRobotToEdge;
+            if(line.intersectsLine(edge)){
+                distanceFromStartingPointToEdge=distanceBetweenPoints(startingPoint,intersection(line, edge));
+                if(distanceFromStartingPointToEdge<shortestDistance){
+                    shortestDistance = distanceFromStartingPointToEdge;
                 }
             }
         }
