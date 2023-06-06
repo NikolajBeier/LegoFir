@@ -4,6 +4,7 @@ import org.example.mapping.RobotPosition;
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
 import org.example.utility.Geometry;
+import org.opencv.core.Mat;
 import org.opencv.core.Point;
 
 import static org.example.Main.logger;
@@ -55,6 +56,48 @@ public class Navigation {
         }
     }
 
+
+    public void checkDirection(Point nextPoint) {
+
+        RobotPosition currentPosition = dude.getMap().getRobotPosition();
+
+        System.out.println("we get here");
+        int nextPointX = (int) nextPoint.x;
+        int nextPointY = (int) nextPoint.y;
+
+        currentAngle = dude.getAngle();
+        if (currentAngle <0){
+            currentAngle=currentAngle+Math.PI;
+        }else {
+            currentAngle = currentAngle-Math.PI;
+        }
+
+        distanceToPoint = distanceBetweenPoints(new Point(currentPosition.getFrontSideX(), currentPosition.getFrontSideY()), new Point(nextPointX, nextPointY));
+
+        // vektor fra currentPosition(x,y) til (nextBallX,nextBallY)
+        Point Pointvector = new Point(nextPointX - currentPosition.getX(), nextPointY - currentPosition.getY());
+        // Vinkel af vektor...
+        angleToNextPoint = Geometry.degreesOfVectorInRadians(Pointvector.x, Pointvector.y);
+/*
+            System.out.println("NextBallX: " + nextBallX + ", NextBallY: " + nextBallY);
+            System.out.println("CurrentPositionX: " + currentPosition.getX() + ", CurrentPositionY: " + currentPosition.getY());
+            System.out.println("RobotToBallVectorX " + ballVector.x + ", RobotToBallVectorY" + ballVector.y);
+            System.out.println("Current angle: " + currentAngle);
+            System.out.println("Angle to next ball: " + angleToNextBall);
+ */
+
+
+        //if current angle is not close to angle to next ball
+        System.out.println("isApproximatelySameAngle: " + isApproximatelySameAngle());
+        if (!isApproximatelySameAngle()) {
+            //turn towards ball
+            if (ballIsLeftOfRobotHeading()) {
+                turnLeftTowardsBall();
+            } else {
+                turnRightTowardsBall();
+            }
+        }
+    }
     private void turnLeftTowardsBall() {
         currentAngle = dude.getAngle();
         if (ballIsLeftOfRobotHeading()) {

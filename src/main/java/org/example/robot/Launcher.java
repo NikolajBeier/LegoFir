@@ -14,7 +14,6 @@ public class Launcher implements Program {
     RemoteEV3 ev3;
     Legofir dude;
     Arbitrator arby;
-    Boolean stopCondition=false;
     MyBehavior[] bArray;
     Themes themes = new Themes();
 
@@ -71,6 +70,7 @@ public class Launcher implements Program {
     public void launchRobot() {
 
         bArray = new MyBehavior[]{
+                new DepositBalls(dude),
                 new DriveTowardsBall(dude),
                 new AvoidCollision(dude),
                 //new StopBehaviour(),
