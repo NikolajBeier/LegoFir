@@ -34,7 +34,9 @@ public class FrameAnalyzer {
     Mat webcamImage = new Mat();
     byte[] imageData;
     List<Mat> channels = new LinkedList<>();
+    Mat lab = new Mat();
     Mat destimage = new Mat();
+    Size size = new Size(512, 512);
 
 
     public FrameAnalyzer(Legofir dude, CameraAnalyze cameraAnalyze) {
@@ -66,7 +68,7 @@ public class FrameAnalyzer {
         frameDetector.detect(frame);
 
         // Draw the stuff
-        frameDrawer.draw(frame);
+       frameDrawer.draw(frame);
 
         // convert matrix to byte
         imageData = convertMatrixToByte(frame);
@@ -195,16 +197,20 @@ public class FrameAnalyzer {
     }
 
     private Mat clahe(Mat capture) {
-        Core.split(capture,channels);
+        cvtColor(capture,lab, COLOR_BGR2Lab);
+        Core.split(lab,channels);
         CLAHE clahe = Imgproc.createCLAHE();
-        Size point = new Size(new Point(1,1));
-        clahe.setClipLimit(4);
-        clahe.setTilesGridSize(point);
-        clahe.apply(channels.get(0),destimage);
-        Core.merge(channels,capture);
-        cvtColor(capture,destimage, 1);
+        clahe.setClipLimit(4.0);
+        clahe.setTilesGridSize(size);
+
+        clahe.apply(channels.get(0),channels.get(0));
+
+        Core.merge(channels,lab);
+        cvtColor(lab,destimage, COLOR_Lab2BGR);
         clahe.collectGarbage();
+
         return destimage;
+
     }
 
     public void setBallDetection(boolean b) {
