@@ -4,6 +4,8 @@ import org.example.robot.model.Legofir;
 import org.opencv.core.Point;
 
 public class DepositBalls implements MyBehavior {
+
+    // TODO Remove class when it has been scavenged for useful parts
     String BehaviorName = "DepositBalls";
     Legofir dude;
     boolean suppressed = false;
@@ -19,13 +21,8 @@ public class DepositBalls implements MyBehavior {
     @Override
     public boolean takeControl() {
 // makes a square around the waypoint so that when the robot enters the square and there are no more balls on the field DepositBalls take control
-        if (dude.getMap().getRobotPosition().getX() + 25 > dude.getMap().getWayPoint().x&&
-                dude.getMap().getRobotPosition().getX() - 25 < dude.getMap().getWayPoint().x &&
-                dude.getMap().getRobotPosition().getY() + 25 > dude.getMap().getWayPoint().y &&
-                dude.getMap().getRobotPosition().getY() - 25 < dude.getMap().getWayPoint().y &&
-                dude.getMap().getBalls().isEmpty() && dude.getMap().getOrangeBalls().isEmpty()) {
-            return true;
-        } else
+
+
             return false;
     }
 

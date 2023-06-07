@@ -23,7 +23,7 @@ public class DropBalls implements MyBehavior {
     public void action() {
         suppressed = false;
         dude.setCurrentBehaviourName(BehaviorName);
-        if(!suppressed){
+        while(!suppressed){
 
             navigation.checkDirection(dude.getMap().getDepositPoint().getCenterRight());
             dude.openCheeks();
@@ -51,8 +51,9 @@ public class DropBalls implements MyBehavior {
     }
 
     @Override
+    // makes a square around the waypoint so that when the robot enters the square and there are no more balls on the field DepositBalls take control
     public boolean takeControl() {
-        if (dude.getMap().getRobotPosition().getX() + 25 > dude.getMap().getWayPoint().x&&
+        if (dude.getMap().getRobotPosition().getX() + 25 > dude.getMap().getWayPoint().x &&
                 dude.getMap().getRobotPosition().getX() - 25 < dude.getMap().getWayPoint().x &&
                 dude.getMap().getRobotPosition().getY() + 25 > dude.getMap().getWayPoint().y &&
                 dude.getMap().getRobotPosition().getY() - 25 < dude.getMap().getWayPoint().y &&
@@ -62,5 +63,3 @@ public class DropBalls implements MyBehavior {
             return false;
     }
     }
-
-

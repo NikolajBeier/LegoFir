@@ -73,7 +73,6 @@ public class Launcher implements Program {
                 new DriveTowardsBall(dude),
                 new AvoidCollision(dude),
                 new DriveTowardsExit(dude),
-                //new StopBehaviour(),
                 new DropBalls(dude),
                 new StopBehaviour()
 

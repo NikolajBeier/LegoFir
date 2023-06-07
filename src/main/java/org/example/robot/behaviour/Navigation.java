@@ -4,7 +4,6 @@ import org.example.mapping.RobotPosition;
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
 import org.example.utility.Geometry;
-import org.opencv.core.Mat;
 import org.opencv.core.Point;
 
 import static org.example.Main.logger;
@@ -24,7 +23,6 @@ public class Navigation {
 
         RobotPosition currentPosition = dude.getMap().getRobotPosition();
 
-        System.out.println("we get here");
         int nextPointX = nextPoint.getX();
         int nextPointY = nextPoint.getY();
 
@@ -61,7 +59,6 @@ public class Navigation {
 
         RobotPosition currentPosition = dude.getMap().getRobotPosition();
 
-        System.out.println("we get here");
         int nextPointX = (int) nextPoint.x;
         int nextPointY = (int) nextPoint.y;
 
