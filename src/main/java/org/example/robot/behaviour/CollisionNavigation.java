@@ -19,14 +19,14 @@ public class CollisionNavigation {
         while(isCollidingOnTheFront() && !isCollidingOnTheBack()){}
         dude.stopWheels();
         dude.turnRight();
-        startTime = System.currentTimeMillis();
-        while(System.currentTimeMillis()-startTime<1500){}
+        doNothingInMS(1500);
         dude.stopWheels();
         dude.moveForward();
-        startTime = System.currentTimeMillis();
-        while(System.currentTimeMillis()-startTime<1500){}
+        doNothingInMS(1500);
         dude.stopWheels();
     }
+
+
 
     public void avoidLeftCollision() {
         System.out.println("avoiding left collision");
@@ -35,13 +35,14 @@ public class CollisionNavigation {
         dude.stopWheels();
         dude.turnRight();
         startTime = System.currentTimeMillis();
-        while(System.currentTimeMillis()-startTime<1500){}
+        while(withinTimerinMS(2500,startTime) && !isCollidingOnTheRight()){}
         dude.stopWheels();
         dude.moveForward();
-        startTime = System.currentTimeMillis();
-        while(System.currentTimeMillis()-startTime<1500){}
+        doNothingInMS(1500);
         dude.stopWheels();
     }
+
+
 
     public void avoidRightCollision() {
         System.out.println("avoiding right collision");
@@ -50,11 +51,10 @@ public class CollisionNavigation {
         dude.stopWheels();
         dude.turnLeft();
         startTime = System.currentTimeMillis();
-        while(!isCollidingOnTheLeft() && System.currentTimeMillis()-startTime<1500){}
+        while(!isCollidingOnTheLeft() && withinTimerinMS(1500,startTime)){}
         dude.stopWheels();
         dude.moveForward();
-        startTime = System.currentTimeMillis();
-        while(System.currentTimeMillis()-startTime<1500){}
+        doNothingInMS(1500);
         dude.stopWheels();
     }
 
@@ -64,12 +64,10 @@ public class CollisionNavigation {
         while(isCollidingOnTheBack() && !isCollidingOnTheFront()){}
         dude.stopWheels();
         dude.turnLeft();
-        startTime = System.currentTimeMillis();
-        while(System.currentTimeMillis()-startTime<1500){}
+        doNothingInMS(1500);
         dude.stopWheels();
         dude.moveForward();
-        startTime = System.currentTimeMillis();
-        while(System.currentTimeMillis()-startTime<1500){}
+        doNothingInMS(1500);
         dude.stopWheels();
     }
 
@@ -138,5 +136,12 @@ public class CollisionNavigation {
         } else if(isCollidingOnTheBack()){
             avoidBackCollision();
         }
+    }
+    private void doNothingInMS(int i) {
+        startTime = System.currentTimeMillis();
+        while(withinTimerinMS(1500,startTime)){}
+    }
+    private boolean withinTimerinMS(int timer, long startTime) {
+        return System.currentTimeMillis()-startTime<timer;
     }
 }
