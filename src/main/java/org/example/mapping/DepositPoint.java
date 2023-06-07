@@ -4,7 +4,7 @@ import org.opencv.core.Point;
 
 public class DepositPoint {
     Point centerLeft=new Point(0,0);
-    Point centerRight =new Point(0,0);
+    Point centerRight=new Point(0,0);
     Point leftExitTopRight=new Point(0,0);
     Point leftExitBottomLeft=new Point(0,0);
     Point rightExitTopRight=new Point(0,0);
@@ -46,9 +46,7 @@ public class DepositPoint {
         this.leftExitBottomLeft = new Point(temp.x-5,temp.y-5);
 
     }
-    public Point getCenterLeft() {
-        return centerLeft;
-    }
+
     public Point getLeftExitBottomLeft() {
         return leftExitBottomLeft;
     }
@@ -67,6 +65,9 @@ public class DepositPoint {
 
     public Point getCenterRight() {
         return centerRight;
+    }
+    public Point getCenterLeft() {
+        return centerLeft;
     }
 }
 
