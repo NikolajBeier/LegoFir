@@ -66,7 +66,7 @@ public class Navigation {
 
 
         //if current angle is not close to angle to next ball
-        System.out.println("isApproximatelySameAngle: " + isApproximatelySameAngle(currentAngle,angleToNextPoint));
+        //System.out.println("isApproximatelySameAngle: " + isApproximatelySameAngle(currentAngle,angleToNextPoint));
         if (!isApproximatelySameAngle(currentAngle,angleToNextPoint)) {
             //turn towards ball
             if (ballIsLeftOfRobotHeading()) {

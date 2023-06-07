@@ -32,8 +32,13 @@ public class DriveTowardsExit implements MyBehavior {
         while (!suppressed) {
             System.out.println("vi når hertil DriveTowards exit");
             navigation.turnCheeksTowardsGoal(dude.getMap().getDepositPoint().getCenterLeft());
+            long timeBefore = System.currentTimeMillis();
+            while(!suppressed && System.currentTimeMillis() - timeBefore < 10000){
+                dude.openCheeks();
+            }
+            dude.stopAll();
+            System.out.println("når vi her til igen?");
 
-            dude.moveBackward();
         }
 
     }

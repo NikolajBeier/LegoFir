@@ -27,10 +27,8 @@ public class StopBehaviour implements MyBehavior {
     @Override
     public boolean takeControl() {
         if(!stopCondition){
-            System.out.println("StopBehaviour.takeControl() = " + false);
             return false;
         }
-        System.out.println("StopBehaviour.takeControl() = " + true);
         return true;
     }
 
