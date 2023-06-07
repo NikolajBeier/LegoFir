@@ -36,7 +36,7 @@ public class FrameAnalyzer {
     List<Mat> channels = new LinkedList<>();
     Mat lab = new Mat();
     Mat destimage = new Mat();
-    Size size = new Size(512, 512);
+    Size size = new Size(64, 64);
 
 
     public FrameAnalyzer(Legofir dude, CameraAnalyze cameraAnalyze) {
