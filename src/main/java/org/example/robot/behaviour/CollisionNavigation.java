@@ -127,13 +127,13 @@ public class CollisionNavigation {
     }
 
     public void startAvoidingCollision(boolean suppressed) {
-        if(isCollidingOnTheFront()){
+        if(isCollidingOnTheFront() && !suppressed){
             avoidFrontCollision();
-        } else if(isCollidingOnTheLeft()){
+        } else if(isCollidingOnTheLeft() && !suppressed){
             avoidLeftCollision();
-        } else if(isCollidingOnTheRight()){
+        } else if(isCollidingOnTheRight() && !suppressed){
             avoidRightCollision();
-        } else if(isCollidingOnTheBack()){
+        } else if(isCollidingOnTheBack() && !suppressed){
             avoidBackCollision();
         }
     }

@@ -60,7 +60,7 @@ public class FrameAnalyzer {
         resize(webcamImage, frame, new Size(1280, 720));
 
         // Remove glare
-        clahe(frame);
+        //clahe(frame);
 
         // Find the stuff
         frameDetector.detect(frame);

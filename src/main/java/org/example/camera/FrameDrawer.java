@@ -4,16 +4,15 @@ import org.example.mapping.Edge;
 import org.example.mapping.Map;
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
+import org.example.utility.Geometry;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
-import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 import java.awt.geom.Line2D;
 
-import static org.example.utility.Geometry.distanceBetweenPoints;
-import static org.example.utility.Geometry.intersection;
+import static org.example.utility.Geometry.*;
 import static org.opencv.imgproc.Imgproc.*;
 
 public class FrameDrawer {
@@ -176,25 +175,43 @@ public class FrameDrawer {
                 drawLinesToEdge(image,backHeading,leftSide);
                 drawLinesToEdge(image,backHeading,rightSide);
                 drawLinesToEdge(image,backHeading,middle);
+                drawCollisionThreshold(image,backHeading,leftSide,150);
+                drawCollisionThreshold(image,backHeading,middle,150);
+                drawCollisionThreshold(image,backHeading,rightSide,150);
                 break;
             }
             case MOVING_FORWARD: {
                 drawLinesToEdge(image,heading,leftSide);
                 drawLinesToEdge(image,heading,rightSide);
                 drawLinesToEdge(image,heading,middle);
+                drawCollisionThreshold(image,heading,leftSide,150);
+                drawCollisionThreshold(image,heading,middle,150);
+                drawCollisionThreshold(image,heading,rightSide,150);
                 break;
             }
             case TURNING_LEFT: {
                 drawLinesToEdge(image,leftHeading,frontSide);
                 drawLinesToEdge(image,rightHeading,backSide);
+                drawCollisionThreshold(image,leftHeading,frontSide,50);
+                drawCollisionThreshold(image,rightHeading,backSide,50);
                 break;
             }
             case TURNING_RIGHT: {
                 drawLinesToEdge(image,rightHeading,frontSide);
                 drawLinesToEdge(image,leftHeading,backSide);
+                drawCollisionThreshold(image,rightHeading,frontSide,50);
+                drawCollisionThreshold(image,leftHeading,backSide,50);
                 break;
             }
         }
+    }
+
+    private void drawCollisionThreshold(Mat image, Point heading, Point startingPoint, int threshold) {
+        double rad = degreesOfVectorInRadians(heading.x,heading.y);
+
+        Point collisionPoint = new Point(startingPoint.x - threshold * -Math.cos(rad), startingPoint.y + threshold * Math.sin(rad));
+        circle(image, new Point(collisionPoint.x, -collisionPoint.y), 10, new Scalar(0, 255, 0), 2);
+        putText(image, "Collision point", new Point(collisionPoint.x, -collisionPoint.y), FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 255, 0), 2);
     }
 
     private void drawLinesToEdge(Mat image, Point heading, Point startingPoint) {
