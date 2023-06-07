@@ -35,7 +35,7 @@ public class Navigation {
         // Vinkel af vektor..x.
         angleToNextPoint = Geometry.degreesOfVectorInRadians(Pointvector.x, Pointvector.y);
 
-        if (!isApproximatelySameAngle()) {
+        if (!isApproximatelySameAngle(currentAngle,angleToNextPoint)) {
             //turn towards ball
             if (ballIsLeftOfRobotHeading()) {
                 turnLeftTowardsBall();
@@ -54,18 +54,27 @@ public class Navigation {
         int nextPointY = (int) nextPoint.y;
 
         currentAngle = dude.getAngle();
+        Point Pointvector = new Point(nextPointX - currentPosition.getX(), nextPointY - currentPosition.getY());
+        double angleToPoint =Geometry.degreesOfVectorInRadians(Pointvector.x, Pointvector.y);
+        double oppositeAngle ;
+        if (angleToPoint>0){
+            oppositeAngle = angleToPoint-Math.PI;
+        } else {
+            oppositeAngle = angleToPoint+Math.PI;
+        }
+
 
         distanceToPoint = distanceBetweenPoints(new Point(currentPosition.getFrontSideX(), currentPosition.getFrontSideY()), new Point(nextPointX, nextPointY));
 
         // vektor fra currentPosition(x,y) til (nextBallX,nextBallY)
-        Point Pointvector = new Point(nextPointX - currentPosition.getX(), nextPointY - currentPosition.getY());
+       // Point Pointvector = new Point(nextPointX - currentPosition.getX(), nextPointY - currentPosition.getY());
         // Vinkel af vektor...
         angleToNextPoint = Geometry.degreesOfVectorInRadians(Pointvector.x, Pointvector.y);
 
 
         //if current angle is not close to angle to next ball
-        System.out.println("isApproximatelySameAngle: " + isApproximatelySameAngle());
-        if (!isApproximatelySameAngle()) {
+        System.out.println("isApproximatelySameAngle: " + isApproximatelySameAngle(currentAngle,oppositeAngle));
+        if (!isApproximatelySameAngle(currentAngle,oppositeAngle)) {
             //turn towards ball
             if (ballIsLeftOfRobotHeading()) {
                 turnLeftTowardsBall();
@@ -140,8 +149,8 @@ public class Navigation {
 
         }
     }
-    private boolean isApproximatelySameAngle(){
-        return ((Math.abs(currentAngle-angleToNextPoint) < 0.2) || (currentAngle>3 && angleToNextPoint<-3) || (currentAngle<-3 && angleToNextPoint>3));
+    private boolean isApproximatelySameAngle(double robotAngle,double targetAngle){
+        return ((Math.abs(robotAngle-targetAngle) < 0.2) || (robotAngle>3 && targetAngle<-3) || (robotAngle<-3 && targetAngle>3));
     }
 
     public double getDistanceToPoint() {

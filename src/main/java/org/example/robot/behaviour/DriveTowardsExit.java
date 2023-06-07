@@ -28,14 +28,7 @@ public class DriveTowardsExit implements MyBehavior {
 
     @Override
     public boolean takeControl() {
-        if ((dude.getMap().getRobotPosition().getX() + 25) > dude.getMap().getWayPoint().x &&
-                dude.getMap().getRobotPosition().getX()-25< dude.getMap().getWayPoint().x&&
-                dude.getMap().getRobotPosition().getY()+25> dude.getMap().getWayPoint().y&&
-                dude.getMap().getRobotPosition().getY()-25< dude.getMap().getWayPoint().y&&
-                dude.getMap().getOrangeBalls().isEmpty() && dude.getMap().getBalls().isEmpty()){
-            return true;
-        }
-        return false;
+        return checkIfRobotIsOnPoint();
     }
 
     @Override
@@ -44,7 +37,7 @@ public class DriveTowardsExit implements MyBehavior {
         dude.setCurrentBehaviourName(BehaviorName);
         while (!suppressed) {
             System.out.println("vi når hertil DriveTowards exit");
-            navigation.checkDirection(dude.getMap().getWayPoint());
+            navigation.checkDirection(dude.getMap().getDepositPoint().getCenterLeft());
             dude.moveBackward();
         }
 
@@ -61,5 +54,12 @@ public class DriveTowardsExit implements MyBehavior {
         this.stopCondition = stopCondition;
         suppressed = true;
 
+    }
+    public Boolean checkIfRobotIsOnPoint(){
+        return (dude.getMap().getRobotPosition().getX() + 25) > dude.getMap().getWayPoint().x &&
+                dude.getMap().getRobotPosition().getX() - 25 < dude.getMap().getWayPoint().x &&
+                dude.getMap().getRobotPosition().getY() + 25 > dude.getMap().getWayPoint().y &&
+                dude.getMap().getRobotPosition().getY() - 25 < dude.getMap().getWayPoint().y &&
+                dude.getMap().getOrangeBalls().isEmpty() && dude.getMap().getBalls().isEmpty();
     }
 }
