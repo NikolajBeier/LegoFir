@@ -95,7 +95,19 @@ public class FrameDrawer {
 
             // Draw line to closest ball
             arrowedLine(frame, centerOfLine, new Point(nextBallX, -nextBallY), new Scalar(0, 255, 0), 1);
+
+            drawFrontAndBackPoints(frame);
         }
+    }
+
+    private void drawFrontAndBackPoints(Mat frame) {
+        Point frontPoint = new Point(dude.getMap().getRobotPosition().getFrontSideX(), (-1)*dude.getMap().getRobotPosition().getFrontSideY());
+        Point backPoint = new Point(dude.getMap().getRobotPosition().getBackSideX(), (-1)*dude.getMap().getRobotPosition().getBackSideY());
+
+        circle(frame, frontPoint, 1, new Scalar(0, 0, 255), 1);
+        putText(frame, "Front", frontPoint, Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 1);
+        circle(frame, backPoint, 1, new Scalar(0, 0, 255), 1);
+        putText(frame, "Back", backPoint, Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 1);
     }
 
     private void drawObstacle(Mat frame) {
