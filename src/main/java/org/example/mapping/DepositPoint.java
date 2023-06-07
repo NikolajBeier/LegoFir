@@ -3,12 +3,12 @@ package org.example.mapping;
 import org.opencv.core.Point;
 
 public class DepositPoint {
-    Point centerLeft;
-    Point centerRight;
-    Point leftExitTopRight;
-    Point leftExitBottomLeft;
-    Point rightExitTopRight;
-    Point rightExitBottomLeft;
+    Point centerLeft=new Point(0,0);
+    Point centerRight =new Point(0,0);
+    Point leftExitTopRight=new Point(0,0);
+    Point leftExitBottomLeft=new Point(0,0);
+    Point rightExitTopRight=new Point(0,0);
+    Point rightExitBottomLeft=new Point(0,0);
     Edge edge;
 
     public DepositPoint(Edge edge) {

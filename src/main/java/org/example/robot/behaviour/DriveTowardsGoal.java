@@ -32,7 +32,7 @@ public class DriveTowardsGoal implements MyBehavior{
 
         while (!suppressed){
 
-           // navigation.checkDirection();
+           navigation.checkDirection(dude.getMap().getWayPoint());
 
 
             dude.moveForward();
