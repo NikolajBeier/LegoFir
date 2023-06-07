@@ -22,6 +22,18 @@ public class Map {
 
     DepositPoint depositPoint = new DepositPoint(this.edge);
 
+    Point wayPoint = new Point();
+
+
+
+
+
+    public Map(int x, int y) {
+        this.x = x;
+        this.y = y;
+        this.size = x * y;
+    }
+
     public Point getWayPoint() {
         return wayPoint;
     }
@@ -30,15 +42,6 @@ public class Map {
         this.wayPoint.x = x;
         this.wayPoint.y = y;
     }
-
-    Point wayPoint;
-
-    public Map(int x, int y) {
-        this.x = x;
-        this.y = y;
-        this.size = x * y;
-    }
-
 
     public void addBallCord(int x, int y) {
         TennisBall tennisball = new TennisBall(x, y);

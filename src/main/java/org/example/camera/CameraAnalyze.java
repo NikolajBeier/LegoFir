@@ -451,7 +451,7 @@ public class CameraAnalyze {
                         }
                     }
                 }
-                if(robotDetectionOn && edgeDetectionOn){
+                if(robotDetectionOn && edgeDetectionOn && edgeIntersections != null){
                     Point heading = dude.getMap().getRobotPosition().getHeading();
                     Point rightHeading = new Point(heading.y, -heading.x);
                     Point leftHeading = new Point(-heading.y, heading.x);
