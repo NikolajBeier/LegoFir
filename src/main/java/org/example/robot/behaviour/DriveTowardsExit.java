@@ -17,6 +17,9 @@ public class DriveTowardsExit implements MyBehavior{
     double currentAngle;
     double angleToExit;
     double distanceToExit;
+    Point exitVector = new Point(0,0);
+    Point nextExit = new Point (0,0);
+    RobotPosition currentPosition;
     //Navigation navigation;
 
     public DriveTowardsExit(Legofir dude){
@@ -38,28 +41,27 @@ public class DriveTowardsExit implements MyBehavior{
         dude.setCurrentBehaviourName(BehaviorName);
         while (!suppressed) {
 
-            RobotPosition currentPosition = dude.getMap().getRobotPosition();
-            Point nextExit = dude.getMap().getDepositPoint().getCenterLeft();
+             currentPosition = dude.getMap().getRobotPosition();
+             nextExit = dude.getMap().getDepositPoint().getCenterLeft();
 
             currentAngle = dude.getAngle();
             distanceToExit = distanceBetweenPoints(new Point(currentPosition.getX(), currentPosition.getY()), nextExit);
 
-            Point exitVector = new Point(nextExit.x-currentPosition.getX(), nextExit.y-currentPosition.getY());
-
+            exitVector.x = nextExit.x-currentPosition.getX();
+            exitVector.y = nextExit.y-currentPosition.getY();
             angleToExit = Geometry.degreesOfVectorInRadians(exitVector.x, exitVector.y);
-if(!isOppositeAngle()){
+            if(!isOppositeAngle()){
                 if (exitIsToTheLeft()) {
-                    turnLeft();
-                } else {
                     turnRight();
+                } else {
+                    turnLeft();
                 }}
-            while(distanceToExit>50){
-                dude.moveBackward();
-            }
+
+            dude.moveBackward();
+
 
             if (distanceToExit<50){
                 dude.stopWheels();
-                dude.openCheeks();
                 long startTime = System.currentTimeMillis();
                 while (System.currentTimeMillis()-startTime<10000){
                     dude.openCheeks();
@@ -89,14 +91,14 @@ if(!isOppositeAngle()){
 
         if (currentAngle>0){
             oppositeAngle = currentAngle-Math.PI;
-            if (angleToExit<currentAngle&& angleToExit>=oppositeAngle){
+            if (angleToExit<oppositeAngle && angleToExit>=currentAngle){
                 return false;
             } else {
                 return true;
             }
         } else if (currentAngle<0){
             oppositeAngle = currentAngle+Math.PI;
-            if (angleToExit<currentAngle || angleToExit>=oppositeAngle){
+            if (angleToExit<oppositeAngle || angleToExit>=currentAngle){
                 return true;
             } else {
                 return false;
@@ -111,31 +113,37 @@ if(!isOppositeAngle()){
         }
     }
     private boolean isOppositeAngle(){
-        return ((Math.abs(currentAngle-angleToExit) < 0.2) || (currentAngle>3 && angleToExit<-3) || (currentAngle<-3 && angleToExit>3));
+        return (((Math.abs(currentAngle-angleToExit) < 0.2)) || (currentAngle>3 && angleToExit<-3) || (currentAngle<-3 && angleToExit>3));
     }
 
     private void turnLeft(){
-        currentAngle = dude.getAngle();
-        if (exitIsToTheLeft()) {
+        currentAngle = dude.getAngle()-Math.PI;
+        if (!exitIsToTheLeft()) {
             dude.turnLeft();
-            while (!suppressed && isOppositeAngle()) {
-                currentAngle = dude.getAngle();
-                System.out.println("når vi her?");
+            while (!suppressed && !exitIsToTheLeft() && Math.abs(currentAngle-angleToExit)>=0.5) {
+                currentAngle = dude.getAngle()-Math.PI;
+                exitVector.x = nextExit.x-currentPosition.getX();
+                exitVector.y = nextExit.y-currentPosition.getY();
+                angleToExit = Geometry.degreesOfVectorInRadians(exitVector.x, exitVector.y);
+                //System.out.println(Math.abs(currentAngle-angleToExit));
             }
             dude.stopWheels();
         }
     }
     private void turnRight(){
-        currentAngle = dude.getAngle();
-        if (!exitIsToTheLeft()) {
+        currentAngle = dude.getAngle()+Math.PI;
+        if (exitIsToTheLeft()) {
             dude.turnRight();
-            while (!suppressed && isOppositeAngle()) {
-                currentAngle = dude.getAngle();
-                System.out.println("nårviher");
+            while (!suppressed && exitIsToTheLeft() && Math.abs(currentAngle-angleToExit)>=0.5) {
+                currentAngle = dude.getAngle()+Math.PI;
+                exitVector.x = nextExit.x-currentPosition.getX();
+                exitVector.y = nextExit.y-currentPosition.getY();
+                angleToExit = Geometry.degreesOfVectorInRadians(exitVector.x, exitVector.y);
+                //System.out.println(Math.abs(currentAngle-angleToExit) + "\t" + currentAngle + "\t" + angleToExit);
+
             }
             dude.stopWheels();
         }
-        dude.stopWheels();
     }
 
 }
