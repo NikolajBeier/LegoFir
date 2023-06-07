@@ -163,11 +163,11 @@ public class RobotDetection {
                         // calculate front and back points of robot
 
                         Point center = new Point(dude.getMap().getRobotPosition().getX(), -dude.getMap().getRobotPosition().getY());
-                        double ratioBelow = 15.0;
-                        double ratioAbove = 20.0;
+                        double ratioBelow = 1.0;
+                        double ratioAbove = 1.5;
                         double distanceBetweenColors = Geometry.distanceBetweenPoints(blueCenter, greenCenter);
 
-                        double totalHeight = distanceBetweenColors * (ratioBelow + ratioAbove) / 15.0;
+                        double totalHeight = distanceBetweenColors * (ratioBelow + ratioAbove) / ratioBelow;
 
                         double angleRad = dude.getMap().getRobotPosition().getHeadingInRadians();
 

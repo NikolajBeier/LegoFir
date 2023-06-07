@@ -148,11 +148,15 @@ public class EdgeDetection {
          }
 
         try {
-            dude.getMap().setEdge(returnValues[1], returnValues[3], returnValues[0], returnValues[2], (int) distanceBetweenPoints(returnValues[1], returnValues[0]), (int) distanceBetweenPoints(returnValues[1], returnValues[3]));
+            if (returnValues[0] != null && returnValues[1] != null && returnValues[2] != null && returnValues[3] != null) {
+                System.out.println("Intersection found");
+                dude.getMap().setEdge(returnValues[1], returnValues[3], returnValues[0], returnValues[2], (int) distanceBetweenPoints(returnValues[1], returnValues[0]), (int) distanceBetweenPoints(returnValues[1], returnValues[3]));
+                dude.getMap().calcDepositPoints();
+            }
         } catch (NullPointerException e) {
             System.out.println("No intersection found");
         }
-        dude.getMap().calcDepositPoints();
+
     }
 
     private void addLine(double rho, double theta, List<Double> rhoList, List<Line2D> edges, Mat image){

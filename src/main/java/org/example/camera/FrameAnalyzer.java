@@ -203,7 +203,6 @@ public class FrameAnalyzer {
         clahe.apply(channels.get(0),destimage);
         Core.merge(channels,capture);
         cvtColor(capture,destimage, 1);
-        clahe.collectGarbage();
         return destimage;
     }
 
