@@ -28,7 +28,11 @@ public class DriveTowardsExit implements MyBehavior {
 
     @Override
     public boolean takeControl() {
-        if (dude.getMap().getOrangeBalls().isEmpty() && dude.getMap().getBalls().isEmpty()) {
+        if ((dude.getMap().getRobotPosition().getX() + 25) > dude.getMap().getWayPoint().x &&
+                dude.getMap().getRobotPosition().getX()-25< dude.getMap().getWayPoint().x&&
+                dude.getMap().getRobotPosition().getY()+25> dude.getMap().getWayPoint().y&&
+                dude.getMap().getRobotPosition().getY()-25< dude.getMap().getWayPoint().y&&
+                dude.getMap().getOrangeBalls().isEmpty() && dude.getMap().getBalls().isEmpty()){
             return true;
         }
         return false;

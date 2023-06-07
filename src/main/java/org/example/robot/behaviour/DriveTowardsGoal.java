@@ -17,9 +17,14 @@ public class DriveTowardsGoal implements MyBehavior{
     double distanceToLine;
     Navigation navigation;
 
+    public DriveTowardsGoal(Legofir dude) {
+        this.dude = dude;
+        navigation = new Navigation(dude);
+    }
+
     @Override
     public boolean takeControl() {
-        if (dude.getMap().getOrangeBalls().isEmpty()&&dude.getMap().getBalls().isEmpty()){
+        if (dude.getMap().getOrangeBalls().isEmpty() && dude.getMap().getBalls().isEmpty()){
             return true;
         }
         return false;
@@ -33,9 +38,7 @@ public class DriveTowardsGoal implements MyBehavior{
         while (!suppressed){
 
            navigation.checkDirection(dude.getMap().getWayPoint());
-
-
-            dude.moveForward();
+           dude.moveForward();
 
 
 

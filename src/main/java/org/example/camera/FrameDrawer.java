@@ -1,5 +1,6 @@
 package org.example.camera;
 
+import lejos.robotics.navigation.Waypoint;
 import org.example.mapping.Edge;
 import org.example.mapping.Map;
 import org.example.mapping.TennisBall;
@@ -31,6 +32,8 @@ public class FrameDrawer {
         drawExitHoles(frame);
         drawRobot(frame);
         drawCollision(frame);
+        drawWayPoint(frame);
+
     }
 
 
@@ -230,5 +233,16 @@ public class FrameDrawer {
                 }
             }
         }
+    }
+    private void drawWayPoint(Mat image){
+        if (dude.getMap().getWayPoint() !=null)
+            try {
+                Point wayPoint = dude.getMap().getWayPoint();
+                circle(image,new Point(wayPoint.x,-wayPoint.y),25,new Scalar(255,0,0),1);
+            }catch (NullPointerException e){
+                System.out.println("NullPointerException");
+            }
+
+
     }
 }

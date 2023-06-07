@@ -54,11 +54,6 @@ public class Navigation {
         int nextPointY = (int) nextPoint.y;
 
         currentAngle = dude.getAngle();
-        if (currentAngle <0){
-            currentAngle=currentAngle+Math.PI;
-        }else {
-            currentAngle = currentAngle-Math.PI;
-        }
 
         distanceToPoint = distanceBetweenPoints(new Point(currentPosition.getFrontSideX(), currentPosition.getFrontSideY()), new Point(nextPointX, nextPointY));
 

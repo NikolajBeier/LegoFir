@@ -62,7 +62,6 @@ public class EdgeDetection {
                      int width = edgeRect.width;
                      dude.getMap().setEdge(topLeft, topRight, bottomLeft, bottomRight, height, width);
                      dude.getMap().calcDepositPoints();
-                     dude.getMap().setWayPoint(dude.getMap().getDepositPoint().getCenterLeft().x+100, dude.getMap().getDepositPoint().getCenterLeft().y);
                      return edgeRect;
                 }
 
@@ -150,10 +149,14 @@ public class EdgeDetection {
 
         try {
             dude.getMap().setEdge(returnValues[1], returnValues[3], returnValues[0], returnValues[2], (int) distanceBetweenPoints(returnValues[1], returnValues[0]), (int) distanceBetweenPoints(returnValues[1], returnValues[3]));
+            dude.getMap().calcDepositPoints();
+            System.out.println("setwaypoint");
+            dude.getMap().setWayPoint(dude.getMap().getDepositPoint().getCenterLeft().x+200, dude.getMap().getDepositPoint().getCenterLeft().y);
+            System.out.println(dude.getMap().getWayPoint().x +" " + dude.getMap().getWayPoint().y);
         } catch (NullPointerException e) {
             System.out.println("No intersection found");
         }
-        dude.getMap().calcDepositPoints();
+
     }
 
     private void addLine(double rho, double theta, List<Double> rhoList, List<Line2D> edges, Mat image){

@@ -72,8 +72,8 @@ public class Launcher implements Program {
         bArray = new MyBehavior[]{
                 new DriveTowardsBall(dude),
                 new AvoidCollision(dude),
+                new DriveTowardsGoal(dude),
                 new DriveTowardsExit(dude),
-                new DropBalls(dude),
                 new StopBehaviour()
 
 
