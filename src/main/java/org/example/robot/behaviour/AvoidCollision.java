@@ -50,37 +50,43 @@ public class AvoidCollision implements MyBehavior {
         else if(checkForLeftCollision()){
             System.out.println("avoiding left collision");
             dude.moveBackward();
-            while(System.currentTimeMillis()-startTime > 1000){}
+            while(checkForFrontCollision() && !checkForBackCollision()){}
             dude.stopWheels();
             dude.turnRight();
-            while(System.currentTimeMillis()-startTime > 2000){}
+            startTime = System.currentTimeMillis();
+            while(System.currentTimeMillis()-startTime<1500){}
             dude.stopWheels();
             dude.moveForward();
-            while(System.currentTimeMillis()-startTime > 2000){}
+            startTime = System.currentTimeMillis();
+            while(System.currentTimeMillis()-startTime<1500){}
             dude.stopWheels();
         }
         else if(checkForRightCollision()){
             System.out.println("avoiding right collision");
             dude.moveBackward();
-            while(System.currentTimeMillis()-startTime > 1000){}
+            while(checkForFrontCollision() && !checkForBackCollision()){}
             dude.stopWheels();
             dude.turnLeft();
-            while(System.currentTimeMillis()-startTime > 2000){}
+            startTime = System.currentTimeMillis();
+            while(System.currentTimeMillis()-startTime<1500){}
             dude.stopWheels();
             dude.moveForward();
-            while(System.currentTimeMillis()-startTime > 2000){}
+            startTime = System.currentTimeMillis();
+            while(System.currentTimeMillis()-startTime<1500){}
             dude.stopWheels();
         }
         else if(checkForBackCollision()){
             System.out.println("avoiding back collision");
             dude.moveForward();
-            while(System.currentTimeMillis()-startTime > 1000){}
+            while(checkForBackCollision() && !checkForFrontCollision()){}
             dude.stopWheels();
-            dude.turnRight();
-            while(System.currentTimeMillis()-startTime > 2000){}
+            dude.turnLeft();
+            startTime = System.currentTimeMillis();
+            while(System.currentTimeMillis()-startTime<1500){}
             dude.stopWheels();
-            dude.moveBackward();
-            while(System.currentTimeMillis()-startTime > 2000){}
+            dude.moveForward();
+            startTime = System.currentTimeMillis();
+            while(System.currentTimeMillis()-startTime<1500){}
             dude.stopWheels();
         }
     }
@@ -118,8 +124,11 @@ public class AvoidCollision implements MyBehavior {
     private boolean checkForBackCollision() {
         Point heading = dude.getMap().getRobotPosition().getHeading();
         Point oppositeHeading = new Point(-heading.x, -heading.y);
-        double distance = dude.getMap().distanceToEdge(oppositeHeading);
-        if(distance < AVOID_DISTANCE){
+        Point leftSide = new Point(dude.getMap().getRobotPosition().leftSideX, dude.getMap().getRobotPosition().leftSideY);
+        Point rightSide = new Point(dude.getMap().getRobotPosition().rightSideX, dude.getMap().getRobotPosition().rightSideY);
+        double distanceLeft = dude.getMap().distanceToEdge(oppositeHeading,leftSide);
+        double distanceRight = dude.getMap().distanceToEdge(oppositeHeading,rightSide);
+        if(distanceRight < AVOID_DISTANCE || distanceLeft < AVOID_DISTANCE){
             return true;
         }
         return false;
@@ -128,8 +137,12 @@ public class AvoidCollision implements MyBehavior {
     private boolean checkForLeftCollision() {
         Point heading = dude.getMap().getRobotPosition().getHeading();
         Point leftHeading = new Point(-heading.y, heading.x);
-        double distance = dude.getMap().distanceToEdge(leftHeading);
-        if(distance < AVOID_DISTANCE){
+        Point rightHeading = new Point(heading.y, -heading.x);
+        Point frontSide = new Point(dude.getMap().getRobotPosition().getFrontSideX(), dude.getMap().getRobotPosition().getFrontSideY());
+        Point backSide = new Point(dude.getMap().getRobotPosition().getBackSideX(), dude.getMap().getRobotPosition().getBackSideY());
+        double distanceFront = dude.getMap().distanceToEdge(leftHeading,frontSide);
+        double distanceBack = dude.getMap().distanceToEdge(rightHeading,backSide);
+        if(distanceBack < AVOID_DISTANCE || distanceFront < AVOID_DISTANCE){
             return true;
         }
         return false;
@@ -137,22 +150,27 @@ public class AvoidCollision implements MyBehavior {
 
     private boolean checkForRightCollision() {
         Point heading = dude.getMap().getRobotPosition().getHeading();
+        Point leftHeading = new Point(-heading.y, heading.x);
         Point rightHeading = new Point(heading.y, -heading.x);
-        double distance = dude.getMap().distanceToEdge(rightHeading);
-        if(distance < AVOID_DISTANCE){
+        Point frontSide = new Point(dude.getMap().getRobotPosition().getFrontSideX(), dude.getMap().getRobotPosition().getFrontSideY());
+        Point backSide = new Point(dude.getMap().getRobotPosition().getBackSideX(), dude.getMap().getRobotPosition().getBackSideY());
+        double distanceFront = dude.getMap().distanceToEdge(rightHeading,frontSide);
+        double distanceBack = dude.getMap().distanceToEdge(leftHeading,backSide);
+        if(distanceBack < AVOID_DISTANCE || distanceFront < AVOID_DISTANCE){
             return true;
         }
-
         return false;
     }
 
     private boolean checkForFrontCollision() {
         Point heading = dude.getMap().getRobotPosition().getHeading();
-
-        double distance = dude.getMap().distanceToEdge(heading);
-        System.out.println("Distance to edge: " + distance);
-        System.out.println("Avoid distance: "+ AVOID_DISTANCE);
-        if(distance < AVOID_DISTANCE){
+        Point leftSide = new Point(dude.getMap().getRobotPosition().leftSideX, dude.getMap().getRobotPosition().leftSideY);
+        Point rightSide = new Point(dude.getMap().getRobotPosition().rightSideX, dude.getMap().getRobotPosition().rightSideY);
+        Point middle = new Point(dude.getMap().getRobotPosition().getX(), dude.getMap().getRobotPosition().getY());
+        double distanceLeft = dude.getMap().distanceToEdge(heading,leftSide);
+        double distanceRight = dude.getMap().distanceToEdge(heading,rightSide);
+        double distanceMiddle= dude.getMap().distanceToEdge(heading,middle);
+        if(distanceRight < AVOID_DISTANCE || distanceLeft < AVOID_DISTANCE || distanceMiddle < AVOID_DISTANCE){
             return true;
         }
         return false;

@@ -73,7 +73,7 @@ public class EdgeDetection {
 
 
 
-    public Point[] intersectionDetect(Mat image, Legofir dude) {
+    public void intersectionDetect(Mat image, Legofir dude) {
         //Imgproc.cvtColor(image, hlsimage, Imgproc.COLOR_BGR2HLS);
         Core.inRange(image, new Scalar(hMin, sMin, lMin), new Scalar(hMax, sMax, lMax), redMask);
 
@@ -143,44 +143,16 @@ public class EdgeDetection {
                             returnValues[3] = intersection.get(intersection.size()-1);
                         }
                     }
-
-
-
                 }
             }
          }
 
-
-        boolean allValuesPresent = true;
-        for (Point value : returnValues) {
-            if (value == null) {
-                allValuesPresent = false;
-                break;
-            }
+        try {
+            dude.getMap().setEdge(returnValues[1], returnValues[3], returnValues[0], returnValues[2], (int) distanceBetweenPoints(returnValues[1], returnValues[0]), (int) distanceBetweenPoints(returnValues[1], returnValues[3]));
+        } catch (NullPointerException e) {
+            System.out.println("No intersection found");
         }
-
-
-        if(allValuesPresent){
-            for (int i = 0; i < returnValues.length; i++) {
-                Point tempPoint = new Point(returnValues[i].x, -returnValues[i].y);
-
-                //Show numbers on corners
-                //Imgproc.putText(image, Integer.toString(i), tempPoint, FONT_HERSHEY_SIMPLEX, 2,new Scalar(0,0,255),2);
-
-                Imgproc.circle(
-                        image,                 //Matrix obj of the image
-                        tempPoint,   //Center of the circle
-                        30,                    //Radius
-                        new Scalar(225, 255, 255),  //Scalar object for color
-                        5                     //Thickness of the circle
-                );
-            }
-
-            dude.getMap().setEdge(returnValues[1], returnValues[3], returnValues[0], returnValues[2], (int)distanceBetweenPoints(returnValues[1], returnValues[0]), (int)distanceBetweenPoints(returnValues[1], returnValues[3]));
-            dude.getMap().calcDepositPoints();
-            return returnValues;
-        }
-        return null;
+        dude.getMap().calcDepositPoints();
     }
 
     private void addLine(double rho, double theta, List<Double> rhoList, List<Line2D> edges, Mat image){

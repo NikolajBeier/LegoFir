@@ -8,5 +8,6 @@ public interface MyBehavior extends Behavior {
     void action();
 
     void suppress();
+
     void setStopCondition(Boolean stopCondition);
 }

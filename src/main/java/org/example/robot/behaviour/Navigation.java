@@ -3,6 +3,7 @@ package org.example.robot.behaviour;
 import org.example.mapping.RobotPosition;
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
+import org.example.robot.model.RobotState;
 import org.example.utility.Geometry;
 import org.opencv.core.Point;
 
@@ -19,11 +20,10 @@ public class Navigation {
         this.dude=dude;
     }
 
-    public void checkDirection(TennisBall nextPoint) {
+    public void turnTowards(TennisBall nextPoint) {
 
         RobotPosition currentPosition = dude.getMap().getRobotPosition();
 
-        System.out.println("we get here");
         int nextPointX = nextPoint.getX();
         int nextPointY = nextPoint.getY();
 
@@ -32,19 +32,9 @@ public class Navigation {
 
         // vektor fra currentPosition(x,y) til (nextBallX,nextBallY)
         Point Pointvector = new Point(nextPointX - currentPosition.getX(), nextPointY - currentPosition.getY());
-        // Vinkel af vektor...
+        // Vinkel af vektor..x.
         angleToNextPoint = Geometry.degreesOfVectorInRadians(Pointvector.x, Pointvector.y);
-/*
-            System.out.println("NextBallX: " + nextBallX + ", NextBallY: " + nextBallY);
-            System.out.println("CurrentPositionX: " + currentPosition.getX() + ", CurrentPositionY: " + currentPosition.getY());
-            System.out.println("RobotToBallVectorX " + ballVector.x + ", RobotToBallVectorY" + ballVector.y);
-            System.out.println("Current angle: " + currentAngle);
-            System.out.println("Angle to next ball: " + angleToNextBall);
- */
 
-
-        //if current angle is not close to angle to next ball
-        System.out.println("isApproximatelySameAngle: " + isApproximatelySameAngle());
         if (!isApproximatelySameAngle()) {
             //turn towards ball
             if (ballIsLeftOfRobotHeading()) {
@@ -127,6 +117,36 @@ public class Navigation {
 
     public double getDistanceToPoint() {
         return distanceToPoint;
+    }
+
+    public void driveTowardsBall(TennisBall nextBall,boolean suppressed) {
+        turnTowards(nextBall);
+        dude.moveForward();
+
+        if (closeToBall(nextBall)) {
+            pickUpBall(suppressed);
+        }
+    }
+
+    private void pickUpBall(boolean suppressed) {
+        long timeBefore = System.currentTimeMillis();
+        dude.beginHarvester();
+        while (!suppressed) {
+            if (System.currentTimeMillis() - timeBefore > 2000) {
+                break;
+            }
+        }
+        dude.stopHarvester();
+    }
+
+    private boolean closeToBall(TennisBall nextBall) {
+        distanceToPoint=distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(),dude.getMap().getRobotPosition().getFrontSideY()),new Point(nextBall.getX(),nextBall.getY()));
+        System.out.println("distance to ball: "+distanceToPoint);
+        return distanceToPoint < 50;
+    }
+
+    private boolean isMovingForward() {
+        return dude.getState() == RobotState.MOVING_FORWARD;
     }
 }
 

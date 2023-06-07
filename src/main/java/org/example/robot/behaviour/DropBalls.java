@@ -10,8 +10,6 @@ public class DropBalls implements MyBehavior {
     boolean suppressed = false;
     boolean stopCondition = false;
 
-    int test = 1;
-
     public DropBalls(Legofir dude) {
         this.dude = dude;
     }

@@ -142,10 +142,10 @@ public class RobotDetection {
                 for (Rect blueBoundingRect : blues) {
                     for(Rect greenBoundingRect : greens) {
 
-                        Point blueCenter = new Point(blueBoundingRect.x + blueBoundingRect.width * 0.5, -blueBoundingRect.y - blueBoundingRect.height * 0.5);
+                        Point blueCenter = new Point(blueBoundingRect.x + blueBoundingRect.width * 0.5, -blueBoundingRect.y - blueBoundingRect.height/2);
                         dude.getMap().getRobotPosition().setLeftSideX((int)blueCenter.x);
                         dude.getMap().getRobotPosition().setLeftSideY((int)blueCenter.y);
-                        Point greenCenter = new Point(greenBoundingRect.x + greenBoundingRect.width * 0.5, -greenBoundingRect.y - greenBoundingRect.height * 0.5);
+                        Point greenCenter = new Point(greenBoundingRect.x + greenBoundingRect.width * 0.5, -greenBoundingRect.y- greenBoundingRect.height/2);
                         dude.getMap().getRobotPosition().setRightSideX((int)greenCenter.x);
                         dude.getMap().getRobotPosition().setRightSideY((int)greenCenter.y);
 
