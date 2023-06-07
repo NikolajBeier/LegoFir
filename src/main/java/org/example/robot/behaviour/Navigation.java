@@ -46,7 +46,7 @@ public class Navigation {
     }
 
 
-    public void checkDirection(Point nextPoint) {
+    public void drivesTowardsWayPoint(Point nextPoint) {
 
         RobotPosition currentPosition = dude.getMap().getRobotPosition();
 
@@ -54,27 +54,47 @@ public class Navigation {
         int nextPointY = (int) nextPoint.y;
 
         currentAngle = dude.getAngle();
-        Point Pointvector = new Point(nextPointX - currentPosition.getX(), nextPointY - currentPosition.getY());
-        double angleToPoint =Geometry.degreesOfVectorInRadians(Pointvector.x, Pointvector.y);
-        double oppositeAngle ;
-        if (angleToPoint>0){
-            oppositeAngle = angleToPoint-Math.PI;
-        } else {
-            oppositeAngle = angleToPoint+Math.PI;
-        }
+        Point pointVector = new Point(nextPointX - currentPosition.getX(), nextPointY - currentPosition.getY());
 
 
         distanceToPoint = distanceBetweenPoints(new Point(currentPosition.getFrontSideX(), currentPosition.getFrontSideY()), new Point(nextPointX, nextPointY));
 
         // vektor fra currentPosition(x,y) til (nextBallX,nextBallY)
-       // Point Pointvector = new Point(nextPointX - currentPosition.getX(), nextPointY - currentPosition.getY());
+       // Point pointvector = new Point(nextPointX - currentPosition.getX(), nextPointY - currentPosition.getY());
         // Vinkel af vektor...
-        angleToNextPoint = Geometry.degreesOfVectorInRadians(Pointvector.x, Pointvector.y);
+        angleToNextPoint = Geometry.degreesOfVectorInRadians(pointVector.x, pointVector.y);
 
 
         //if current angle is not close to angle to next ball
-        System.out.println("isApproximatelySameAngle: " + isApproximatelySameAngle(currentAngle,oppositeAngle));
-        if (!isApproximatelySameAngle(currentAngle,oppositeAngle)) {
+        System.out.println("isApproximatelySameAngle: " + isApproximatelySameAngle(currentAngle,angleToNextPoint));
+        if (!isApproximatelySameAngle(currentAngle,angleToNextPoint)) {
+            //turn towards ball
+            if (ballIsLeftOfRobotHeading()) {
+                turnLeftTowardsBall();
+            } else {
+                turnRightTowardsBall();
+            }
+        }
+    }
+
+    public void turnCheeksTowardsGoal(Point goal){
+        RobotPosition currentPosition = dude.getMap().getRobotPosition();
+
+        int nextPointX = (int) goal.x;
+        int nextPointY = (int) goal.y;
+
+        currentAngle = dude.getAngle();
+        Point pointVector = new Point(nextPointX - currentPosition.getX(), nextPointY - currentPosition.getY());
+        angleToNextPoint = Geometry.degreesOfVectorInRadians(pointVector.x, pointVector.y);
+        double oppositeAngleToNextPoint=0;
+        if (angleToNextPoint>0){
+            oppositeAngleToNextPoint=angleToNextPoint+Math.PI;
+        }else {
+            oppositeAngleToNextPoint= angleToNextPoint-Math.PI;
+        }
+
+        System.out.println("isApproximatelySameAngle: " + isApproximatelySameAngle(currentAngle,angleToNextPoint));
+        if (!isApproximatelySameAngle(currentAngle,oppositeAngleToNextPoint)) {
             //turn towards ball
             if (ballIsLeftOfRobotHeading()) {
                 turnLeftTowardsBall();

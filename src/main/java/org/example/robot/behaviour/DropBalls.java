@@ -25,7 +25,7 @@ public class DropBalls implements MyBehavior {
         dude.setCurrentBehaviourName(BehaviorName);
         while(!suppressed){
 
-            navigation.checkDirection(dude.getMap().getDepositPoint().getCenterRight());
+            navigation.drivesTowardsWayPoint(dude.getMap().getDepositPoint().getCenterRight());
             dude.openCheeks();
             dude.beginHarvester();
             try {

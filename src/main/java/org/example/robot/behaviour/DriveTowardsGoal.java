@@ -1,11 +1,6 @@
 package org.example.robot.behaviour;
 
-import org.example.mapping.Map;
-import org.example.mapping.RobotPosition;
 import org.example.robot.model.Legofir;
-import org.example.utility.Geometry;
-import org.opencv.core.Point;
-import org.example.robot.behaviour.Navigation;
 
 public class DriveTowardsGoal implements MyBehavior{
     Legofir dude;
@@ -37,7 +32,7 @@ public class DriveTowardsGoal implements MyBehavior{
 
         while (!suppressed){
 
-           navigation.checkDirection(dude.getMap().getWayPoint());
+           navigation.drivesTowardsWayPoint(dude.getMap().getWayPoint());
            dude.moveForward();
 
 

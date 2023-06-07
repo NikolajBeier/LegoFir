@@ -1,13 +1,7 @@
 package org.example.robot.behaviour;
 
 
-import org.example.mapping.RobotPosition;
-import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
-import org.example.utility.Geometry;
-import org.opencv.core.Point;
-
-import static org.example.utility.Geometry.distanceBetweenPoints;
 
 public class DriveTowardsExit implements MyBehavior {
     String BehaviorName = "DriveTowardsExit";
@@ -37,7 +31,8 @@ public class DriveTowardsExit implements MyBehavior {
         dude.setCurrentBehaviourName(BehaviorName);
         while (!suppressed) {
             System.out.println("vi når hertil DriveTowards exit");
-            navigation.checkDirection(dude.getMap().getDepositPoint().getCenterLeft());
+            navigation.turnCheeksTowardsGoal(dude.getMap().getDepositPoint().getCenterLeft());
+
             dude.moveBackward();
         }
 

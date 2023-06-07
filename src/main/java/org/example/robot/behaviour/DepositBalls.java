@@ -34,7 +34,7 @@ public class DepositBalls implements MyBehavior {
         //Todo create real point
         point.x = point.x + 50;
         while (!suppressed) {
-            navigation.checkDirection(point);
+            navigation.drivesTowardsWayPoint(point);
             dude.moveBackward();
         }
     }
