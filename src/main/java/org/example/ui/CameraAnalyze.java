@@ -19,7 +19,6 @@ import static org.opencv.imgproc.Imgproc.arrowedLine;
 
 public class CameraAnalyze {
     JFrame jFrame = new JFrame();
-    JPanel jPanel = new JPanel();
     JLabel cameraScreen = new JLabel();
     JLabel robotState = new JLabel();
     JLabel ballAmount = new JLabel();

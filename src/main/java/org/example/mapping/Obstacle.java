@@ -3,10 +3,10 @@ package org.example.mapping;
 import org.opencv.core.Point;
 
 public class Obstacle {
-    Point topPoint= new Point(0,0);
-    Point bottomPoint= new Point(0,0);
-    Point leftPoint= new Point(0,0);
-    Point rightPoint= new Point(0,0);
+    Point topPoint;
+    Point bottomPoint;
+    Point leftPoint;
+    Point rightPoint;
 
     public Point getTopPoint() {
         return topPoint;

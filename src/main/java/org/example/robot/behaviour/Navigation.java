@@ -34,8 +34,6 @@ public class Navigation {
         Point Pointvector = new Point(nextPointX - currentPosition.getX(), nextPointY - currentPosition.getY());
         // Vinkel af vektor..x.
         angleToNextPoint = Geometry.degreesOfVectorInRadians(Pointvector.x, Pointvector.y);
-        System.out.println("angleToNextPoint = " + angleToNextPoint);
-        System.out.println("currentAngle = " + currentAngle);
 
         if (!isApproximatelySameAngle()) {
             //turn towards ball
@@ -128,7 +126,6 @@ public class Navigation {
         if (closeToBall(nextBall)) {
             pickUpBall(suppressed);
         }
-
     }
 
     private void pickUpBall(boolean suppressed) {

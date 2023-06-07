@@ -42,7 +42,7 @@ public class ObstacleDetection {
 
 
 
-    public void detect(Mat image, Point topObstacle, Point bottomObstacle, Point leftObstacle, Point rightObstacle, Legofir dude) {
+    public void detect(Mat image,Legofir dude) {
 
         Core.inRange(image, new Scalar(hMin, sMin, lMin), new Scalar(hMax, sMax, lMax), redMask);
 
