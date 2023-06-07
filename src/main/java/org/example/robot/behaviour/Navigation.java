@@ -102,6 +102,13 @@ public class Navigation {
                 turnRightTowardsBall();
             }
         }
+        else {
+            long timeBefore = System.currentTimeMillis();
+            while(System.currentTimeMillis() - timeBefore < 10000){
+                dude.openCheeks();
+
+            }
+        }
     }
     private void turnLeftTowardsBall() {
         currentAngle = dude.getAngle();

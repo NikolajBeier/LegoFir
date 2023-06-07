@@ -32,10 +32,6 @@ public class DriveTowardsExit implements MyBehavior {
         while (!suppressed) {
             System.out.println("vi når hertil DriveTowards exit");
             navigation.turnCheeksTowardsGoal(dude.getMap().getDepositPoint().getCenterLeft());
-            long timeBefore = System.currentTimeMillis();
-            while(!suppressed && System.currentTimeMillis() - timeBefore < 10000){
-                dude.openCheeks();
-            }
             dude.stopAll();
             System.out.println("når vi her til igen?");
 
@@ -61,5 +57,8 @@ public class DriveTowardsExit implements MyBehavior {
                 dude.getMap().getRobotPosition().getY() + 25 > dude.getMap().getWayPoint().y &&
                 dude.getMap().getRobotPosition().getY() - 25 < dude.getMap().getWayPoint().y &&
                 dude.getMap().getOrangeBalls().isEmpty() && dude.getMap().getBalls().isEmpty();
+    }
+    private boolean isApproximatelySameAngle(double robotAngle,double targetAngle){
+        return ((Math.abs(robotAngle-targetAngle) < 0.2) || (robotAngle>3 && targetAngle<-3) || (robotAngle<-3 && targetAngle>3));
     }
 }
