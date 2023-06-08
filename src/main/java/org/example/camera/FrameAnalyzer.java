@@ -60,6 +60,10 @@ public class FrameAnalyzer {
             System.exit(1);
         }
 
+        //Calibrate Camera if JSON file exists
+
+
+
         //Starts thread which analyses and alters each frame from video capture and updates ui with the result
         EventQueue.invokeLater(() -> new Thread(() -> {
                     while (true) {

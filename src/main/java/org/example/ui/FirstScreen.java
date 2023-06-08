@@ -2,6 +2,7 @@ package org.example.ui;
 
 import org.example.robot.model.Legofir;
 import org.example.ui.Calibration.CalibrationTool;
+import org.example.ui.Calibration.CameraCalibrationTool;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,6 +13,7 @@ public class FirstScreen {
     static JFrame jFrame = new JFrame();
     JButton camera = new JButton("Begin");
     JButton calibrationTool = new JButton("Calibration");
+    JButton cameraCalibration = new JButton("Camera Calibration");
     JLabel header = new JLabel("Jank'o Fett", SwingConstants.CENTER);
     JPanel buttons = new JPanel();
 
@@ -36,10 +38,16 @@ public class FirstScreen {
                 final CalibrationTool calibrationTool = new CalibrationTool();
             });
         });
+        cameraCalibration.addActionListener(e-> {
+            EventQueue.invokeLater(()->{
+                final CameraCalibrationTool cameraCalibrationTool = new CameraCalibrationTool();
+            });
+        });
         header.setPreferredSize(new Dimension(300, 75));
         buttons.setLayout(new GridLayout(0, 2));
         buttons.add(camera);
         buttons.add(calibrationTool);
+        buttons.add(cameraCalibration);
     }
     private void showUI() {
         jFrame.add(header, BorderLayout.NORTH);
