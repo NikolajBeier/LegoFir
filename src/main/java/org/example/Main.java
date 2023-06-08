@@ -5,7 +5,6 @@ import org.example.robot.model.Legofir;
 import org.example.mapping.ObjectColor;
 import org.example.ui.Calibration.CalibrationTool;
 import org.example.ui.FirstScreen;
-import org.example.ui.Calibration.CameraCalibrationTool;
 import org.example.ui.ConnectToRobot;
 import org.example.ui.Visualization;
 import org.json.simple.JSONArray;

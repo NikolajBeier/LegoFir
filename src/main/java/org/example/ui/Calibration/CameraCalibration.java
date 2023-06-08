@@ -8,7 +8,10 @@ import org.opencv.core.Point;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.*;
+import org.opencv.videoio.VideoCapture;
+import org.opencv.videoio.Videoio;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.ByteArrayInputStream;
 import java.io.FileWriter;
@@ -17,6 +20,7 @@ import java.util.List;
 
 import static org.opencv.calib3d.Calib3d.CALIB_CB_ADAPTIVE_THRESH;
 import static org.opencv.calib3d.Calib3d.CALIB_CB_NORMALIZE_IMAGE;
+import static org.opencv.imgproc.Imgproc.resize;
 
 
 public class CameraCalibration {
@@ -41,13 +45,59 @@ public class CameraCalibration {
     private final int numCornersHor;
     private final int numCornersVer;
 
+    private boolean running = true;
+
+    VideoCapture capture;
+    Mat image;
+    Mat webCamImage;
+    byte[] imageData;
+    ImageIcon icon;
+    boolean detect;
+
     public CameraCalibration(){
-        this.boardsNumber = 1;
+        this.boardsNumber = 4;
         this.numCornersHor = 9;
         this.numCornersVer = 6;
         int numSquares = this.numCornersHor * this.numCornersVer;
         for (int j = 0; j < numSquares; j++)
             obj.push_back(new MatOfPoint3f(new Point3((double) j / this.numCornersHor, j % this.numCornersVer, 0.0f)));
+    }
+
+    public void runCalibration(JLabel cameraScreen){
+        capture = new VideoCapture(0);
+        capture.set(Videoio.CAP_PROP_BUFFERSIZE, 3);
+        image = new Mat();
+        webCamImage = new Mat();
+        capture.read(image);
+        final MatOfByte tempBuf = new MatOfByte();
+        Imgcodecs.imencode(".jpg", image, tempBuf);
+        imageData = tempBuf.toArray();
+        icon = new ImageIcon(imageData);
+
+
+        while(running){
+            // read image to matrix
+            capture.read(image);
+            //image = Imgcodecs.imread("chessboard.jpg");
+
+            if(detect){
+                detectBoard(image);
+            }
+
+            if (getCalibrated())
+            {
+                image = undistort(image);
+            }
+            resize(image, image, new Size(1280, 720));
+            final MatOfByte buf = new MatOfByte();
+            Imgcodecs.imencode(".jpg", image, buf);
+
+            imageData = buf.toArray();
+
+            // Add to JLabel
+            icon = new ImageIcon(imageData);
+            cameraScreen.setIcon(icon);
+        }
     }
 
 
@@ -64,7 +114,7 @@ public class CameraCalibration {
             Size boardSize = new Size(this.numCornersVer, this.numCornersHor);
             // look for the inner chessboard corners
             found = Calib3d.findChessboardCorners(grayImage, boardSize, imageCorners,
-                     Calib3d.CALIB_CB_FAST_CHECK + CALIB_CB_ADAPTIVE_THRESH);
+                     Calib3d.CALIB_CB_FAST_CHECK );//+ CALIB_CB_ADAPTIVE_THRESH);
             // all the required corners have been found...
             if (found && !imageCorners.empty())
             {
@@ -104,6 +154,11 @@ public class CameraCalibration {
             this.successes++;
         }
     }
+
+    public boolean isSufficient(){
+        return this.successes == this.boardsNumber;
+    }
+
     public Mat undistort(Mat image){
         // prepare the undistored image
         Mat undistort = new Mat();
@@ -136,5 +191,12 @@ public class CameraCalibration {
         } catch (Exception exception) {
 
         }
+    }
+    public void closeCalibration(){
+        running = false;
+        capture.release();
+    }
+    public void setDetect(boolean detect){
+        this.detect = detect;
     }
 }

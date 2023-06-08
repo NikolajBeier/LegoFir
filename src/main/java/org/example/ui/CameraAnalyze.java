@@ -76,16 +76,16 @@ public class CameraAnalyze {
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setVisible(true);
     }
-    public void updateUI(ImageIcon imageIcon){
+    public void updateUI(ImageIcon imageIcon) {
         String currentBehaviour = dude.getCurrentBehaviourName();
         int currentBallAmount = dude.getMap().getBalls().size();
-        int currentOrangeBallAmount=dude.getMap().getOrangeBalls().size();
+        int currentOrangeBallAmount = dude.getMap().getOrangeBalls().size();
         RobotState currentState = dude.getState();
         RobotPosition currentPostion = dude.getMap().getRobotPosition();
         robotBehaviour.setText("Current Behaviour: " + currentBehaviour);
         robotState.setText("Current Robot State: " + currentState.name());
-        ballAmount.setText("Amount of balls left: "+(currentBallAmount+currentOrangeBallAmount));
-        robotPosition.setText("Current Position: x = " + currentPostion.getX() + ", y = "+ currentPostion.getY());
+        ballAmount.setText("Amount of balls left: " + (currentBallAmount + currentOrangeBallAmount));
+        robotPosition.setText("Current Position: x = " + currentPostion.getX() + ", y = " + currentPostion.getY());
         cameraScreen.setIcon(imageIcon);
     }
 

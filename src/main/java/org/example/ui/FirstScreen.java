@@ -2,7 +2,6 @@ package org.example.ui;
 
 import org.example.robot.model.Legofir;
 import org.example.ui.Calibration.CalibrationTool;
-import org.example.ui.Calibration.CameraCalibrationTool;
 
 import javax.swing.*;
 import java.awt.*;
@@ -40,7 +39,7 @@ public class FirstScreen {
         });
         cameraCalibration.addActionListener(e-> {
             EventQueue.invokeLater(()->{
-                final CameraCalibrationTool cameraCalibrationTool = new CameraCalibrationTool();
+                final CameraCalibrationToolUI cameraCalibrationToolUI = new CameraCalibrationToolUI();
             });
         });
         header.setPreferredSize(new Dimension(300, 75));
