@@ -37,16 +37,16 @@ public class Navigation {
 
         if (!isApproximatelySameAngle(currentAngle,angleToNextPoint)) {
             //turn towards ball
-            if (ballIsLeftOfRobotHeading()) {
-                turnLeftTowardsBall();
+            if (pointIsLeftOfRobotHeading()) {
+                turnLeftTowardsPoint();
             } else {
-                turnRightTowardsBall();
+                turnRightTowardsPoint();
             }
         }
     }
 
 
-    public void drivesTowardsWayPoint(Point nextPoint) {
+    public void turnsTowardsWayPoint(Point nextPoint) {
 
         RobotPosition currentPosition = dude.getMap().getRobotPosition();
 
@@ -69,10 +69,10 @@ public class Navigation {
         //System.out.println("isApproximatelySameAngle: " + isApproximatelySameAngle(currentAngle,angleToNextPoint));
         if (!isApproximatelySameAngle(currentAngle,angleToNextPoint)) {
             //turn towards ball
-            if (ballIsLeftOfRobotHeading()) {
-                turnLeftTowardsBall();
+            if (pointIsLeftOfRobotHeading()) {
+                turnLeftTowardsPoint();
             } else {
-                turnRightTowardsBall();
+                turnRightTowardsPoint();
             }
         }
     }
@@ -97,11 +97,11 @@ public class Navigation {
         System.out.println("isApproximatelySameAngle: " + isApproximatelySameAngle(currentAngle,oppositeAngleToNextPoint));
         if (!isApproximatelySameAngle(currentAngle,oppositeAngleToNextPoint)) {
             //turn towards ball
-            if (ballIsLeftOfRobotHeading()) {
-                turnLeftTowardsBall();
+            if (pointIsLeftOfRobotHeading()) {
+                turnLeftTowardsPoint();
 
             } else {
-                turnRightTowardsBall();
+                turnRightTowardsPoint();
             }
         }
         else {
@@ -113,15 +113,15 @@ public class Navigation {
             dude.stopBallDropper();
         }
     }
-    private void turnLeftTowardsBall() {
+    private void turnLeftTowardsPoint() {
 
         currentAngle = dude.getAngle();
-        if (ballIsLeftOfRobotHeading()) {
+        if (pointIsLeftOfRobotHeading()) {
             logger.info("time: "+System.currentTimeMillis()+". Turning left - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
             //System.out.println("turning left: "+currentAngle + " " + angleToNextBall);
             // Turn left towards ball
             dude.turnLeft();
-            while (ballIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint) {
+            while (pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint) {
                 currentAngle = dude.getAngle();
                 //System.out.println("Turning Left. CurrentAngle = " + currentAngle);
             }
@@ -131,7 +131,7 @@ public class Navigation {
             //System.out.println("turning left: "+currentAngle + " " + angleToNextBall);
         }
     }
-    private boolean ballIsLeftOfRobotHeading( ) {
+    private boolean pointIsLeftOfRobotHeading( ) {
         double oppositeAngleOfRobot;
 
         // Robot's heading in upper quadrant.
@@ -162,14 +162,14 @@ public class Navigation {
             } else return false;
         }
     }
-    private void turnRightTowardsBall() {
+    private void turnRightTowardsPoint() {
         currentAngle = dude.getAngle();
-        if (!ballIsLeftOfRobotHeading()) {
+        if (!pointIsLeftOfRobotHeading()) {
             logger.info("time: "+System.currentTimeMillis()+". Turning right - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
             //System.out.println("turning right: "+currentAngle + " " + angleToNextBall);
 
             dude.turnRight();
-            while(!ballIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint){
+            while(!pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint){
                 currentAngle = dude.getAngle();
                 //System.out.println("Turning Right. CurrentAngle = " + currentAngle);
             }
@@ -195,6 +195,10 @@ public class Navigation {
         if (closeToBall(nextBall)) {
             pickUpBall(suppressed);
         }
+    }
+    public void driveTowardsWaypoint(Point point) {
+        turnsTowardsWayPoint(point);
+        dude.moveForward();
     }
 
     private void pickUpBall(boolean suppressed) {

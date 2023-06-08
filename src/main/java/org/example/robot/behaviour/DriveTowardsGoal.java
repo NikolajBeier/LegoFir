@@ -7,9 +7,6 @@ public class DriveTowardsGoal implements MyBehavior{
     String BehaviorName = "DriveTowardsGoal";
     boolean suppressed = false;
     boolean stopCondition = false;
-    double currentAngle;
-    double angleToLine;
-    double distanceToLine;
     Navigation navigation;
 
     public DriveTowardsGoal(Legofir dude) {
@@ -32,8 +29,8 @@ public class DriveTowardsGoal implements MyBehavior{
 
         while (!suppressed){
 
-           navigation.drivesTowardsWayPoint(dude.getMap().getWayPoint());
-           dude.moveForward();
+           navigation.turnsTowardsWayPoint(dude.getMap().getWayPoint());
+           navigation.driveTowardsWaypoint(dude.getMap().getWayPoint());
         }
 
 
