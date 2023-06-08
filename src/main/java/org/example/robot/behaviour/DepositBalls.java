@@ -3,7 +3,7 @@ package org.example.robot.behaviour;
 
 import org.example.robot.model.Legofir;
 
-public class DriveTowardsExit implements MyBehavior {
+public class DepositBalls implements MyBehavior {
     String BehaviorName = "DriveTowardsExit";
     boolean suppressed = false;
     Legofir dude;
@@ -14,7 +14,7 @@ public class DriveTowardsExit implements MyBehavior {
     Navigation navigation;
 
 
-    public DriveTowardsExit(Legofir dude) {
+    public DepositBalls(Legofir dude) {
         this.dude = dude;
         navigation = new Navigation(dude);
     }
@@ -32,7 +32,6 @@ public class DriveTowardsExit implements MyBehavior {
         while (!suppressed) {
             System.out.println("vi når hertil DriveTowards exit");
             navigation.turnCheeksTowardsGoal(dude.getMap().getDepositPoint().getCenterLeft());
-            dude.stopAll();
             System.out.println("når vi her til igen?");
 
         }
@@ -52,13 +51,10 @@ public class DriveTowardsExit implements MyBehavior {
 
     }
     public Boolean checkIfRobotIsOnPoint(){
-        return (dude.getMap().getRobotPosition().getX() + 25) > dude.getMap().getWayPoint().x &&
+        return (dude.getMap().getRobotPosition().getX() + 25 > dude.getMap().getWayPoint().x &&
                 dude.getMap().getRobotPosition().getX() - 25 < dude.getMap().getWayPoint().x &&
                 dude.getMap().getRobotPosition().getY() + 25 > dude.getMap().getWayPoint().y &&
                 dude.getMap().getRobotPosition().getY() - 25 < dude.getMap().getWayPoint().y &&
-                dude.getMap().getOrangeBalls().isEmpty() && dude.getMap().getBalls().isEmpty();
-    }
-    private boolean isApproximatelySameAngle(double robotAngle,double targetAngle){
-        return ((Math.abs(robotAngle-targetAngle) < 0.2) || (robotAngle>3 && targetAngle<-3) || (robotAngle<-3 && targetAngle>3));
+                dude.getMap().getOrangeBalls().isEmpty() && dude.getMap().getBalls().isEmpty());
     }
 }

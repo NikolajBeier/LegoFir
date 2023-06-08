@@ -34,26 +34,6 @@ public class DriveTowardsGoal implements MyBehavior{
 
            navigation.drivesTowardsWayPoint(dude.getMap().getWayPoint());
            dude.moveForward();
-
-
-
-
-            /*RobotPosition robotPosition = dude.getMap().getRobotPosition();
-
-            int getLineX = 0;
-            int getlineY = 0;
-
-            currentAngle = dude.getAngle();
-
-            Point lineVector = new Point(getLineX-robotPosition.getX(), getlineY-robotPosition.getY());
-            // Vinkel af vektor...
-            angleToLine= Geometry.degreesOfVectorInRadians(lineVector.x,lineVector.y);
-
-
-
-             */
-
-
         }
 
 

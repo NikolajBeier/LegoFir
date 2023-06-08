@@ -88,16 +88,18 @@ public class Navigation {
         angleToNextPoint = Geometry.degreesOfVectorInRadians(pointVector.x, pointVector.y);
         double oppositeAngleToNextPoint=0;
         if (angleToNextPoint>0){
-            oppositeAngleToNextPoint=angleToNextPoint+Math.PI;
+            oppositeAngleToNextPoint=angleToNextPoint-Math.PI;
         }else {
-            oppositeAngleToNextPoint= angleToNextPoint-Math.PI;
+            oppositeAngleToNextPoint= angleToNextPoint+Math.PI;
         }
+        angleToNextPoint=oppositeAngleToNextPoint;
 
-        System.out.println("isApproximatelySameAngle: " + isApproximatelySameAngle(currentAngle,angleToNextPoint));
+        System.out.println("isApproximatelySameAngle: " + isApproximatelySameAngle(currentAngle,oppositeAngleToNextPoint));
         if (!isApproximatelySameAngle(currentAngle,oppositeAngleToNextPoint)) {
             //turn towards ball
             if (ballIsLeftOfRobotHeading()) {
                 turnLeftTowardsBall();
+
             } else {
                 turnRightTowardsBall();
             }
@@ -108,9 +110,11 @@ public class Navigation {
                 dude.openCheeks();
 
             }
+            dude.stopBallDropper();
         }
     }
     private void turnLeftTowardsBall() {
+
         currentAngle = dude.getAngle();
         if (ballIsLeftOfRobotHeading()) {
             logger.info("time: "+System.currentTimeMillis()+". Turning left - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
@@ -127,7 +131,7 @@ public class Navigation {
             //System.out.println("turning left: "+currentAngle + " " + angleToNextBall);
         }
     }
-    private boolean ballIsLeftOfRobotHeading() {
+    private boolean ballIsLeftOfRobotHeading( ) {
         double oppositeAngleOfRobot;
 
         // Robot's heading in upper quadrant.

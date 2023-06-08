@@ -12,6 +12,7 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.CLAHE;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
+import org.opencv.videoio.Videoio;
 
 import javax.swing.*;
 import java.awt.*;
@@ -44,7 +45,7 @@ public class FrameAnalyzer {
         this.cameraAnalyze = cameraAnalyze;
         frameDetector = new FrameDetector(dude);
         frameDrawer = new FrameDrawer(dude,frameDetector);
-        capture = new VideoCapture(0);
+        capture = new VideoCapture(0, Videoio.CAP_DSHOW);
 
         //Starts thread which analyses and alters each frame from video capture and updates ui with the result
         EventQueue.invokeLater(() -> new Thread(() -> {

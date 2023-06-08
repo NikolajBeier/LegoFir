@@ -157,7 +157,6 @@ public class EdgeDetection {
         } catch (NullPointerException e) {
             System.out.println("No intersection found");
         }
-        dude.getMap().calcDepositPoints();
     }
 
     private void addLine(double rho, double theta, List<Double> rhoList, List<Line2D> edges, Mat image){
