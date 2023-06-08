@@ -42,7 +42,7 @@ public class CameraCalibration {
     private final int numCornersVer;
 
     public CameraCalibration(){
-        this.boardsNumber = 6;
+        this.boardsNumber = 1;
         this.numCornersHor = 9;
         this.numCornersVer = 6;
         int numSquares = this.numCornersHor * this.numCornersVer;
@@ -117,8 +117,11 @@ public class CameraCalibration {
     }
 
     public void saveCalibration() {
+
+        JSONArray objectjson = new JSONArray();
+        objectjson.add(objectPoints);
         JSONObject params = new JSONObject();
-        params.put("objectPoints", new JSONArray().add(objectPoints));
+        params.put("objectPoints", objectjson);
         params.put("imagePoints", new JSONArray().add(imagePoints));
         params.put("savedImageSize", new JSONArray().add(savedImage.size()));
         params.put("intrinsic", new JSONArray().add(intrinsic));

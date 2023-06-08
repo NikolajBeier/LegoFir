@@ -150,13 +150,34 @@ public class EdgeDetection {
         try {
             if (returnValues[0] != null && returnValues[1] != null && returnValues[2] != null && returnValues[3] != null) {
                 System.out.println("Intersection found");
-                dude.getMap().setEdge(returnValues[1], returnValues[3], returnValues[0], returnValues[2], (int) distanceBetweenPoints(returnValues[1], returnValues[0]), (int) distanceBetweenPoints(returnValues[1], returnValues[3]));
+                warpToEdge(image, returnValues);
+                //dude.getMap().setEdge(returnValues[1], returnValues[3], returnValues[0], returnValues[2], (int) distanceBetweenPoints(returnValues[1], returnValues[0]), (int) distanceBetweenPoints(returnValues[1], returnValues[3]));
+                dude.getMap().setEdge(new Point(0, -0), new Point(image.width(), -0), new Point(0, -image.height()), new Point(image.width(), -image.height()), (int) distanceBetweenPoints(new Point(0, -0), new Point(0, -image.height())), (int) distanceBetweenPoints(new Point(0, -0), new Point(image.width(), -0)));
                 dude.getMap().setWayPoint(dude.getMap().getDepositPoint().getCenterLeft().x+200, dude.getMap().getDepositPoint().getCenterLeft().y);
                 dude.getMap().calcDepositPoints();
             }
         } catch (NullPointerException e) {
             System.out.println("No intersection found");
         }
+    }
+
+    private void warpToEdge(Mat image, Point[] points){
+        MatOfPoint2f src = new MatOfPoint2f(
+                new Point(points[1].x, -points[1].y),
+                new Point(points[3].x, -points[3].y),
+                new Point(points[0].x, -points[0].y),
+                new Point(points[2].x, -points[2].y)
+        );
+
+        MatOfPoint2f dst = new MatOfPoint2f(
+                new Point(0, 0),
+                new Point(image.width(), 0),
+                new Point(0, image.height()),
+                new Point(image.width(), image.height())
+        );
+
+        Mat warpMat = Imgproc.getPerspectiveTransform(src, dst);
+        Imgproc.warpPerspective(image, image, warpMat, image.size());
     }
 
     private void addLine(double rho, double theta, List<Double> rhoList, List<Line2D> edges, Mat image){

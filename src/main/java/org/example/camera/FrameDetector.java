@@ -21,9 +21,9 @@ public class FrameDetector {
         this.dude = dude;
     }
     public void detect(Mat frame) {
+        detectEdges(frame);
         detectRobot(frame);
         detectBalls(frame);
-        detectEdges(frame);
         incrementFrameCounter();
     }
     private void detectBalls(Mat frame) {
@@ -43,7 +43,7 @@ public class FrameDetector {
 
     private void detectEdges(Mat frame) {
         // Edge and obstacle detection every 10 frames
-        if (edgeDetectionOn && counter%10==0) {
+        if (edgeDetectionOn) {
             edgeDetection.intersectionDetect(frame, dude);
             obstacleDetection.detect(frame, dude);
         }
