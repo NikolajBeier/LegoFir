@@ -51,15 +51,10 @@ public class FrameAnalyzer {
         if (os.contains("win")) {
             // operating system is Windows
             capture = new VideoCapture(0, Videoio.CAP_DSHOW);
-        } else if (os.contains("mac")) {
-            // operating system is Mac
-            capture = new VideoCapture(0);
         } else {
-            // throw an exception if non of the above
-            System.out.println("Unsupported operating system.");
-            System.exit(1);
+            // operating system is Mac or other
+            capture = new VideoCapture(0);
         }
-
         //Starts thread which analyses and alters each frame from video capture and updates ui with the result
         EventQueue.invokeLater(() -> new Thread(() -> {
                     while (true) {
