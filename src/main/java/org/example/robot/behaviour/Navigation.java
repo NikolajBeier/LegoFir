@@ -16,8 +16,10 @@ public class Navigation {
     Legofir dude;
     double distanceToPoint=0;
     double angleToNextPoint=0;
-    public Navigation(Legofir dude){
+    MyBehavior myBehavior;
+    public Navigation(Legofir dude, MyBehavior myBehavior) {
         this.dude=dude;
+        this.myBehavior= myBehavior;
     }
 
     public void turnTowards(TennisBall nextPoint) {
@@ -77,7 +79,7 @@ public class Navigation {
         }
     }
 
-    public void turnCheeksTowardsGoal(Point goal){
+    public void turnCheeksTowardsGoal(Point goal, boolean suppressed){
         RobotPosition currentPosition = dude.getMap().getRobotPosition();
 
         int nextPointX = (int) goal.x;
@@ -121,7 +123,7 @@ public class Navigation {
             //System.out.println("turning left: "+currentAngle + " " + angleToNextBall);
             // Turn left towards ball
             dude.turnLeft();
-            while (pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint) {
+            while (pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && !myBehavior.isSuppressed()) {
                 currentAngle = dude.getAngle();
                 //System.out.println("Turning Left. CurrentAngle = " + currentAngle);
             }
@@ -162,14 +164,14 @@ public class Navigation {
             } else return false;
         }
     }
-    private void turnRightTowardsPoint() {
+    private void turnRightTowardsPoint(){
         currentAngle = dude.getAngle();
         if (!pointIsLeftOfRobotHeading()) {
             logger.info("time: "+System.currentTimeMillis()+". Turning right - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
             //System.out.println("turning right: "+currentAngle + " " + angleToNextBall);
 
             dude.turnRight();
-            while(!pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint){
+            while(!pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && !myBehavior.isSuppressed()){
                 currentAngle = dude.getAngle();
                 //System.out.println("Turning Right. CurrentAngle = " + currentAngle);
             }
@@ -188,13 +190,13 @@ public class Navigation {
         return distanceToPoint;
     }
 
-    public void driveTowardsBall(TennisBall nextBall,boolean suppressed) {
-        while(!suppressed) {
+    public void driveTowardsBall(TennisBall nextBall) {
+        while(!myBehavior.isSuppressed()) {
             turnTowards(nextBall);
             dude.moveForward();
 
             if (closeToBall(nextBall)) {
-                pickUpBall(suppressed);
+                pickUpBall();
                 break;
             }
         }
@@ -204,10 +206,10 @@ public class Navigation {
         dude.moveForward();
     }
 
-    private void pickUpBall(boolean suppressed) {
+    private void pickUpBall() {
         long timeBefore = System.currentTimeMillis();
         dude.beginHarvester();
-        while (!suppressed) {
+        while (!myBehavior.isSuppressed()) {
             if (System.currentTimeMillis() - timeBefore > 1000) {
                 break;
             }

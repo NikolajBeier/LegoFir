@@ -13,6 +13,9 @@ import static org.example.utility.Geometry.distanceBetweenPoints;
 
 public class DriveTowardsBall implements MyBehavior {
     String BehaviorName = "DriveTowardsBall";
+
+
+
     boolean suppressed = false;
     Legofir dude;
     boolean stopCondition = false;
@@ -20,7 +23,7 @@ public class DriveTowardsBall implements MyBehavior {
 
     public DriveTowardsBall(Legofir dude) {
         this.dude = dude;
-        navigation= new Navigation(dude);
+        navigation= new Navigation(dude,this);
     }
 
 
@@ -39,7 +42,7 @@ public class DriveTowardsBall implements MyBehavior {
         dude.setCurrentBehaviourName(BehaviorName);
         while(!suppressed){
             TennisBall nextBall = dude.getMap().getNextBall();
-            navigation.driveTowardsBall(nextBall, suppressed);
+            navigation.driveTowardsBall(nextBall);
         }
         dude.stopWheels();
         dude.stopHarvester();
@@ -54,5 +57,9 @@ public class DriveTowardsBall implements MyBehavior {
         this.stopCondition=stopCondition;
         suppressed= true;
     }
+    public boolean isSuppressed() {
+        return suppressed;
+    }
+
 
 }

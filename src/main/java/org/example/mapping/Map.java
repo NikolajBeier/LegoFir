@@ -16,6 +16,7 @@ public class Map {
     int y;
     int size;
     Edge edge = new Edge();
+    Edge unwarpedEdge = new Edge();
     Obstacle obstacle = new Obstacle();
     RobotPosition robotPosition = new RobotPosition();
     List<TennisBall> balls = new ArrayList<>();
@@ -134,14 +135,21 @@ public class Map {
         Point topRight = edge.getTopRight();
         Point bottomLeft = edge.getBottomLeft();
         Point bottomRight = edge.getBottomRight();
+        Point topObstacle = obstacle.getTopPoint();
+        Point bottomObstacle = obstacle.getBottomPoint();
+        Point leftObstacle = obstacle.getLeftPoint();
+        Point rightObstacle = obstacle.getRightPoint();
+
+
+
 
         // Lines of the map
         Line2D.Double[] edges = {new Line2D.Double(topLeft.x, topLeft.y, topRight.x, topRight.y),
                 new Line2D.Double(bottomLeft.x, bottomLeft.y, bottomRight.x, bottomRight.y),
                 new Line2D.Double(topLeft.x, topLeft.y, bottomLeft.x, bottomLeft.y),
                 new Line2D.Double(topRight.x, topRight.y, bottomRight.x, bottomRight.y),
-                new Line2D.Double(obstacle.getRightPoint().x, obstacle.getRightPoint().y, obstacle.getLeftPoint().x, obstacle.getLeftPoint().y),
-                new Line2D.Double(obstacle.getTopPoint().x, obstacle.getTopPoint().y, obstacle.getBottomPoint().x, obstacle.getBottomPoint().y)
+                new Line2D.Double(rightObstacle.x, rightObstacle.y, leftObstacle.x, leftObstacle.y),
+                new Line2D.Double(topObstacle.x, topObstacle.y, bottomObstacle.x, bottomObstacle.y)
         };
 
         double distanceFromStartingPointToEdge = Double.MAX_VALUE;
@@ -183,5 +191,17 @@ public class Map {
 
     public Obstacle getObstacle() {
         return obstacle;
+    }
+
+    public void setUnWarpedEdges(Point topLeft, Point topRight, Point bottomLeft, Point bottomRight, int height, int width) {
+        unwarpedEdge.setAll(topLeft, topRight, bottomLeft, bottomRight, height, width);
+    }
+
+    public Edge getUnwarpedEdge() {
+        return unwarpedEdge;
+    }
+
+    public Point[] getUnWarpedEdges() {
+        return new Point[] {unwarpedEdge.getBottomLeft(), unwarpedEdge.getTopLeft(), unwarpedEdge.getBottomRight(), unwarpedEdge.getTopRight()};
     }
 }

@@ -10,4 +10,6 @@ public interface MyBehavior extends Behavior {
     void suppress();
 
     void setStopCondition(Boolean stopCondition);
+
+    boolean isSuppressed();
 }

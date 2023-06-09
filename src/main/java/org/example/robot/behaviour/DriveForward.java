@@ -21,6 +21,11 @@ public class DriveForward implements MyBehavior {
     }
 
     @Override
+    public boolean isSuppressed() {
+        return false;
+    }
+
+    @Override
     public void suppress(){
         suppressed = true;
     }

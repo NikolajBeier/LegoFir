@@ -11,16 +11,14 @@ public class DriveTowardsGoal implements MyBehavior{
 
     public DriveTowardsGoal(Legofir dude) {
         this.dude = dude;
-        navigation = new Navigation(dude);
+        navigation = new Navigation(dude,this);
     }
 
     @Override
     public boolean takeControl() {
         if (dude.getMap().getOrangeBalls().isEmpty() && dude.getMap().getBalls().isEmpty()){
-            System.out.println("DriveTowardsGoal");
             return true;
         }
-        System.out.println("DriveTowardsGoal+");
         return false;
     }
 
@@ -42,5 +40,10 @@ public class DriveTowardsGoal implements MyBehavior{
         this.stopCondition=stopCondition;
         suppressed= true;
         }
+
+    @Override
+    public boolean isSuppressed() {
+        return false;
+    }
 }
 

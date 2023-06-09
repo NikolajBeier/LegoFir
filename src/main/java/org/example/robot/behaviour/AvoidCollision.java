@@ -22,6 +22,11 @@ public class AvoidCollision implements MyBehavior {
     }
 
     @Override
+    public boolean isSuppressed() {
+        return false;
+    }
+
+    @Override
     public void action() {
         suppressed = false;
         dude.setCurrentBehaviourName(BehaviorName);
@@ -57,6 +62,7 @@ public class AvoidCollision implements MyBehavior {
                 collision = collisionNavigation.isCollidingOnTheBack();
                 break;
         }
+        System.out.println("Collision take control: " + collision);
         return collision;
     }
 }

@@ -5,8 +5,8 @@ import org.opencv.core.Point;
 
 public class CollisionNavigation {
     Legofir dude;
-    private final double FRONTAL_AVOID_DISTANCE = 150;
-    private final double TURNING_AVOID_DISTANCE = 50;
+    private final double FRONTAL_AVOID_DISTANCE = 200;
+    private final double TURNING_AVOID_DISTANCE = 100;
     private long startTime;
     public CollisionNavigation(Legofir dude){
         this.dude=dude;
@@ -92,6 +92,7 @@ public class CollisionNavigation {
         Point backSide = new Point(dude.getMap().getRobotPosition().getBackSideX(), dude.getMap().getRobotPosition().getBackSideY());
         double distanceFront = dude.getMap().distanceToEdge(leftHeading,frontSide);
         double distanceBack = dude.getMap().distanceToEdge(rightHeading,backSide);
+        System.out.println("Turning Left. Distance front: " + distanceFront + " distance back: " + distanceBack);
         if(distanceBack < TURNING_AVOID_DISTANCE || distanceFront < TURNING_AVOID_DISTANCE){
             return true;
         }
@@ -106,6 +107,7 @@ public class CollisionNavigation {
         Point backSide = new Point(dude.getMap().getRobotPosition().getBackSideX(), dude.getMap().getRobotPosition().getBackSideY());
         double distanceFront = dude.getMap().distanceToEdge(rightHeading,frontSide);
         double distanceBack = dude.getMap().distanceToEdge(leftHeading,backSide);
+        System.out.println("Turning Right. Distance front: " + distanceFront + " distance back: " + distanceBack);
         if(distanceBack < TURNING_AVOID_DISTANCE || distanceFront < TURNING_AVOID_DISTANCE){
             return true;
         }

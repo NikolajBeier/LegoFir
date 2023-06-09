@@ -16,7 +16,7 @@ public class DepositBalls implements MyBehavior {
 
     public DepositBalls(Legofir dude) {
         this.dude = dude;
-        navigation = new Navigation(dude);
+        navigation = new Navigation(dude,this);
     }
 
 
@@ -31,7 +31,7 @@ public class DepositBalls implements MyBehavior {
         dude.setCurrentBehaviourName(BehaviorName);
         while (!suppressed) {
             System.out.println("vi når hertil DriveTowards exit");
-            navigation.turnCheeksTowardsGoal(dude.getMap().getDepositPoint().getCenterLeft());
+            navigation.turnCheeksTowardsGoal(dude.getMap().getDepositPoint().getCenterLeft(),suppressed);
             System.out.println("når vi her til igen?");
 
         }
@@ -50,6 +50,12 @@ public class DepositBalls implements MyBehavior {
         suppressed = true;
 
     }
+
+    @Override
+    public boolean isSuppressed() {
+        return false;
+    }
+
     public Boolean checkIfRobotIsOnPoint(){
         return (dude.getMap().getRobotPosition().getX() + 25 > dude.getMap().getWayPoint().x &&
                 dude.getMap().getRobotPosition().getX() - 25 < dude.getMap().getWayPoint().x &&
