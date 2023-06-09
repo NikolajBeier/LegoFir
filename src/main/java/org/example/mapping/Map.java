@@ -160,6 +160,75 @@ public class Map {
 
         return shortestDistance;
     }
+
+    public double distanceToEdge(Point startingPoint) {
+        // Edge points of the map
+        Point topLeft = edge.getTopLeft();
+        Point topRight = edge.getTopRight();
+        Point bottomLeft = edge.getBottomLeft();
+        Point bottomRight = edge.getBottomRight();
+
+        // Lines of the map
+        Line2D.Double[] edges = {new Line2D.Double(topLeft.x, topLeft.y, topRight.x, topRight.y),
+                new Line2D.Double(bottomLeft.x, bottomLeft.y, bottomRight.x, bottomRight.y),
+                new Line2D.Double(topLeft.x, topLeft.y, bottomLeft.x, bottomLeft.y),
+                new Line2D.Double(topRight.x, topRight.y, bottomRight.x, bottomRight.y),
+        };
+
+        double shortestDistance = Double.MAX_VALUE;
+
+        // For each edge line, calculate the shortest distance to it from the starting point
+        for(Line2D edge : edges){
+            double distanceFromStartingPointToEdge = shortestDistanceToLineSegment(startingPoint, edge);
+            if(distanceFromStartingPointToEdge < shortestDistance){
+                shortestDistance = distanceFromStartingPointToEdge;
+            }
+        }
+
+        return shortestDistance;
+    }
+
+    // Helper method to compute the shortest distance from a point to a line segment
+    public double shortestDistanceToLineSegment(Point p, Line2D line) {
+        double x = p.x;
+        double y = p.y;
+        double x1 = line.getX1();
+        double y1 = line.getY1();
+        double x2 = line.getX2();
+        double y2 = line.getY2();
+
+        double A = x - x1;
+        double B = y - y1;
+        double C = x2 - x1;
+        double D = y2 - y1;
+
+        double dot = A * C + B * D;
+        double len_sq = C * C + D * D;
+        double param = -1;
+        if (len_sq != 0) //in case of 0 length line
+            param = dot / len_sq;
+
+        double xx, yy;
+
+        if (param < 0) {
+            xx = x1;
+            yy = y1;
+        }
+        else if (param > 1) {
+            xx = x2;
+            yy = y2;
+        }
+        else {
+            xx = x1 + param * C;
+            yy = y1 + param * D;
+        }
+
+        double dx = x - xx;
+        double dy = y - yy;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+
     public DepositPoint getDepositPoint(){
         return this.depositPoint;
     }
