@@ -25,6 +25,8 @@ import static org.example.utility.Geometry.distanceBetweenPoints;
 import static org.example.utility.Geometry.intersection;
 import static org.opencv.imgproc.Imgproc.*;
 import static org.opencv.imgproc.Imgproc.cvtColor;
+import static org.opencv.videoio.Videoio.CAP_PROP_FRAME_HEIGHT;
+import static org.opencv.videoio.Videoio.CAP_PROP_FRAME_WIDTH;
 
 public class FrameAnalyzer {
     Legofir dude;
@@ -73,7 +75,7 @@ public class FrameAnalyzer {
     private ImageIcon analyzeFrame(Mat frame) {
 
         // resize image
-        resize(webcamImage, frame, new Size(1260, 840));
+        resize(webcamImage, frame, new Size(1260, 840), 0, 0, INTER_AREA);
 
         // Remove glare
         clahe(frame);
@@ -82,7 +84,7 @@ public class FrameAnalyzer {
         frameDetector.detect(frame);
 
         // Draw the stuff
-       frameDrawer.draw(frame);
+        frameDrawer.draw(frame);
 
         // convert matrix to byte
         imageData = convertMatrixToByte(frame);

@@ -38,7 +38,7 @@ public class RobotDetection {
 
     int blueValMin = ObjectColor.getBlueRobot().getValMin();
     int blueValMax = ObjectColor.getBlueRobot().getValMax();
-    private final double OFFSET_FACTOR = 65.0;
+    private final double OFFSET_FACTOR = 15.0;
 
     public RobotDetection() {
     }
@@ -114,7 +114,7 @@ public class RobotDetection {
 
         if(!greenContour.isEmpty() || !blueContour.isEmpty()) {
             for (MatOfPoint contour : greenContour) {
-                if(contourArea(contour) > 400) {
+                if(contourArea(contour) > 150) {
                     Rect greenBoundingRect = boundingRect(contour);
                     greens.add(greenBoundingRect);
 
@@ -125,7 +125,7 @@ public class RobotDetection {
                 }
             }
             for (MatOfPoint contour : blueContour) {
-                if(contourArea(contour) > 400) {
+                if(contourArea(contour) > 150) {
                     Rect blueBoundingRect = boundingRect(contour);
                     blues.add(blueBoundingRect);
 

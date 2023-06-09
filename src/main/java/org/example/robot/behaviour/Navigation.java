@@ -205,7 +205,7 @@ public class Navigation {
         long timeBefore = System.currentTimeMillis();
         dude.beginHarvester();
         while (!suppressed) {
-            if (System.currentTimeMillis() - timeBefore > 2000) {
+            if (System.currentTimeMillis() - timeBefore > 1000) {
                 break;
             }
         }
@@ -215,7 +215,7 @@ public class Navigation {
     private boolean closeToBall(TennisBall nextBall) {
         distanceToPoint=distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(),dude.getMap().getRobotPosition().getFrontSideY()),new Point(nextBall.getX(),nextBall.getY()));
         System.out.println("distance to ball: "+distanceToPoint);
-        return distanceToPoint < 50;
+        return distanceToPoint < 25;
     }
 
     private boolean isMovingForward() {
