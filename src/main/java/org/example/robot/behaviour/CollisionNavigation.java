@@ -8,8 +8,10 @@ public class CollisionNavigation {
     private final double FRONTAL_AVOID_DISTANCE = 200;
     private final double TURNING_AVOID_DISTANCE = 100;
     private long startTime;
-    public CollisionNavigation(Legofir dude){
+    MyBehavior myBehavior;
+    public CollisionNavigation(Legofir dude,MyBehavior myBehavior){
         this.dude=dude;
+        this.myBehavior=myBehavior;
     }
 
 
@@ -128,7 +130,7 @@ public class CollisionNavigation {
         return false;
     }
 
-    public void startAvoidingCollision(boolean suppressed) {
+    public void startAvoidingCollision() {
         if(isCollidingOnTheFront()){
             avoidFrontCollision();
         } else if(isCollidingOnTheLeft()){
