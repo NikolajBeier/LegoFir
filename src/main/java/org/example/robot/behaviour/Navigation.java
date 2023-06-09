@@ -189,11 +189,14 @@ public class Navigation {
     }
 
     public void driveTowardsBall(TennisBall nextBall,boolean suppressed) {
-        turnTowards(nextBall);
-        dude.moveForward();
+        while(!suppressed) {
+            turnTowards(nextBall);
+            dude.moveForward();
 
-        if (closeToBall(nextBall)) {
-            pickUpBall(suppressed);
+            if (closeToBall(nextBall)) {
+                pickUpBall(suppressed);
+                break;
+            }
         }
     }
     public void driveTowardsWaypoint(Point point) {

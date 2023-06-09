@@ -17,8 +17,10 @@ public class DriveTowardsGoal implements MyBehavior{
     @Override
     public boolean takeControl() {
         if (dude.getMap().getOrangeBalls().isEmpty() && dude.getMap().getBalls().isEmpty()){
+            System.out.println("DriveTowardsGoal");
             return true;
         }
+        System.out.println("DriveTowardsGoal+");
         return false;
     }
 
@@ -26,15 +28,10 @@ public class DriveTowardsGoal implements MyBehavior{
     public void action() {
         suppressed=false;
         dude.setCurrentBehaviourName(BehaviorName);
-
         while (!suppressed){
-
            navigation.turnsTowardsWayPoint(dude.getMap().getWayPoint());
            navigation.driveTowardsWaypoint(dude.getMap().getWayPoint());
         }
-
-
-
     }
 
     @Override
