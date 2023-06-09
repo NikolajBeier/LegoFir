@@ -17,6 +17,7 @@ public class DriveTowardsBall implements MyBehavior {
     Legofir dude;
     boolean stopCondition = false;
     Navigation navigation;
+    BallDistanceToWall ballDistanceToWall;
 
     public DriveTowardsBall(Legofir dude) {
         this.dude = dude;
@@ -39,13 +40,22 @@ public class DriveTowardsBall implements MyBehavior {
     public void action() {
         suppressed = false;
         dude.setCurrentBehaviourName(BehaviorName);
+
         while(!suppressed){
             TennisBall nextBall = dude.getMap().getNextBall();
+            ballDistanceToWall = new BallDistanceToWall(nextBall);
+            if (nextBall.isInCorner()){
+
+            }else if (nextBall.getClosetsWall()<100){
+
+            }else
+
             navigation.driveTowardsBall(nextBall, suppressed);
         }
         dude.stopWheels();
         dude.stopHarvester();
     }
+
     @Override
     public void suppress(){
         suppressed = true;

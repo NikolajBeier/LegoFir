@@ -45,7 +45,7 @@ public class Map {
     }
 
     public void addBallCord(int x, int y){
-        TennisBall tennisball = new TennisBall(x,y);
+        TennisBall tennisball = new TennisBall(x,y,0,false);
         balls.add(tennisball);
     }
 
@@ -61,7 +61,7 @@ public class Map {
 
     public TennisBall getNextBall() {
         // find the tennis ball closest to the robot
-        TennisBall closestBall = new TennisBall(0,0);
+        TennisBall closestBall = new TennisBall(0,0, 0,false);
         double closestDistance = Integer.MAX_VALUE;
 
         //  checks if there is a orange ball sets it as closestball
