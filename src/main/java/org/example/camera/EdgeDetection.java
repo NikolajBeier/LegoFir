@@ -149,10 +149,20 @@ public class EdgeDetection {
 
         try {
             if (returnValues[0] != null && returnValues[1] != null && returnValues[2] != null && returnValues[3] != null) {
-                System.out.println("Intersection found");
                 warpToEdge(image, returnValues);
                 //dude.getMap().setEdge(returnValues[1], returnValues[3], returnValues[0], returnValues[2], (int) distanceBetweenPoints(returnValues[1], returnValues[0]), (int) distanceBetweenPoints(returnValues[1], returnValues[3]));
-                dude.getMap().setEdge(new Point(0, -0), new Point(image.width(), -0), new Point(0, -image.height()), new Point(image.width(), -image.height()), (int) distanceBetweenPoints(new Point(0, -0), new Point(0, -image.height())), (int) distanceBetweenPoints(new Point(0, -0), new Point(image.width(), -0)));
+                dude.getMap().setEdge(
+                        new Point(63, -42),
+                        new Point(1260-63, -42),
+                        new Point(63, -840+42),
+                        new Point(1260-63, -840+42),
+                        (int) distanceBetweenPoints(
+                                new Point(63, -42),
+                                new Point(63, -840+42)),
+                        (int) distanceBetweenPoints(
+                                new Point(63, -42),
+                                new Point(1260-63, -42))
+                );
                 dude.getMap().setWayPoint(dude.getMap().getDepositPoint().getCenterLeft().x+200, dude.getMap().getDepositPoint().getCenterLeft().y);
                 dude.getMap().calcDepositPoints();
             }
@@ -169,12 +179,14 @@ public class EdgeDetection {
                 new Point(points[2].x, -points[2].y)
         );
 
+        // 5% of the screen remains outside the edge
         MatOfPoint2f dst = new MatOfPoint2f(
-                new Point(0, 0),
-                new Point(image.width(), 0),
-                new Point(0, image.height()),
-                new Point(image.width(), image.height())
+                new Point(63, 42),
+                new Point(1260-63, 42),
+                new Point(63, 840-42),
+                new Point(1260-63, 840-42)
         );
+
 
         Mat warpMat = Imgproc.getPerspectiveTransform(src, dst);
         Imgproc.warpPerspective(image, image, warpMat, image.size());

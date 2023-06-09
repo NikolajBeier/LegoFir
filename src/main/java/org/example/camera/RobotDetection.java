@@ -16,8 +16,7 @@ import static org.opencv.imgproc.Imgproc.*;
 public class RobotDetection {
 
 
-    public RobotDetection() {
-    }
+
 
     // LOGIC
     Mat hsvImage = new Mat();
@@ -39,6 +38,10 @@ public class RobotDetection {
 
     int blueValMin = ObjectColor.getBlueRobot().getValMin();
     int blueValMax = ObjectColor.getBlueRobot().getValMax();
+    private final double OFFSET_FACTOR = 15.0;
+
+    public RobotDetection() {
+    }
 
     /*
     int valMin = 20;
@@ -111,7 +114,7 @@ public class RobotDetection {
 
         if(!greenContour.isEmpty() || !blueContour.isEmpty()) {
             for (MatOfPoint contour : greenContour) {
-                if(contourArea(contour) > 400) {
+                if(contourArea(contour) > 150) {
                     Rect greenBoundingRect = boundingRect(contour);
                     greens.add(greenBoundingRect);
 
@@ -122,7 +125,7 @@ public class RobotDetection {
                 }
             }
             for (MatOfPoint contour : blueContour) {
-                if(contourArea(contour) > 400) {
+                if(contourArea(contour) > 150) {
                     Rect blueBoundingRect = boundingRect(contour);
                     blues.add(blueBoundingRect);
 
@@ -142,12 +145,43 @@ public class RobotDetection {
                 for (Rect blueBoundingRect : blues) {
                     for(Rect greenBoundingRect : greens) {
 
+                        Point centerOfImage = new Point(image.width()/2, -image.height()/2);
+
                         Point blueCenter = new Point(blueBoundingRect.x + blueBoundingRect.width * 0.5, -blueBoundingRect.y - blueBoundingRect.height/2);
-                        dude.getMap().getRobotPosition().setLeftSideX((int)blueCenter.x);
-                        dude.getMap().getRobotPosition().setLeftSideY((int)blueCenter.y);
+
+                        double deltaX = blueCenter.x - centerOfImage.x;
+                        // 200 -300
+                        // -100
+                        double realBlueX = blueCenter.x-(deltaX/OFFSET_FACTOR);
+                        //200+100/150 = 202 . When perceived x position is 200 and the center of camera is 300, the real x position is 202
+
+                        double deltaY = blueCenter.y - centerOfImage.y;
+                        // -200 - - 300
+                        // 100
+
+                        double realBlueY = blueCenter.y-(deltaY/OFFSET_FACTOR);
+                        // -200 - 100/50 = -202 - When perceived y position is -200 and the center of camera is -300, the real y position is -202
+
+                        dude.getMap().getRobotPosition().setLeftSideX((int)realBlueX);
+                        dude.getMap().getRobotPosition().setLeftSideY((int)realBlueY);
                         Point greenCenter = new Point(greenBoundingRect.x + greenBoundingRect.width * 0.5, -greenBoundingRect.y- greenBoundingRect.height/2);
-                        dude.getMap().getRobotPosition().setRightSideX((int)greenCenter.x);
-                        dude.getMap().getRobotPosition().setRightSideY((int)greenCenter.y);
+
+                        double deltaGreenX = greenCenter.x - centerOfImage.x;
+                        // 200 -300
+                        // -100
+                        double realGreenX = greenCenter.x-(deltaGreenX/OFFSET_FACTOR);
+                        //200+100/150 = 202 . When perceived x position is 200 and the center of camera is 300, the real x position is 202
+
+                        double deltaGreenY = greenCenter.y - centerOfImage.y;
+                        // -200 - - 300
+                        // 100
+
+                        double realGreenY = greenCenter.y-(deltaGreenY/OFFSET_FACTOR);
+                        // -200 - 100/50 = -202 - When perceived y position is -200 and the center of camera is -300, the real y position is -202
+
+
+                        dude.getMap().getRobotPosition().setRightSideX((int)realGreenX);
+                        dude.getMap().getRobotPosition().setRightSideY((int)realGreenY);
 
                         Point centerOfLine = new Point((blueCenter.x + greenCenter.x) * 0.5, (blueCenter.y + greenCenter.y) * 0.5);
                         Point leftHarvesterStart = new Point(centerOfLine.x *0.3, centerOfLine.y*0.3);
@@ -165,16 +199,15 @@ public class RobotDetection {
                         // calculate front and back points of robot
 
                         Point center = new Point(dude.getMap().getRobotPosition().getX(), -dude.getMap().getRobotPosition().getY());
-                        double ratioBelow = 1.0;
-                        double ratioAbove = 1.5;
+                        double ratioBelow = 0.5;
+                        double ratioAbove = 1.0;
                         double distanceBetweenColors = Geometry.distanceBetweenPoints(blueCenter, greenCenter);
 
-                        double totalHeight = distanceBetweenColors * (ratioBelow + ratioAbove) / ratioBelow;
 
                         double angleRad = dude.getMap().getRobotPosition().getHeadingInRadians();
 
-                        double deltaTop = totalHeight * ratioAbove / (ratioBelow + ratioAbove);
-                        double deltaBottom = totalHeight * ratioBelow / (ratioBelow + ratioAbove);
+                        double deltaTop = distanceBetweenColors*ratioAbove;
+                        double deltaBottom = distanceBetweenColors*ratioBelow;
 
                         Point front = new Point(center.x - deltaTop * -Math.cos(angleRad), center.y - deltaTop * Math.sin(angleRad));
                         Point back = new Point(center.x + deltaBottom * -Math.cos(angleRad), center.y + deltaBottom * Math.sin(angleRad));

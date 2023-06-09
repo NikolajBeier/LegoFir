@@ -27,10 +27,8 @@ public class DriveTowardsBall implements MyBehavior {
     @Override
     public boolean takeControl() {
         if(stopCondition){
-            System.out.println("DriveTowardsBall.takeControl() = " + false);
             return false;
         }
-        System.out.println("DriveTowardsBall.takeControl() = " + true);
         return true;
     }
 
