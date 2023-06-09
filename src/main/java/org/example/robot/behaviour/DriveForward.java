@@ -29,10 +29,8 @@ public class DriveForward implements MyBehavior {
     @Override
     public boolean takeControl() {
         if(stopCondition){
-            System.out.println("DriveForward.takeControl() = " + false);
             return false;
         }
-        System.out.println("DriveForward.takeControl() = " + true);
         return true;
     }
 

@@ -149,7 +149,6 @@ public class EdgeDetection {
 
         try {
             if (returnValues[0] != null && returnValues[1] != null && returnValues[2] != null && returnValues[3] != null) {
-                System.out.println("Intersection found");
                 warpToEdge(image, returnValues);
                 //dude.getMap().setEdge(returnValues[1], returnValues[3], returnValues[0], returnValues[2], (int) distanceBetweenPoints(returnValues[1], returnValues[0]), (int) distanceBetweenPoints(returnValues[1], returnValues[3]));
                 dude.getMap().setEdge(new Point(0, -0), new Point(image.width(), -0), new Point(0, -image.height()), new Point(image.width(), -image.height()), (int) distanceBetweenPoints(new Point(0, -0), new Point(0, -image.height())), (int) distanceBetweenPoints(new Point(0, -0), new Point(image.width(), -0)));
@@ -171,10 +170,11 @@ public class EdgeDetection {
 
         MatOfPoint2f dst = new MatOfPoint2f(
                 new Point(0, 0),
-                new Point(image.width(), 0),
-                new Point(0, image.height()),
-                new Point(image.width(), image.height())
+                new Point(1260, 0),
+                new Point(0, 840),
+                new Point(1260, 840)
         );
+
 
         Mat warpMat = Imgproc.getPerspectiveTransform(src, dst);
         Imgproc.warpPerspective(image, image, warpMat, image.size());

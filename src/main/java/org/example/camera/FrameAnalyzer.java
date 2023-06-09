@@ -73,7 +73,7 @@ public class FrameAnalyzer {
     private ImageIcon analyzeFrame(Mat frame) {
 
         // resize image
-        resize(webcamImage, frame, new Size(1280, 720));
+        resize(webcamImage, frame, new Size(1260, 840));
 
         // Remove glare
         clahe(frame);

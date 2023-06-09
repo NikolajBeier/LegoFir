@@ -1,7 +1,8 @@
 package org.example.ui.Calibration;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.*;
+
+import com.google.gson.reflect.TypeToken;
 import org.opencv.calib3d.Calib3d;
 import org.opencv.core.*;
 import org.opencv.core.Point;
@@ -12,6 +13,7 @@ import org.opencv.objdetect.*;
 import java.awt.*;
 import java.io.ByteArrayInputStream;
 import java.io.FileWriter;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +44,7 @@ public class CameraCalibration {
     private final int numCornersVer;
 
     public CameraCalibration(){
-        this.boardsNumber = 1;
+        this.boardsNumber = 30;
         this.numCornersHor = 9;
         this.numCornersVer = 6;
         int numSquares = this.numCornersHor * this.numCornersVer;
@@ -98,6 +100,7 @@ public class CameraCalibration {
     }
     public void TakeSnapShot(){
         if(found){
+            Imgcodecs.imwrite("src/main/java/org/example/ui/Calibration/snapshots" + successes + ".png", savedImage);
             this.imagePoints.add(imageCorners);
             imageCorners = new MatOfPoint2f();
             this.objectPoints.add(obj);
@@ -117,21 +120,33 @@ public class CameraCalibration {
     }
 
     public void saveCalibration() {
+        Gson gson = new Gson();
+        JsonElement element = gson.toJsonTree(objectPoints , new TypeToken<List<Mat>>() {}.getType());
+        JsonArray jsonArray = element.getAsJsonArray();
+        String json = gson.toJson(jsonArray);
+        String json123 = gson.toJson(element);
+        //String json = gson.toJson(objectPoints,objectPointsType);
+        String json2 = gson.toJson(imagePoints,imagePoints.getClass());
+        String json3 = gson.toJson(savedImage.size(),savedImage.size().getClass());
+        String json4 = gson.toJson(intrinsic,intrinsic.getClass());
+        String json5 = gson.toJson(distCoeffs,distCoeffs.getClass());
+        String json6 = gson.toJson(rvecsGlobal,rvecsGlobal.getClass());
+        String json7 = gson.toJson(tvecsGlobal,tvecsGlobal.getClass());
 
-        JSONArray objectjson = new JSONArray();
-        objectjson.add(objectPoints);
-        JSONObject params = new JSONObject();
-        params.put("objectPoints", objectjson);
-        params.put("imagePoints", new JSONArray().add(imagePoints));
-        params.put("savedImageSize", new JSONArray().add(savedImage.size()));
-        params.put("intrinsic", new JSONArray().add(intrinsic));
-        params.put("distCoeff", new JSONArray().add(distCoeffs));
-        params.put("rvecs", new JSONArray().add(rvecsGlobal));
-        params.put("rvecs", new JSONArray().add(tvecsGlobal));
+        JsonObject object = new JsonObject();
+        object.addProperty("objectPoints", json);
+        object.addProperty("objectPoints2", json123);
+        object.addProperty("imagePoints", json2);
+        object.addProperty("savedImageSize", json3);
+        object.addProperty("intrinsic", json4);
+        object.addProperty("distCoeff", json5);
+        object.addProperty("rvecs", json6);
+        object.addProperty("tvecs", json7);
+
 
         try {
-            FileWriter fileWriter = new FileWriter("src/main/java/org/example/ui/Calibration/colors.json");
-            fileWriter.write(params.toJSONString());
+            FileWriter fileWriter = new FileWriter("src/main/java/org/example/ui/Calibration/cameracalibration.json");
+            fileWriter.write(object.toString());
             fileWriter.close();
         } catch (Exception exception) {
 

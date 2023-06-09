@@ -41,7 +41,7 @@ public class OrangeBallDetection {
 
         if(!redContour.isEmpty()){
             for(MatOfPoint contour : redContour){
-                    if(Imgproc.contourArea(contour) > 200&& Imgproc.contourArea(contour)<400){
+                    if(Imgproc.contourArea(contour) > 400&& Imgproc.contourArea(contour)<700){
                     Rect boundingRect = Imgproc.boundingRect(contour);
                     orangeBalls.add(boundingRect);
                     //dude.getMap().addBallCord((int)(boundingRect.x+boundingRect.width*0.5), (int)(boundingRect.y+ boundingRect.height*0.5));
