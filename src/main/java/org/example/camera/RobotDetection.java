@@ -180,6 +180,11 @@ public class RobotDetection {
                         // -200 - 100/50 = -202 - When perceived y position is -200 and the center of camera is -300, the real y position is -202
 
 
+                        greenCenter.x= realGreenX;
+                        greenCenter.y= realGreenY;
+                        blueCenter.x= realBlueX;
+                        blueCenter.y= realBlueY;
+
                         dude.getMap().getRobotPosition().setRightSideX((int)realGreenX);
                         dude.getMap().getRobotPosition().setRightSideY((int)realGreenY);
 
@@ -199,8 +204,8 @@ public class RobotDetection {
                         // calculate front and back points of robot
 
                         Point center = new Point(dude.getMap().getRobotPosition().getX(), -dude.getMap().getRobotPosition().getY());
-                        double ratioBelow = 0.5;
-                        double ratioAbove = 1.0;
+                        double ratioBelow = 0.65;
+                        double ratioAbove = 1.1;
                         double distanceBetweenColors = Geometry.distanceBetweenPoints(blueCenter, greenCenter);
 
 
