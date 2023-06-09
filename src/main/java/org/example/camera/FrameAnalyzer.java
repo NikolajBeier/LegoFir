@@ -5,6 +5,7 @@ import org.example.mapping.Map;
 import org.example.mapping.RobotPosition;
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
+import org.example.ui.Calibration.CameraCalibration;
 import org.example.ui.CameraAnalyze;
 import org.opencv.core.*;
 import org.opencv.core.Point;
@@ -59,7 +60,10 @@ public class FrameAnalyzer {
         }
 
         //Calibrate Camera if JSON file exists
-
+        if(CameraCalibration.fileExists()){
+            CameraCalibration cameraCalibration = new CameraCalibration();
+            cameraCalibration.loadCalibration();
+        }
 
 
         //Starts thread which analyses and alters each frame from video capture and updates ui with the result

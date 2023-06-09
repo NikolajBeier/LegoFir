@@ -15,6 +15,7 @@ import org.opencv.videoio.Videoio;
 import javax.swing.*;
 import java.awt.*;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.FileWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class CameraCalibration {
     List<Mat> rvecsGlobal = new ArrayList<>();
     List<Mat> tvecsGlobal = new ArrayList<>();
 
-    private final int boardsNumber;
+    private int boardsNumber;
 
     private final int numCornersHor;
     private final int numCornersVer;
@@ -150,7 +151,15 @@ public class CameraCalibration {
     }
     public void TakeSnapShot(){
         if(found){
-            Imgcodecs.imwrite("src/main/java/org/example/ui/Calibration/snapshots" + successes + ".png", savedImage);
+            Imgcodecs.imwrite("src/main/java/org/example/ui/Calibration/CalibrationImages/snapshots" + successes + ".png", savedImage);
+            this.imagePoints.add(imageCorners);
+            imageCorners = new MatOfPoint2f();
+            this.objectPoints.add(obj);
+            this.successes++;
+        }
+    }
+    public void TakeSnapShotWithoutSave(){
+        if(found){
             this.imagePoints.add(imageCorners);
             imageCorners = new MatOfPoint2f();
             this.objectPoints.add(obj);
@@ -213,5 +222,30 @@ public class CameraCalibration {
     }
     public void setDetect(boolean detect){
         this.detect = detect;
+    }
+
+
+
+    public void loadCalibration(){
+        if(fileExists()){
+            boolean fileExists = true;
+            this.boardsNumber = 100;
+            int imageNumber = 0;
+            while(fileExists){
+                if(new File("src/main/java/org/example/ui/Calibration/CalibrationImages/snapshots"+imageNumber+".png").exists()){
+                    Mat image = Imgcodecs.imread("src/main/java/org/example/ui/Calibration/CalibrationImages/snapshots"+imageNumber+".png");
+                    detectBoard(image);
+                    TakeSnapShotWithoutSave();
+                    imageNumber++;
+                } else {
+                    fileExists = false;
+                    this.boardsNumber = imageNumber+1;
+                    calibrateCam();
+                }
+            }
+        }
+    }
+    public static boolean fileExists(){
+        return new File("src/main/java/org/example/ui/Calibration/CalibrationImages/snapshots0.png").exists();
     }
 }
