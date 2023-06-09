@@ -251,6 +251,21 @@ public class FrameDrawer {
             try {
                 Point wayPoint = dude.getMap().getWayPoint();
                 circle(image,new Point(wayPoint.x,-wayPoint.y),25,new Scalar(255,0,0),1);
+
+
+                Point wayPointOffSet = new Point(dude.getMap().getWayPoint().x + 10, dude.getMap().getWayPoint().y);
+                circle(image,new Point(wayPointOffSet.x,-wayPointOffSet.y),2,new Scalar(255,255,0),1);
+
+                Point wayPointOffSet1 = new Point(dude.getMap().getWayPoint().x - 10, dude.getMap().getWayPoint().y);
+                circle(image,new Point(wayPointOffSet1.x,-wayPointOffSet1.y),2,new Scalar(255,255,0),1);
+
+                Point wayPointOffSet2 = new Point(dude.getMap().getWayPoint().x, dude.getMap().getWayPoint().y+10);
+                circle(image,new Point(wayPointOffSet2.x,-wayPointOffSet2.y),2,new Scalar(255,255,0),1);
+
+                Point wayPointOffSet3 = new Point(dude.getMap().getWayPoint().x, dude.getMap().getWayPoint().y-10);
+                circle(image,new Point(wayPointOffSet3.x,-wayPointOffSet3.y),2,new Scalar(255,255,0),1);
+
+
             }catch (NullPointerException e){
                 System.out.println("NullPointerException");
             }

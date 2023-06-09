@@ -54,10 +54,29 @@ public class DepositBalls implements MyBehavior {
     }
 
     public Boolean checkIfRobotIsOnPoint(){
-        return (dude.getMap().getRobotPosition().getX() + 25 > dude.getMap().getWayPoint().x &&
-                dude.getMap().getRobotPosition().getX() - 25 < dude.getMap().getWayPoint().x &&
-                dude.getMap().getRobotPosition().getY() + 25 > dude.getMap().getWayPoint().y &&
-                dude.getMap().getRobotPosition().getY() - 25 < dude.getMap().getWayPoint().y &&
-                dude.getMap().getOrangeBalls().isEmpty() && dude.getMap().getBalls().isEmpty());
+        boolean isOnPoint = true;
+
+        if(!dude.getMap().getOrangeBalls().isEmpty() && !dude.getMap().getBalls().isEmpty()){
+            isOnPoint = false;
+        }
+        if(!(dude.getMap().getRobotPosition().getX() > dude.getMap().getWayPoint().x - 10)){
+            isOnPoint = false;
+        }
+        if(!(dude.getMap().getRobotPosition().getX() < dude.getMap().getWayPoint().x + 10)){
+            isOnPoint = false;
+        }
+        if(!(dude.getMap().getRobotPosition().getY() > dude.getMap().getWayPoint().y - 10)){
+            isOnPoint = false;
+        }
+        if(!(dude.getMap().getRobotPosition().getY() < dude.getMap().getWayPoint().y + 10)){
+            isOnPoint = false;
+        }
+
+        if(isOnPoint){
+            System.out.println("Robot is on point wallahi");
+        }
+
+        return isOnPoint;
+
     }
 }
