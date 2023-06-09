@@ -68,7 +68,6 @@ public class Navigation {
 
 
         //if current angle is not close to angle to next ball
-        //System.out.println("isApproximatelySameAngle: " + isApproximatelySameAngle(currentAngle,angleToNextPoint));
         if (!isApproximatelySameAngle(currentAngle,angleToNextPoint)) {
             //turn towards ball
             if (pointIsLeftOfRobotHeading()) {
@@ -94,15 +93,15 @@ public class Navigation {
         }else {
             oppositeAngleToNextPoint= angleToNextPoint+Math.PI;
         }
-        angleToNextPoint=oppositeAngleToNextPoint;
+        angleToNextPoint=0;
 
-        System.out.println("isApproximatelySameAngle: " + isApproximatelySameAngle(currentAngle,oppositeAngleToNextPoint));
-        if (!isApproximatelySameAngle(currentAngle,oppositeAngleToNextPoint)) {
+        if (!isApproximatelySameAngle(currentAngle,0)) {
             //turn towards ball
             if (pointIsLeftOfRobotHeading()) {
+                angleToNextPoint=-0.2;
                 turnLeftTowardsPoint();
-
             } else {
+                angleToNextPoint=0.2;
                 turnRightTowardsPoint();
             }
         }
@@ -120,17 +119,14 @@ public class Navigation {
         currentAngle = dude.getAngle();
         if (pointIsLeftOfRobotHeading()) {
             logger.info("time: "+System.currentTimeMillis()+". Turning left - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
-            //System.out.println("turning left: "+currentAngle + " " + angleToNextBall);
             // Turn left towards ball
             dude.turnLeft();
             while (pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && !myBehavior.isSuppressed()) {
                 currentAngle = dude.getAngle();
-                //System.out.println("Turning Left. CurrentAngle = " + currentAngle);
             }
             dude.stopWheels();
             // Stop turning
             logger.info("time: "+System.currentTimeMillis()+". Turning left ended - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
-            //System.out.println("turning left: "+currentAngle + " " + angleToNextBall);
         }
     }
     private boolean pointIsLeftOfRobotHeading( ) {
@@ -168,17 +164,14 @@ public class Navigation {
         currentAngle = dude.getAngle();
         if (!pointIsLeftOfRobotHeading()) {
             logger.info("time: "+System.currentTimeMillis()+". Turning right - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
-            //System.out.println("turning right: "+currentAngle + " " + angleToNextBall);
 
             dude.turnRight();
             while(!pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && !myBehavior.isSuppressed()){
                 currentAngle = dude.getAngle();
-                //System.out.println("Turning Right. CurrentAngle = " + currentAngle);
             }
             dude.stopWheels();
 
             logger.info("time: "+System.currentTimeMillis()+". Turning right ended - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
-            //System.out.println("turning right: "+currentAngle + " " + angleToNextBall);
 
         }
     }
@@ -219,7 +212,6 @@ public class Navigation {
 
     private boolean closeToBall(TennisBall nextBall) {
         distanceToPoint=distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(),dude.getMap().getRobotPosition().getFrontSideY()),new Point(nextBall.getX(),nextBall.getY()));
-        System.out.println("distance to ball: "+distanceToPoint);
         return distanceToPoint < 25;
     }
 

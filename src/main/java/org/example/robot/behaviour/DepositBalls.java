@@ -30,10 +30,7 @@ public class DepositBalls implements MyBehavior {
         suppressed = false;
         dude.setCurrentBehaviourName(BehaviorName);
         while (!suppressed) {
-            System.out.println("vi når hertil DriveTowards exit");
             navigation.turnCheeksTowardsGoal(dude.getMap().getDepositPoint().getCenterLeft(),suppressed);
-            System.out.println("når vi her til igen?");
-
         }
 
     }

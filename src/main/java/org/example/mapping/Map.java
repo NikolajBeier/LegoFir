@@ -88,12 +88,7 @@ public class Map {
                 }
             }
         }
-        /*
-        System.out.println("closest distance: "+closestDistance);
-        System.out.println("robot x: "+getRobotPosition().x+" robot y: "+getRobotPosition().y);
-        System.out.println("ball x: "+closestBall.x+" ball y: "+closestBall.y);
 
-         */
 
 
         return closestBall;

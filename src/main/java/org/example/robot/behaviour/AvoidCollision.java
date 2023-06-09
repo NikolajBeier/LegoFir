@@ -62,7 +62,6 @@ public class AvoidCollision implements MyBehavior {
                 collision = collisionNavigation.isCollidingOnTheBack();
                 break;
         }
-        System.out.println("Collision take control: " + collision);
         return collision;
     }
 }

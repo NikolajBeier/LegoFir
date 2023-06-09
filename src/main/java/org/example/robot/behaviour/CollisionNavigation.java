@@ -5,8 +5,8 @@ import org.opencv.core.Point;
 
 public class CollisionNavigation {
     Legofir dude;
-    private final double FRONTAL_AVOID_DISTANCE = 200;
-    private final double TURNING_AVOID_DISTANCE = 100;
+    private final double FRONTAL_AVOID_DISTANCE = 150;
+    private final double TURNING_AVOID_DISTANCE = 60;
     private long startTime;
     MyBehavior myBehavior;
     public CollisionNavigation(Legofir dude,MyBehavior myBehavior){
@@ -16,7 +16,6 @@ public class CollisionNavigation {
 
 
     public void avoidFrontCollision() {
-        System.out.println("avoiding front collision");
         dude.moveBackward();
         while(isCollidingOnTheFront() && !isCollidingOnTheBack()){}
         dude.stopWheels();
@@ -31,7 +30,6 @@ public class CollisionNavigation {
 
 
     public void avoidLeftCollision() {
-        System.out.println("avoiding left collision");
         dude.moveBackward();
         while(isCollidingOnTheLeft() && !isCollidingOnTheBack()){}
         dude.stopWheels();
@@ -47,7 +45,6 @@ public class CollisionNavigation {
 
 
     public void avoidRightCollision() {
-        System.out.println("avoiding right collision");
         dude.moveBackward();
         while(isCollidingOnTheRight() && !isCollidingOnTheBack()){}
         dude.stopWheels();
@@ -61,7 +58,6 @@ public class CollisionNavigation {
     }
 
     public void avoidBackCollision() {
-        System.out.println("avoiding back collision");
         dude.moveForward();
         while(isCollidingOnTheBack() && !isCollidingOnTheFront()){}
         dude.stopWheels();
@@ -94,7 +90,6 @@ public class CollisionNavigation {
         Point backSide = new Point(dude.getMap().getRobotPosition().getBackSideX(), dude.getMap().getRobotPosition().getBackSideY());
         double distanceFront = dude.getMap().distanceToEdge(leftHeading,frontSide);
         double distanceBack = dude.getMap().distanceToEdge(rightHeading,backSide);
-        System.out.println("Turning Left. Distance front: " + distanceFront + " distance back: " + distanceBack);
         if(distanceBack < TURNING_AVOID_DISTANCE || distanceFront < TURNING_AVOID_DISTANCE){
             return true;
         }
@@ -109,7 +104,6 @@ public class CollisionNavigation {
         Point backSide = new Point(dude.getMap().getRobotPosition().getBackSideX(), dude.getMap().getRobotPosition().getBackSideY());
         double distanceFront = dude.getMap().distanceToEdge(rightHeading,frontSide);
         double distanceBack = dude.getMap().distanceToEdge(leftHeading,backSide);
-        System.out.println("Turning Right. Distance front: " + distanceFront + " distance back: " + distanceBack);
         if(distanceBack < TURNING_AVOID_DISTANCE || distanceFront < TURNING_AVOID_DISTANCE){
             return true;
         }
