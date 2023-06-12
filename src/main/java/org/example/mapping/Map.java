@@ -2,8 +2,10 @@ package org.example.mapping;
 
 import lejos.robotics.navigation.Waypoint;
 import org.example.utility.Geometry;
+import org.opencv.core.Mat;
 import org.opencv.core.Point;
 
+import javax.sound.sampled.Line;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +25,8 @@ public class Map {
 
     DepositPoint depositPoint = new DepositPoint(this.edge);
 
-    Point wayPoint = new Point();
+    Point goalWayPoint = new Point();
+    Point ballNextToWallWaypoint = new Point();
 
 
 
@@ -36,12 +39,20 @@ public class Map {
     }
 
     public Point getWayPoint() {
-        return wayPoint;
+        return goalWayPoint;
     }
 
     public void setWayPoint(double x, double y) {
-        this.wayPoint.x = x;
-        this.wayPoint.y = y;
+        this.goalWayPoint.x = x;
+        this.goalWayPoint.y = y;
+    }
+
+    public Point getBallNextToWallWaypoint() {
+        return ballNextToWallWaypoint;
+    }
+
+    public void setBallNextToWallWaypoint(double x, double y) {
+        this.ballNextToWallWaypoint = ballNextToWallWaypoint;
     }
 
     public void addBallCord(int x, int y){
@@ -126,7 +137,7 @@ public class Map {
     public double distanceToEdge(Point heading,Point startingPoint) {
 
         // Line shooting out from the starting point
-        Line2D line = new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x+10000*heading.x, startingPoint.y+10000*heading.y);
+        Line2D line = new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x+10000* heading.x, startingPoint.y+10000*heading.y);
 
         // Edge points of the map
 
@@ -162,11 +173,22 @@ public class Map {
     }
 
     public double distanceToEdge(Point startingPoint) {
+
+        Line2D[] cardinalDirections = {
+        new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x+10000* 1, startingPoint.y+10000*0),
+        new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x+10000*0, startingPoint.y+10000*1),
+        new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x+10000*-1, startingPoint.y+10000*0),
+        new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x+10000*0, startingPoint.y+10000*-1)
+        };
+
+
+
         // Edge points of the map
         Point topLeft = edge.getTopLeft();
         Point topRight = edge.getTopRight();
         Point bottomLeft = edge.getBottomLeft();
         Point bottomRight = edge.getBottomRight();
+
 
         // Lines of the map
         Line2D.Double[] edges = {new Line2D.Double(topLeft.x, topLeft.y, topRight.x, topRight.y),
@@ -177,6 +199,18 @@ public class Map {
 
         double shortestDistance = Double.MAX_VALUE;
 
+        for (Line2D edge : edges){
+            for (Line2D cardinalDirection  : cardinalDirections){
+                double distanceFromStartingPointToEdge = distanceBetweenPoints(startingPoint,intersection(cardinalDirection,edge));
+                if (distanceFromStartingPointToEdge<shortestDistance){
+                    shortestDistance = distanceFromStartingPointToEdge;
+                }
+
+            }
+            }
+
+
+        /*
         // For each edge line, calculate the shortest distance to it from the starting point
         for(Line2D edge : edges){
             double distanceFromStartingPointToEdge = shortestDistanceToLineSegment(startingPoint, edge);
@@ -185,11 +219,13 @@ public class Map {
             }
         }
 
+         */
+
         return shortestDistance;
     }
 
     // Helper method to compute the shortest distance from a point to a line segment
-    public double shortestDistanceToLineSegment(Point p, Line2D line) {
+   /* public double shortestDistanceToLineSegment(Point p, Line2D line) {
         double x = p.x;
         double y = p.y;
         double x1 = line.getX1();
@@ -227,6 +263,8 @@ public class Map {
         double dy = y - yy;
         return Math.sqrt(dx * dx + dy * dy);
     }
+
+    */
 
 
     public DepositPoint getDepositPoint(){
