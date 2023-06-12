@@ -81,7 +81,7 @@ public class Themes {
 
         Audio sound = ev3.getAudio();
         sound.setVolume(15);
-        sound.playSample(new File("oh-my-god-meme.wav"));
+        sound.playSample(new File("oh-my-god-memev2.wav"), 100);
 
     }
 
