@@ -4,7 +4,7 @@ package org.example.robot.behaviour;
 import org.example.robot.model.Legofir;
 
 public class DepositBalls implements MyBehavior {
-    String BehaviorName = "DriveTowardsExit";
+    String BehaviorName = "depositBalls";
     boolean suppressed = false;
     Legofir dude;
     boolean stopCondition = false;
@@ -51,10 +51,10 @@ public class DepositBalls implements MyBehavior {
 
     }
     public Boolean checkIfRobotIsOnPoint(){
-        return (dude.getMap().getRobotPosition().getX() + 25 > dude.getMap().getWayPoint().x &&
-                dude.getMap().getRobotPosition().getX() - 25 < dude.getMap().getWayPoint().x &&
-                dude.getMap().getRobotPosition().getY() + 25 > dude.getMap().getWayPoint().y &&
-                dude.getMap().getRobotPosition().getY() - 25 < dude.getMap().getWayPoint().y &&
+        return (dude.getMap().getRobotPosition().getX() + 10 > dude.getMap().getWayPoint().x &&
+                dude.getMap().getRobotPosition().getX() - 10 < dude.getMap().getWayPoint().x &&
+                dude.getMap().getRobotPosition().getY() + 10 > dude.getMap().getWayPoint().y &&
+                dude.getMap().getRobotPosition().getY() - 10 < dude.getMap().getWayPoint().y &&
                 dude.getMap().getOrangeBalls().isEmpty() && dude.getMap().getBalls().isEmpty());
     }
 }

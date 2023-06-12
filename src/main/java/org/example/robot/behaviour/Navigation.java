@@ -105,11 +105,13 @@ public class Navigation {
             }
         }
         else {
-            long timeBefore = System.currentTimeMillis();
-            while(System.currentTimeMillis() - timeBefore < 10000){
                 dude.openCheeks();
-
-            }
+                dude.beginHarvester();
+                try {
+                    wait(40000);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
             dude.stopBallDropper();
         }
     }

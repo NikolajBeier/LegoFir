@@ -38,7 +38,7 @@ public class Launcher implements Program {
         /*
         EV3UltrasonicSensor ultrasonicSensor = new EV3UltrasonicSensor(ev3.getPort("S1"));
         // EV3 create sensor
-        RMISampleProvider ev3GyroSensor = ev3.createSampleProvider("S3", "lejos.hardware.sensor.EV3GyroSensor", "Angle");
+        RMISampleProar ev3GyroSensor = ev3.createSampleProvider("S3", "lejos.hardware.sensor.EV3GyroSensor", "Angle");
         System.out.println("sensors connected");
          */
 
