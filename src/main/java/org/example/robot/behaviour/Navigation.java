@@ -94,32 +94,13 @@ public class Navigation {
         angleToNextPoint=0;
          */
 
-
-        currentAngle = dude.getAngle();
-        Point currentPosition = new Point(dude.getMap().getRobotPosition().getX(), dude.getMap().getRobotPosition().getY());
-        double targetAngle = getAngleBetweenTwoPoints(currentPosition, goal);
-        if(targetAngle<0){
-            angleToNextPoint=targetAngle+Math.PI;
-        } else{
-            angleToNextPoint=targetAngle-Math.PI;
-        }
-
-        if (!isApproximatelySameAngle(currentAngle,angleToNextPoint, 0.1)) {
-            System.out.println("Target Angle: " + angleToNextPoint + "   Current Angle: " +currentAngle);
-
-            //turn towards ball
-            if (pointIsLeftOfRobotHeading()) {
-                turnLeftTowardsPoint();
-            } else {
-                turnRightTowardsPoint();
-            }
-        }
-        else {
+        if(angleTowardsGoal(goal)) {
             long timeBefore = System.currentTimeMillis();
-            while(System.currentTimeMillis() - timeBefore < 500){
+            while(System.currentTimeMillis() - timeBefore < 1000){
                 dude.moveBackward();
             }
             dude.stopWheels();
+            angleTowardsGoal(goal);
             timeBefore = System.currentTimeMillis();
             while(System.currentTimeMillis() - timeBefore < 10000){
                 dude.openCheeks();
@@ -127,6 +108,29 @@ public class Navigation {
             }
             dude.stopBallDropper();
         }
+    }
+    private boolean angleTowardsGoal(Point goal){
+        currentAngle = dude.getAngle();
+        Point currentPosition = new Point(dude.getMap().getRobotPosition().getX(), dude.getMap().getRobotPosition().getY());
+        double targetAngle = getAngleBetweenTwoPoints(currentPosition, goal);
+        if(targetAngle<0){
+            angleToNextPoint=targetAngle+Math.PI;
+        } else if(targetAngle>0){
+            angleToNextPoint=targetAngle-Math.PI;
+        }
+
+        if (!isApproximatelySameAngle(currentAngle,angleToNextPoint, 0.15)) {
+            System.out.println("Target Angle: " + Math.toDegrees(angleToNextPoint) + "   Current Angle: " + Math.toDegrees(currentAngle));
+
+            //turn towards ball
+            if (pointIsLeftOfRobotHeading()) {
+                turnLeftTowardsPoint();
+            } else {
+                turnRightTowardsPoint();
+            }
+            return false;
+        }
+        return true;
     }
     private void turnLeftTowardsPoint() {
 
