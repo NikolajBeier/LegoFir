@@ -9,13 +9,26 @@ public class BallDistanceToWall {
 
 
 
-    public Map.direction BallDistanceToWall(TennisBall tennisBall, Legofir dude){
+    public Map.Direction BallHeadingtoWall(TennisBall tennisBall, Legofir dude){
         Point point = new Point(tennisBall.getX(),tennisBall.getY());
-        Map.direction distanceToEdge= dude.getMap().distanceToEdge(point);
+        Map.Direction headingToEdge = dude.getMap().FindNearestWall(point,tennisBall.getDistanceToClosestWall());
 
 
+        return headingToEdge;
 
-        return distanceToEdge;
+    }
+    public double shortestDistanceToWall(TennisBall tennisBall, Legofir dude){
+        Point point = new Point(tennisBall.getX(),tennisBall.getY());
+        double distance = dude.getMap().distanceToEdge(point);
+        return distance;
+    }
 
+    public  boolean isCloseToWall(TennisBall tennisBall, Legofir dude){
+        Point point = new Point(tennisBall.getX(),tennisBall.getY());
+        double distance = dude.getMap().distanceToEdge(point);
+        if(distance < 100){
+            return true;
+        }
+        return false;
     }
 }

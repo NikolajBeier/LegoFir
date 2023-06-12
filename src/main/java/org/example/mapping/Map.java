@@ -66,11 +66,12 @@ public class Map {
     }
 
 
-    public double distanceFromStartingPointToEdge(Point startingPoint, Line2D cardinalDirection, Line2D edge){
+    public double distanceFromStartingPointToEdge(Point startingPoint, Line2D cardinalDirection, Line2D edge) {
         return distanceBetweenPoints(startingPoint, intersection(cardinalDirection, edge));
     }
+
     public double getDistanceFromStartingPointToEdge(Point startingPoint, Line2D cardinalDirection, Line2D edge) {
-        return distanceFromStartingPointToEdge(startingPoint,cardinalDirection,edge);
+        return distanceFromStartingPointToEdge(startingPoint, cardinalDirection, edge);
     }
 
     public TennisBall getNextBall() {
@@ -177,7 +178,7 @@ public class Map {
         return shortestDistance;
     }
 
-    public direction distanceToEdge(Point startingPoint) {
+    public Double distanceToEdge(Point startingPoint) {
 
         Line2D[] cardinalDirections = {
                 new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x + 10000 * 1, startingPoint.y + 10000 * 0),
@@ -205,12 +206,15 @@ public class Map {
 
         for (Line2D edge : edges) {
             for (Line2D cardinalDirection : cardinalDirections) {
-                if (distanceFromStartingPointToEdge(startingPoint,cardinalDirection,edge)< shortestDistance && distanceFromStartingPointToEdge(startingPoint,cardinalDirection,edge) < 100) {
-                    findNearestWall(edges);
+                if (cardinalDirection.intersectsLine(edge)) {
+                    double distanceFromStartingPointToEdge = distanceBetweenPoints(startingPoint, intersection(cardinalDirection, edge));
+                    if (distanceFromStartingPointToEdge < shortestDistance) {
+                        shortestDistance = distanceFromStartingPointToEdge;
+                    }
                 }
             }
+            return shortestDistance;
         }
-
 
 
 
@@ -228,7 +232,47 @@ public class Map {
         return null;
     }
 
-    public enum direction {north, east, south, west}
+    public Direction FindNearestWall(Point startingPoint, Double distanceToEdge) {
+        Line2D[] cardinalDirections = {
+                new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x + 10000 * 1, startingPoint.y + 10000 * 0),
+                new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x + 10000 * 0, startingPoint.y + 10000 * 1),
+                new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x + 10000 * -1, startingPoint.y + 10000 * 0),
+                new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x + 10000 * 0, startingPoint.y + 10000 * -1)
+        };
+
+
+        // Edge points of the map
+        Point topLeft = edge.getTopLeft();
+        Point topRight = edge.getTopRight();
+        Point bottomLeft = edge.getBottomLeft();
+        Point bottomRight = edge.getBottomRight();
+        // direction to be returned
+        Direction closestwallheading = null;
+
+        // Lines of the map
+        Line2D.Double[] edges = {
+                new Line2D.Double(topLeft.x, topLeft.y, topRight.x, topRight.y),
+                new Line2D.Double(bottomLeft.x, bottomLeft.y, bottomRight.x, bottomRight.y),
+                new Line2D.Double(topLeft.x, topLeft.y, bottomLeft.x, bottomLeft.y),
+                new Line2D.Double(topRight.x, topRight.y, bottomRight.x, bottomRight.y),
+        };
+        for (Line2D edge : edges) {
+            for (Line2D cardinalDirection : cardinalDirections) {
+                System.out.println("hello1111");
+                if (cardinalDirection.intersectsLine(edge)) {
+                    System.out.println("hello2222");
+                    if (distanceToEdge >= distanceToEdge(startingPoint))
+                        closestwallheading = findNearestWall(edges, cardinalDirection);
+                    System.out.println("Hello");
+                }
+                return closestwallheading;
+            }
+        }
+
+        return null;
+    }
+
+    public enum Direction {NORTH, SOUTH, EAST, WEST}
 
     public DepositPoint getDepositPoint() {
         return this.depositPoint;
@@ -257,15 +301,15 @@ public class Map {
         return obstacle;
     }
 
-    public direction findNearestWall(Line2D.Double[] edges) {
-        if (edges[0].equals(edges)) {
-            return direction.north;
-        } else if (edges[1].equals(edges)) {
-            return direction.south;
-        } else if (edges[2].equals(edges)) {
-            return direction.west;
-        } else if (edges[3].equals(edges)) {
-            return direction.east;
+    public Direction findNearestWall(Line2D.Double[] edges, Line2D line) {
+        if (edges[0].equals(line)) {
+            return Direction.NORTH;
+        } else if (edges[1].equals(line)) {
+            return Direction.SOUTH;
+        } else if (edges[2].equals(line)) {
+            return Direction.WEST;
+        } else if (edges[3].equals(line)) {
+            return Direction.EAST;
         } else {
             return null;
         }

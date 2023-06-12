@@ -6,12 +6,12 @@ public class TennisBall {
     int x;
 
     int y;
-
-    Map.direction closetsWall;
+    double distanceToClosestWall;
+    Map.Direction closetsWall;
 
     boolean isInCorner;
 
-    public TennisBall(int x, int y, Map.direction closetsWall, boolean isInCorner) {
+    public TennisBall(int x, int y, Map.Direction closetsWall, boolean isInCorner) {
         this.x = x;
         this.y = y;
         this.closetsWall=closetsWall;
@@ -27,7 +27,7 @@ public class TennisBall {
         return y;
     }
 
-    public Map.direction getClosetsWall() {
+    public Map.Direction getClosetsWall() {
         return closetsWall;
     }
 
@@ -35,10 +35,15 @@ public class TennisBall {
         return isInCorner;
     }
 
-    public void setClosetsWall(Map.direction closetsWall) {
+    public void setClosetsWall(Map.Direction closetsWall) {
         this.closetsWall = closetsWall;
     }
-
+    public void setDistanceToClosestWall(double distanceToClosestWall) {
+        this.distanceToClosestWall = distanceToClosestWall;
+    }
+    public double getDistanceToClosestWall() {
+        return distanceToClosestWall;
+    }
     public void setInCorner(boolean inCorner) {
         isInCorner = inCorner;
     }
