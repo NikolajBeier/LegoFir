@@ -326,4 +326,13 @@ state=RobotState.TURNING_RIGHT;
             stopAll();
         }
     }
+
+    public void collectBall() {
+        try {
+            harvester.rotate(-1400);
+            harvester.resetTachoCount();
+        } catch (RemoteException e) {
+            stopAll();
+        }
+    }
 }

@@ -10,7 +10,7 @@ import org.example.robot.music.Themes;
 
 import static java.lang.Thread.sleep;
 
-public class Launcher implements Program {
+public class HarvesterTest implements Program {
     RemoteEV3 ev3;
     Legofir dude;
     Arbitrator arby;
@@ -18,7 +18,7 @@ public class Launcher implements Program {
     Themes themes = new Themes();
 
 
-    public Launcher(RemoteEV3 ev3, Legofir dude){
+    public HarvesterTest(RemoteEV3 ev3, Legofir dude){
         this.ev3 = ev3;
         this.dude=dude;
     }
@@ -31,7 +31,7 @@ public class Launcher implements Program {
         RMIRegulatedMotor left =ev3.createRegulatedMotor("D", 'L');
         RMIRegulatedMotor harvester =ev3.createRegulatedMotor("B", 'M');
         RMIRegulatedMotor balldropper =ev3.createRegulatedMotor("C", 'M');
-        System.out.println("motors connected");
+        System.out.println("motors connected harvester test");
 
 
         // Create the sensor objects
@@ -64,24 +64,21 @@ public class Launcher implements Program {
          */
 
 
-        System.out.println("Når vi her?");
+        System.out.println("Når vi her harvester test?");
 
-           }
+    }
     public void launchRobot() {
 
-        bArray = new MyBehavior[]{
-                new DriveTowardsBall(dude),
-                new DriveTowardsGoal(dude),
-                new AvoidCollision(dude),
-                new DepositBalls(dude),
-                new StopBehaviour()
-
-
-        };
-        arby = new Arbitrator(bArray);
-
-        arby.go();
-        System.out.println("arby stoppet");
+        System.out.println("launching harvester test");
+        for(int i=0;i<15;i++) {
+            dude.collectBall();
+            try {
+                sleep(100);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        System.out.println("finished harvester test");
     }
 
     private void imperialLaunch(Audio sound) {
