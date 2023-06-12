@@ -107,6 +107,11 @@ public class Navigation {
         }
         else {
             long timeBefore = System.currentTimeMillis();
+            while(System.currentTimeMillis() - timeBefore < 1000){
+                dude.moveBackward();
+            }
+            dude.stopWheels();
+            timeBefore = System.currentTimeMillis();
             while(System.currentTimeMillis() - timeBefore < 10000){
                 dude.openCheeks();
 
