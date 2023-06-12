@@ -65,6 +65,14 @@ public class Map {
         balls.clear();
     }
 
+
+    public double distanceFromStartingPointToEdge(Point startingPoint, Line2D cardinalDirection, Line2D edge){
+        return distanceBetweenPoints(startingPoint, intersection(cardinalDirection, edge));
+    }
+    public double getDistanceFromStartingPointToEdge(Point startingPoint, Line2D cardinalDirection, Line2D edge) {
+        return distanceFromStartingPointToEdge(startingPoint,cardinalDirection,edge);
+    }
+
     public TennisBall getNextBall() {
         // find the tennis ball closest to the robot
         TennisBall closestBall = new TennisBall(0, 0, null, false);
@@ -193,25 +201,12 @@ public class Map {
                 new Line2D.Double(topLeft.x, topLeft.y, bottomLeft.x, bottomLeft.y),
                 new Line2D.Double(topRight.x, topRight.y, bottomRight.x, bottomRight.y),
         };
-
         double shortestDistance = Double.MAX_VALUE;
 
         for (Line2D edge : edges) {
             for (Line2D cardinalDirection : cardinalDirections) {
-                double distanceFromStartingPointToEdge = distanceBetweenPoints(startingPoint, intersection(cardinalDirection, edge));
-                if (distanceFromStartingPointToEdge < shortestDistance && distanceFromStartingPointToEdge<100) {
-                    if (edges[0].equals(edges)) {
-                        return direction.north;
-                    } else if (edges[1].equals(edges)) {
-                        return direction.south;
-                    } else if (edges[2].equals(edges)) {
-                        return direction.west;
-                    } else if (edges[3].equals(edges)) {
-                        return direction.east;
-                    } else {
-                        return null;
-                    }
-                } else if (distanceFromStartingPointToEdge > 150&& distanceFromStartingPointToEdge > shortestDistance ) {
+                if (distanceFromStartingPointToEdge(startingPoint,cardinalDirection,edge)< shortestDistance && distanceFromStartingPointToEdge(startingPoint,cardinalDirection,edge) < 100) {
+                    findNearestWall(edges);
                 }
             }
         }
@@ -235,7 +230,7 @@ public class Map {
 
     public enum direction {north, east, south, west}
 
-      public DepositPoint getDepositPoint() {
+    public DepositPoint getDepositPoint() {
         return this.depositPoint;
     }
 
@@ -261,4 +256,20 @@ public class Map {
     public Obstacle getObstacle() {
         return obstacle;
     }
+
+    public direction findNearestWall(Line2D.Double[] edges) {
+        if (edges[0].equals(edges)) {
+            return direction.north;
+        } else if (edges[1].equals(edges)) {
+            return direction.south;
+        } else if (edges[2].equals(edges)) {
+            return direction.west;
+        } else if (edges[3].equals(edges)) {
+            return direction.east;
+        } else {
+            return null;
+        }
+    }
+
+
 }
