@@ -54,7 +54,7 @@ public class DepositBalls implements MyBehavior {
     }
 
     public Boolean checkIfRobotIsOnPoint(){
-        double errorMargin = 10;
+        double errorMargin = 8;
 
         if(!dude.getMap().getOrangeBalls().isEmpty() && !dude.getMap().getBalls().isEmpty()){
             return false;
