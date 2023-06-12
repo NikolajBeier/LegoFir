@@ -138,15 +138,15 @@ public class Navigation {
         if (pointIsLeftOfRobotHeading()) {
             logger.info("time: "+System.currentTimeMillis()+". Turning left - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
             // Turn left towards ball
-            dude.turnLeft(75);
+            dude.turnLeft(100);
             while (pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && !myBehavior.isSuppressed() || (myBehavior.isSuppressed() && dude.getMap().getBalls().size()==0)) {
                 currentAngle = dude.getAngle();
                 if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.08)){
                     dude.setWheelSpeed(5);
                 } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint)){
-                    dude.setWheelSpeed(10);
+                    dude.setWheelSpeed(15);
                 } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.5)){
-                    dude.setWheelSpeed(25);
+                    dude.setWheelSpeed(35);
                 }
             }
             dude.stopWheels();
@@ -190,15 +190,15 @@ public class Navigation {
         if (!pointIsLeftOfRobotHeading()) {
             logger.info("time: "+System.currentTimeMillis()+". Turning right - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
 
-            dude.turnRight(75);
+            dude.turnRight(100);
             while(!pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && !myBehavior.isSuppressed() || (myBehavior.isSuppressed() && dude.getMap().getBalls().size()==0)){
                 currentAngle = dude.getAngle();
                 if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.08)){
                     dude.setWheelSpeed(5);
                 } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint)){
-                    dude.setWheelSpeed(10);
+                    dude.setWheelSpeed(15);
                 } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.5)){
-                    dude.setWheelSpeed(25);
+                    dude.setWheelSpeed(35);
                 }
             }
             dude.stopWheels();
@@ -228,12 +228,12 @@ public class Navigation {
             turnTowards(nextBall);
             distanceToPoint = distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(), dude.getMap().getRobotPosition().getFrontSideY()), new Point(nextBall.getX(), nextBall.getY()));
 
-            if (distanceToPoint<100) {
+            if (distanceToPoint<75) {
                 dude.moveForward(100);
             } else if (distanceToPoint<150){
-                dude.moveForward(250);
-            } else {
                 dude.moveForward(300);
+            } else {
+                dude.moveForward(400);
             }
 
             if (closeToBall(nextBall)) {
@@ -246,13 +246,18 @@ public class Navigation {
         turnsTowardsWayPoint(point);
         distanceToPoint = distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(), dude.getMap().getRobotPosition().getFrontSideY()), point);
 
-        if (distanceToPoint<100) {
+        if (distanceToPoint<75) {
             dude.moveForward(100);
         } else if (distanceToPoint<150){
             dude.moveForward(250);
         } else {
             dude.moveForward(300);
         }
+    }
+    public void driveTowardsWaypoint(Point point,int speed) {
+        turnsTowardsWayPoint(point);
+        distanceToPoint = distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(), dude.getMap().getRobotPosition().getFrontSideY()), point);
+        dude.moveForward(speed);
     }
     private void pickUpBall() {
         long timeBefore = System.currentTimeMillis();

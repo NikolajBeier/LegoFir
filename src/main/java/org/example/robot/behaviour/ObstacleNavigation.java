@@ -49,8 +49,21 @@ public class ObstacleNavigation {
     private void moveToIntermediatePoint(Point nextPoint) {
         while(!myBehavior.isSuppressed()) {
             navigation.turnsTowardsWayPoint(nextPoint);
-            navigation.driveTowardsWaypoint(nextPoint);
+            navigation.driveTowardsWaypoint(nextPoint,400);
+            if(isOnTopOf(nextPoint)){
+                dude.stopWheels();
+                return;
+            }
         }
+    }
+
+    private boolean isOnTopOf(Point nextPoint) {
+        double errorMargin = 35;
+
+
+        double distance = Math.sqrt(Math.pow(dude.getMap().getRobotPosition().getX() - nextPoint.x, 2) +
+                Math.pow(dude.getMap().getRobotPosition().getY() - nextPoint.y, 2));
+        return distance <= errorMargin;
     }
 
     private Point findIntermediatePoint(Point nextBallPoint) {
