@@ -20,10 +20,12 @@ public class DriveTowardsBall implements MyBehavior {
     Legofir dude;
     boolean stopCondition = false;
     Navigation navigation;
+    ObstacleNavigation obstacleNavigation;
 
     public DriveTowardsBall(Legofir dude) {
         this.dude = dude;
         navigation= new Navigation(dude,this);
+        obstacleNavigation = new ObstacleNavigation(dude,this);
     }
 
 
@@ -42,6 +44,10 @@ public class DriveTowardsBall implements MyBehavior {
         dude.setCurrentBehaviourName(BehaviorName);
         while(!suppressed){
             TennisBall nextBall = dude.getMap().getNextBall();
+            Point nextBallPoint = new Point(nextBall.getX(),nextBall.getY());
+            if(obstacleNavigation.pathToNextPointCollidesWithObstacle(nextBallPoint)){
+                obstacleNavigation.moveAroundObstacle(nextBallPoint);
+            }
             navigation.driveTowardsBall(nextBall);
         }
         dude.stopWheels();
