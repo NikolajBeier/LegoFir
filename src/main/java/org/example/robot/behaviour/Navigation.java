@@ -79,12 +79,10 @@ public class Navigation {
     }
 
     public void turnCheeksTowardsGoal(Point goal, boolean suppressed){
-        RobotPosition currentPosition = dude.getMap().getRobotPosition();
 
-        int nextPointX = (int) goal.x;
+        /*
+         int nextPointX = (int) goal.x;
         int nextPointY = (int) goal.y;
-
-        currentAngle = dude.getAngle();
         Point pointVector = new Point(nextPointX - currentPosition.getX(), nextPointY - currentPosition.getY());
         angleToNextPoint = Geometry.degreesOfVectorInRadians(pointVector.x, pointVector.y);
         double oppositeAngleToNextPoint=0;
@@ -94,14 +92,27 @@ public class Navigation {
             oppositeAngleToNextPoint= angleToNextPoint+Math.PI;
         }
         angleToNextPoint=0;
+         */
 
-        if (!isApproximatelySameAngle(currentAngle,0)) {
+
+        currentAngle = dude.getAngle();
+        Point currentPosition = new Point(dude.getMap().getRobotPosition().getX(), dude.getMap().getRobotPosition().getY());
+        double targetAngle = getAngleBetweenTwoPoints(currentPosition, goal);
+        if(targetAngle<0){
+            angleToNextPoint=targetAngle+Math.PI;
+        } else{
+            angleToNextPoint=targetAngle-Math.PI;
+        }
+
+        if (!isApproximatelySameAngle(currentAngle,angleToNextPoint, 0.2)) {
+            System.out.println("Target Angle: " + Math.toDegrees(angleToNextPoint) + "   Current Angle: " + Math.toDegrees(currentAngle));
+
             //turn towards ball
             if (pointIsLeftOfRobotHeading()) {
-                angleToNextPoint=-0.2;
+                //angleToNextPoint=-0.2;
                 turnLeftTowardsPoint();
             } else {
-                angleToNextPoint=0.2;
+                //angleToNextPoint=0.2;
                 turnRightTowardsPoint();
             }
         }
@@ -175,8 +186,16 @@ public class Navigation {
 
         }
     }
+    private boolean isApproximatelySameAngle(double robotAngle,double targetAngle, double marginDegrees){
+        return ((Math.abs(robotAngle-targetAngle) < marginDegrees) || (robotAngle>Math.PI-marginDegrees/2 && targetAngle<-Math.PI+marginDegrees/2) || (robotAngle<-Math.PI+marginDegrees/2 && targetAngle>Math.PI-marginDegrees/2));
+    }
     private boolean isApproximatelySameAngle(double robotAngle,double targetAngle){
-        return ((Math.abs(robotAngle-targetAngle) < 0.2) || (robotAngle>3 && targetAngle<-3) || (robotAngle<-3 && targetAngle>3));
+        return ((Math.abs(robotAngle-targetAngle) < 0.2) || (robotAngle>3 && targetAngle<3) || (robotAngle<3 && targetAngle>3));
+    }
+
+    public double getAngleBetweenTwoPoints(Point point, Point target) {
+        return Math.atan2(-point.y - (-target.y),target.x - point.x);
+
     }
 
     public double getDistanceToPoint() {
