@@ -16,7 +16,7 @@ public class DepositBalls implements MyBehavior {
 
     public DepositBalls(Legofir dude) {
         this.dude = dude;
-        navigation = new Navigation(dude);
+        navigation = new Navigation(dude,this);
     }
 
 
@@ -30,10 +30,7 @@ public class DepositBalls implements MyBehavior {
         suppressed = false;
         dude.setCurrentBehaviourName(BehaviorName);
         while (!suppressed) {
-            System.out.println("vi når hertil DriveTowards exit");
-            navigation.turnCheeksTowardsGoal(dude.getMap().getDepositPoint().getCenterLeft());
-            System.out.println("når vi her til igen?");
-
+            navigation.turnCheeksTowardsGoal(dude.getMap().getDepositPoint().getCenterLeft(),suppressed);
         }
 
     }
@@ -50,11 +47,38 @@ public class DepositBalls implements MyBehavior {
         suppressed = true;
 
     }
+
+    @Override
+    public boolean isSuppressed() {
+        return false;
+    }
+
     public Boolean checkIfRobotIsOnPoint(){
-        return (dude.getMap().getRobotPosition().getX() + 10 > dude.getMap().getWayPoint().x &&
-                dude.getMap().getRobotPosition().getX() - 10 < dude.getMap().getWayPoint().x &&
-                dude.getMap().getRobotPosition().getY() + 10 > dude.getMap().getWayPoint().y &&
-                dude.getMap().getRobotPosition().getY() - 10 < dude.getMap().getWayPoint().y &&
-                dude.getMap().getOrangeBalls().isEmpty() && dude.getMap().getBalls().isEmpty());
+        double errorMargin = 8;
+
+        if(!dude.getMap().getOrangeBalls().isEmpty() && !dude.getMap().getBalls().isEmpty()){
+            return false;
+        }
+
+        double distance = Math.sqrt(Math.pow(dude.getMap().getRobotPosition().getX() - dude.getMap().getWayPoint().x, 2) +
+                Math.pow(dude.getMap().getRobotPosition().getY() - dude.getMap().getWayPoint().y, 2));
+        return distance <= errorMargin;
+
+        /*
+
+        if(!(dude.getMap().getRobotPosition().getX() > dude.getMap().getWayPoint().x - 10)){
+            isOnPoint = false;
+        }
+        if(!(dude.getMap().getRobotPosition().getX() < dude.getMap().getWayPoint().x + 10)){
+            isOnPoint = false;
+        }
+        if(!(dude.getMap().getRobotPosition().getY() > dude.getMap().getWayPoint().y - 10)){
+            isOnPoint = false;
+        }
+        if(!(dude.getMap().getRobotPosition().getY() < dude.getMap().getWayPoint().y + 10)){
+            isOnPoint = false;
+        }
+
+        */
     }
 }

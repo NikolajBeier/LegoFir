@@ -148,26 +148,31 @@ public class EdgeDetection {
          }
 
         try {
-            if (returnValues[0] != null && returnValues[1] != null && returnValues[2] != null && returnValues[3] != null) {
-                warpToEdge(image, returnValues);
-                //dude.getMap().setEdge(returnValues[1], returnValues[3], returnValues[0], returnValues[2], (int) distanceBetweenPoints(returnValues[1], returnValues[0]), (int) distanceBetweenPoints(returnValues[1], returnValues[3]));
-                dude.getMap().setEdge(
-                        new Point(63, -42),
-                        new Point(1260-63, -42),
-                        new Point(63, -840+42),
-                        new Point(1260-63, -840+42),
-                        (int) distanceBetweenPoints(
-                                new Point(63, -42),
-                                new Point(63, -840+42)),
-                        (int) distanceBetweenPoints(
-                                new Point(63, -42),
-                                new Point(1260-63, -42))
-                );
-                dude.getMap().setWayPoint(dude.getMap().getDepositPoint().getCenterLeft().x+200, dude.getMap().getDepositPoint().getCenterLeft().y);
-                dude.getMap().calcDepositPoints();
+            if(returnValues[0] == null || returnValues[1] == null || returnValues[2] == null || returnValues[3] == null){
+                throw new NullPointerException();
             }
+            dude.getMap().setUnWarpedEdges(returnValues[1], returnValues[3], returnValues[0], returnValues[2],(int) distanceBetweenPoints(returnValues[1], returnValues[0]), (int) distanceBetweenPoints(returnValues[1], returnValues[3]));
+            warpToEdge(image, returnValues);
         } catch (NullPointerException e) {
-            System.out.println("No intersection found");
+            Point[] oldValues = dude.getMap().getUnWarpedEdges();
+            warpToEdge(image, oldValues);
+        } finally {
+            int offSetX = 126;
+            int offSetY = 42;
+            dude.getMap().setEdge(
+                    new Point(offSetX, -offSetY),
+                    new Point(image.width()-offSetX, -offSetY),
+                    new Point(offSetX, -image.height()+offSetY),
+                    new Point(image.width()-offSetX, -image.height()+offSetY),
+                    (int) distanceBetweenPoints(
+                            new Point(offSetX, -offSetY),
+                            new Point(offSetX, -image.height()+offSetY)),
+                    (int) distanceBetweenPoints(
+                            new Point(offSetX, -offSetY),
+                            new Point(image.width()-offSetX, -offSetY))
+            );
+            dude.getMap().setWayPoint(dude.getMap().getDepositPoint().getCenterLeft().x+200, dude.getMap().getDepositPoint().getCenterLeft().y);
+            dude.getMap().calcDepositPoints();
         }
     }
 
@@ -181,10 +186,10 @@ public class EdgeDetection {
 
         // 5% of the screen remains outside the edge
         MatOfPoint2f dst = new MatOfPoint2f(
-                new Point(63, 42),
-                new Point(1260-63, 42),
-                new Point(63, 840-42),
-                new Point(1260-63, 840-42)
+                new Point(126, 42),
+                new Point(1260-126, 42),
+                new Point(126, 840-42),
+                new Point(1260-126, 840-42)
         );
 
 

@@ -25,6 +25,11 @@ public class StopBehaviour implements MyBehavior {
     }
 
     @Override
+    public boolean isSuppressed() {
+        return false;
+    }
+
+    @Override
     public boolean takeControl() {
         if(!stopCondition){
             return false;

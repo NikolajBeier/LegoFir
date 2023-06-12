@@ -16,8 +16,10 @@ public class Navigation {
     Legofir dude;
     double distanceToPoint=0;
     double angleToNextPoint=0;
-    public Navigation(Legofir dude){
+    MyBehavior myBehavior;
+    public Navigation(Legofir dude, MyBehavior myBehavior) {
         this.dude=dude;
+        this.myBehavior= myBehavior;
     }
 
     public void turnTowards(TennisBall nextPoint) {
@@ -66,7 +68,6 @@ public class Navigation {
 
 
         //if current angle is not close to angle to next ball
-        //System.out.println("isApproximatelySameAngle: " + isApproximatelySameAngle(currentAngle,angleToNextPoint));
         if (!isApproximatelySameAngle(currentAngle,angleToNextPoint)) {
             //turn towards ball
             if (pointIsLeftOfRobotHeading()) {
@@ -77,13 +78,11 @@ public class Navigation {
         }
     }
 
-    public void turnCheeksTowardsGoal(Point goal){
-        RobotPosition currentPosition = dude.getMap().getRobotPosition();
+    public void turnCheeksTowardsGoal(Point goal, boolean suppressed){
 
-        int nextPointX = (int) goal.x;
+        /*
+         int nextPointX = (int) goal.x;
         int nextPointY = (int) goal.y;
-
-        currentAngle = dude.getAngle();
         Point pointVector = new Point(nextPointX - currentPosition.getX(), nextPointY - currentPosition.getY());
         angleToNextPoint = Geometry.degreesOfVectorInRadians(pointVector.x, pointVector.y);
         double oppositeAngleToNextPoint=0;
@@ -92,48 +91,70 @@ public class Navigation {
         }else {
             oppositeAngleToNextPoint= angleToNextPoint+Math.PI;
         }
-        angleToNextPoint=oppositeAngleToNextPoint;
+        angleToNextPoint=0;
+         */
 
-        System.out.println("isApproximatelySameAngle: " + isApproximatelySameAngle(currentAngle,oppositeAngleToNextPoint));
-        if (!isApproximatelySameAngle(currentAngle,oppositeAngleToNextPoint)) {
+        if(angleTowardsGoal(goal)) {
+            long timeBefore = System.currentTimeMillis();
+            while(System.currentTimeMillis() - timeBefore < 1000){
+                dude.moveBackward();
+            }
+            dude.stopWheels();
+            angleTowardsGoal(goal);
+            timeBefore = System.currentTimeMillis();
+            while(System.currentTimeMillis() - timeBefore < 10000){
+                dude.openCheeks();
+
+            }
+            dude.stopBallDropper();
+        }
+    }
+    private boolean angleTowardsGoal(Point goal){
+        currentAngle = dude.getAngle();
+        Point currentPosition = new Point(dude.getMap().getRobotPosition().getX(), dude.getMap().getRobotPosition().getY());
+        double targetAngle = getAngleBetweenTwoPoints(currentPosition, goal);
+        if(targetAngle<0){
+            angleToNextPoint=targetAngle+Math.PI;
+        } else if(targetAngle>0){
+            angleToNextPoint=targetAngle-Math.PI;
+        }
+
+        if (!isApproximatelySameAngle(currentAngle,angleToNextPoint, 0.05)) {
+            System.out.println("Target Angle: " + Math.toDegrees(angleToNextPoint) + "   Current Angle: " + Math.toDegrees(currentAngle));
+
             //turn towards ball
             if (pointIsLeftOfRobotHeading()) {
                 turnLeftTowardsPoint();
-
             } else {
                 turnRightTowardsPoint();
             }
+            return false;
         }
-        else {
-                dude.openCheeks();
-                dude.beginHarvester();
-                try {
-                    wait(40000);
-                }catch (InterruptedException e){
-                    e.printStackTrace();
-                }
-            dude.stopBallDropper();
-        }
+        return true;
     }
     private void turnLeftTowardsPoint() {
 
         currentAngle = dude.getAngle();
         if (pointIsLeftOfRobotHeading()) {
             logger.info("time: "+System.currentTimeMillis()+". Turning left - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
-            //System.out.println("turning left: "+currentAngle + " " + angleToNextBall);
             // Turn left towards ball
-            dude.turnLeft();
-            while (pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint) {
+            dude.turnLeft(75);
+            while (pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && !myBehavior.isSuppressed()) {
                 currentAngle = dude.getAngle();
-                //System.out.println("Turning Left. CurrentAngle = " + currentAngle);
+                if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.08)){
+                    dude.setWheelSpeed(5);
+                } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint)){
+                    dude.setWheelSpeed(10);
+                } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.5)){
+                    dude.setWheelSpeed(25);
+                }
             }
             dude.stopWheels();
             // Stop turning
             logger.info("time: "+System.currentTimeMillis()+". Turning left ended - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
-            //System.out.println("turning left: "+currentAngle + " " + angleToNextBall);
         }
     }
-    public boolean pointIsLeftOfRobotHeading( ) {
+    private boolean pointIsLeftOfRobotHeading( ) {
         double oppositeAngleOfRobot;
 
         // Robot's heading in upper quadrant.
@@ -164,65 +185,85 @@ public class Navigation {
             } else return false;
         }
     }
-    private void turnRightTowardsPoint() {
+    private void turnRightTowardsPoint(){
         currentAngle = dude.getAngle();
         if (!pointIsLeftOfRobotHeading()) {
             logger.info("time: "+System.currentTimeMillis()+". Turning right - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
-            //System.out.println("turning right: "+currentAngle + " " + angleToNextBall);
 
-            dude.turnRight();
-            while(!pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint){
+            dude.turnRight(75);
+            while(!pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && !myBehavior.isSuppressed()){
                 currentAngle = dude.getAngle();
-                //System.out.println("Turning Right. CurrentAngle = " + currentAngle);
+                if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.08)){
+                    dude.setWheelSpeed(5);
+                } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint)){
+                    dude.setWheelSpeed(10);
+                } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.5)){
+                    dude.setWheelSpeed(25);
+                }
             }
             dude.stopWheels();
 
             logger.info("time: "+System.currentTimeMillis()+". Turning right ended - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
-            //System.out.println("turning right: "+currentAngle + " " + angleToNextBall);
 
         }
     }
+    private boolean isApproximatelySameAngle(double robotAngle,double targetAngle, double marginDegrees){
+        return ((Math.abs(robotAngle-targetAngle) < marginDegrees) || (robotAngle>Math.PI-marginDegrees/2 && targetAngle<-Math.PI+marginDegrees/2) || (robotAngle<-Math.PI+marginDegrees/2 && targetAngle>Math.PI-marginDegrees/2));
+    }
     private boolean isApproximatelySameAngle(double robotAngle,double targetAngle){
-        return ((Math.abs(robotAngle-targetAngle) < 0.2) || (robotAngle>3 && targetAngle<-3) || (robotAngle<-3 && targetAngle>3));
+        return ((Math.abs(robotAngle-targetAngle) < 0.15) || (robotAngle>3.05 && targetAngle<-3.05) || (robotAngle<-3.05 && targetAngle>3.05));
+    }
+
+    public double getAngleBetweenTwoPoints(Point point, Point target) {
+        return Math.atan2(-point.y - (-target.y),target.x - point.x);
+
     }
 
     public double getDistanceToPoint() {
         return distanceToPoint;
     }
 
-    public void driveTowardsBall(TennisBall nextBall,boolean suppressed) {
-        while(!suppressed) {
+    public void driveTowardsBall(TennisBall nextBall) {
+        while(!myBehavior.isSuppressed() || dude.getMap().getBalls().size()==1) {
             turnTowards(nextBall);
-            dude.moveForward();
+            distanceToPoint = distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(), dude.getMap().getRobotPosition().getFrontSideY()), new Point(nextBall.getX(), nextBall.getY()));
+
+            if (distanceToPoint<100) {
+                dude.moveForward(100);
+            } else if (distanceToPoint<150){
+                dude.moveForward(250);
+            } else {
+                dude.moveForward(300);
+            }
 
             if (closeToBall(nextBall)) {
-                pickUpBall(suppressed);
+                pickUpBall();
                 break;
             }
         }
     }
     public void driveTowardsWaypoint(Point point) {
         turnsTowardsWayPoint(point);
-        dude.moveForward();
-    }
+        distanceToPoint = distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(), dude.getMap().getRobotPosition().getFrontSideY()), point);
 
-    private void pickUpBall(boolean suppressed) {
-        long timeBefore = System.currentTimeMillis();
-        dude.beginHarvester();
-        while (!suppressed) {
-            if (System.currentTimeMillis() - timeBefore > 1000) {
-                break;
-            }
+        if (distanceToPoint<100) {
+            dude.moveForward(100);
+        } else if (distanceToPoint<150){
+            dude.moveForward(250);
+        } else {
+            dude.moveForward(300);
         }
+    }
+    private void pickUpBall() {
+        long timeBefore = System.currentTimeMillis();
+        dude.collectBall();
+
         dude.stopHarvester();
     }
-
     private boolean closeToBall(TennisBall nextBall) {
         distanceToPoint=distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(),dude.getMap().getRobotPosition().getFrontSideY()),new Point(nextBall.getX(),nextBall.getY()));
-        System.out.println("distance to ball: "+distanceToPoint);
-        return distanceToPoint < 25;
+        return distanceToPoint < 17;
     }
-
     private boolean isMovingForward() {
         return dude.getState() == RobotState.MOVING_FORWARD;
     }

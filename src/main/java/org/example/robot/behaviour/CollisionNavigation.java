@@ -6,15 +6,16 @@ import org.opencv.core.Point;
 public class CollisionNavigation {
     Legofir dude;
     private final double FRONTAL_AVOID_DISTANCE = 150;
-    private final double TURNING_AVOID_DISTANCE = 50;
+    private final double TURNING_AVOID_DISTANCE = 60;
     private long startTime;
-    public CollisionNavigation(Legofir dude){
+    MyBehavior myBehavior;
+    public CollisionNavigation(Legofir dude,MyBehavior myBehavior){
         this.dude=dude;
+        this.myBehavior=myBehavior;
     }
 
 
     public void avoidFrontCollision() {
-        System.out.println("avoiding front collision");
         dude.moveBackward();
         while(isCollidingOnTheFront() && !isCollidingOnTheBack()){}
         dude.stopWheels();
@@ -29,7 +30,6 @@ public class CollisionNavigation {
 
 
     public void avoidLeftCollision() {
-        System.out.println("avoiding left collision");
         dude.moveBackward();
         while(isCollidingOnTheLeft() && !isCollidingOnTheBack()){}
         dude.stopWheels();
@@ -45,7 +45,6 @@ public class CollisionNavigation {
 
 
     public void avoidRightCollision() {
-        System.out.println("avoiding right collision");
         dude.moveBackward();
         while(isCollidingOnTheRight() && !isCollidingOnTheBack()){}
         dude.stopWheels();
@@ -59,7 +58,6 @@ public class CollisionNavigation {
     }
 
     public void avoidBackCollision() {
-        System.out.println("avoiding back collision");
         dude.moveForward();
         while(isCollidingOnTheBack() && !isCollidingOnTheFront()){}
         dude.stopWheels();
@@ -126,7 +124,7 @@ public class CollisionNavigation {
         return false;
     }
 
-    public void startAvoidingCollision(boolean suppressed) {
+    public void startAvoidingCollision() {
         if(isCollidingOnTheFront()){
             avoidFrontCollision();
         } else if(isCollidingOnTheLeft()){

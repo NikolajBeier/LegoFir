@@ -41,6 +41,8 @@ public class FrameAnalyzer {
     Mat lab = new Mat();
     Mat destimage = new Mat();
     Size size = new Size(64, 64);
+    boolean isCalibrated = false;
+    CameraCalibration cameraCalibration;
 
 
     public FrameAnalyzer(Legofir dude, CameraAnalyze cameraAnalyze) {
@@ -59,12 +61,17 @@ public class FrameAnalyzer {
             capture = new VideoCapture(0);
         }
 
+
         //Calibrate Camera if JSON file exists
         if(CameraCalibration.fileExists()){
-            System.out.println("runnings");
-            CameraCalibration cameraCalibration = new CameraCalibration();
+            cameraCalibration = new CameraCalibration();
             cameraCalibration.loadCalibration();
+            isCalibrated = true;
         }
+
+
+
+
 
 
         //Starts thread which analyses and alters each frame from video capture and updates ui with the result
@@ -80,7 +87,12 @@ public class FrameAnalyzer {
     private ImageIcon analyzeFrame(Mat frame) {
 
         // resize image
-        resize(webcamImage, frame, new Size(1260, 840), 0, 0, INTER_AREA);
+        resize(webcamImage, frame, new Size(1260, 840), webcamImage.width()/2, webcamImage.height()/2, INTER_AREA);
+
+        //Calibrate
+        if(isCalibrated){
+            webcamImage = cameraCalibration.undistort(webcamImage);
+        }
 
         // Remove glare
         clahe(frame);

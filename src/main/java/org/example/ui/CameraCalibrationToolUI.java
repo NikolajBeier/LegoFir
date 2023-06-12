@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 public class CameraCalibrationToolUI {
     JFrame mainFrame = new JFrame();
@@ -32,7 +34,6 @@ public class CameraCalibrationToolUI {
     private void initializeUI(){
         mainFrame.setLayout(new BorderLayout());
         mainFrame.setSize(new Dimension(width, height));
-
 
         mainFrame.add(cameraScreen, BorderLayout.CENTER);
 
@@ -82,7 +83,44 @@ public class CameraCalibrationToolUI {
         buttonPanel.add(saveCalibration);
         mainFrame.add(buttonPanel, BorderLayout.SOUTH);
         mainFrame.setLocationRelativeTo(null);
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.addWindowListener(new WindowListener() {
+            @Override
+            public void windowOpened(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                cameraCalibration.closeCalibration();
+                mainFrame.dispose();
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+
+            }
+        });
+
         mainFrame.setVisible(true);
 
 

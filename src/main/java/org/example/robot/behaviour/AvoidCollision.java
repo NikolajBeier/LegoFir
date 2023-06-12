@@ -13,7 +13,7 @@ public class AvoidCollision implements MyBehavior {
 
     public AvoidCollision(Legofir dude) {
         this.dude = dude;
-        collisionNavigation = new CollisionNavigation(dude);
+        collisionNavigation = new CollisionNavigation(dude,this);
     }
 
     public void setStopCondition(Boolean stopCondition) {
@@ -22,12 +22,17 @@ public class AvoidCollision implements MyBehavior {
     }
 
     @Override
+    public boolean isSuppressed() {
+        return false;
+    }
+
+    @Override
     public void action() {
         suppressed = false;
         dude.setCurrentBehaviourName(BehaviorName);
         dude.stopWheels();
         dude.stopHarvester();
-        collisionNavigation.startAvoidingCollision(suppressed);
+        collisionNavigation.startAvoidingCollision();
     }
 
     @Override

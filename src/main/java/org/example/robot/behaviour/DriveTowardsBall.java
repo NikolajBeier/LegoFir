@@ -8,6 +8,9 @@ import org.example.robot.model.Legofir;
 
 public class DriveTowardsBall implements MyBehavior {
     String BehaviorName = "DriveTowardsBall";
+
+
+
     boolean suppressed = false;
     Legofir dude;
     boolean stopCondition = false;
@@ -19,14 +22,14 @@ public class DriveTowardsBall implements MyBehavior {
 
     public DriveTowardsBall(Legofir dude) {
         this.dude = dude;
-        navigation = new Navigation(dude);
+        navigation= new Navigation(dude,this);
         wallNav = new WallNavigation(dude, navigation);
     }
 
 
     @Override
     public boolean takeControl() {
-        if (stopCondition) {
+        if(stopCondition){
             return false;
         }
         return true;
@@ -37,8 +40,7 @@ public class DriveTowardsBall implements MyBehavior {
     public void action() {
         suppressed = false;
         dude.setCurrentBehaviourName(BehaviorName);
-
-        while (!suppressed) {
+        while(!suppressed){
             TennisBall nextBall = dude.getMap().getNextBall();
             ballDistanceToWall = new BallDistanceToWall();
             nextBall.setClosetsWall(ballDistanceToWall.BallHeadingtoWall(nextBall, dude));
@@ -78,6 +80,10 @@ public class DriveTowardsBall implements MyBehavior {
         this.stopCondition = stopCondition;
         suppressed = true;
     }
+    public boolean isSuppressed() {
+        return suppressed;
+    }
+
 
     public Boolean checkIfRobotIsOnPoint() {
         return (dude.getMap().getRobotPosition().getX() + 25 > dude.getMap().getWayPoint().x &&

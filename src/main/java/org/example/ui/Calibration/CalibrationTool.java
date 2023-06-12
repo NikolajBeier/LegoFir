@@ -197,6 +197,7 @@ public class CalibrationTool {
         mainFrame.add(mainPanel, BorderLayout.CENTER);
         mainFrame.add(title, BorderLayout.NORTH);
         mainFrame.add(southPanel, BorderLayout.SOUTH);
+        mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mainFrame.setVisible(true);
 
 

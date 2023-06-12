@@ -58,7 +58,7 @@ public class CameraCalibration {
     boolean detect;
 
     public CameraCalibration(){
-        this.boardsNumber = 4;
+        this.boardsNumber = 0;
         this.numCornersHor = 9;
         this.numCornersVer = 6;
         int numSquares = this.numCornersHor * this.numCornersVer;
@@ -77,10 +77,13 @@ public class CameraCalibration {
         imageData = tempBuf.toArray();
         icon = new ImageIcon(imageData);
 
+        int imageNumber = 0;
 
         while(running){
+
             // read image to matrix
             capture.read(image);
+            resize(image, image, new Size(1260, 840));
             //image = Imgcodecs.imread("chessboard.jpg");
 
             if(detect){
@@ -91,7 +94,7 @@ public class CameraCalibration {
             {
                 image = undistort(image);
             }
-            resize(image, image, new Size(1280, 720));
+
             final MatOfByte buf = new MatOfByte();
             Imgcodecs.imencode(".jpg", image, buf);
 
@@ -112,7 +115,6 @@ public class CameraCalibration {
         if (this.successes < this.boardsNumber) {
             // convert the frame in gray scale
             Imgproc.cvtColor(image, grayImage, Imgproc.COLOR_BGR2GRAY);
-
             // the size of the chessboard
             Size boardSize = new Size(this.numCornersVer, this.numCornersHor);
             // look for the inner chessboard corners
@@ -121,6 +123,7 @@ public class CameraCalibration {
             // all the required corners have been found...
             if (found && !imageCorners.empty())
             {
+                System.out.println("poopy");
                 // optimization
                 TermCriteria term = new TermCriteria(TermCriteria.EPS | TermCriteria.MAX_ITER, 30, 0.1);
                 Imgproc.cornerSubPix(grayImage, imageCorners, new Size(5, 5), new Size(-1, -1), term);
@@ -144,6 +147,7 @@ public class CameraCalibration {
             // calibrate!
             Calib3d.calibrateCamera(objectPoints, imagePoints, savedImage.size(), intrinsic, distCoeffs, rvecs, tvecs);
             this.isCalibrated = true;
+            System.out.println("gets calibrated");
 
             rvecsGlobal = rvecs;
             tvecsGlobal = tvecs;
