@@ -4,7 +4,7 @@ package org.example.robot.behaviour;
 import org.example.robot.model.Legofir;
 
 public class DepositBalls implements MyBehavior {
-    String BehaviorName = "DriveTowardsExit";
+    String BehaviorName = "DepositBalls";
     boolean suppressed = false;
     Legofir dude;
     boolean stopCondition = false;
