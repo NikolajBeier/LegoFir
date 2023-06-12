@@ -251,7 +251,7 @@ public class Legofir {
         // replace old balls with new ones
         List<TennisBall> newList = new ArrayList<>();
         for (Rect ball : balls) {
-            newList.add(new TennisBall((int)(ball.x+ball.width*0.5), (int)(-ball.y- ball.height*0.5), 0, false));
+            newList.add(new TennisBall((int)(ball.x+ball.width*0.5), (int)(-ball.y- ball.height*0.5), null, false));
         }
         map.setBalls(newList);
     }
@@ -259,7 +259,7 @@ public class Legofir {
         // replace old balls with new ones
         List<TennisBall> newOrangeList = new ArrayList<>();
         for (Rect ball : balls) {
-            newOrangeList.add(new TennisBall((int)(ball.x+ball.width*0.5), (int)(-ball.y- ball.height*0.5), 0,false));
+            newOrangeList.add(new TennisBall((int)(ball.x+ball.width*0.5), (int)(-ball.y- ball.height*0.5), null,false));
         }
         map.setOrangeBalls(newOrangeList);
     }

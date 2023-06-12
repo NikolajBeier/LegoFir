@@ -4,12 +4,6 @@ package org.example.robot.behaviour;
 import org.example.mapping.Edge;
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
-import org.example.robot.model.RobotState;
-import org.example.utility.Geometry;
-import org.opencv.core.Point;
-
-import static org.example.Main.logger;
-import static org.example.utility.Geometry.distanceBetweenPoints;
 
 
 public class DriveTowardsBall implements MyBehavior {
@@ -51,7 +45,7 @@ public class DriveTowardsBall implements MyBehavior {
 
             //if (nextBall.isInCorner()){
 
-            /*}else*/ if (nextBall.getClosetsWall()<100){
+            /*}else*/ if (nextBall.getClosetsWall()!=null){
                 dude.getMap().setBallNextToWallWaypoint(nextBall.getX(), nextBall.getY());
 
                 while (!checkIfRobotIsOnPoint()){
