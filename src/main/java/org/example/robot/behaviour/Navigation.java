@@ -133,7 +133,7 @@ public class Navigation {
             //System.out.println("turning left: "+currentAngle + " " + angleToNextBall);
         }
     }
-    private boolean pointIsLeftOfRobotHeading( ) {
+    public boolean pointIsLeftOfRobotHeading( ) {
         double oppositeAngleOfRobot;
 
         // Robot's heading in upper quadrant.
