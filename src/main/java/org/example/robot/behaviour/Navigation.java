@@ -119,7 +119,7 @@ public class Navigation {
             angleToNextPoint=targetAngle-Math.PI;
         }
 
-        if (!isApproximatelySameAngle(currentAngle,angleToNextPoint, 0.15)) {
+        if (!isApproximatelySameAngle(currentAngle,angleToNextPoint, 0.05)) {
             System.out.println("Target Angle: " + Math.toDegrees(angleToNextPoint) + "   Current Angle: " + Math.toDegrees(currentAngle));
 
             //turn towards ball
