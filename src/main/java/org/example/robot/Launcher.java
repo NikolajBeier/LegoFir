@@ -70,6 +70,7 @@ public class Launcher implements Program {
     public void launchRobot() {
 
         bArray = new MyBehavior[]{
+                new DriveTowardsCorner(dude),
                 new DriveTowardsBall(dude),
                 new DriveTowardsGoal(dude),
                 new AvoidCollision(dude),
