@@ -54,11 +54,18 @@ public class DepositBalls implements MyBehavior {
     }
 
     public Boolean checkIfRobotIsOnPoint(){
-        boolean isOnPoint = true;
+        double errorMargin = 10;
 
         if(!dude.getMap().getOrangeBalls().isEmpty() && !dude.getMap().getBalls().isEmpty()){
-            isOnPoint = false;
+            return true;
         }
+
+        double distance = Math.sqrt(Math.pow(dude.getMap().getRobotPosition().getX() - dude.getMap().getWayPoint().x, 2) +
+                Math.pow(dude.getMap().getRobotPosition().getY() - dude.getMap().getWayPoint().y, 2));
+        return distance <= errorMargin;
+
+        /*
+
         if(!(dude.getMap().getRobotPosition().getX() > dude.getMap().getWayPoint().x - 10)){
             isOnPoint = false;
         }
@@ -72,11 +79,6 @@ public class DepositBalls implements MyBehavior {
             isOnPoint = false;
         }
 
-        if(isOnPoint){
-            System.out.println("Robot is on point wallahi");
-        }
-
-        return isOnPoint;
-
+        */
     }
 }
