@@ -154,7 +154,7 @@ public class Navigation {
             logger.info("time: "+System.currentTimeMillis()+". Turning left ended - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
         }
     }
-    private boolean pointIsLeftOfRobotHeading( ) {
+    public boolean pointIsLeftOfRobotHeading( ) {
         double oppositeAngleOfRobot;
 
         // Robot's heading in upper quadrant.
