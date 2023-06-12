@@ -57,7 +57,7 @@ public class DepositBalls implements MyBehavior {
         double errorMargin = 10;
 
         if(!dude.getMap().getOrangeBalls().isEmpty() && !dude.getMap().getBalls().isEmpty()){
-            return true;
+            return false;
         }
 
         double distance = Math.sqrt(Math.pow(dude.getMap().getRobotPosition().getX() - dude.getMap().getWayPoint().x, 2) +
