@@ -109,6 +109,17 @@ public class Legofir {
         this.currentBehaviourName = currentBehaviourName;
     }
 
+    public void moveForward(int speed){
+        state=RobotState.MOVING_FORWARD;
+        try {
+            left.setSpeed(speed);
+            right.setSpeed(speed);
+            left.backward();
+            right.backward();
+        } catch (RemoteException e) {
+            stopAll();
+        }
+    }
     public void moveForward(){
         state=RobotState.MOVING_FORWARD;
         try {
@@ -127,12 +138,34 @@ public class Legofir {
             stopAll();
         }
     }
+    public void moveBackward(int speed){
+        state=RobotState.MOVING_BACKWARD;
+        try {
+            left.setSpeed(speed);
+            right.setSpeed(speed);
+            left.forward();
+            right.forward();
+        } catch (RemoteException e) {
+            stopAll();
+        }
+    }
 
     public void turnLeft(){
         state=RobotState.TURNING_LEFT;
         try {
-            left.setSpeed(35);
-            right.setSpeed(35);
+            left.setSpeed(50);
+            right.setSpeed(50);
+            left.forward();
+            right.backward();
+        } catch (RemoteException e) {
+            stopAll();
+        }
+    }
+    public void turnLeft(int speed){
+        state=RobotState.TURNING_LEFT;
+        try {
+            left.setSpeed(speed);
+            right.setSpeed(speed);
             left.forward();
             right.backward();
         } catch (RemoteException e) {
@@ -140,11 +173,22 @@ public class Legofir {
         }
     }
 
+    public void turnRight(int speed){
+state=RobotState.TURNING_RIGHT;
+        try{
+            left.setSpeed(speed);
+            right.setSpeed(speed);
+            left.backward();
+            right.forward();
+        } catch (RemoteException e) {
+            stopAll();
+        }
+    }
     public void turnRight(){
         state=RobotState.TURNING_RIGHT;
         try{
-            left.setSpeed(35);
-            right.setSpeed(35);
+            left.setSpeed(50);
+            right.setSpeed(50);
             left.backward();
             right.forward();
         } catch (RemoteException e) {
@@ -164,10 +208,10 @@ public class Legofir {
     public void stopWheels(){
         //state=RobotState.IDLE;
         try {
+            left.stop(true);
+            right.stop(false);
             left.setSpeed(defaultSpeedWheel);
             right.setSpeed(defaultSpeedWheel);
-            left.stop(true);
-            right.stop(true);
         } catch (RemoteException e) {
             closePorts();
         }
@@ -272,5 +316,14 @@ public class Legofir {
 
     public RobotState getState() {
         return state;
+    }
+
+    public void setWheelSpeed(int i) {
+        try {
+            left.setSpeed(i);
+            right.setSpeed(i);
+        } catch (RemoteException e) {
+            stopAll();
+        }
     }
 }

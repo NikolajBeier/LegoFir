@@ -98,10 +98,10 @@ public class Navigation {
         if (!isApproximatelySameAngle(currentAngle,0)) {
             //turn towards ball
             if (pointIsLeftOfRobotHeading()) {
-                angleToNextPoint=-0.2;
+                //angleToNextPoint=-0.2;
                 turnLeftTowardsPoint();
             } else {
-                angleToNextPoint=0.2;
+                //angleToNextPoint=0.2;
                 turnRightTowardsPoint();
             }
         }
@@ -123,6 +123,9 @@ public class Navigation {
             dude.turnLeft();
             while (pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && !myBehavior.isSuppressed()) {
                 currentAngle = dude.getAngle();
+                if(isApproximatelySameAngle(currentAngle,angleToNextPoint)){
+                    dude.setWheelSpeed(15);
+                }
             }
             dude.stopWheels();
             // Stop turning
@@ -168,6 +171,9 @@ public class Navigation {
             dude.turnRight();
             while(!pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && !myBehavior.isSuppressed()){
                 currentAngle = dude.getAngle();
+                if(isApproximatelySameAngle(currentAngle,angleToNextPoint)){
+                    dude.setWheelSpeed(15);
+                }
             }
             dude.stopWheels();
 
@@ -176,7 +182,7 @@ public class Navigation {
         }
     }
     private boolean isApproximatelySameAngle(double robotAngle,double targetAngle){
-        return ((Math.abs(robotAngle-targetAngle) < 0.2) || (robotAngle>3 && targetAngle<-3) || (robotAngle<-3 && targetAngle>3));
+        return ((Math.abs(robotAngle-targetAngle) < 0.15) || (robotAngle>3.05 && targetAngle<-3.05) || (robotAngle<-3.05 && targetAngle>3.05));
     }
 
     public double getDistanceToPoint() {
@@ -186,7 +192,15 @@ public class Navigation {
     public void driveTowardsBall(TennisBall nextBall) {
         while(!myBehavior.isSuppressed()) {
             turnTowards(nextBall);
-            dude.moveForward();
+            distanceToPoint = distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(), dude.getMap().getRobotPosition().getFrontSideY()), new Point(nextBall.getX(), nextBall.getY()));
+
+            if (distanceToPoint<100) {
+                dude.moveForward(100);
+            } else if (distanceToPoint<150){
+                dude.moveForward(250);
+            } else {
+                dude.moveForward(300);
+            }
 
             if (closeToBall(nextBall)) {
                 pickUpBall();
@@ -196,7 +210,7 @@ public class Navigation {
     }
     public void driveTowardsWaypoint(Point point) {
         turnsTowardsWayPoint(point);
-        dude.moveForward();
+        dude.moveForward(200);
     }
 
     private void pickUpBall() {
@@ -212,7 +226,7 @@ public class Navigation {
 
     private boolean closeToBall(TennisBall nextBall) {
         distanceToPoint=distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(),dude.getMap().getRobotPosition().getFrontSideY()),new Point(nextBall.getX(),nextBall.getY()));
-        return distanceToPoint < 25;
+        return distanceToPoint < 17;
     }
 
     private boolean isMovingForward() {
