@@ -284,17 +284,18 @@ public class FrameDrawer {
 
     }
     private void drawBallHeading(Mat image){
+        if (dude.getMap().getNextBall() != null) {
+            Point ballPos = dude.getMap().getBallNextToWallWaypoint();
+            Point eastHeading = new Point(1, 0);
+            Point southHeading = new Point(0, -1);
+            Point westHeading = new Point(-1, 0);
+            Point northHeading = new Point(0, 1);
 
 
-        Point ballPos = dude.getMap().getBallNextToWallWaypoint();
-        Point eastHeading = new Point(1,0);
-        Point southHeading = new Point(0,-1);
-        Point westHeading = new Point(-1,0);
-        Point northHeading = new Point(0,1);
-
-        drawLinesToEdge(image,eastHeading,ballPos);
-        drawLinesToEdge(image,southHeading,ballPos);
-        drawLinesToEdge(image,westHeading,ballPos);
-        drawLinesToEdge(image,northHeading,ballPos);
+            drawLinesToEdge(image, eastHeading, ballPos);
+            drawLinesToEdge(image, southHeading, ballPos);
+            drawLinesToEdge(image, westHeading, ballPos);
+            drawLinesToEdge(image, northHeading, ballPos);
+        }
     }
 }
