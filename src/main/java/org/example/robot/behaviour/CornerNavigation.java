@@ -22,7 +22,7 @@ public class CornerNavigation {
         this.navigation = navigation;
     }
 
-    public void driveTowardsCorner(TennisBall nextBall, DriveTowardsBall.Position position) {
+    public void pickUpBallInCorner(TennisBall nextBall, DriveTowardsBall.Position position) {
         wayPoint = new Point();
         switch (position){
             case TOPLEFT -> wayPoint = new Point(nextBall.getX() + 200, nextBall.getY() - 200);

@@ -7,7 +7,6 @@ import org.example.robot.model.Legofir;
 import org.example.utility.Geometry;
 import org.opencv.core.Point;
 
-import javax.sound.midi.SysexMessage;
 import java.awt.geom.Line2D;
 
 import static org.example.Main.logger;
@@ -152,7 +151,7 @@ public class ObstacleNavigation {
         }
     }
 
-    public void pickUpBallInCorner(TennisBall nextBall, DriveTowardsBall.Position cornerPosition) {
+    public void pickUpBallInObstacle(TennisBall nextBall, DriveTowardsBall.Position cornerPosition) {
         Point intermediatePoint = findBallIntermediatePoint(nextBall, cornerPosition);
         System.out.println("Intermediate point: x=" + intermediatePoint.x + ", y=" + intermediatePoint.y);
         moveToIntermediatePoint(intermediatePoint);

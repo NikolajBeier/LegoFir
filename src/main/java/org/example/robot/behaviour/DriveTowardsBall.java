@@ -5,8 +5,6 @@ import org.example.mapping.Edge;
 import org.example.mapping.Obstacle;
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
-import org.example.robot.model.RobotState;
-import org.example.utility.Geometry;
 import org.opencv.core.Point;
 
 import java.awt.geom.Line2D;
@@ -68,50 +66,30 @@ public class DriveTowardsBall implements MyBehavior {
         while (!suppressed) {
             TennisBall nextBall = dude.getMap().getNextBall();
             Point nextBallPoint = new Point(nextBall.getX(), nextBall.getY());
+
+            // Avoid obstacle if ball is on the other side of it.
             if (obstacleNavigation.pathToNextPointCollidesWithObstacle(nextBallPoint)) {
                 obstacleNavigation.moveAroundObstacle(nextBallPoint);
             }
-            switch(ballConditions(nextBall)){
+
+            switch (ballConditions(nextBall)) {
                 case CORNER:
-                    cornerNavigation.driveTowardsCorner(nextBall, cornerPosition);
+                    cornerNavigation.pickUpBallInCorner(nextBall, cornerPosition);
                     break;
                 case WALL:
-                    //navigation.driveTowardsWall();
+                    wallNav.walldrive(dude.getMap().getBallNextToWallWaypoint(),nextBall);
                     break;
                 case OBSTACLE:
-                    obstacleNavigation.pickUpBallInCorner(nextBall, cornerPosition);
+                    obstacleNavigation.pickUpBallInObstacle(nextBall, cornerPosition);
                     break;
                 default:
                     navigation.driveTowardsBall(nextBall);
             }
-            ballDistanceToWall = new BallDistanceToWall();
-            // nextBall.setClosetsWall(ballDistanceToWall.BallHeadingtoWall(nextBall, dude));
-
-            //if (nextBall.isInCorner()){
-
-            /*}else*/
-            if (dude.getMap().getNextBall().isCloseToWall()) {
-                wallNav.walldrive(dude.getMap().getBallNextToWallWaypoint());
-
-           /* if (ballDistanceToWall.isCloseToWall(nextBall, dude)) {
-                System.out.println(dude.getMap().getNextBall().getClosetswall());
-                System.out.println(dude.getMap().getBallNextToWallWaypoint().x + " " + dude.getMap().getBallNextToWallWaypoint().y);
-             *//**//*   switch (ballDistanceToWall.BallHeadingtoWall(nextBall, dude)) {
-                    case NORTH -> dude.getMap().setBallNextToWallWaypoint(nextBall.getX(), nextBall.getY() + 100);
-                    case SOUTH -> dude.getMap().setBallNextToWallWaypoint(nextBall.getX(), nextBall.getY() - 100);
-                    case EAST -> dude.getMap().setBallNextToWallWaypoint(nextBall.getX() + 100, nextBall.getY());
-                    case WEST -> dude.getMap().setBallNextToWallWaypoint(nextBall.getX() - 100, nextBall.getY());
-                }*//**//*
-                wallNav.walldrive(dude.getMap().getWayPoint());
-                // navigation.driveTowardsBall(nextBall);
-                // dude.moveBackward();*/
-            } else {
-                navigation.driveTowardsBall(nextBall);
-            }
         }
-            dude.stopWheels();
-            dude.stopHarvester();
-        }
+
+        dude.stopWheels();
+        dude.stopHarvester();
+    }
 
 
     @Override
@@ -133,6 +111,8 @@ public class DriveTowardsBall implements MyBehavior {
             return Condition.CORNER;
         } else if (ballInObstacle(nextBall)){
             return Condition.OBSTACLE;
+        } else if (nextBall.isCloseToWall()){
+            return Condition.WALL;
         }
         return Condition.DEFAULT;
     }
