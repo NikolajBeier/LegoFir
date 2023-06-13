@@ -97,8 +97,8 @@ public class FrameAnalyzer {
            // webcamImage = cameraCalibration.undistort(webcamImage);
         }
 
-        // Remove glare
-        clahe(frame);
+        // Remove glare TODO: DISABLED FOR NOW, FIX WITH BETTER CALIBRATION, THINK OF PERFORMANCE
+       // frame = clahe(frame);
 
         // Find the stuff
         frameDetector.detect(frame);
