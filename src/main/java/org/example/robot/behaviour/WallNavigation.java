@@ -21,7 +21,6 @@ public class WallNavigation {
 
             }
             nav.driveTowardsWaypoint(waypoint);
-            return;
            // needs slowspeed
 
 

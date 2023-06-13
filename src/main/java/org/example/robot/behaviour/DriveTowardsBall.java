@@ -42,21 +42,21 @@ public class DriveTowardsBall implements MyBehavior {
     public void action() {
         suppressed = false;
         dude.setCurrentBehaviourName(BehaviorName);
-        while(!suppressed){
+        while (!suppressed) {
             TennisBall nextBall = dude.getMap().getNextBall();
-            Point nextBallPoint = new Point(nextBall.getX(),nextBall.getY());
-            if(obstacleNavigation.pathToNextPointCollidesWithObstacle(nextBallPoint)){
+            Point nextBallPoint = new Point(nextBall.getX(), nextBall.getY());
+            if (obstacleNavigation.pathToNextPointCollidesWithObstacle(nextBallPoint)) {
                 obstacleNavigation.moveAroundObstacle(nextBallPoint);
             }
             ballDistanceToWall = new BallDistanceToWall();
-           // nextBall.setClosetsWall(ballDistanceToWall.BallHeadingtoWall(nextBall, dude));
+            // nextBall.setClosetsWall(ballDistanceToWall.BallHeadingtoWall(nextBall, dude));
 
             //if (nextBall.isInCorner()){
 
             /*}else*/
-           if (dude.getMap().getNextBall().isCloseToWall()){
-               wallNav.walldrive(dude.getMap().getBallNextToWallWaypoint());
-           }
+            if (dude.getMap().getNextBall().isCloseToWall()) {
+                wallNav.walldrive(dude.getMap().getBallNextToWallWaypoint());
+
            /* if (ballDistanceToWall.isCloseToWall(nextBall, dude)) {
                 System.out.println(dude.getMap().getNextBall().getClosetswall());
                 System.out.println(dude.getMap().getBallNextToWallWaypoint().x + " " + dude.getMap().getBallNextToWallWaypoint().y);
@@ -68,13 +68,15 @@ public class DriveTowardsBall implements MyBehavior {
                 }*//**//*
                 wallNav.walldrive(dude.getMap().getWayPoint());
                 // navigation.driveTowardsBall(nextBall);
-                // dude.moveBackward();*//*
-            } else*/
+                // dude.moveBackward();*/
+            } else {
                 navigation.driveTowardsBall(nextBall);
+            }
         }
-        dude.stopWheels();
-        dude.stopHarvester();
-    }
+            dude.stopWheels();
+            dude.stopHarvester();
+        }
+
 
     @Override
     public void suppress(){

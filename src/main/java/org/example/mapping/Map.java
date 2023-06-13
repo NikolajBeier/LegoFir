@@ -371,21 +371,22 @@ public enum Direction {
                 ball.setClosetsWall(FindNearestWall(new Point(ball.getX(), ball.getY()), distanceToEdge));
                 System.out.println("ball is close to wall");
                 ball.setCloseToWall(true);
+                System.out.println(ball.getClosetswall());
                 switch (ball.getClosetswall()) {
                     case NORTH -> {
-                        ballNextToWallWaypoint = new Point(ball.getX(), ball.getY() + 100);
+                        ballNextToWallWaypoint = new Point(ball.getX(), ball.getY() - 100);
                         System.out.println("N created");
                     }
                     case SOUTH -> {
-                        ballNextToWallWaypoint = new Point(ball.getX(), ball.getY() - 100);
+                        ballNextToWallWaypoint = new Point(ball.getX(), ball.getY() + 100);
                         System.out.println("S created");
                     }
                     case EAST -> {
-                        ballNextToWallWaypoint = new Point(ball.getX() + 100, ball.getY());
+                        ballNextToWallWaypoint = new Point(ball.getX() - 100, ball.getY());
                         System.out.println("E created");
                     }
                     case WEST -> {
-                        ballNextToWallWaypoint = new Point(ball.getX() - 100, ball.getY());
+                        ballNextToWallWaypoint = new Point(ball.getX() + 100, ball.getY());
                         System.out.println("W created");
                     }
                     default -> throw new IllegalStateException("Unexpected value: " + ball.getClosetswall());

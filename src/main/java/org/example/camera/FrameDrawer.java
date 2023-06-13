@@ -306,7 +306,7 @@ public class FrameDrawer {
 
     }
 
-}
+
     private void drawBallHeading(Mat image){
         try {
             if (dude.getMap().getNextBall() != null && frameDetector.ballDetectionOn && frameDetector.edgeDetectionOn) {
