@@ -48,7 +48,18 @@ public class DriveTowardsBall implements MyBehavior {
             if(obstacleNavigation.pathToNextPointCollidesWithObstacle(nextBallPoint)){
                 obstacleNavigation.moveAroundObstacle(nextBallPoint);
             }
-            navigation.driveTowardsBall(nextBall);
+
+            if (nextBall.isInCorner()){
+                navigation.turnsTowardsWayPoint(dude.getMap().getWayPoint());
+                navigation.driveTowardsWaypoint(dude.getMap().getWayPoint());
+                navigation.driveTowardsBall(nextBall);
+                long timeBefore= System.currentTimeMillis();
+                while(System.currentTimeMillis() - timeBefore < 500){
+                    dude.moveBackward();
+                }
+            }else {
+                navigation.driveTowardsBall(nextBall);
+            }
         }
         dude.stopWheels();
         dude.stopHarvester();

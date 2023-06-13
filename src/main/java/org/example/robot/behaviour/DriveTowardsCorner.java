@@ -1,4 +1,4 @@
-package org.example.robot.behaviour;
+/*package org.example.robot.behaviour;
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
 import org.example.mapping.TennisBall;
@@ -37,8 +37,19 @@ public class DriveTowardsCorner implements MyBehavior{
         suppressed=false;
         dude.setCurrentBehaviourName(BehaviorName);
         while (!suppressed){
-            navigation.turnsTowardsWayPoint(dude.getMap().getWayPoint());
-            navigation.driveTowardsWaypoint(dude.getMap().getWayPoint());
+            if (!checkIfRobotIsOnPoint()) {
+                navigation.turnsTowardsWayPoint(dude.getMap().getWayPoint());
+                navigation.driveTowardsWaypoint(dude.getMap().getWayPoint());
+            }else {
+                nextBall = dude.getMap().getNextBall();
+                navigation.driveTowardsBall(nextBall);
+            }
+
+
+        }
+        long timeBefore = System.currentTimeMillis();
+        while(System.currentTimeMillis() - timeBefore < 500){
+            dude.moveBackward();
         }
     }
 
@@ -57,4 +68,16 @@ public class DriveTowardsCorner implements MyBehavior{
     public boolean isSuppressed() {
         return false;
     }
-}
+
+    public Boolean checkIfRobotIsOnPoint(){
+        double errorMargin = 8;
+
+        if(dude.getMap().getOrangeBalls().isEmpty() && dude.getMap().getBalls().isEmpty()){
+            return false;
+        }
+
+        double distance = Math.sqrt(Math.pow(dude.getMap().getRobotPosition().getX() - dude.getMap().getWayPoint().x, 2) +
+                Math.pow(dude.getMap().getRobotPosition().getY() - dude.getMap().getWayPoint().y, 2));
+        return distance <= errorMargin;
+    }
+}*/
