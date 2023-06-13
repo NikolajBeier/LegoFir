@@ -273,29 +273,34 @@ public class FrameDrawer {
 
     }
     private void drawBallWaypoint(Mat image){
-      {
-        if (dude.getMap().getBallNextToWallWaypoint() != null && frameDetector.ballDetectionOn && frameDetector.edgeDetectionOn)
         try {
+        if (dude.getMap().getBallNextToWallWaypoint() != null && frameDetector.ballDetectionOn && frameDetector.edgeDetectionOn) {
             Point waypoint = dude.getMap().getBallNextToWallWaypoint();
-            circle(image, new Point(waypoint.x,-waypoint.y),25,new Scalar(255, 0,0), 1);
+            circle(image, new Point(waypoint.x, -waypoint.y), 25, new Scalar(255, 0, 0), 1);
+        }
         }catch (NullPointerException e){
-            System.out.println("NullPointerException");}}
+            System.out.println("NullPointerException");
+        }
 
 
     }
     private void drawBallHeading(Mat image){
-        if (dude.getMap().getNextBall() != null && frameDetector.ballDetectionOn && frameDetector.edgeDetectionOn) {
-            Point ballPos =  new Point(dude.getMap().getNextBall().getX(),dude.getMap().getNextBall().getY());
-            Point eastHeading = new Point(1, 0);
-            Point southHeading = new Point(0, -1);
-            Point westHeading = new Point(-1, 0);
-            Point northHeading = new Point(0, 1);
+        try {
+            if (dude.getMap().getNextBall() != null && frameDetector.ballDetectionOn && frameDetector.edgeDetectionOn) {
+                Point ballPos = new Point(dude.getMap().getNextBall().getX(), dude.getMap().getNextBall().getY());
+                Point eastHeading = new Point(1, 0);
+                Point southHeading = new Point(0, -1);
+                Point westHeading = new Point(-1, 0);
+                Point northHeading = new Point(0, 1);
 
 
-            drawLinesToEdge(image, eastHeading, ballPos);
-            drawLinesToEdge(image, southHeading, ballPos);
-            drawLinesToEdge(image, westHeading, ballPos);
-            drawLinesToEdge(image, northHeading, ballPos);
+                drawLinesToEdge(image, eastHeading, ballPos);
+                drawLinesToEdge(image, southHeading, ballPos);
+                drawLinesToEdge(image, westHeading, ballPos);
+                drawLinesToEdge(image, northHeading, ballPos);
+            }
+        } catch (NullPointerException e){
+            // doesn't draw
         }
     }
 }

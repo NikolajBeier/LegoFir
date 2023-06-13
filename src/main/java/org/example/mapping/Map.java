@@ -187,12 +187,13 @@ public class Map {
                 new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x + 10000 * 0, startingPoint.y + 10000 * -1)
         };
 
+try {
 
-        // Edge points of the map
-        Point topLeft = edge.getTopLeft();
-        Point topRight = edge.getTopRight();
-        Point bottomLeft = edge.getBottomLeft();
-        Point bottomRight = edge.getBottomRight();
+    // Edge points of the map
+    Point topLeft = edge.getTopLeft();
+    Point topRight = edge.getTopRight();
+    Point bottomLeft = edge.getBottomLeft();
+    Point bottomRight = edge.getBottomRight();
 
 
         // Lines of the map
@@ -202,6 +203,7 @@ public class Map {
                 new Line2D.Double(topLeft.x, topLeft.y, bottomLeft.x, bottomLeft.y),
                 new Line2D.Double(topRight.x, topRight.y, bottomRight.x, bottomRight.y),
         };
+
         double shortestDistance = Double.MAX_VALUE;
 
         for (Line2D edge : edges) {
@@ -216,7 +218,9 @@ public class Map {
             return shortestDistance;
         }
 
-
+    }catch (Exception e){
+        System.out.println("Edge not set");
+    }
 
 
         /*
@@ -262,15 +266,17 @@ public class Map {
         for (Line2D edge : edges) {
             for (Line2D cardinalDirection : cardinalDirections) {
                 System.out.println("hello1111");
-               // if (cardinalDirection.intersectsLine(edge)) {
+               if (cardinalDirection.intersectsLine(edge)) {
                     System.out.println("hello2222");
                     if (distanceToEdge <= distanceToEdge(startingPoint))
+                        System.out.println("hello3333");
                         closestwallheading = findNearestWall(edges, cardinalDirection);
+
 
                 }
 
             }
-       //  }
+         }
 
         return closestwallheading;
     }
@@ -331,32 +337,39 @@ public class Map {
     }
 
     private void setBallsClosetowalls(TennisBall ball) {
-        double distanceToEdge;
+        try {
 
-        distanceToEdge = distanceToEdge(new Point(ball.getX(), ball.getY()));
-        if (distanceToEdge < 100) {
-            ball.setClosetsWall(FindNearestWall(new Point(ball.getX(), ball.getY()), distanceToEdge));
-            System.out.println("ball is close to wall");
-            ball.setCloseToWall(true);
-            switch (ball.getClosetswall()) {
-                case NORTH -> {
-                    ballNextToWallWaypoint = new Point(ball.getX(), ball.getY() + 100);
-                    System.out.println("N created");
+
+            double distanceToEdge;
+
+            distanceToEdge = distanceToEdge(new Point(ball.getX(), ball.getY()));
+            if (distanceToEdge < 100) {
+                ball.setClosetsWall(FindNearestWall(new Point(ball.getX(), ball.getY()), distanceToEdge));
+                System.out.println("ball is close to wall");
+                ball.setCloseToWall(true);
+                switch (ball.getClosetswall()) {
+                    case NORTH -> {
+                        ballNextToWallWaypoint = new Point(ball.getX(), ball.getY() + 100);
+                        System.out.println("N created");
+                    }
+                    case SOUTH -> {
+                        ballNextToWallWaypoint = new Point(ball.getX(), ball.getY() - 100);
+                        System.out.println("S created");
+                    }
+                    case EAST -> {
+                        ballNextToWallWaypoint = new Point(ball.getX() + 100, ball.getY());
+                        System.out.println("E created");
+                    }
+                    case WEST -> {
+                        ballNextToWallWaypoint = new Point(ball.getX() - 100, ball.getY());
+                        System.out.println("W created");
+                    }
+                    default -> throw new IllegalStateException("Unexpected value: " + ball.getClosetswall());
                 }
-                case SOUTH -> {
-                    ballNextToWallWaypoint = new Point(ball.getX(), ball.getY() - 100);
-                    System.out.println("S created");
-                }
-                case EAST -> {
-                    ballNextToWallWaypoint = new Point(ball.getX() + 100, ball.getY());
-                    System.out.println("E created");
-                }
-                case WEST -> {
-                    ballNextToWallWaypoint = new Point(ball.getX() - 100, ball.getY());
-                    System.out.println("W created");
-                }
-                default -> throw new IllegalStateException("Unexpected value: " + ball.getClosetswall());
+
             }
+        }catch (Exception e){
+            System.out.println("ball not set");
         }
     }
 
