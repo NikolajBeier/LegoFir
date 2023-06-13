@@ -29,10 +29,12 @@ public class DriveTowardsBall implements MyBehavior {
     boolean stopCondition = false;
     Navigation navigation;
     CornerNavigation cornerNavigation;
+    ObstacleNavigation obstacleNavigation;
 
     public DriveTowardsBall(Legofir dude) {
         this.dude = dude;
         navigation= new Navigation(dude,this);
+        obstacleNavigation = new ObstacleNavigation(dude,this);
         cornerNavigation = new CornerNavigation(dude, this, navigation);
     }
 
@@ -52,6 +54,11 @@ public class DriveTowardsBall implements MyBehavior {
         dude.setCurrentBehaviourName(BehaviorName);
         while(!suppressed){
             TennisBall nextBall = dude.getMap().getNextBall();
+            Point nextBallPoint = new Point(nextBall.getX(),nextBall.getY());
+            if(obstacleNavigation.pathToNextPointCollidesWithObstacle(nextBallPoint)){
+                obstacleNavigation.moveAroundObstacle(nextBallPoint);
+            }
+            navigation.driveTowardsBall(nextBall);
             switch(ballConditions(nextBall)){
                 case CORNER:
                     cornerNavigation.driveTowardsCorner(nextBall, cornerPosition);

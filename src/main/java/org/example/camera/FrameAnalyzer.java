@@ -73,6 +73,8 @@ public class FrameAnalyzer {
 
 
 
+
+
         //Starts thread which analyses and alters each frame from video capture and updates ui with the result
         EventQueue.invokeLater(() -> new Thread(() -> {
                     while (true) {
@@ -90,11 +92,12 @@ public class FrameAnalyzer {
 
         //Calibrate
         if(isCalibrated){
-            webcamImage = cameraCalibration.undistort(webcamImage);
+            Imgproc.remap(frame, frame, cameraCalibration.map1, cameraCalibration.map2, Imgproc.INTER_LINEAR);
+           // webcamImage = cameraCalibration.undistort(webcamImage);
         }
 
-        // Remove glare
-        clahe(frame);
+        // Remove glare TODO: DISABLED FOR NOW, FIX WITH BETTER CALIBRATION, THINK OF PERFORMANCE
+       // frame = clahe(frame);
 
         // Find the stuff
         frameDetector.detect(frame);

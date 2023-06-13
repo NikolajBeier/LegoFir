@@ -1,6 +1,7 @@
 package org.example.robot.behaviour;
 
 import org.example.robot.model.Legofir;
+import org.opencv.core.Point;
 
 public class DriveTowardsGoal implements MyBehavior{
     Legofir dude;
@@ -8,15 +9,17 @@ public class DriveTowardsGoal implements MyBehavior{
     boolean suppressed = false;
     boolean stopCondition = false;
     Navigation navigation;
+    ObstacleNavigation obstacleNavigation;
 
     public DriveTowardsGoal(Legofir dude) {
         this.dude = dude;
         navigation = new Navigation(dude,this);
+        obstacleNavigation = new ObstacleNavigation(dude,this);
     }
 
     @Override
     public boolean takeControl() {
-        if (dude.getMap().getOrangeBalls().isEmpty() && dude.getMap().getBalls().isEmpty()){
+        if((dude.getMap().getOrangeBalls().isEmpty() && dude.getMap().getBalls().isEmpty()) || timerExpired()){
             return true;
         }
         return false;
@@ -26,8 +29,10 @@ public class DriveTowardsGoal implements MyBehavior{
     public void action() {
         suppressed=false;
         dude.setCurrentBehaviourName(BehaviorName);
-        while (!suppressed){
-           navigation.turnsTowardsWayPoint(dude.getMap().getWayPoint());
+        if(obstacleNavigation.pathToNextPointCollidesWithObstacle(dude.getMap().getWayPoint())){
+            obstacleNavigation.moveAroundObstacle(dude.getMap().getWayPoint());
+        }
+        while (!suppressed && takeControl()){
            navigation.driveTowardsWaypoint(dude.getMap().getWayPoint());
         }
     }
@@ -44,6 +49,11 @@ public class DriveTowardsGoal implements MyBehavior{
     @Override
     public boolean isSuppressed() {
         return false;
+    }
+
+
+    private boolean timerExpired() {
+        return System.currentTimeMillis()-dude.startTime>420000;
     }
 }
 

@@ -6,6 +6,8 @@ import org.opencv.core.Point;
 public class CollisionNavigation {
     Legofir dude;
     private final double FRONTAL_AVOID_DISTANCE = 100;
+    private final double FRONTAL_MIDDLE_DISTANCE = 25;
+    private final double BACKWARDS_AVOID_DISTANCE = 150;
     private final double TURNING_AVOID_DISTANCE = 50;
     private long startTime;
     MyBehavior myBehavior;
@@ -20,10 +22,12 @@ public class CollisionNavigation {
         while(isCollidingOnTheFront() && !isCollidingOnTheBack()){}
         dude.stopWheels();
         dude.turnRight();
-        doNothingInMS(1000);
+        startTime = System.currentTimeMillis();
+        while(!isCollidingOnTheRight() && withinTimerinMS(500,startTime)){}
         dude.stopWheels();
         dude.moveForward();
-        doNothingInMS(500);
+        startTime = System.currentTimeMillis();
+        while(!isCollidingOnTheFront() && withinTimerinMS(500,startTime)){}
         dude.stopWheels();
     }
 
@@ -120,7 +124,7 @@ public class CollisionNavigation {
         double distanceRight = dude.getMap().distanceToEdge(heading,rightSide);
         double distanceMiddle= dude.getMap().distanceToEdge(heading,middle);
         double distanceFront = dude.getMap().distanceToEdge(heading,front);
-        if(distanceRight < FRONTAL_AVOID_DISTANCE || distanceLeft < FRONTAL_AVOID_DISTANCE || distanceMiddle < FRONTAL_AVOID_DISTANCE || distanceFront < 15){
+        if(distanceRight < FRONTAL_AVOID_DISTANCE || distanceLeft < FRONTAL_AVOID_DISTANCE || distanceMiddle < FRONTAL_AVOID_DISTANCE || distanceFront < FRONTAL_MIDDLE_DISTANCE){
             return true;
         }
         return false;

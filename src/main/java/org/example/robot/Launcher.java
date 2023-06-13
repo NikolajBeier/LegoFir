@@ -56,12 +56,12 @@ public class Launcher implements Program {
         dude.setDefaultSpeedWheel(200);
         dude.setLaunched(true);
 
-        /*
+
         Audio sound = ev3.getAudio();
         sound.setVolume(15);
-        themes.ImperialTheme(ev3);
+        themes.ohmygod(ev3);
 
-         */
+
 
 
         System.out.println("Når vi her?");
@@ -79,7 +79,7 @@ public class Launcher implements Program {
 
         };
         arby = new Arbitrator(bArray);
-
+        dude.startTimer();
         arby.go();
         System.out.println("arby stoppet");
     }
