@@ -18,7 +18,7 @@ public class WallNavigation {
         while (!suppressed) {
             while(!checkIfRobotIsOnPoint()){
                 nav.turnsTowardsWayPoint(waypoint);
-                nav.driveTowardsWaypoint(waypoint);
+
             }
 
           //  nav.turnsTowardsWayPoint(nextBall, 200);

@@ -10,26 +10,24 @@ public class DriveTowardsBall implements MyBehavior {
     String BehaviorName = "DriveTowardsBall";
 
 
-
     boolean suppressed = false;
     Legofir dude;
     boolean stopCondition = false;
     Navigation navigation;
     WallNavigation wallNav;
     BallDistanceToWall ballDistanceToWall;
-
     Edge edge;
 
     public DriveTowardsBall(Legofir dude) {
         this.dude = dude;
-        navigation= new Navigation(dude,this);
+        navigation = new Navigation(dude, this);
         wallNav = new WallNavigation(dude, navigation);
     }
 
 
     @Override
     public boolean takeControl() {
-        if(stopCondition){
+        if (stopCondition) {
             return false;
         }
         return true;
@@ -40,7 +38,7 @@ public class DriveTowardsBall implements MyBehavior {
     public void action() {
         suppressed = false;
         dude.setCurrentBehaviourName(BehaviorName);
-        while(!suppressed){
+        while (!suppressed) {
             TennisBall nextBall = dude.getMap().getNextBall();
             ballDistanceToWall = new BallDistanceToWall();
             nextBall.setClosetsWall(ballDistanceToWall.BallHeadingtoWall(nextBall, dude));
@@ -48,16 +46,17 @@ public class DriveTowardsBall implements MyBehavior {
             //if (nextBall.isInCorner()){
 
             /*}else*/
+            // TODO move this to mapping.
             if (ballDistanceToWall.isCloseToWall(nextBall, dude)) {
-                switch (ballDistanceToWall.BallHeadingtoWall(nextBall,dude)){
-                    case NORTH -> dude.getMap().setBallNextToWallWaypoint(nextBall.getX(), nextBall.getY() - 100);
-                    case SOUTH -> dude.getMap().setBallNextToWallWaypoint(nextBall.getX(), nextBall.getY() + 100);
+                switch (ballDistanceToWall.BallHeadingtoWall(nextBall, dude)) {
+                    case NORTH -> dude.getMap().setBallNextToWallWaypoint(nextBall.getX(), nextBall.getY() + 100);
+                    case SOUTH -> dude.getMap().setBallNextToWallWaypoint(nextBall.getX(), nextBall.getY() - 100);
                     case EAST -> dude.getMap().setBallNextToWallWaypoint(nextBall.getX() + 100, nextBall.getY());
                     case WEST -> dude.getMap().setBallNextToWallWaypoint(nextBall.getX() - 100, nextBall.getY());
                 }
                 wallNav.walldrive(dude.getMap().getWayPoint(), suppressed);
-                //navigation.driveTowardsBall(nextBall);
-               // dude.moveBackward();
+                // navigation.driveTowardsBall(nextBall);
+                // dude.moveBackward();
             } else
                 navigation.driveTowardsBall(nextBall);
         }
@@ -75,6 +74,7 @@ public class DriveTowardsBall implements MyBehavior {
         this.stopCondition = stopCondition;
         suppressed = true;
     }
+
     public boolean isSuppressed() {
         return suppressed;
     }
