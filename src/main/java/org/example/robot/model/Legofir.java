@@ -114,8 +114,8 @@ public class Legofir {
         try {
             left.setSpeed(speed);
             right.setSpeed(speed);
-            left.backward();
-            right.backward();
+            left.forward();
+            right.forward();
         } catch (RemoteException e) {
             stopAll();
         }
@@ -123,8 +123,8 @@ public class Legofir {
     public void moveForward(){
         state=RobotState.MOVING_FORWARD;
         try {
-            left.backward();
-            right.backward();
+            left.forward();
+            right.forward();
         } catch (RemoteException e) {
             stopAll();
         }
@@ -132,8 +132,8 @@ public class Legofir {
     public void moveBackward(){
         state=RobotState.MOVING_BACKWARD;
         try {
-            left.forward();
-            right.forward();
+            left.backward();
+            right.backward();
         } catch (RemoteException e) {
             stopAll();
         }
@@ -143,8 +143,8 @@ public class Legofir {
         try {
             left.setSpeed(speed);
             right.setSpeed(speed);
-            left.forward();
-            right.forward();
+            left.backward();
+            right.backward();
         } catch (RemoteException e) {
             stopAll();
         }
@@ -155,8 +155,8 @@ public class Legofir {
         try {
             left.setSpeed(50);
             right.setSpeed(50);
-            left.forward();
-            right.backward();
+            left.backward();
+            right.forward();
         } catch (RemoteException e) {
             stopAll();
         }
@@ -166,8 +166,8 @@ public class Legofir {
         try {
             left.setSpeed(speed);
             right.setSpeed(speed);
-            left.forward();
-            right.backward();
+            left.backward();
+            right.forward();
         } catch (RemoteException e) {
             stopAll();
         }
@@ -178,8 +178,8 @@ state=RobotState.TURNING_RIGHT;
         try{
             left.setSpeed(speed);
             right.setSpeed(speed);
-            left.backward();
-            right.forward();
+            left.forward();
+            right.backward();
         } catch (RemoteException e) {
             stopAll();
         }
@@ -189,8 +189,8 @@ state=RobotState.TURNING_RIGHT;
         try{
             left.setSpeed(50);
             right.setSpeed(50);
-            left.backward();
-            right.forward();
+            left.forward();
+            right.backward();
         } catch (RemoteException e) {
             stopAll();
         }

@@ -4,10 +4,12 @@ package org.example.robot.behaviour;
 import org.example.mapping.Edge;
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
+import org.opencv.core.Point;
 
 
 public class DriveTowardsBall implements MyBehavior {
     String BehaviorName = "DriveTowardsBall";
+
 
 
     boolean suppressed = false;
@@ -17,17 +19,19 @@ public class DriveTowardsBall implements MyBehavior {
     WallNavigation wallNav;
     BallDistanceToWall ballDistanceToWall;
     Edge edge;
+    ObstacleNavigation obstacleNavigation;
 
     public DriveTowardsBall(Legofir dude) {
         this.dude = dude;
         navigation = new Navigation(dude, this);
         wallNav = new WallNavigation(dude, navigation);
+        obstacleNavigation = new ObstacleNavigation(dude,this);
     }
 
 
     @Override
     public boolean takeControl() {
-        if (stopCondition) {
+        if(stopCondition){
             return false;
         }
         return true;
@@ -38,8 +42,12 @@ public class DriveTowardsBall implements MyBehavior {
     public void action() {
         suppressed = false;
         dude.setCurrentBehaviourName(BehaviorName);
-        while (!suppressed) {
+        while(!suppressed){
             TennisBall nextBall = dude.getMap().getNextBall();
+            Point nextBallPoint = new Point(nextBall.getX(),nextBall.getY());
+            if(obstacleNavigation.pathToNextPointCollidesWithObstacle(nextBallPoint)){
+                obstacleNavigation.moveAroundObstacle(nextBallPoint);
+            }
             ballDistanceToWall = new BallDistanceToWall();
            // nextBall.setClosetsWall(ballDistanceToWall.BallHeadingtoWall(nextBall, dude));
 
@@ -69,16 +77,15 @@ public class DriveTowardsBall implements MyBehavior {
     }
 
     @Override
-    public void suppress() {
+    public void suppress(){
         suppressed = true;
     }
 
     @Override
     public void setStopCondition(Boolean stopCondition) {
-        this.stopCondition = stopCondition;
-        suppressed = true;
+        this.stopCondition=stopCondition;
+        suppressed= true;
     }
-
     public boolean isSuppressed() {
         return suppressed;
     }
