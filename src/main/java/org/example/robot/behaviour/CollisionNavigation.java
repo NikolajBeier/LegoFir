@@ -20,10 +20,12 @@ public class CollisionNavigation {
         while(isCollidingOnTheFront() && !isCollidingOnTheBack()){}
         dude.stopWheels();
         dude.turnRight();
-        doNothingInMS(1000);
+        startTime = System.currentTimeMillis();
+        while(!isCollidingOnTheRight() && withinTimerinMS(500,startTime)){}
         dude.stopWheels();
         dude.moveForward();
-        doNothingInMS(500);
+        startTime = System.currentTimeMillis();
+        while(!isCollidingOnTheFront() && withinTimerinMS(500,startTime)){}
         dude.stopWheels();
     }
 
