@@ -96,7 +96,7 @@ public class FrameDrawer {
             int nextBallY = nextBall.getY();
 
 
-            // Draw line to closest ball
+            // Draw line to the closest ball
             arrowedLine(frame, centerOfLine, new Point(nextBallX, -nextBallY), new Scalar(0, 255, 0), 1);
 
             drawFrontAndBackPoints(frame);
@@ -247,7 +247,7 @@ public class FrameDrawer {
         }
     }
     private void drawWayPoint(Mat image){
-        if (dude.getMap().getWayPoint() !=null)
+        if (dude.getMap().getWayPoint() !=null && frameDetector.ballDetectionOn && frameDetector.edgeDetectionOn)
             try {
                 Point wayPoint = dude.getMap().getWayPoint();
                 circle(image,new Point(wayPoint.x,-wayPoint.y),25,new Scalar(255,0,0),1);
@@ -273,7 +273,7 @@ public class FrameDrawer {
 
     }
     private void drawBallWaypoint(Mat image){
-        if (dude.getMap().getBallNextToWallWaypoint() != null)
+        if (dude.getMap().getBallNextToWallWaypoint() != null && frameDetector.ballDetectionOn && frameDetector.edgeDetectionOn)
         try {
             Point waypoint = dude.getMap().getBallNextToWallWaypoint();
             circle(image, new Point(waypoint.x,-waypoint.y),25,new Scalar(255, 0,0), 1);
@@ -284,8 +284,8 @@ public class FrameDrawer {
 
     }
     private void drawBallHeading(Mat image){
-        if (dude.getMap().getNextBall() != null) {
-            Point ballPos = dude.getMap().getBallNextToWallWaypoint();
+        if (dude.getMap().getNextBall() != null && frameDetector.ballDetectionOn && frameDetector.edgeDetectionOn) {
+            Point ballPos =  new Point(dude.getMap().getNextBall().getX(),dude.getMap().getNextBall().getY());
             Point eastHeading = new Point(1, 0);
             Point southHeading = new Point(0, -1);
             Point westHeading = new Point(-1, 0);
