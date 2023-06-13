@@ -1,13 +1,11 @@
 package org.example.camera;
 
-import lejos.robotics.navigation.Waypoint;
 import org.example.mapping.Edge;
 import org.example.mapping.Map;
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
-import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
@@ -33,6 +31,8 @@ public class FrameDrawer {
         drawRobot(frame);
         drawCollision(frame);
         drawWayPoint(frame);
+        drawBallWaypoint(frame);
+        drawBallHeading(frame);
 
     }
 
@@ -271,5 +271,30 @@ public class FrameDrawer {
             }
 
 
+    }
+    private void drawBallWaypoint(Mat image){
+        if (dude.getMap().getBallNextToWallWaypoint() != null)
+        try {
+            Point waypoint = dude.getMap().getBallNextToWallWaypoint();
+            circle(image, new Point(waypoint.x,-waypoint.y),25,new Scalar(255, 0,0), 1);
+        }catch (NullPointerException e){
+            System.out.println("NullPointerException");
+        }
+
+
+    }
+    private void drawBallHeading(Mat image){
+
+
+        Point ballPos = dude.getMap().getBallNextToWallWaypoint();
+        Point eastHeading = new Point(1,0);
+        Point southHeading = new Point(0,-1);
+        Point westHeading = new Point(-1,0);
+        Point northHeading = new Point(0,1);
+
+        drawLinesToEdge(image,eastHeading,ballPos);
+        drawLinesToEdge(image,southHeading,ballPos);
+        drawLinesToEdge(image,westHeading,ballPos);
+        drawLinesToEdge(image,northHeading,ballPos);
     }
 }

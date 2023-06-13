@@ -261,7 +261,8 @@ public class Navigation {
         dude.stopHarvester();
     }
     private boolean closeToBall(TennisBall nextBall) {
-        distanceToPoint=distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(),dude.getMap().getRobotPosition().getFrontSideY()),new Point(nextBall.getX(),nextBall.getY()));
+        distanceToPoint=distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(),
+                dude.getMap().getRobotPosition().getFrontSideY()),new Point(nextBall.getX(),nextBall.getY()));
         return distanceToPoint < 17;
     }
     private boolean isMovingForward() {
