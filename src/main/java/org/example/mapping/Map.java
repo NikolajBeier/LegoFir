@@ -187,40 +187,40 @@ public class Map {
                 new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x + 10000 * 0, startingPoint.y + 10000 * -1)
         };
 
-try {
+        try {
 
-    // Edge points of the map
-    Point topLeft = edge.getTopLeft();
-    Point topRight = edge.getTopRight();
-    Point bottomLeft = edge.getBottomLeft();
-    Point bottomRight = edge.getBottomRight();
+            // Edge points of the map
+            Point topLeft = edge.getTopLeft();
+            Point topRight = edge.getTopRight();
+            Point bottomLeft = edge.getBottomLeft();
+            Point bottomRight = edge.getBottomRight();
 
 
-        // Lines of the map
-        Line2D.Double[] edges = {
-                new Line2D.Double(topLeft.x, topLeft.y, topRight.x, topRight.y),
-                new Line2D.Double(bottomLeft.x, bottomLeft.y, bottomRight.x, bottomRight.y),
-                new Line2D.Double(topLeft.x, topLeft.y, bottomLeft.x, bottomLeft.y),
-                new Line2D.Double(topRight.x, topRight.y, bottomRight.x, bottomRight.y),
-        };
+            // Lines of the map
+            Line2D.Double[] edges = {
+                    new Line2D.Double(topLeft.x, topLeft.y, topRight.x, topRight.y),
+                    new Line2D.Double(bottomLeft.x, bottomLeft.y, bottomRight.x, bottomRight.y),
+                    new Line2D.Double(topLeft.x, topLeft.y, bottomLeft.x, bottomLeft.y),
+                    new Line2D.Double(topRight.x, topRight.y, bottomRight.x, bottomRight.y),
+            };
 
-        double shortestDistance = Double.MAX_VALUE;
+            double shortestDistance = Double.MAX_VALUE;
 
-        for (Line2D edge : edges) {
-            for (Line2D cardinalDirection : cardinalDirections) {
-                if (cardinalDirection.intersectsLine(edge)) {
-                    double distanceFromStartingPointToEdge = distanceBetweenPoints(startingPoint, intersection(cardinalDirection, edge));
-                    if (distanceFromStartingPointToEdge < shortestDistance) {
-                        shortestDistance = distanceFromStartingPointToEdge;
+            for (Line2D edge : edges) {
+                for (Line2D cardinalDirection : cardinalDirections) {
+                    if (cardinalDirection.intersectsLine(edge)) {
+                        double distanceFromStartingPointToEdge = distanceBetweenPoints(startingPoint, intersection(cardinalDirection, edge));
+                        if (distanceFromStartingPointToEdge < shortestDistance) {
+                            shortestDistance = distanceFromStartingPointToEdge;
+                        }
                     }
                 }
+                return shortestDistance;
             }
-            return shortestDistance;
-        }
 
-    }catch (Exception e){
-        System.out.println("Edge not set");
-    }
+        } catch (Exception e) {
+            System.out.println("Edge not set");
+        }
 
 
         /*
@@ -254,34 +254,58 @@ try {
         Direction closestwallheading = null;
 
         // Lines of the map
-        Line2D.Double[] edges = {
-                new Line2D.Double(topLeft.x, topLeft.y, topRight.x, topRight.y),
-                new Line2D.Double(bottomLeft.x, bottomLeft.y, bottomRight.x, bottomRight.y),
-                new Line2D.Double(topLeft.x, topLeft.y, bottomLeft.x, bottomLeft.y),
-                new Line2D.Double(topRight.x, topRight.y, bottomRight.x, bottomRight.y),
-        };
+
+        Line2D North = new Line2D.Double(topLeft.x, topLeft.y, topRight.x, topRight.y);
+        Line2D South = new Line2D.Double(bottomLeft.x, bottomLeft.y, bottomRight.x, bottomRight.y);
+        Line2D West = new Line2D.Double(topLeft.x, topLeft.y, bottomLeft.x, bottomLeft.y);
+        Line2D East = new Line2D.Double(topRight.x, topRight.y, bottomRight.x, bottomRight.y);
         System.out.println(cardinalDirections[0] + " \t" + cardinalDirections[1] + " \t" + cardinalDirections[2] + " \t" + cardinalDirections[3]);
-        System.out.println(edges[0] + " \t" + edges[1] + " \t" + edges[2] + " \t" + edges[3]);
+
+        for (Line2D dir : cardinalDirections) {
+
+        }
+
+
         System.out.println(distanceToEdge);
-        for (Line2D edge : edges) {
-            for (Line2D cardinalDirection : cardinalDirections) {
+        for (Line2D dir : cardinalDirections) {
+            //if (distanceToEdge>=distanceToEdge(startingPoint)){
+
+            if (dir.intersectsLine(North)) {
+                if (distanceToEdge >= distanceBetweenPoints(startingPoint, intersection(dir, North)))
+                    return Direction.NORTH;
+            }
+            if (dir.intersectsLine(South)) {
+                if (distanceToEdge >= distanceBetweenPoints(startingPoint, intersection(dir, South)))
+                    return Direction.SOUTH;
+            }
+            if (dir.intersectsLine(West)) {
+                if (distanceToEdge >= distanceBetweenPoints(startingPoint, intersection(dir, West)))
+                    return Direction.WEST;
+            }
+            if (dir.intersectsLine(East)) {
+                if (distanceToEdge >= distanceBetweenPoints(startingPoint, intersection(dir, East)))
+                    return Direction.EAST;
+            }
+        }
+
+
+       /*     for (Line2D cardinalDirection : cardinalDirections) {
                 System.out.println("hello1111");
-               if (cardinalDirection.intersectsLine(edge)) {
+                if (cardinalDirection.intersectsLine(edge)) {
                     System.out.println("hello2222");
                     if (distanceToEdge <= distanceToEdge(startingPoint))
                         System.out.println("hello3333");
-                        closestwallheading = findNearestWall(edges, cardinalDirection);
+                    closestwallheading = findNearestWall(edges, cardinalDirection);
 
 
-                }
+                }*/
 
-            }
-         }
 
         return closestwallheading;
-    }
+}
 
-    public enum Direction {NORTH, SOUTH, EAST, WEST}
+public enum Direction {
+    NORTH, SOUTH, EAST, WEST}
 
     public DepositPoint getDepositPoint() {
         return this.depositPoint;
@@ -368,7 +392,7 @@ try {
                 }
 
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println("ball not set");
         }
     }
