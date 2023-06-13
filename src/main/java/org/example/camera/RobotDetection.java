@@ -205,7 +205,7 @@ public class RobotDetection {
 
                         Point center = new Point(dude.getMap().getRobotPosition().getX(), -dude.getMap().getRobotPosition().getY());
                         double ratioBelow = 1.0;
-                        double ratioAbove = 0.6;
+                        double ratioAbove = 1.0;
                         double distanceBetweenColors = Geometry.distanceBetweenPoints(blueCenter, greenCenter);
 
 

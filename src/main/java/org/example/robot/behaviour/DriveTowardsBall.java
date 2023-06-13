@@ -3,27 +3,37 @@ package org.example.robot.behaviour;
 
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
-import org.example.robot.model.RobotState;
-import org.example.utility.Geometry;
-import org.opencv.core.Point;
-
-import static org.example.Main.logger;
-import static org.example.utility.Geometry.distanceBetweenPoints;
 
 
 public class DriveTowardsBall implements MyBehavior {
     String BehaviorName = "DriveTowardsBall";
 
+    enum Condition {
+            CORNER,
+            WALL,
+            OBSTACLE,
+            DEFAULT
+    }
+    enum Position {
+        TOPLEFT,
+        TOPRIGHT,
+        BOTTOMLEFT,
+        BOTTOMRIGHT
+    }
+
+    Position cornerPosition = null;
 
 
     boolean suppressed = false;
     Legofir dude;
     boolean stopCondition = false;
     Navigation navigation;
+    CornerNavigation cornerNavigation;
 
     public DriveTowardsBall(Legofir dude) {
         this.dude = dude;
         navigation= new Navigation(dude,this);
+        cornerNavigation = new CornerNavigation(dude, this, navigation);
     }
 
 
@@ -42,7 +52,19 @@ public class DriveTowardsBall implements MyBehavior {
         dude.setCurrentBehaviourName(BehaviorName);
         while(!suppressed){
             TennisBall nextBall = dude.getMap().getNextBall();
-            navigation.driveTowardsBall(nextBall);
+            switch(ballConditions(nextBall)){
+                case CORNER:
+                    cornerNavigation.driveTowardsCorner(nextBall, cornerPosition);
+                    break;
+                case WALL:
+                    //navigation.driveTowardsWall();
+                    break;
+                case OBSTACLE:
+                    //navigation.driveTowardsObstacle();
+                    break;
+                default:
+                    navigation.driveTowardsBall(nextBall);
+            }
         }
         dude.stopWheels();
         dude.stopHarvester();
@@ -59,6 +81,36 @@ public class DriveTowardsBall implements MyBehavior {
     }
     public boolean isSuppressed() {
         return suppressed;
+    }
+
+    private Condition ballConditions(TennisBall nextBall){
+        if(ballInCorner(nextBall)){
+            return Condition.CORNER;
+        }
+
+        return Condition.DEFAULT;
+    }
+
+    private boolean ballInCorner(TennisBall nextBall){
+        if(nextBall.getX() < dude.getMap().getEdge().getTopLeft().x + 50 && nextBall.getY() < dude.getMap().getEdge().getTopLeft().y - 50){
+            //top left
+            cornerPosition = Position.TOPLEFT;
+            return true;
+        } else if(nextBall.getX() > dude.getMap().getEdge().getTopRight().x - 50 && nextBall.getY() < dude.getMap().getEdge().getTopLeft().y - 50){
+            //top right
+            cornerPosition = Position.TOPRIGHT;
+            return true;
+        } else if(nextBall.getX() < dude.getMap().getEdge().getTopLeft().x + 50 && nextBall.getY() > dude.getMap().getEdge().getTopLeft().y + 50){
+            //bottom left
+            cornerPosition = Position.BOTTOMLEFT;
+            return true;
+        } else if(nextBall.getX() > dude.getMap().getEdge().getTopRight().x - 50 && nextBall.getY() > dude.getMap().getEdge().getTopLeft().y + 50){
+            //bottom right
+            cornerPosition = Position.BOTTOMRIGHT;
+            return true;
+        }
+
+        return false;
     }
 
 
