@@ -224,7 +224,7 @@ public class Navigation {
     }
 
     public void driveTowardsBall(TennisBall nextBall) {
-        while(!myBehavior.isSuppressed() || dude.getMap().getBalls().size()==1) {
+        while(!myBehavior.isSuppressed() || dude.getMap().getBalls().size()==0) {
             turnTowards(nextBall);
             distanceToPoint = distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(), dude.getMap().getRobotPosition().getFrontSideY()), new Point(nextBall.getX(), nextBall.getY()));
 
@@ -260,10 +260,7 @@ public class Navigation {
         dude.moveForward(speed);
     }
     private void pickUpBall() {
-        long timeBefore = System.currentTimeMillis();
         dude.collectBall();
-
-        dude.stopHarvester();
     }
     private boolean closeToBall(TennisBall nextBall) {
         distanceToPoint=distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(),dude.getMap().getRobotPosition().getFrontSideY()),new Point(nextBall.getX(),nextBall.getY()));

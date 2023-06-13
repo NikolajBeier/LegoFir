@@ -38,6 +38,8 @@ public class Legofir {
 
     String currentBehaviourName = "None";
 
+    public long startTime;
+
     public Legofir() {
     }
 
@@ -335,5 +337,9 @@ state=RobotState.TURNING_RIGHT;
         } catch (RemoteException e) {
             stopAll();
         }
+    }
+
+    public void startTimer() {
+        startTime = System.currentTimeMillis();
     }
 }
