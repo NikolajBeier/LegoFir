@@ -9,12 +9,10 @@ public class BallDistanceToWall {
 
 
 
-    public Map.Direction BallHeadingtoWall(TennisBall tennisBall, Legofir dude){
+    public void BallHeadingtoWall(TennisBall tennisBall, Legofir dude){
         Point point = new Point(tennisBall.getX(),tennisBall.getY());
-        Map.Direction headingToEdge = dude.getMap().FindNearestWall(point,tennisBall.getDistanceToClosestWall());
 
 
-        return headingToEdge;
 
     }
     public double shortestDistanceToWall(TennisBall tennisBall, Legofir dude){

@@ -295,7 +295,7 @@ state=RobotState.TURNING_RIGHT;
         // replace old balls with new ones
         List<TennisBall> newList = new ArrayList<>();
         for (Rect ball : balls) {
-            newList.add(new TennisBall((int)(ball.x+ball.width*0.5), (int)(-ball.y- ball.height*0.5), null, false));
+            newList.add(new TennisBall((int)(ball.x+ball.width*0.5), (int)(-ball.y- ball.height*0.5), null, false, false));
         }
         map.setBalls(newList);
     }
@@ -303,7 +303,7 @@ state=RobotState.TURNING_RIGHT;
         // replace old balls with new ones
         List<TennisBall> newOrangeList = new ArrayList<>();
         for (Rect ball : balls) {
-            newOrangeList.add(new TennisBall((int)(ball.x+ball.width*0.5), (int)(-ball.y- ball.height*0.5), null,false));
+            newOrangeList.add(new TennisBall((int)(ball.x+ball.width*0.5), (int)(-ball.y- ball.height*0.5), null,false, false));
         }
         map.setOrangeBalls(newOrangeList);
     }

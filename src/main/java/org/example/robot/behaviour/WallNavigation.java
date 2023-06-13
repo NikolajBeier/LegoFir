@@ -13,17 +13,17 @@ public class WallNavigation {
     }
 
     //needs an enum of Heading
-    public void walldrive(Point waypoint,Boolean suppressed) {
+    public void walldrive(Point waypoint) {
         nextBall = new Point(dude.getMap().getNextBall().getX(), dude.getMap().getNextBall().getY() );
-        while (!suppressed) {
+        while (nav.myBehavior.isSuppressed()) {
             while(!checkIfRobotIsOnPoint()){
                 nav.turnsTowardsWayPoint(waypoint);
 
             }
-
-          //  nav.turnsTowardsWayPoint(nextBall, 200);
+            nav.driveTowardsWaypoint(waypoint);
+            return;
            // needs slowspeed
-            //nav.driveTowardsWaypoint(nextBall, 200);
+
 
 
 

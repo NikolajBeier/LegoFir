@@ -41,23 +41,27 @@ public class DriveTowardsBall implements MyBehavior {
         while (!suppressed) {
             TennisBall nextBall = dude.getMap().getNextBall();
             ballDistanceToWall = new BallDistanceToWall();
-            nextBall.setClosetsWall(ballDistanceToWall.BallHeadingtoWall(nextBall, dude));
+           // nextBall.setClosetsWall(ballDistanceToWall.BallHeadingtoWall(nextBall, dude));
 
             //if (nextBall.isInCorner()){
 
             /*}else*/
-            // TODO move this to mapping.
-            if (ballDistanceToWall.isCloseToWall(nextBall, dude)) {
-                switch (ballDistanceToWall.BallHeadingtoWall(nextBall, dude)) {
+           if (dude.getMap().getNextBall().isCloseToWall()){
+               wallNav.walldrive(dude.getMap().getBallNextToWallWaypoint());
+           }
+           /* if (ballDistanceToWall.isCloseToWall(nextBall, dude)) {
+                System.out.println(dude.getMap().getNextBall().getClosetswall());
+                System.out.println(dude.getMap().getBallNextToWallWaypoint().x + " " + dude.getMap().getBallNextToWallWaypoint().y);
+             *//**//*   switch (ballDistanceToWall.BallHeadingtoWall(nextBall, dude)) {
                     case NORTH -> dude.getMap().setBallNextToWallWaypoint(nextBall.getX(), nextBall.getY() + 100);
                     case SOUTH -> dude.getMap().setBallNextToWallWaypoint(nextBall.getX(), nextBall.getY() - 100);
                     case EAST -> dude.getMap().setBallNextToWallWaypoint(nextBall.getX() + 100, nextBall.getY());
                     case WEST -> dude.getMap().setBallNextToWallWaypoint(nextBall.getX() - 100, nextBall.getY());
-                }
-                wallNav.walldrive(dude.getMap().getWayPoint(), suppressed);
+                }*//**//*
+                wallNav.walldrive(dude.getMap().getWayPoint());
                 // navigation.driveTowardsBall(nextBall);
-                // dude.moveBackward();
-            } else
+                // dude.moveBackward();*//*
+            } else*/
                 navigation.driveTowardsBall(nextBall);
         }
         dude.stopWheels();

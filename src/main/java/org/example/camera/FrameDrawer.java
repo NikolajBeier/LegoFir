@@ -247,7 +247,7 @@ public class FrameDrawer {
         }
     }
     private void drawWayPoint(Mat image){
-        if (dude.getMap().getWayPoint() !=null && frameDetector.ballDetectionOn && frameDetector.edgeDetectionOn)
+        if (dude.getMap().getWayPoint() !=null && frameDetector.ballDetectionOn && frameDetector.edgeDetectionOn){
             try {
                 Point wayPoint = dude.getMap().getWayPoint();
                 circle(image,new Point(wayPoint.x,-wayPoint.y),25,new Scalar(255,0,0),1);
@@ -268,18 +268,18 @@ public class FrameDrawer {
 
             }catch (NullPointerException e){
                 System.out.println("NullPointerException");
-            }
+            }}
 
 
     }
     private void drawBallWaypoint(Mat image){
+      {
         if (dude.getMap().getBallNextToWallWaypoint() != null && frameDetector.ballDetectionOn && frameDetector.edgeDetectionOn)
         try {
             Point waypoint = dude.getMap().getBallNextToWallWaypoint();
             circle(image, new Point(waypoint.x,-waypoint.y),25,new Scalar(255, 0,0), 1);
         }catch (NullPointerException e){
-            System.out.println("NullPointerException");
-        }
+            System.out.println("NullPointerException");}}
 
 
     }

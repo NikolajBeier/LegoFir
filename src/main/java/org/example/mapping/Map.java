@@ -52,7 +52,7 @@ public class Map {
     }
 
     public void addBallCord(int x, int y) {
-        TennisBall tennisball = new TennisBall(x, y, null, false);
+        TennisBall tennisball = new TennisBall(x, y, null, false, false);
         balls.add(tennisball);
     }
 
@@ -77,7 +77,7 @@ public class Map {
 
     public TennisBall getNextBall() {
         // find the tennis ball closest to the robot
-        TennisBall closestBall = new TennisBall(0, 0, null, false);
+        TennisBall closestBall = new TennisBall(0, 0, null, false, false);
         double closestDistance = Integer.MAX_VALUE;
 
         //  checks if there is a orange ball sets it as closestball
@@ -104,8 +104,7 @@ public class Map {
             }
         }
 
-
-
+        setBallsClosetowalls(closestBall);
         return closestBall;
     }
 
@@ -151,8 +150,6 @@ public class Map {
         Point bottomObstacle = obstacle.getBottomPoint();
         Point leftObstacle = obstacle.getLeftPoint();
         Point rightObstacle = obstacle.getRightPoint();
-
-
 
 
         // Lines of the map
@@ -237,10 +234,10 @@ public class Map {
 
     public Direction FindNearestWall(Point startingPoint, Double distanceToEdge) {
         Line2D[] cardinalDirections = {
-                new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x + 10000 , startingPoint.y ),
-                new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x , startingPoint.y + 10000),
-                new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x + 10000 * -1, startingPoint.y ),
-                new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x , startingPoint.y + 10000 * -1)
+                new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x + 10000, startingPoint.y),
+                new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x, startingPoint.y + 10000),
+                new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x + 10000 * -1, startingPoint.y),
+                new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x, startingPoint.y + 10000 * -1)
         };
 
 
@@ -259,20 +256,23 @@ public class Map {
                 new Line2D.Double(topLeft.x, topLeft.y, bottomLeft.x, bottomLeft.y),
                 new Line2D.Double(topRight.x, topRight.y, bottomRight.x, bottomRight.y),
         };
+        System.out.println(cardinalDirections[0] + " \t" + cardinalDirections[1] + " \t" + cardinalDirections[2] + " \t" + cardinalDirections[3]);
+        System.out.println(edges[0] + " \t" + edges[1] + " \t" + edges[2] + " \t" + edges[3]);
+        System.out.println(distanceToEdge);
         for (Line2D edge : edges) {
             for (Line2D cardinalDirection : cardinalDirections) {
                 System.out.println("hello1111");
                 if (cardinalDirection.intersectsLine(edge)) {
                     System.out.println("hello2222");
-                    if (distanceToEdge >= distanceToEdge(startingPoint))
+                    if (distanceToEdge <= distanceToEdge(startingPoint))
                         closestwallheading = findNearestWall(edges, cardinalDirection);
-                    System.out.println("Hello");
+
                 }
-                return closestwallheading;
+
             }
         }
 
-        return null;
+        return closestwallheading;
     }
 
     public enum Direction {NORTH, SOUTH, EAST, WEST}
@@ -313,7 +313,7 @@ public class Map {
     }
 
     public Point[] getUnWarpedEdges() {
-        return new Point[] {unwarpedEdge.getBottomLeft(), unwarpedEdge.getTopLeft(), unwarpedEdge.getBottomRight(), unwarpedEdge.getTopRight()};
+        return new Point[]{unwarpedEdge.getBottomLeft(), unwarpedEdge.getTopLeft(), unwarpedEdge.getBottomRight(), unwarpedEdge.getTopRight()};
     }
 
     public Direction findNearestWall(Line2D.Double[] edges, Line2D line) {
@@ -330,5 +330,35 @@ public class Map {
         }
     }
 
+    private void setBallsClosetowalls(TennisBall ball) {
+        double distanceToEdge;
+
+        distanceToEdge = distanceToEdge(new Point(ball.getX(), ball.getY()));
+        if (distanceToEdge < 100) {
+            ball.setClosetsWall(FindNearestWall(new Point(ball.getX(), ball.getY()), distanceToEdge));
+            System.out.println("ball is close to wall");
+            ball.setCloseToWall(true);
+            switch (ball.getClosetswall()) {
+                case NORTH -> {
+                    ballNextToWallWaypoint = new Point(ball.getX(), ball.getY() + 100);
+                    System.out.println("N created");
+                }
+                case SOUTH -> {
+                    ballNextToWallWaypoint = new Point(ball.getX(), ball.getY() - 100);
+                    System.out.println("S created");
+                }
+                case EAST -> {
+                    ballNextToWallWaypoint = new Point(ball.getX() + 100, ball.getY());
+                    System.out.println("E created");
+                }
+                case WEST -> {
+                    ballNextToWallWaypoint = new Point(ball.getX() - 100, ball.getY());
+                    System.out.println("W created");
+                }
+                default -> throw new IllegalStateException("Unexpected value: " + ball.getClosetswall());
+            }
+        }
+    }
 
 }
+
