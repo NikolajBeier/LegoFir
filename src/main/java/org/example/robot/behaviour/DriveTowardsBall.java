@@ -55,16 +55,11 @@ public class DriveTowardsBall implements MyBehavior {
                     case EAST -> dude.getMap().setBallNextToWallWaypoint(nextBall.getX() + 100, nextBall.getY());
                     case WEST -> dude.getMap().setBallNextToWallWaypoint(nextBall.getX() - 100, nextBall.getY());
                 }
-
-
-                while (!checkIfRobotIsOnPoint()) {
-                    navigation.turnsTowardsWayPoint(dude.getMap().getBallNextToWallWaypoint());
-                    navigation.driveTowardsWaypoint(dude.getMap().getWayPoint());
-                }
-                navigation.driveTowardsBall(nextBall, suppressed);
-                dude.moveBackward();
+                wallNav.walldrive(dude.getMap().getWayPoint(), suppressed);
+                //navigation.driveTowardsBall(nextBall);
+               // dude.moveBackward();
             } else
-                navigation.driveTowardsBall(nextBall, suppressed);
+                navigation.driveTowardsBall(nextBall);
         }
         dude.stopWheels();
         dude.stopHarvester();

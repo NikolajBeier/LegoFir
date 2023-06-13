@@ -237,10 +237,10 @@ public class Map {
 
     public Direction FindNearestWall(Point startingPoint, Double distanceToEdge) {
         Line2D[] cardinalDirections = {
-                new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x + 10000 * 1, startingPoint.y + 10000 * 0),
-                new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x + 10000 * 0, startingPoint.y + 10000 * 1),
-                new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x + 10000 * -1, startingPoint.y + 10000 * 0),
-                new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x + 10000 * 0, startingPoint.y + 10000 * -1)
+                new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x + 10000 , startingPoint.y ),
+                new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x , startingPoint.y + 10000),
+                new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x + 10000 * -1, startingPoint.y ),
+                new Line2D.Double(startingPoint.x, startingPoint.y, startingPoint.x , startingPoint.y + 10000 * -1)
         };
 
 
@@ -318,13 +318,13 @@ public class Map {
 
     public Direction findNearestWall(Line2D.Double[] edges, Line2D line) {
         if (edges[0].equals(line)) {
-            return Direction.NORTH;
+            return Direction.EAST;
         } else if (edges[1].equals(line)) {
             return Direction.SOUTH;
         } else if (edges[2].equals(line)) {
             return Direction.WEST;
         } else if (edges[3].equals(line)) {
-            return Direction.EAST;
+            return Direction.NORTH;
         } else {
             return null;
         }
