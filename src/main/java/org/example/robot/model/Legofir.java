@@ -145,8 +145,8 @@ public class Legofir {
         try {
             left.setSpeed(speed);
             right.setSpeed(speed);
-            left.backward();
-            right.backward();
+            left.forward();
+            right.forward();
         } catch (RemoteException e) {
             stopAll();
         }
@@ -333,6 +333,14 @@ state=RobotState.TURNING_RIGHT;
         try {
             harvester.rotate(40);
             harvester.rotate(-1400);
+            harvester.resetTachoCount();
+        } catch (RemoteException e) {
+            stopAll();
+        }
+    }
+    public void collectBallOnce(){
+        try {
+            harvester.rotate(-700);
             harvester.resetTachoCount();
         } catch (RemoteException e) {
             stopAll();

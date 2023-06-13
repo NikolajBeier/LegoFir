@@ -67,7 +67,6 @@ public class FrameAnalyzer {
             capture = new VideoCapture(0);
         }
 
-
         //Calibrate Camera if JSON file exists
         if(CameraCalibration.fileExists()){
             cameraCalibration = new CameraCalibration();
