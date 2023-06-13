@@ -139,7 +139,7 @@ public class Navigation {
             logger.info("time: "+System.currentTimeMillis()+". Turning left - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
             // Turn left towards ball
             dude.turnLeft(100);
-            while (pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && !myBehavior.isSuppressed() || (myBehavior.isSuppressed() && dude.getMap().getBalls().size()==0)) {
+            while (pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && (!myBehavior.isSuppressed() || (myBehavior.isSuppressed() && dude.getMap().getBalls().size()==0))) {
                 currentAngle = dude.getAngle();
                 if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.08)){
                     dude.setWheelSpeed(5);
@@ -191,7 +191,7 @@ public class Navigation {
             logger.info("time: "+System.currentTimeMillis()+". Turning right - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
 
             dude.turnRight(100);
-            while(!pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && !myBehavior.isSuppressed() || (myBehavior.isSuppressed() && dude.getMap().getBalls().size()==0)){
+            while(!pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && (!myBehavior.isSuppressed() || (myBehavior.isSuppressed() && dude.getMap().getBalls().size()==0))){
                 currentAngle = dude.getAngle();
                 if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.08)){
                     dude.setWheelSpeed(5);
@@ -224,7 +224,7 @@ public class Navigation {
     }
 
     public void driveTowardsBall(TennisBall nextBall) {
-        while(!myBehavior.isSuppressed() || dude.getMap().getBalls().size()==1) {
+        while(!myBehavior.isSuppressed() || dude.getMap().getBalls().size()==0) {
             turnTowards(nextBall);
             distanceToPoint = distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(), dude.getMap().getRobotPosition().getFrontSideY()), new Point(nextBall.getX(), nextBall.getY()));
 
@@ -260,10 +260,7 @@ public class Navigation {
         dude.moveForward(speed);
     }
     private void pickUpBall() {
-        long timeBefore = System.currentTimeMillis();
         dude.collectBall();
-
-        dude.stopHarvester();
     }
     private boolean closeToBall(TennisBall nextBall) {
         distanceToPoint=distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(),dude.getMap().getRobotPosition().getFrontSideY()),new Point(nextBall.getX(),nextBall.getY()));

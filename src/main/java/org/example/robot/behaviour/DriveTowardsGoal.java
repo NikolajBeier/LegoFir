@@ -19,7 +19,7 @@ public class DriveTowardsGoal implements MyBehavior{
 
     @Override
     public boolean takeControl() {
-        if (dude.getMap().getOrangeBalls().isEmpty() && dude.getMap().getBalls().isEmpty()){
+        if((dude.getMap().getOrangeBalls().isEmpty() && dude.getMap().getBalls().isEmpty()) || timerExpired()){
             return true;
         }
         return false;
@@ -32,8 +32,7 @@ public class DriveTowardsGoal implements MyBehavior{
         if(obstacleNavigation.pathToNextPointCollidesWithObstacle(dude.getMap().getWayPoint())){
             obstacleNavigation.moveAroundObstacle(dude.getMap().getWayPoint());
         }
-        while (!suppressed){
-           navigation.turnsTowardsWayPoint(dude.getMap().getWayPoint());
+        while (!suppressed && takeControl()){
            navigation.driveTowardsWaypoint(dude.getMap().getWayPoint());
         }
     }
@@ -50,6 +49,11 @@ public class DriveTowardsGoal implements MyBehavior{
     @Override
     public boolean isSuppressed() {
         return false;
+    }
+
+
+    private boolean timerExpired() {
+        return System.currentTimeMillis()-dude.startTime>420000;
     }
 }
 

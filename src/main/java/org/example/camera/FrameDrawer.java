@@ -13,13 +13,16 @@ import org.opencv.imgproc.Imgproc;
 
 import java.awt.geom.Line2D;
 
-import static org.example.utility.Geometry.distanceBetweenPoints;
-import static org.example.utility.Geometry.intersection;
+import static org.example.utility.Geometry.*;
 import static org.opencv.imgproc.Imgproc.*;
 
 public class FrameDrawer {
     Legofir dude;
     FrameDetector frameDetector;
+    private final double FRONTAL_AVOID_DISTANCE = 100;
+    private final double FRONTAL_MIDDLE_DISTANCE = 25;
+    private final double BACKWARDS_AVOID_DISTANCE = 150;
+    private final double TURNING_AVOID_DISTANCE = 50;
     public FrameDrawer(Legofir dude, FrameDetector frameDetector){
         this.dude=dude;
         this.frameDetector=frameDetector;
@@ -179,22 +182,33 @@ public class FrameDrawer {
                 drawLinesToEdge(image,backHeading,leftSide);
                 drawLinesToEdge(image,backHeading,rightSide);
                 drawLinesToEdge(image,backHeading,middle);
+                drawCollisionThreshold(image,backHeading,leftSide,BACKWARDS_AVOID_DISTANCE);
+                drawCollisionThreshold(image,backHeading,rightSide,BACKWARDS_AVOID_DISTANCE);
+                drawCollisionThreshold(image,backHeading,middle,BACKWARDS_AVOID_DISTANCE);
                 break;
             }
             case MOVING_FORWARD: {
                 drawLinesToEdge(image,heading,leftSide);
                 drawLinesToEdge(image,heading,rightSide);
                 drawLinesToEdge(image,heading,middle);
+                drawCollisionThreshold(image,heading,leftSide,FRONTAL_AVOID_DISTANCE);
+                drawCollisionThreshold(image,heading,rightSide,FRONTAL_AVOID_DISTANCE);
+                drawCollisionThreshold(image,heading,middle,FRONTAL_AVOID_DISTANCE);
+                drawCollisionThreshold(image,heading,frontSide,FRONTAL_MIDDLE_DISTANCE);
                 break;
             }
             case TURNING_LEFT: {
                 drawLinesToEdge(image,leftHeading,frontSide);
                 drawLinesToEdge(image,rightHeading,backSide);
+                drawCollisionThreshold(image,leftHeading,frontSide,TURNING_AVOID_DISTANCE);
+                drawCollisionThreshold(image,rightHeading,backSide,TURNING_AVOID_DISTANCE);
                 break;
             }
             case TURNING_RIGHT: {
                 drawLinesToEdge(image,rightHeading,frontSide);
                 drawLinesToEdge(image,leftHeading,backSide);
+                drawCollisionThreshold(image,rightHeading,frontSide,TURNING_AVOID_DISTANCE);
+                drawCollisionThreshold(image,leftHeading,backSide,TURNING_AVOID_DISTANCE);
                 break;
             }
         }
@@ -246,6 +260,13 @@ public class FrameDrawer {
             }
         }
     }
+    private void drawCollisionThreshold(Mat image, Point heading, Point startingPoint, double threshold) {
+        double rad = degreesOfVectorInRadians(heading.x,heading.y);
+
+        Point collisionPoint = new Point(startingPoint.x - threshold * -Math.cos(rad), startingPoint.y + threshold * Math.sin(rad));
+        circle(image, new Point(collisionPoint.x, -collisionPoint.y), 10, new Scalar(0, 255, 0), 2);
+        putText(image, "Collision point", new Point(collisionPoint.x, -collisionPoint.y), FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 255, 0), 2);
+    }
     private void drawWayPoint(Mat image){
         if (dude.getMap().getWayPoint() !=null)
             try {
@@ -272,4 +293,5 @@ public class FrameDrawer {
 
 
     }
+
 }
