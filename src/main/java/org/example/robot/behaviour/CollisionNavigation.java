@@ -5,8 +5,8 @@ import org.opencv.core.Point;
 
 public class CollisionNavigation {
     Legofir dude;
-    private final double FRONTAL_AVOID_DISTANCE = 150;
-    private final double TURNING_AVOID_DISTANCE = 60;
+    private final double FRONTAL_AVOID_DISTANCE = 100;
+    private final double TURNING_AVOID_DISTANCE = 50;
     private long startTime;
     MyBehavior myBehavior;
     public CollisionNavigation(Legofir dude,MyBehavior myBehavior){
@@ -20,10 +20,10 @@ public class CollisionNavigation {
         while(isCollidingOnTheFront() && !isCollidingOnTheBack()){}
         dude.stopWheels();
         dude.turnRight();
-        doNothingInMS(1500);
+        doNothingInMS(1000);
         dude.stopWheels();
         dude.moveForward();
-        doNothingInMS(1500);
+        doNothingInMS(500);
         dude.stopWheels();
     }
 
@@ -115,10 +115,12 @@ public class CollisionNavigation {
         Point leftSide = new Point(dude.getMap().getRobotPosition().leftSideX, dude.getMap().getRobotPosition().leftSideY);
         Point rightSide = new Point(dude.getMap().getRobotPosition().rightSideX, dude.getMap().getRobotPosition().rightSideY);
         Point middle = new Point(dude.getMap().getRobotPosition().getX(), dude.getMap().getRobotPosition().getY());
+        Point front = new Point(dude.getMap().getRobotPosition().getFrontSideX(), dude.getMap().getRobotPosition().getFrontSideY());
         double distanceLeft = dude.getMap().distanceToEdge(heading,leftSide);
         double distanceRight = dude.getMap().distanceToEdge(heading,rightSide);
         double distanceMiddle= dude.getMap().distanceToEdge(heading,middle);
-        if(distanceRight < FRONTAL_AVOID_DISTANCE || distanceLeft < FRONTAL_AVOID_DISTANCE || distanceMiddle < FRONTAL_AVOID_DISTANCE){
+        double distanceFront = dude.getMap().distanceToEdge(heading,front);
+        if(distanceRight < FRONTAL_AVOID_DISTANCE || distanceLeft < FRONTAL_AVOID_DISTANCE || distanceMiddle < FRONTAL_AVOID_DISTANCE || distanceFront < 15){
             return true;
         }
         return false;
@@ -137,7 +139,7 @@ public class CollisionNavigation {
     }
     private void doNothingInMS(int i) {
         startTime = System.currentTimeMillis();
-        while(withinTimerinMS(1500,startTime)){}
+        while(withinTimerinMS(i,startTime)){}
     }
     private boolean withinTimerinMS(int timer, long startTime) {
         return System.currentTimeMillis()-startTime<timer;
