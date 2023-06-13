@@ -44,7 +44,7 @@ public class DriveTowardsBall implements MyBehavior {
     public DriveTowardsBall(Legofir dude) {
         this.dude = dude;
         navigation = new Navigation(dude, this);
-        wallNav = new WallNavigation(dude, navigation);
+        wallNav = new WallNavigation(dude, navigation,this);
         obstacleNavigation = new ObstacleNavigation(dude,this);
         cornerNavigation = new CornerNavigation(dude, this, navigation);
     }

@@ -13,14 +13,16 @@ public class WallNavigation {
     Legofir dude;
     Navigation nav;
     Point nextBall = new Point(0,0);
-    public WallNavigation(Legofir dude, Navigation nav) {
+    MyBehavior myBehavior;
+    public WallNavigation(Legofir dude, Navigation nav, MyBehavior myBehavior){
         this.dude = dude;
         this.nav = nav;
+        this.myBehavior = myBehavior;
     }
 
     //needs an enum of Heading
     public void pickUpBallNextToWall(Point waypoint, TennisBall nextBall){
-        nav.driveTowardsWaypoint(waypoint);
+        moveToWayPoint(waypoint);
         slowlyMoveTowardsBallInCorner(nextBall);
         turnTowards(new Point(nextBall.getX(), nextBall.getY()));
         dude.collectBall();
@@ -42,6 +44,26 @@ public class WallNavigation {
          */
 
     }
+
+    private void moveToWayPoint(Point waypoint) {
+        while(!myBehavior.isSuppressed()) {
+            nav.turnsTowardsWayPoint(waypoint);
+            nav.driveTowardsWaypoint(waypoint);
+            if(isOnTopOf(waypoint)){
+                dude.stopWheels();
+                return;
+            }
+        }
+    }
+    private boolean isOnTopOf(Point nextPoint) {
+        double errorMargin = 25;
+
+
+        double distance = Math.sqrt(Math.pow(dude.getMap().getRobotPosition().getX() - nextPoint.x, 2) +
+                Math.pow(dude.getMap().getRobotPosition().getY() - nextPoint.y, 2));
+        return distance <= errorMargin;
+    }
+
     private void slowlyMoveTowardsBallInCorner(TennisBall nextBall) {
         Point nextBallPoint = new Point(nextBall.getX(),nextBall.getY());
         double distance = Double.MAX_VALUE;

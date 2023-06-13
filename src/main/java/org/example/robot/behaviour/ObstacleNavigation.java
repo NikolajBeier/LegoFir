@@ -32,8 +32,8 @@ public class ObstacleNavigation {
         Line2D rightLine = new Line2D.Double(robotPosition.rightSideX,robotPosition.rightSideY,point.x,point.y);
         Line2D leftLine = new Line2D.Double(robotPosition.leftSideX,robotPosition.leftSideY,point.x,point.y);
 
-        Line2D obstacleHorizontal = new Line2D.Double(obstacle.getLeftPoint().x,obstacle.getLeftPoint().y,obstacle.getRightPoint().x,obstacle.getRightPoint().y);
-        Line2D obstacleVertical = new Line2D.Double(obstacle.getTopPoint().x,obstacle.getTopPoint().y,obstacle.getBottomPoint().x,obstacle.getBottomPoint().y);
+        Line2D obstacleHorizontal = new Line2D.Double(obstacle.getLeftPoint().x-35,obstacle.getLeftPoint().y,obstacle.getRightPoint().x+35,obstacle.getRightPoint().y);
+        Line2D obstacleVertical = new Line2D.Double(obstacle.getTopPoint().x,obstacle.getTopPoint().y+35,obstacle.getBottomPoint().x,obstacle.getBottomPoint().y-35);
 
         if(middleLine.intersectsLine(obstacleHorizontal) || middleLine.intersectsLine(obstacleVertical) || rightLine.intersectsLine(obstacleHorizontal) || rightLine.intersectsLine(obstacleVertical) || leftLine.intersectsLine(obstacleHorizontal) || leftLine.intersectsLine(obstacleVertical)){
             return true;
@@ -54,7 +54,7 @@ public class ObstacleNavigation {
     private void moveToIntermediatePoint(Point nextPoint) {
         while(!myBehavior.isSuppressed()) {
             navigation.turnsTowardsWayPoint(nextPoint);
-            navigation.driveTowardsWaypoint(nextPoint,400);
+            navigation.driveTowardsWaypoint(nextPoint);
             if(isOnTopOf(nextPoint)){
                 dude.stopWheels();
                 return;
@@ -63,7 +63,7 @@ public class ObstacleNavigation {
     }
 
     private boolean isOnTopOf(Point nextPoint) {
-        double errorMargin = 35;
+        double errorMargin = 25;
 
 
         double distance = Math.sqrt(Math.pow(dude.getMap().getRobotPosition().getX() - nextPoint.x, 2) +
