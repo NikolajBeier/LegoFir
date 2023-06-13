@@ -153,11 +153,11 @@ public class DriveTowardsBall implements MyBehavior {
     }
 
     private boolean ballInCorner(TennisBall nextBall){
-        if(nextBall.getX() < dude.getMap().getEdge().getTopLeft().x + 50 && nextBall.getY() < dude.getMap().getEdge().getTopLeft().y - 50){
+        if(nextBall.getX() < dude.getMap().getEdge().getTopLeft().x + 100 && nextBall.getY() > dude.getMap().getEdge().getTopLeft().y - 100){
             //top left
             cornerPosition = Position.TOPLEFT;
             return true;
-        } else if(nextBall.getX() > dude.getMap().getEdge().getTopRight().x - 50 && nextBall.getY() < dude.getMap().getEdge().getTopLeft().y - 50){
+        } else if(nextBall.getX() > dude.getMap().getEdge().getTopRight().x - 100 && nextBall.getY() < dude.getMap().getEdge().getTopLeft().y - 100){
             //top right
             cornerPosition = Position.TOPRIGHT;
             return true;

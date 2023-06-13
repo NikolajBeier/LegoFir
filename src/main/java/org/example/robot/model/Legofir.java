@@ -145,8 +145,8 @@ public class Legofir {
         try {
             left.setSpeed(speed);
             right.setSpeed(speed);
-            left.backward();
-            right.backward();
+            left.forward();
+            right.forward();
         } catch (RemoteException e) {
             stopAll();
         }

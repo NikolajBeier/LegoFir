@@ -37,6 +37,10 @@ public class FrameDrawer {
         drawCollision(frame);
         drawWayPoint(frame);
 
+        if(dude.getMap().getWayPoint()!=null){
+            Point p = new Point(dude.getMap().getNextBall().getX() + 100, -(dude.getMap().getNextBall().getY() - 100));
+            circle(frame, p, 15, new Scalar(0, 0, 255), 5);
+        }
     }
 
 
