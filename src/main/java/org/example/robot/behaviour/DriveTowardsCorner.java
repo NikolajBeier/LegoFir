@@ -17,11 +17,18 @@ public class DriveTowardsCorner implements MyBehavior{
         this.dude = dude;
         navigation = new Navigation(dude,this);
     }
+    public boolean ballIsInCorner(){
+        if (nextBall.isInCorner()){
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public boolean takeControl() {
-
-        //TODO: Kun tag kontrol hvis ballden er i hjørnet
+        if (ballIsInCorner()){
+            return true;
+        }
         return false;
     }
 
@@ -37,12 +44,13 @@ public class DriveTowardsCorner implements MyBehavior{
 
     @Override
     public void suppress() {
-
+        suppressed = true;
     }
 
     @Override
     public void setStopCondition(Boolean stopCondition) {
-
+        this.stopCondition=stopCondition;
+        suppressed= true;
     }
 
     @Override
