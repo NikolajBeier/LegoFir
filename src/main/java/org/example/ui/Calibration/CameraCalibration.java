@@ -36,6 +36,8 @@ public class CameraCalibration {
     List<Mat> objectPoints = new ArrayList<>();
     Mat intrinsic = new Mat(3, 3, CvType.CV_32FC1);
     Mat distCoeffs = new Mat();
+    public Mat map1 = new Mat();
+    public Mat map2 = new Mat();
     int successes = 0;
     boolean isCalibrated = false;
     boolean found;
@@ -119,7 +121,7 @@ public class CameraCalibration {
             Size boardSize = new Size(this.numCornersVer, this.numCornersHor);
             // look for the inner chessboard corners
             found = Calib3d.findChessboardCorners(grayImage, boardSize, imageCorners,
-                     Calib3d.CALIB_CB_FAST_CHECK );//+ CALIB_CB_ADAPTIVE_THRESH);
+                     Calib3d.CALIB_CB_FAST_CHECK); /*+ CALIB_CB_ADAPTIVE_THRESH);//)*/
             // all the required corners have been found...
             if (found && !imageCorners.empty())
             {
@@ -137,6 +139,8 @@ public class CameraCalibration {
         }
     }
 
+    /*
+
     public void calibrateCam(){
         if(!isCalibrated) {
             // init needed variables according to OpenCV docs
@@ -153,6 +157,39 @@ public class CameraCalibration {
             tvecsGlobal = tvecs;
         }
     }
+
+     */
+
+    public void calibrateCam(){
+        if(!isCalibrated) {
+            // init needed variables according to OpenCV docs
+            List<Mat> rvecs = new ArrayList<>();
+            List<Mat> tvecs = new ArrayList<>();
+            intrinsic.put(0, 0, 1);
+            intrinsic.put(1, 1, 1);
+
+            // check that inputs are correctly formatted and not empty
+            if(objectPoints.isEmpty() || imagePoints.isEmpty() || savedImage.empty()){
+                System.out.println("Inputs not valid");
+                return;
+            }
+
+            try{
+                // calibrate!
+                Calib3d.calibrateCamera(objectPoints, imagePoints, savedImage.size(), intrinsic, distCoeffs, rvecs, tvecs, Calib3d.CALIB_USE_LU);
+                Calib3d.initUndistortRectifyMap(intrinsic, distCoeffs, new Mat(), intrinsic, savedImage.size(), CvType.CV_32FC1, map1, map2);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+
+            this.isCalibrated = true;
+            System.out.println("gets calibrated");
+
+            rvecsGlobal = rvecs;
+            tvecsGlobal = tvecs;
+        }
+    }
+
     public void TakeSnapShot(){
         if(found){
             Imgcodecs.imwrite("src/main/java/org/example/ui/Calibration/CalibrationImages/snapshots" + successes + ".png", savedImage);
