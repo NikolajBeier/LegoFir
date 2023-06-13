@@ -25,12 +25,14 @@ public class ObstacleNavigation {
         Obstacle obstacle = dude.getMap().getObstacle();
         RobotPosition robotPosition = dude.getMap().getRobotPosition();
 
-        Line2D line = new Line2D.Double(robotPosition.getX(),robotPosition.getY(),point.x,point.y);
+        Line2D middleLine = new Line2D.Double(robotPosition.getX(),robotPosition.getY(),point.x,point.y);
+        Line2D rightLine = new Line2D.Double(robotPosition.rightSideX,robotPosition.rightSideY,point.x,point.y);
+        Line2D leftLine = new Line2D.Double(robotPosition.leftSideX,robotPosition.leftSideY,point.x,point.y);
 
         Line2D obstacleHorizontal = new Line2D.Double(obstacle.getLeftPoint().x,obstacle.getLeftPoint().y,obstacle.getRightPoint().x,obstacle.getRightPoint().y);
         Line2D obstacleVertical = new Line2D.Double(obstacle.getTopPoint().x,obstacle.getTopPoint().y,obstacle.getBottomPoint().x,obstacle.getBottomPoint().y);
 
-        if(line.intersectsLine(obstacleHorizontal) || line.intersectsLine(obstacleVertical)){
+        if(middleLine.intersectsLine(obstacleHorizontal) || middleLine.intersectsLine(obstacleVertical) || rightLine.intersectsLine(obstacleHorizontal) || rightLine.intersectsLine(obstacleVertical) || leftLine.intersectsLine(obstacleHorizontal) || leftLine.intersectsLine(obstacleVertical)){
             return true;
         }
         return false;
