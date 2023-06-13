@@ -262,7 +262,7 @@ public class Map {
         for (Line2D edge : edges) {
             for (Line2D cardinalDirection : cardinalDirections) {
                 System.out.println("hello1111");
-                if (cardinalDirection.intersectsLine(edge)) {
+               // if (cardinalDirection.intersectsLine(edge)) {
                     System.out.println("hello2222");
                     if (distanceToEdge <= distanceToEdge(startingPoint))
                         closestwallheading = findNearestWall(edges, cardinalDirection);
@@ -270,7 +270,7 @@ public class Map {
                 }
 
             }
-        }
+       //  }
 
         return closestwallheading;
     }
