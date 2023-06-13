@@ -7,6 +7,7 @@ import org.example.robot.model.Legofir;
 import org.example.utility.Geometry;
 import org.opencv.core.Point;
 
+import javax.sound.midi.SysexMessage;
 import java.awt.geom.Line2D;
 
 import static org.example.Main.logger;
@@ -158,6 +159,9 @@ public class ObstacleNavigation {
         System.out.println("Intermediate point reached");
         slowlyMoveTowardsBallInCorner(nextBall);
         System.out.println("Ball reached");
+        System.out.println("Turning Towards Ball");
+        turnTowards(new Point(nextBall.getX(), nextBall.getY()));
+        System.out.println("Collecting Ball");
         dude.collectBall();
         System.out.println("Ball collected");
         dude.moveBackward();
@@ -171,7 +175,7 @@ public class ObstacleNavigation {
         Point nextBallPoint = new Point(nextBall.getX(),nextBall.getY());
         double distance = Double.MAX_VALUE;
 
-        while(distance > 12) {
+        while(distance > 17) {
            turnTowards(nextBallPoint);
            if(distance>50){
                dude.moveForward(50);

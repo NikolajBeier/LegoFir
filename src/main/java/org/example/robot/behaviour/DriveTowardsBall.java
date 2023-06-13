@@ -157,15 +157,15 @@ public class DriveTowardsBall implements MyBehavior {
             //top left
             cornerPosition = Position.TOPLEFT;
             return true;
-        } else if(nextBall.getX() > dude.getMap().getEdge().getTopRight().x - 100 && nextBall.getY() < dude.getMap().getEdge().getTopLeft().y - 100){
+        } else if(nextBall.getX() > dude.getMap().getEdge().getTopRight().x - 100 && nextBall.getY() > dude.getMap().getEdge().getTopRight().y - 100){
             //top right
             cornerPosition = Position.TOPRIGHT;
             return true;
-        } else if(nextBall.getX() < dude.getMap().getEdge().getTopLeft().x + 50 && nextBall.getY() > dude.getMap().getEdge().getTopLeft().y + 50){
+        } else if(nextBall.getX() < dude.getMap().getEdge().getBottomLeft().x + 100 && nextBall.getY() < dude.getMap().getEdge().getBottomLeft().y + 100){
             //bottom left
             cornerPosition = Position.BOTTOMLEFT;
             return true;
-        } else if(nextBall.getX() > dude.getMap().getEdge().getTopRight().x - 50 && nextBall.getY() > dude.getMap().getEdge().getTopLeft().y + 50){
+        } else if(nextBall.getX() > dude.getMap().getEdge().getBottomRight().x - 100 && nextBall.getY() < dude.getMap().getEdge().getBottomRight().y + 100){
             //bottom right
             cornerPosition = Position.BOTTOMRIGHT;
             return true;

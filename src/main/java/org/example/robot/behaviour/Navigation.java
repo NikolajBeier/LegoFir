@@ -96,13 +96,13 @@ public class Navigation {
 
         if(angleTowardsGoal(goal)) {
             long timeBefore = System.currentTimeMillis();
-            while(System.currentTimeMillis() - timeBefore < 500){
+            while(System.currentTimeMillis() - timeBefore < 1000){
                 dude.moveBackward();
             }
             dude.stopWheels();
             angleTowardsGoal(goal);
             timeBefore = System.currentTimeMillis();
-            while(System.currentTimeMillis() - timeBefore < 10000){
+            while(System.currentTimeMillis() - timeBefore < 25000){
                 dude.openCheeks();
 
             }

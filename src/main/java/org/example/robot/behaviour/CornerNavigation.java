@@ -30,17 +30,15 @@ public class CornerNavigation {
             case BOTTOMLEFT -> wayPoint = new Point(nextBall.getX() + 200 , nextBall.getY() + 200);
             case BOTTOMRIGHT -> wayPoint = new Point(nextBall.getX() - 200, nextBall.getY() + 200);
         }
-        while(!myBehavior.isSuppressed()){
             if(isOnWayPoint()){
                 System.out.println("drive into corner");
                 driveIntoCorner(nextBall);
+                turnTowards(new Point(nextBall.getX(), nextBall.getY()));
                 collectBallInCorner();
-                break;
             } else {
                 System.out.println("drive towards waypoint");
                 navigation.driveTowardsWaypoint(wayPoint);
             }
-        }
     }
 
     private void collectBallInCorner() {
@@ -54,7 +52,7 @@ public class CornerNavigation {
     }
 
     private boolean isOnWayPoint() {
-        double errorMargin = 35;
+        double errorMargin = 20;
 
         double distance = Math.sqrt(Math.pow(dude.getMap().getRobotPosition().getX() - wayPoint.x, 2) +
                 Math.pow(dude.getMap().getRobotPosition().getY() - wayPoint.y, 2));
@@ -64,7 +62,7 @@ public class CornerNavigation {
     private void driveIntoCorner(TennisBall nextBall){
         double distanceToPoint = Double.MAX_VALUE;
 
-        while(distanceToPoint > 12) {
+        while(distanceToPoint > 16) {
             turnTowards(new Point(nextBall.getX(), nextBall.getY()));
             distanceToPoint = distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(), dude.getMap().getRobotPosition().getFrontSideY()), new Point(nextBall.getX(), nextBall.getY()));
 

@@ -177,24 +177,28 @@ public class EdgeDetection {
     }
 
     private void warpToEdge(Mat image, Point[] points){
-        MatOfPoint2f src = new MatOfPoint2f(
-                new Point(points[1].x, -points[1].y),
-                new Point(points[3].x, -points[3].y),
-                new Point(points[0].x, -points[0].y),
-                new Point(points[2].x, -points[2].y)
-        );
+        try {
+            MatOfPoint2f src = new MatOfPoint2f(
+                    new Point(points[1].x, -points[1].y),
+                    new Point(points[3].x, -points[3].y),
+                    new Point(points[0].x, -points[0].y),
+                    new Point(points[2].x, -points[2].y)
+            );
 
-        // 5% of the screen remains outside the edge
-        MatOfPoint2f dst = new MatOfPoint2f(
-                new Point(126, 42),
-                new Point(1260-126, 42),
-                new Point(126, 840-42),
-                new Point(1260-126, 840-42)
-        );
+            // 5% of the screen remains outside the edge
+            MatOfPoint2f dst = new MatOfPoint2f(
+                    new Point(126, 42),
+                    new Point(1260 - 126, 42),
+                    new Point(126, 840 - 42),
+                    new Point(1260 - 126, 840 - 42)
+            );
 
 
-        Mat warpMat = Imgproc.getPerspectiveTransform(src, dst);
-        Imgproc.warpPerspective(image, image, warpMat, image.size());
+            Mat warpMat = Imgproc.getPerspectiveTransform(src, dst);
+            Imgproc.warpPerspective(image, image, warpMat, image.size());
+        } catch (NullPointerException e){
+
+        }
     }
 
     private void addLine(double rho, double theta, List<Double> rhoList, List<Line2D> edges, Mat image){
