@@ -41,6 +41,7 @@ public class FrameAnalyzer {
     Mat lab = new Mat();
     Mat destimage = new Mat();
     Size size = new Size(64, 64);
+    MatOfInt params = new MatOfInt();
     boolean isCalibrated = false;
     CameraCalibration cameraCalibration;
 
@@ -50,6 +51,11 @@ public class FrameAnalyzer {
         this.cameraAnalyze = cameraAnalyze;
         frameDetector = new FrameDetector(dude);
         frameDrawer = new FrameDrawer(dude,frameDetector);
+
+        // jpeg quality settings
+        params.fromArray(Imgcodecs.IMWRITE_JPEG_QUALITY, 50);
+
+        // depending on os for performance
 
         String os = System.getProperty("os.name").toLowerCase();
 
@@ -69,11 +75,6 @@ public class FrameAnalyzer {
             isCalibrated = true;
         }
 
-
-
-
-
-
         //Starts thread which analyses and alters each frame from video capture and updates ui with the result
         EventQueue.invokeLater(() -> new Thread(() -> {
                     while (true) {
@@ -91,11 +92,12 @@ public class FrameAnalyzer {
 
         //Calibrate
         if(isCalibrated){
-            webcamImage = cameraCalibration.undistort(webcamImage);
+            Imgproc.remap(frame, frame, cameraCalibration.map1, cameraCalibration.map2, Imgproc.INTER_LINEAR);
+           // webcamImage = cameraCalibration.undistort(webcamImage);
         }
 
-        // Remove glare
-        clahe(frame);
+        // Remove glare TODO: DISABLED FOR NOW, FIX WITH BETTER CALIBRATION, THINK OF PERFORMANCE
+       // frame = clahe(frame);
 
         // Find the stuff
         frameDetector.detect(frame);
@@ -110,7 +112,7 @@ public class FrameAnalyzer {
     }
     private byte[] convertMatrixToByte(Mat frame){
         final MatOfByte buf = new MatOfByte();
-        Imgcodecs.imencode(".jpg", frame, buf);
+        Imgcodecs.imencode(".jpg", frame, buf, params);
         return buf.toArray();
     }
 

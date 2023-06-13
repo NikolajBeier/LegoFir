@@ -32,7 +32,6 @@ public class DepositBalls implements MyBehavior {
         while (!suppressed) {
             navigation.turnCheeksTowardsGoal(dude.getMap().getDepositPoint().getCenterLeft(),suppressed);
         }
-
     }
 
 

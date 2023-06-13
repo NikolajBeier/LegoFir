@@ -79,7 +79,7 @@ public class Launcher implements Program {
 
         };
         arby = new Arbitrator(bArray);
-
+        dude.startTimer();
         arby.go();
         System.out.println("arby stoppet");
     }
