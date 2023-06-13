@@ -329,6 +329,7 @@ state=RobotState.TURNING_RIGHT;
 
     public void collectBall() {
         try {
+            harvester.rotate(40);
             harvester.rotate(-1400);
             harvester.resetTachoCount();
         } catch (RemoteException e) {

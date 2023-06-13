@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.opencv.imgproc.Imgproc.RETR_EXTERNAL;
+import static org.opencv.imgproc.Imgproc.contourArea;
 
 public class BallDetection {
 
@@ -56,7 +57,7 @@ public class BallDetection {
 
         if (!whiteContour.isEmpty()) {
             for (MatOfPoint contour : whiteContour) {
-                if (Imgproc.contourArea(contour) > 300 && Imgproc.contourArea(contour) < 700) {
+                if ( (contourArea(contour) > 300 && contourArea(contour) < 500) || (contourArea(contour) > 600 && contourArea(contour) < 1000)  ) {
                     Rect boundingRect = Imgproc.boundingRect(contour);
                     balls.add(boundingRect);
                     //dude.getMap().addBallCord((int)(boundingRect.x+boundingRect.width*0.5), (int)(boundingRect.y+ boundingRect.height*0.5));

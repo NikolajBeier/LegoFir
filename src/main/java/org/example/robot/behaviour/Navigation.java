@@ -139,7 +139,7 @@ public class Navigation {
             logger.info("time: "+System.currentTimeMillis()+". Turning left - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
             // Turn left towards ball
             dude.turnLeft(100);
-            while (pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && !myBehavior.isSuppressed() || (myBehavior.isSuppressed() && dude.getMap().getBalls().size()==0)) {
+            while (pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && (!myBehavior.isSuppressed() || (myBehavior.isSuppressed() && dude.getMap().getBalls().size()==0))) {
                 currentAngle = dude.getAngle();
                 if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.08)){
                     dude.setWheelSpeed(5);
@@ -191,7 +191,7 @@ public class Navigation {
             logger.info("time: "+System.currentTimeMillis()+". Turning right - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
 
             dude.turnRight(100);
-            while(!pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && !myBehavior.isSuppressed() || (myBehavior.isSuppressed() && dude.getMap().getBalls().size()==0)){
+            while(!pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && (!myBehavior.isSuppressed() || (myBehavior.isSuppressed() && dude.getMap().getBalls().size()==0))){
                 currentAngle = dude.getAngle();
                 if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.08)){
                     dude.setWheelSpeed(5);
