@@ -19,7 +19,7 @@ public class WallNavigation {
     }
 
     //needs an enum of Heading
-    public void walldrive(Point waypoint,TennisBall nextBall){
+    public void pickUpBallNextToWall(Point waypoint, TennisBall nextBall){
         nav.driveTowardsWaypoint(waypoint);
         slowlyMoveTowardsBallInCorner(nextBall);
         turnTowards(new Point(nextBall.getX(), nextBall.getY()));

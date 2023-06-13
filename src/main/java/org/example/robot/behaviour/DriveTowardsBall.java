@@ -77,7 +77,7 @@ public class DriveTowardsBall implements MyBehavior {
                     cornerNavigation.pickUpBallInCorner(nextBall, cornerPosition);
                     break;
                 case WALL:
-                    wallNav.walldrive(dude.getMap().getBallNextToWallWaypoint(),nextBall);
+                    wallNav.pickUpBallNextToWall(dude.getMap().getBallNextToWallWaypoint(),nextBall);
                     break;
                 case OBSTACLE:
                     obstacleNavigation.pickUpBallInObstacle(nextBall, cornerPosition);
@@ -138,7 +138,7 @@ public class DriveTowardsBall implements MyBehavior {
         double ballX = nextBall.getX();
         double ballY = nextBall.getY();
 
-        if(ballX>leftX && ballX<rightX && ballY>bottomY && ballY<topY){
+        if(ballX>leftX-35 && ballX<rightX+35 && ballY>bottomY-35 && ballY<topY+35){
             // The ball is within the obstacle
             if(ballX>middleX){
                 // The ball is on the right of the obstacle
