@@ -145,6 +145,7 @@ public class Navigation {
 
             // Calculate the speed based on the angle difference
             double speed = minSpeed + (normalizedAngleDiff * (maxSpeed - minSpeed));
+            System.out.println("Speed:" + speed);
 
             dude.setWheelSpeed((int)speed);
         }
