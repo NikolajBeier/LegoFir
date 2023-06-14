@@ -16,11 +16,12 @@ public class DriveTowardsBall implements MyBehavior {
     String BehaviorName = "DriveTowardsBall";
 
     enum Condition {
-            CORNER,
-            WALL,
-            OBSTACLE,
-            DEFAULT
+        CORNER,
+        WALL,
+        OBSTACLE,
+        DEFAULT
     }
+
     enum Position {
         TOPLEFT,
         TOPRIGHT,
@@ -28,6 +29,11 @@ public class DriveTowardsBall implements MyBehavior {
         BOTTOMRIGHT
     }
 
+    public enum Direction {
+        NORTH, SOUTH, EAST, WEST
+    }
+
+    Direction nearestWall = null;
     Position cornerPosition = null;
 
 
@@ -36,7 +42,6 @@ public class DriveTowardsBall implements MyBehavior {
     boolean stopCondition = false;
     Navigation navigation;
     WallNavigation wallNav;
-    BallDistanceToWall ballDistanceToWall;
     Edge edge;
     CornerNavigation cornerNavigation;
     ObstacleNavigation obstacleNavigation;
@@ -44,18 +49,15 @@ public class DriveTowardsBall implements MyBehavior {
     public DriveTowardsBall(Legofir dude) {
         this.dude = dude;
         navigation = new Navigation(dude, this);
-        wallNav = new WallNavigation(dude, navigation,this);
-        obstacleNavigation = new ObstacleNavigation(dude,this);
+        wallNav = new WallNavigation(dude, navigation, this);
+        obstacleNavigation = new ObstacleNavigation(dude, this);
         cornerNavigation = new CornerNavigation(dude, this, navigation);
     }
 
 
     @Override
     public boolean takeControl() {
-        if(stopCondition){
-            return false;
-        }
-        return true;
+        return !stopCondition;
     }
 
 
@@ -73,17 +75,10 @@ public class DriveTowardsBall implements MyBehavior {
             }
 
             switch (ballConditions(nextBall)) {
-                case CORNER:
-                    cornerNavigation.pickUpBallInCorner(nextBall, cornerPosition);
-                    break;
-                case WALL:
-                    wallNav.pickUpBallNextToWall(dude.getMap().getBallNextToWallWaypoint(),nextBall);
-                    break;
-                case OBSTACLE:
-                    obstacleNavigation.pickUpBallInObstacle(nextBall, cornerPosition);
-                    break;
-                default:
-                    navigation.driveTowardsBall(nextBall);
+                case CORNER -> cornerNavigation.pickUpBallInCorner(nextBall, cornerPosition);
+                case WALL -> wallNav.pickUpBallNextToWall(nearestWall, nextBall);
+                case OBSTACLE -> obstacleNavigation.pickUpBallInObstacle(nextBall, cornerPosition);
+                default -> navigation.driveTowardsBall(nextBall);
             }
         }
 
@@ -93,25 +88,26 @@ public class DriveTowardsBall implements MyBehavior {
 
 
     @Override
-    public void suppress(){
+    public void suppress() {
         suppressed = true;
     }
 
     @Override
     public void setStopCondition(Boolean stopCondition) {
-        this.stopCondition=stopCondition;
-        suppressed= true;
+        this.stopCondition = stopCondition;
+        suppressed = true;
     }
+
     public boolean isSuppressed() {
         return suppressed;
     }
 
-    private Condition ballConditions(TennisBall nextBall){
-        if(ballInCorner(nextBall)){
+    private Condition ballConditions(TennisBall nextBall) {
+        if (ballInCorner(nextBall)) {
             return Condition.CORNER;
-        } else if (ballInObstacle(nextBall)){
+        } else if (ballInObstacle(nextBall)) {
             return Condition.OBSTACLE;
-        } else if (nextBall.isCloseToWall()){
+        } else if (ballNearWall(nextBall)) {
             return Condition.WALL;
         }
         return Condition.DEFAULT;
@@ -128,21 +124,21 @@ public class DriveTowardsBall implements MyBehavior {
         double leftX = obstacle.getLeftPoint().x;
         double leftY = obstacle.getLeftPoint().y;
 
-        Line2D obstacleHorizontal = new Line2D.Double(obstacle.getLeftPoint().x,obstacle.getLeftPoint().y,obstacle.getRightPoint().x,obstacle.getRightPoint().y);
-        Line2D obstacleVertical = new Line2D.Double(obstacle.getTopPoint().x,obstacle.getTopPoint().y,obstacle.getBottomPoint().x,obstacle.getBottomPoint().y);
+        Line2D obstacleHorizontal = new Line2D.Double(obstacle.getLeftPoint().x, obstacle.getLeftPoint().y, obstacle.getRightPoint().x, obstacle.getRightPoint().y);
+        Line2D obstacleVertical = new Line2D.Double(obstacle.getTopPoint().x, obstacle.getTopPoint().y, obstacle.getBottomPoint().x, obstacle.getBottomPoint().y);
 
-        double middleX = intersection(obstacleHorizontal,obstacleVertical).x;
-        double middleY = intersection(obstacleHorizontal,obstacleVertical).y;
+        double middleX = intersection(obstacleHorizontal, obstacleVertical).x;
+        double middleY = intersection(obstacleHorizontal, obstacleVertical).y;
 
 
         double ballX = nextBall.getX();
         double ballY = nextBall.getY();
 
-        if(ballX>leftX-35 && ballX<rightX+35 && ballY>bottomY-35 && ballY<topY+35){
+        if (ballX > leftX - 35 && ballX < rightX + 35 && ballY > bottomY - 35 && ballY < topY + 35) {
             // The ball is within the obstacle
-            if(ballX>middleX){
+            if (ballX > middleX) {
                 // The ball is on the right of the obstacle
-                if(ballY<middleY){
+                if (ballY < middleY) {
                     // The ball is in the bottom right corner of the obstacle
                     cornerPosition = Position.BOTTOMRIGHT;
                     System.out.println("bottom right");
@@ -152,7 +148,7 @@ public class DriveTowardsBall implements MyBehavior {
                 }
             } else {
                 // The ball is on the left of the obstacle
-                if(ballY<middleY){
+                if (ballY < middleY) {
                     // The ball is in the bottom left corner of the obstacle
                     cornerPosition = Position.BOTTOMLEFT;
                 } else {
@@ -165,33 +161,61 @@ public class DriveTowardsBall implements MyBehavior {
         return false;
     }
 
-    private boolean ballInCorner(TennisBall nextBall){
-        if(nextBall.getX() < dude.getMap().getEdge().getTopLeft().x + 100 && nextBall.getY() > dude.getMap().getEdge().getTopLeft().y - 100){
+    private Boolean ballNearWall(TennisBall nextBall) {
+        Point topLeft = edge.getTopLeft();
+        Point topRight = edge.getTopRight();
+        Point bottomLeft = edge.getBottomLeft();
+        Point bottomRight = edge.getBottomRight();
+
+
+
+        double ballX = nextBall.getX();
+        double ballY = nextBall.getY();
+
+        //if (distanceToEdge>=distanceToEdge(startingPoint)){
+        if (ballY > topRight.y - 100) {
+            nearestWall = Direction.NORTH;
+            return true;
+
+        }
+        if (ballY > bottomRight.y + 100) {
+            nearestWall = Direction.SOUTH;
+            return true;
+        }
+
+        if (ballX < bottomLeft.x + 100) {
+            nearestWall = Direction.WEST;
+            return true;
+        }
+
+        if (ballX > bottomRight.x-100) {
+            nearestWall = Direction.EAST;
+            return true;
+        }
+
+
+            return false;
+}
+
+    private boolean ballInCorner(TennisBall nextBall) {
+        if (nextBall.getX() < dude.getMap().getEdge().getTopLeft().x + 100 && nextBall.getY() > dude.getMap().getEdge().getTopLeft().y - 100) {
             //top left
             cornerPosition = Position.TOPLEFT;
             return true;
-        } else if(nextBall.getX() > dude.getMap().getEdge().getTopRight().x - 100 && nextBall.getY() > dude.getMap().getEdge().getTopRight().y - 100){
+        } else if (nextBall.getX() > dude.getMap().getEdge().getTopRight().x - 100 && nextBall.getY() > dude.getMap().getEdge().getTopRight().y - 100) {
             //top right
             cornerPosition = Position.TOPRIGHT;
             return true;
-        } else if(nextBall.getX() < dude.getMap().getEdge().getBottomLeft().x + 100 && nextBall.getY() < dude.getMap().getEdge().getBottomLeft().y + 100){
+        } else if (nextBall.getX() < dude.getMap().getEdge().getBottomLeft().x + 100 && nextBall.getY() < dude.getMap().getEdge().getBottomLeft().y + 100) {
             //bottom left
             cornerPosition = Position.BOTTOMLEFT;
             return true;
-        } else if(nextBall.getX() > dude.getMap().getEdge().getBottomRight().x - 100 && nextBall.getY() < dude.getMap().getEdge().getBottomRight().y + 100){
+        } else if (nextBall.getX() > dude.getMap().getEdge().getBottomRight().x - 100 && nextBall.getY() < dude.getMap().getEdge().getBottomRight().y + 100) {
             //bottom right
             cornerPosition = Position.BOTTOMRIGHT;
             return true;
         }
 
         return false;
-    }
-
-
-    public Boolean checkIfRobotIsOnPoint() {
-        return (dude.getMap().getRobotPosition().getX() + 25 > dude.getMap().getWayPoint().x &&
-                dude.getMap().getRobotPosition().getX() - 25 < dude.getMap().getWayPoint().x &&
-                dude.getMap().getRobotPosition().getY() + 25 > dude.getMap().getWayPoint().y &&
-                dude.getMap().getRobotPosition().getY() - 25 < dude.getMap().getWayPoint().y);
     }
 }

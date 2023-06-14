@@ -21,7 +21,8 @@ public class WallNavigation {
     }
 
     //needs an enum of Heading
-    public void pickUpBallNextToWall(Point waypoint, TennisBall nextBall){
+    public void pickUpBallNextToWall(DriveTowardsBall.Direction direction, TennisBall nextBall){
+        Point waypoint = findWaypoint(direction, nextBall);
         moveToWayPoint(waypoint);
         slowlyMoveTowardsBallInCorner(nextBall);
         turnTowards(new Point(nextBall.getX(), nextBall.getY()));
@@ -44,6 +45,36 @@ public class WallNavigation {
          */
 
     }
+
+    private Point findWaypoint(DriveTowardsBall.Direction direction, TennisBall nextBall) {
+        try {
+            switch (direction) {
+                case NORTH -> {System.out.println("N created");
+                    return new Point(nextBall.getX(), nextBall.getY() - 100);
+
+                }
+                case SOUTH -> { System.out.println("S created");
+                    return new Point(nextBall.getX(), nextBall.getY() + 100);
+
+                }
+                case EAST -> {System.out.println("E created");
+                    return new Point(nextBall.getX() - 100, nextBall.getY());
+
+                }
+                case WEST -> {System.out.println("W created");
+                    return new Point(nextBall.getX() + 100, nextBall.getY());
+
+                }
+                default -> throw new IllegalStateException("Unexpected value: " + nextBall.getClosetswall());
+            }
+
+
+        } catch (Exception e) {
+            System.out.println("ball not set");
+        }
+        return null;
+    }
+
 
     private void moveToWayPoint(Point waypoint) {
         while(!myBehavior.isSuppressed()) {
