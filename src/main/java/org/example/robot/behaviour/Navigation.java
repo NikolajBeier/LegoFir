@@ -132,6 +132,24 @@ public class Navigation {
         }
         return true;
     }
+
+    private void changeSpeedDynamically(double currentAngle, double angleToNextPoint, double minSpeed, double maxSpeed, double margin) {
+        if(isApproximatelySameAngle(currentAngle, angleToNextPoint, margin)){
+            dude.setWheelSpeed((int)minSpeed);
+        } else {
+            // Calculate the difference in angles
+            double angleDiff = Math.abs(currentAngle - angleToNextPoint);
+
+            // Normalize the angle difference to the range [0, 1]
+            double normalizedAngleDiff = angleDiff / Math.PI; // angles are in radians
+
+            // Calculate the speed based on the angle difference
+            double speed = minSpeed + (normalizedAngleDiff * (maxSpeed - minSpeed));
+
+            dude.setWheelSpeed((int)speed);
+        }
+    }
+
     private void turnLeftTowardsPoint() {
 
         currentAngle = dude.getAngle();
@@ -141,6 +159,7 @@ public class Navigation {
             dude.turnLeft(100);
             while (pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && (!myBehavior.isSuppressed() || (myBehavior.isSuppressed() && dude.getMap().getBalls().size()==0))) {
                 currentAngle = dude.getAngle();
+                /*
                 if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.08)){
                     dude.setWheelSpeed(5);
                 } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint)){
@@ -148,10 +167,41 @@ public class Navigation {
                 } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.5)){
                     dude.setWheelSpeed(35);
                 }
+
+                 */
+                changeSpeedDynamically(currentAngle,angleToNextPoint,5,100,0.08);
             }
             dude.stopWheels();
             // Stop turning
             logger.info("time: "+System.currentTimeMillis()+". Turning left ended - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
+        }
+    }
+    private void turnRightTowardsPoint(){
+        currentAngle = dude.getAngle();
+        if (!pointIsLeftOfRobotHeading()) {
+            logger.info("time: "+System.currentTimeMillis()+". Turning right - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
+
+            dude.turnRight(100);
+            while(!pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && (!myBehavior.isSuppressed() || (myBehavior.isSuppressed() && dude.getMap().getBalls().size()==0))){
+                currentAngle = dude.getAngle();
+                /*
+                if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.08)){
+                    dude.setWheelSpeed(5);
+                } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint)){
+                    dude.setWheelSpeed(15);
+                } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.5)){
+                    dude.setWheelSpeed(35);
+                }
+
+                 */
+                changeSpeedDynamically(currentAngle,angleToNextPoint,5,100,0.08);
+            }
+
+
+            dude.stopWheels();
+
+            logger.info("time: "+System.currentTimeMillis()+". Turning right ended - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
+
         }
     }
     private boolean pointIsLeftOfRobotHeading( ) {
@@ -185,28 +235,7 @@ public class Navigation {
             } else return false;
         }
     }
-    private void turnRightTowardsPoint(){
-        currentAngle = dude.getAngle();
-        if (!pointIsLeftOfRobotHeading()) {
-            logger.info("time: "+System.currentTimeMillis()+". Turning right - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
 
-            dude.turnRight(100);
-            while(!pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && (!myBehavior.isSuppressed() || (myBehavior.isSuppressed() && dude.getMap().getBalls().size()==0))){
-                currentAngle = dude.getAngle();
-                if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.08)){
-                    dude.setWheelSpeed(5);
-                } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint)){
-                    dude.setWheelSpeed(15);
-                } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.5)){
-                    dude.setWheelSpeed(35);
-                }
-            }
-            dude.stopWheels();
-
-            logger.info("time: "+System.currentTimeMillis()+". Turning right ended - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
-
-        }
-    }
     private boolean isApproximatelySameAngle(double robotAngle,double targetAngle, double marginDegrees){
         return ((Math.abs(robotAngle-targetAngle) < marginDegrees) || (robotAngle>Math.PI-marginDegrees/2 && targetAngle<-Math.PI+marginDegrees/2) || (robotAngle<-Math.PI+marginDegrees/2 && targetAngle>Math.PI-marginDegrees/2));
     }
