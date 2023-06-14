@@ -256,6 +256,8 @@ public class FrameAnalyzer {
 
     public void setEdgeDetection(boolean b) {
         frameDetector.setEdgeDetectionOn(b);
+        frameDetector.setObstacleDetectionOn(b);
+        frameDetector.setRunIntersectOnce(b);
     }
 
     public boolean isEdgeDetectionOn() {

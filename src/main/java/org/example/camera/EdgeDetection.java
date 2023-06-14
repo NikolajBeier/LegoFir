@@ -152,7 +152,7 @@ public class EdgeDetection {
                 throw new NullPointerException();
             }
             dude.getMap().setUnWarpedEdges(returnValues[1], returnValues[3], returnValues[0], returnValues[2],(int) distanceBetweenPoints(returnValues[1], returnValues[0]), (int) distanceBetweenPoints(returnValues[1], returnValues[3]));
-            warpToEdge(image, returnValues);
+            //warpToEdge(image, returnValues);
         } catch (NullPointerException e) {
             Point[] oldValues = dude.getMap().getUnWarpedEdges();
             warpToEdge(image, oldValues);
@@ -176,7 +176,79 @@ public class EdgeDetection {
         }
     }
 
-    private void warpToEdge(Mat image, Point[] points){
+    public void updateEdgeIntersections(Mat image, Legofir dude) {
+        //Imgproc.cvtColor(image, hlsimage, Imgproc.COLOR_BGR2HLS);
+        Core.inRange(image, new Scalar(hMin, sMin, lMin), new Scalar(hMax, sMax, lMax), redMask);
+
+        // Apply Hough Line Transform
+        Mat lines = new Mat();
+        Imgproc.HoughLines(redMask, lines, 1, Math.PI / 180, 10, 0, 0);
+
+        // This will ensure only the top 4 lines are processed
+        List<Double> rhoList = new ArrayList<Double>();
+
+        double difference = 50;
+        List<Line2D> edges = new ArrayList<Line2D>();
+        List<Point> intersection = new ArrayList<Point>();
+
+
+        for (int i = 0; i < lines.rows() && i < 10; i++) {
+            if (edges.size() == 4) {
+                break;
+            }
+
+            double[] data = lines.get(i, 0);
+            double rho = data[0];
+            double theta = data[1];
+
+            if (rhoList.isEmpty()) {
+                addLine(rho, theta, rhoList, edges, image);
+            } else {
+                boolean isFalse = false;
+                for (int j = 0; j < rhoList.size(); j++) {
+                    if ((rho < rhoList.get(j) + difference && rho > rhoList.get(j) - difference)) {
+                        isFalse = true;
+                        break;
+                    }
+                }
+                if (!isFalse) {
+                    addLine(rho, theta, rhoList, edges, image);
+                }
+            }
+        }
+        Point[] returnValues = new Point[4];
+        for (int i = 0; i < edges.size(); i++) {
+            for (int j = 0; j < edges.size(); j++) {
+                if (edges.get(i).intersectsLine(edges.get(j)) && edges.get(i) != edges.get(j)) {
+                    intersection.add(intersection(edges.get(i), edges.get(j)));
+
+                    if ((int) intersection.get(intersection.size() - 1).x < image.width() / 2) {
+                        if ((int) intersection.get(intersection.size() - 1).y > -image.height() / 2) {
+                            //top left
+                            returnValues[1] = intersection.get(intersection.size() - 1);
+                            if (oldEdgesFarFromNewEdge(returnValues[1], dude)){
+                                System.out.println("Rerunning intersections");
+                                intersectionDetect(image, dude);
+                                return;
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
+    private Boolean oldEdgesFarFromNewEdge(Point topLeft, Legofir dude){
+        int offset = 6;
+        return (topLeft.x < dude.getMap().getUnwarpedEdge().getTopLeft().x - offset
+                || topLeft.x > dude.getMap().getUnwarpedEdge().getTopLeft().x + offset
+                || topLeft.y < dude.getMap().getUnwarpedEdge().getTopLeft().y - offset
+                || topLeft.y > dude.getMap().getUnwarpedEdge().getTopLeft().y + offset);
+    }
+
+
+    public void warpToEdge(Mat image, Point[] points){
         try {
             MatOfPoint2f src = new MatOfPoint2f(
                     new Point(points[1].x, -points[1].y),
