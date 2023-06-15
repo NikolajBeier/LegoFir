@@ -162,10 +162,10 @@ public class DriveTowardsBall implements MyBehavior {
     }
 
     private Boolean ballNearWall(TennisBall nextBall) {
-        Point topLeft = edge.getTopLeft();
-        Point topRight = edge.getTopRight();
-        Point bottomLeft = edge.getBottomLeft();
-        Point bottomRight = edge.getBottomRight();
+        Point topLeft = dude.getMap().getEdge().getTopLeft();
+        Point topRight = dude.getMap().getEdge().getTopRight();
+        Point bottomLeft = dude.getMap().getEdge().getBottomLeft();
+        Point bottomRight = dude.getMap().getEdge().getBottomRight();
 
 
 
@@ -173,8 +173,9 @@ public class DriveTowardsBall implements MyBehavior {
         double ballY = nextBall.getY();
 
         //if (distanceToEdge>=distanceToEdge(startingPoint)){
-        if (ballY > topRight.y - 100) {
+        if (ballY > topLeft.y - 100) {
             nearestWall = Direction.NORTH;
+            System.out.println("bolden er mod den nordlige væg");
             return true;
 
         }
@@ -188,7 +189,7 @@ public class DriveTowardsBall implements MyBehavior {
             return true;
         }
 
-        if (ballX > bottomRight.x-100) {
+        if (ballX > topRight.x-100) {
             nearestWall = Direction.EAST;
             return true;
         }

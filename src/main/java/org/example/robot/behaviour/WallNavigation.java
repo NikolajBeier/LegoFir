@@ -13,6 +13,7 @@ public class WallNavigation {
     Legofir dude;
     Navigation nav;
     Point nextBall = new Point(0,0);
+    public Point waypointWAll;
     MyBehavior myBehavior;
     public WallNavigation(Legofir dude, Navigation nav, MyBehavior myBehavior){
         this.dude = dude;
@@ -22,8 +23,8 @@ public class WallNavigation {
 
     //needs an enum of Heading
     public void pickUpBallNextToWall(DriveTowardsBall.Direction direction, TennisBall nextBall){
-        Point waypoint = findWaypoint(direction, nextBall);
-        moveToWayPoint(waypoint);
+        waypointWAll = findWaypoint(direction, nextBall);
+        moveToWayPoint(waypointWAll);
         slowlyMoveTowardsBallInCorner(nextBall);
         turnTowards(new Point(nextBall.getX(), nextBall.getY()));
         dude.collectBall();

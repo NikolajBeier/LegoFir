@@ -299,8 +299,8 @@ public class FrameDrawer {
     }
     private void drawBallWaypoint(Mat image){
         try {
-        if (dude.getMap().getBallNextToWallWaypoint() != null && frameDetector.ballDetectionOn && frameDetector.edgeDetectionOn) {
-            Point waypoint = dude.getMap().getBallNextToWallWaypoint();
+        if (dude.getMap().getNextBall() != null && frameDetector.ballDetectionOn && frameDetector.edgeDetectionOn) {
+            Point waypoint = new Point(dude.getMap().getNextBall().getX(),dude.getMap().getNextBall().getY()-100 );
             circle(image, new Point(waypoint.x, -waypoint.y), 25, new Scalar(255, 0, 0), 1);
         }
         }catch (NullPointerException e){
