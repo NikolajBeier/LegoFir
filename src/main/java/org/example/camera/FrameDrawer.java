@@ -32,7 +32,7 @@ public class FrameDrawer {
         drawObstacle(frame);
         drawExitHoles(frame);
         drawRobot(frame);
-        drawCollision(frame);
+        //drawCollision(frame);
         drawWayPoint(frame);
         drawBallWaypoint(frame);
         drawBallHeading(frame);

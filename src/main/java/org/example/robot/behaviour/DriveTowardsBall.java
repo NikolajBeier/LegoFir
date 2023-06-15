@@ -108,6 +108,7 @@ public class DriveTowardsBall implements MyBehavior {
 
     private Condition ballConditions(TennisBall nextBall){
         if(ballInCorner(nextBall)){
+            System.out.println("in corner");
             return Condition.CORNER;
         } else if (ballInObstacle(nextBall)){
             return Condition.OBSTACLE;
