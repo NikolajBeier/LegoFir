@@ -36,11 +36,6 @@ public class FrameDrawer {
         drawRobot(frame);
         drawCollision(frame);
         drawWayPoint(frame);
-
-        if(dude.getMap().getWayPoint()!=null){
-            Point p = new Point(dude.getMap().getNextBall().getX() + 100, -(dude.getMap().getNextBall().getY() - 100));
-            circle(frame, p, 15, new Scalar(0, 0, 255), 5);
-        }
     }
 
 
@@ -114,7 +109,7 @@ public class FrameDrawer {
         Point frontPoint = new Point(dude.getMap().getRobotPosition().getFrontSideX(), (-1)*dude.getMap().getRobotPosition().getFrontSideY());
         Point backPoint = new Point(dude.getMap().getRobotPosition().getBackSideX(), (-1)*dude.getMap().getRobotPosition().getBackSideY());
 
-        circle(frame, frontPoint, 1, new Scalar(0, 0, 255), 1);
+        circle(frame, frontPoint, 4, new Scalar(0, 0, 255), 4);
         putText(frame, "Front", frontPoint, Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 1);
         circle(frame, backPoint, 1, new Scalar(0, 0, 255), 1);
         putText(frame, "Back", backPoint, Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 1);

@@ -38,7 +38,7 @@ public class RobotDetection {
 
     int blueValMin = ObjectColor.getBlueRobot().getValMin();
     int blueValMax = ObjectColor.getBlueRobot().getValMax();
-    private final double OFFSET_FACTOR = 15.0;
+    private final double OFFSET_FACTOR = 0;
 
     public RobotDetection() {
     }
@@ -152,14 +152,14 @@ public class RobotDetection {
                         double deltaX = blueCenter.x - centerOfImage.x;
                         // 200 -300
                         // -100
-                        double realBlueX = blueCenter.x-(deltaX/OFFSET_FACTOR);
+                        double realBlueX = blueCenter.x; //-(deltaX/OFFSET_FACTOR);
                         //200+100/150 = 202 . When perceived x position is 200 and the center of camera is 300, the real x position is 202
 
                         double deltaY = blueCenter.y - centerOfImage.y;
                         // -200 - - 300
                         // 100
 
-                        double realBlueY = blueCenter.y-(deltaY/OFFSET_FACTOR);
+                        double realBlueY = blueCenter.y; //-(deltaY/OFFSET_FACTOR);
                         // -200 - 100/50 = -202 - When perceived y position is -200 and the center of camera is -300, the real y position is -202
 
                         dude.getMap().getRobotPosition().setLeftSideX((int)realBlueX);
@@ -169,14 +169,14 @@ public class RobotDetection {
                         double deltaGreenX = greenCenter.x - centerOfImage.x;
                         // 200 -300
                         // -100
-                        double realGreenX = greenCenter.x-(deltaGreenX/OFFSET_FACTOR);
+                        double realGreenX = greenCenter.x; //-(deltaGreenX/OFFSET_FACTOR);
                         //200+100/150 = 202 . When perceived x position is 200 and the center of camera is 300, the real x position is 202
 
                         double deltaGreenY = greenCenter.y - centerOfImage.y;
                         // -200 - - 300
                         // 100
 
-                        double realGreenY = greenCenter.y-(deltaGreenY/OFFSET_FACTOR);
+                        double realGreenY = greenCenter.y; //-(deltaGreenY/OFFSET_FACTOR);
                         // -200 - 100/50 = -202 - When perceived y position is -200 and the center of camera is -300, the real y position is -202
 
 
