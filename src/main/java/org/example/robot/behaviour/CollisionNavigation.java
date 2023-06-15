@@ -8,7 +8,7 @@ public class CollisionNavigation {
     private final double FRONTAL_AVOID_DISTANCE = 100;
     private final double FRONTAL_MIDDLE_DISTANCE = 25;
     private final double BACKWARDS_AVOID_DISTANCE = 150;
-    private final double TURNING_AVOID_DISTANCE = 50;
+    private final double TURNING_AVOID_DISTANCE = 70;
     private long startTime;
     MyBehavior myBehavior;
     public CollisionNavigation(Legofir dude,MyBehavior myBehavior){

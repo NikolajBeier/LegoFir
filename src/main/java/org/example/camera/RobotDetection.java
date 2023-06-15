@@ -114,7 +114,8 @@ public class RobotDetection {
 
         if(!greenContour.isEmpty() || !blueContour.isEmpty()) {
             for (MatOfPoint contour : greenContour) {
-                if(contourArea(contour) > 80 && contourArea(contour) < 1500) {
+                if(contourArea(contour) > 200 && contourArea(contour) < 1500) {
+                    System.out.println("Green: "+contourArea(contour));
                     Rect greenBoundingRect = boundingRect(contour);
                     greens.add(greenBoundingRect);
 
@@ -125,7 +126,8 @@ public class RobotDetection {
                 }
             }
             for (MatOfPoint contour : blueContour) {
-                if(contourArea(contour) > 80 && contourArea(contour) < 1500) {
+                if(contourArea(contour) > 200 && contourArea(contour) < 1500) {
+                    System.out.println("Blue: "+contourArea(contour));
                     Rect blueBoundingRect = boundingRect(contour);
                     blues.add(blueBoundingRect);
 

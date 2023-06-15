@@ -9,84 +9,86 @@ import org.opencv.core.Point;
 import static org.example.Main.logger;
 import static org.example.utility.Geometry.distanceBetweenPoints;
 
-public class CornerNavigation {
+public class WallNavigation {
     Legofir dude;
+    Navigation nav;
+    Point nextBall = new Point(0,0);
     MyBehavior myBehavior;
-    Navigation navigation;
-
-    Point wayPoint;
-
-    public CornerNavigation(Legofir dude, MyBehavior myBehavior, Navigation navigation) {
-        this.dude=dude;
-        this.myBehavior= myBehavior;
-        this.navigation = navigation;
+    public WallNavigation(Legofir dude, Navigation nav, MyBehavior myBehavior){
+        this.dude = dude;
+        this.nav = nav;
+        this.myBehavior = myBehavior;
     }
 
-    public void pickUpBallInCorner(TennisBall nextBall, DriveTowardsBall.Position position) {
-        wayPoint = new Point();
-        int wayPointMargin = 125;
-        switch (position){
-            case TOPLEFT -> wayPoint = new Point(nextBall.getX() + wayPointMargin, nextBall.getY() - wayPointMargin);
-            case TOPRIGHT -> wayPoint = new Point(nextBall.getX() - wayPointMargin, nextBall.getY() - wayPointMargin);
-            case BOTTOMLEFT -> wayPoint = new Point(nextBall.getX() + wayPointMargin , nextBall.getY() + wayPointMargin);
-            case BOTTOMRIGHT -> wayPoint = new Point(nextBall.getX() - wayPointMargin, nextBall.getY() + wayPointMargin);
-        }
-            if(isOnWayPoint()){
-                Point nextBallPoint = new Point(nextBall.getX(), nextBall.getY());
-                System.out.println("drive into corner");
-                driveIntoCorner(nextBallPoint);
-                turnTowards(nextBallPoint, 0.01);
-                collectBallInCorner();
-            } else {
-                System.out.println("drive towards waypoint");
-                navigation.driveTowardsWaypoint(wayPoint);
-            }
-    }
 
-    private void collectBallInCorner() {
+    public void pickUpBallNextToWall(Point waypoint, TennisBall nextBall){
+        moveToWayPoint(waypoint);
+        slowlyMoveTowardsBallInCorner(nextBall);
+        turnTowards(new Point(nextBall.getX(), nextBall.getY()));
         dude.collectBall();
-        dude.stopHarvester();
         dude.moveBackward();
         long timeBefore = System.currentTimeMillis();
-        while(System.currentTimeMillis() - timeBefore < 2500) {
+        while(System.currentTimeMillis() - timeBefore < 1500) {
         }
         dude.stopWheels();
+
+        /*
+        while (nav.myBehavior.isSuppressed()) {
+            while(!checkIfRobotIsOnPoint()){
+                nav.turnsTowardsWayPoint(waypoint);
+            }
+            nav.driveTowardsWaypoint(waypoint);
+           // needs slowspeed
+        }
+
+         */
+
     }
 
-    private boolean isOnWayPoint() {
-        double errorMargin = 18;
+    private void moveToWayPoint(Point waypoint) {
+        while(!myBehavior.isSuppressed()) {
+            nav.turnsTowardsWayPoint(waypoint);
+            nav.driveTowardsWaypoint(waypoint);
+            if(isOnTopOf(waypoint)){
+                dude.stopWheels();
+                return;
+            }
+        }
+    }
+    private boolean isOnTopOf(Point nextPoint) {
+        double errorMargin = 25;
 
-        double distance = Math.sqrt(Math.pow(dude.getMap().getRobotPosition().getX() - wayPoint.x, 2) +
-                Math.pow(dude.getMap().getRobotPosition().getY() - wayPoint.y, 2));
+
+        double distance = Math.sqrt(Math.pow(dude.getMap().getRobotPosition().getX() - nextPoint.x, 2) +
+                Math.pow(dude.getMap().getRobotPosition().getY() - nextPoint.y, 2));
         return distance <= errorMargin;
     }
 
-    private void driveIntoCorner(Point nextBall){
-        double distanceToPoint = Double.MAX_VALUE;
+    private void slowlyMoveTowardsBallInCorner(TennisBall nextBall) {
+        Point nextBallPoint = new Point(nextBall.getX(),nextBall.getY());
+        double distance = Double.MAX_VALUE;
 
-        while(distanceToPoint > 19.5) {
-            distanceToPoint = distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(), dude.getMap().getRobotPosition().getFrontSideY()), nextBall);
-            System.out.println("distanceToPoint: " + distanceToPoint);
-            if(distanceToPoint < 40){
-                turnTowards(nextBall, 0.04);
-                dude.moveForward(15);
-                continue;
-            }
-
-
-
-            turnTowards(nextBall, 0.08);
-            if(distanceToPoint < 50){
-                dude.moveForward(25);
-            } else if (distanceToPoint<100) {
+        while(distance > 17) {
+            turnTowards(nextBallPoint);
+            if(distance>50){
                 dude.moveForward(50);
             } else {
-                dude.moveForward(100);
+                dude.moveForward(15);
             }
+            distance=distanceBetweenPoints(nextBallPoint, new Point(dude.getMap().getRobotPosition().getFrontSideX(),dude.getMap().getRobotPosition().getFrontSideY()));
         }
         dude.stopWheels();
     }
-    public void turnTowards(Point nextPoint, double turnMargin) {
+    public Boolean checkIfRobotIsOnPoint(){
+        return (dude.getMap().getRobotPosition().getX() + 25 > dude.getMap().getWayPoint().x &&
+                dude.getMap().getRobotPosition().getX() - 25 < dude.getMap().getWayPoint().x &&
+                dude.getMap().getRobotPosition().getY() + 25 > dude.getMap().getWayPoint().y &&
+                dude.getMap().getRobotPosition().getY() - 25 < dude.getMap().getWayPoint().y);
+    }
+
+
+
+    public void turnTowards(Point nextPoint) {
 
         RobotPosition currentPosition = dude.getMap().getRobotPosition();
 
@@ -99,7 +101,7 @@ public class CornerNavigation {
         // Vinkel af vektor..x.
         double angleToNextPoint = Geometry.degreesOfVectorInRadians(Pointvector.x, Pointvector.y);
 
-        if (!isApproximatelySameAngle(currentAngle,angleToNextPoint,turnMargin)) {
+        if (!isApproximatelySameAngle(currentAngle,angleToNextPoint,0.1)) {
             //turn towards ball
             if (pointIsLeftOfRobotHeading(currentAngle, angleToNextPoint)) {
                 turnLeftTowardsPoint(currentAngle, angleToNextPoint);

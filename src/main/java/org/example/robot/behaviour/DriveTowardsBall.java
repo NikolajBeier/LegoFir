@@ -1,6 +1,7 @@
 package org.example.robot.behaviour;
 
 
+import org.example.mapping.Edge;
 import org.example.mapping.Obstacle;
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
@@ -34,12 +35,16 @@ public class DriveTowardsBall implements MyBehavior {
     Legofir dude;
     boolean stopCondition = false;
     Navigation navigation;
+    WallNavigation wallNav;
+    BallDistanceToWall ballDistanceToWall;
+    Edge edge;
     CornerNavigation cornerNavigation;
     ObstacleNavigation obstacleNavigation;
 
     public DriveTowardsBall(Legofir dude) {
         this.dude = dude;
-        navigation= new Navigation(dude,this);
+        navigation = new Navigation(dude, this);
+        wallNav = new WallNavigation(dude, navigation,this);
         obstacleNavigation = new ObstacleNavigation(dude,this);
         cornerNavigation = new CornerNavigation(dude, this, navigation);
     }
@@ -58,29 +63,35 @@ public class DriveTowardsBall implements MyBehavior {
     public void action() {
         suppressed = false;
         dude.setCurrentBehaviourName(BehaviorName);
-        while(!suppressed){
+        while (!suppressed) {
             TennisBall nextBall = dude.getMap().getNextBall();
-            Point nextBallPoint = new Point(nextBall.getX(),nextBall.getY());
-            if(obstacleNavigation.pathToNextPointCollidesWithObstacle(nextBallPoint)){
+            Point nextBallPoint = new Point(nextBall.getX(), nextBall.getY());
+
+            // Avoid obstacle if ball is on the other side of it.
+            if (obstacleNavigation.pathToNextPointCollidesWithObstacle(nextBallPoint)) {
                 obstacleNavigation.moveAroundObstacle(nextBallPoint);
             }
-            switch(ballConditions(nextBall)){
+
+            switch (ballConditions(nextBall)) {
                 case CORNER:
-                    cornerNavigation.driveTowardsCorner(nextBall, cornerPosition);
+                    cornerNavigation.pickUpBallInCorner(nextBall, cornerPosition);
                     break;
                 case WALL:
-                    //navigation.driveTowardsWall();
+                    wallNav.pickUpBallNextToWall(dude.getMap().getBallNextToWallWaypoint(),nextBall);
                     break;
                 case OBSTACLE:
-                    obstacleNavigation.pickUpBallInCorner(nextBall, cornerPosition);
+                    obstacleNavigation.pickUpBallInObstacle(nextBall, cornerPosition);
                     break;
                 default:
                     navigation.driveTowardsBall(nextBall);
             }
         }
+
         dude.stopWheels();
         dude.stopHarvester();
     }
+
+
     @Override
     public void suppress(){
         suppressed = true;
@@ -100,6 +111,8 @@ public class DriveTowardsBall implements MyBehavior {
             return Condition.CORNER;
         } else if (ballInObstacle(nextBall)){
             return Condition.OBSTACLE;
+        } else if (nextBall.isCloseToWall()){
+            return Condition.WALL;
         }
         return Condition.DEFAULT;
     }
@@ -125,7 +138,7 @@ public class DriveTowardsBall implements MyBehavior {
         double ballX = nextBall.getX();
         double ballY = nextBall.getY();
 
-        if(ballX>leftX && ballX<rightX && ballY>bottomY && ballY<topY){
+        if(ballX>leftX-35 && ballX<rightX+35 && ballY>bottomY-35 && ballY<topY+35){
             // The ball is within the obstacle
             if(ballX>middleX){
                 // The ball is on the right of the obstacle
@@ -175,4 +188,10 @@ public class DriveTowardsBall implements MyBehavior {
     }
 
 
+    public Boolean checkIfRobotIsOnPoint() {
+        return (dude.getMap().getRobotPosition().getX() + 25 > dude.getMap().getWayPoint().x &&
+                dude.getMap().getRobotPosition().getX() - 25 < dude.getMap().getWayPoint().x &&
+                dude.getMap().getRobotPosition().getY() + 25 > dude.getMap().getWayPoint().y &&
+                dude.getMap().getRobotPosition().getY() - 25 < dude.getMap().getWayPoint().y);
+    }
 }

@@ -1,13 +1,11 @@
 package org.example.camera;
 
-import lejos.robotics.navigation.Waypoint;
 import org.example.mapping.Edge;
 import org.example.mapping.Map;
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
-import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
@@ -22,7 +20,7 @@ public class FrameDrawer {
     private final double FRONTAL_AVOID_DISTANCE = 100;
     private final double FRONTAL_MIDDLE_DISTANCE = 25;
     private final double BACKWARDS_AVOID_DISTANCE = 150;
-    private final double TURNING_AVOID_DISTANCE = 50;
+    private final double TURNING_AVOID_DISTANCE = 70;
     public FrameDrawer(Legofir dude, FrameDetector frameDetector){
         this.dude=dude;
         this.frameDetector=frameDetector;
@@ -36,6 +34,13 @@ public class FrameDrawer {
         drawRobot(frame);
         drawCollision(frame);
         drawWayPoint(frame);
+        drawBallWaypoint(frame);
+        drawBallHeading(frame);
+
+        if(dude.getMap().getWayPoint()!=null){
+            Point p = new Point(dude.getMap().getNextBall().getX() + 100, -(dude.getMap().getNextBall().getY() - 100));
+            circle(frame, p, 15, new Scalar(0, 0, 255), 5);
+        }
     }
 
 
@@ -98,7 +103,7 @@ public class FrameDrawer {
             int nextBallY = nextBall.getY();
 
 
-            // Draw line to closest ball
+            // Draw line to the closest ball
             arrowedLine(frame, centerOfLine, new Point(nextBallX, -nextBallY), new Scalar(0, 255, 0), 1);
 
             drawFrontAndBackPoints(frame);
@@ -267,7 +272,7 @@ public class FrameDrawer {
         putText(image, "Collision point", new Point(collisionPoint.x, -collisionPoint.y), FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 255, 0), 2);
     }
     private void drawWayPoint(Mat image){
-        if (dude.getMap().getWayPoint() !=null)
+        if (dude.getMap().getWayPoint() !=null && frameDetector.ballDetectionOn && frameDetector.edgeDetectionOn){
             try {
                 Point wayPoint = dude.getMap().getWayPoint();
                 circle(image,new Point(wayPoint.x,-wayPoint.y),25,new Scalar(255,0,0),1);
@@ -288,9 +293,41 @@ public class FrameDrawer {
 
             }catch (NullPointerException e){
                 System.out.println("NullPointerException");
-            }
+            }}
+
+
+    }
+    private void drawBallWaypoint(Mat image){
+        try {
+        if (dude.getMap().getBallNextToWallWaypoint() != null && frameDetector.ballDetectionOn && frameDetector.edgeDetectionOn) {
+            Point waypoint = dude.getMap().getBallNextToWallWaypoint();
+            circle(image, new Point(waypoint.x, -waypoint.y), 25, new Scalar(255, 0, 0), 1);
+        }
+        }catch (NullPointerException e){
+            System.out.println("NullPointerException");
+        }
 
 
     }
 
+
+    private void drawBallHeading(Mat image){
+        try {
+            if (dude.getMap().getNextBall() != null && frameDetector.ballDetectionOn && frameDetector.edgeDetectionOn) {
+                Point ballPos = new Point(dude.getMap().getNextBall().getX(), dude.getMap().getNextBall().getY());
+                Point eastHeading = new Point(1, 0);
+                Point southHeading = new Point(0, -1);
+                Point westHeading = new Point(-1, 0);
+                Point northHeading = new Point(0, 1);
+
+
+                drawLinesToEdge(image, eastHeading, ballPos);
+                drawLinesToEdge(image, southHeading, ballPos);
+                drawLinesToEdge(image, westHeading, ballPos);
+                drawLinesToEdge(image, northHeading, ballPos);
+            }
+        } catch (NullPointerException e){
+            // doesn't draw
+        }
+    }
 }

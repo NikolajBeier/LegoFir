@@ -7,7 +7,6 @@ import org.example.robot.model.Legofir;
 import org.example.utility.Geometry;
 import org.opencv.core.Point;
 
-import javax.sound.midi.SysexMessage;
 import java.awt.geom.Line2D;
 
 import static org.example.Main.logger;
@@ -33,8 +32,8 @@ public class ObstacleNavigation {
         Line2D rightLine = new Line2D.Double(robotPosition.rightSideX,robotPosition.rightSideY,point.x,point.y);
         Line2D leftLine = new Line2D.Double(robotPosition.leftSideX,robotPosition.leftSideY,point.x,point.y);
 
-        Line2D obstacleHorizontal = new Line2D.Double(obstacle.getLeftPoint().x,obstacle.getLeftPoint().y,obstacle.getRightPoint().x,obstacle.getRightPoint().y);
-        Line2D obstacleVertical = new Line2D.Double(obstacle.getTopPoint().x,obstacle.getTopPoint().y,obstacle.getBottomPoint().x,obstacle.getBottomPoint().y);
+        Line2D obstacleHorizontal = new Line2D.Double(obstacle.getLeftPoint().x-35,obstacle.getLeftPoint().y,obstacle.getRightPoint().x+35,obstacle.getRightPoint().y);
+        Line2D obstacleVertical = new Line2D.Double(obstacle.getTopPoint().x,obstacle.getTopPoint().y+35,obstacle.getBottomPoint().x,obstacle.getBottomPoint().y-35);
 
         if(middleLine.intersectsLine(obstacleHorizontal) || middleLine.intersectsLine(obstacleVertical) || rightLine.intersectsLine(obstacleHorizontal) || rightLine.intersectsLine(obstacleVertical) || leftLine.intersectsLine(obstacleHorizontal) || leftLine.intersectsLine(obstacleVertical)){
             return true;
@@ -55,7 +54,7 @@ public class ObstacleNavigation {
     private void moveToIntermediatePoint(Point nextPoint) {
         while(!myBehavior.isSuppressed()) {
             navigation.turnsTowardsWayPoint(nextPoint);
-            navigation.driveTowardsWaypoint(nextPoint,400);
+            navigation.driveTowardsWaypoint(nextPoint);
             if(isOnTopOf(nextPoint)){
                 dude.stopWheels();
                 return;
@@ -64,7 +63,7 @@ public class ObstacleNavigation {
     }
 
     private boolean isOnTopOf(Point nextPoint) {
-        double errorMargin = 35;
+        double errorMargin = 25;
 
 
         double distance = Math.sqrt(Math.pow(dude.getMap().getRobotPosition().getX() - nextPoint.x, 2) +
@@ -152,7 +151,7 @@ public class ObstacleNavigation {
         }
     }
 
-    public void pickUpBallInCorner(TennisBall nextBall, DriveTowardsBall.Position cornerPosition) {
+    public void pickUpBallInObstacle(TennisBall nextBall, DriveTowardsBall.Position cornerPosition) {
         Point intermediatePoint = findBallIntermediatePoint(nextBall, cornerPosition);
         System.out.println("Intermediate point: x=" + intermediatePoint.x + ", y=" + intermediatePoint.y);
         moveToIntermediatePoint(intermediatePoint);
@@ -177,7 +176,9 @@ public class ObstacleNavigation {
 
         while(distance > 17) {
            turnTowards(nextBallPoint);
-           if(distance>50){
+           if(distance>100){
+               dude.moveForward(100);
+           } else if(distance>50){
                dude.moveForward(50);
            } else {
                dude.moveForward(15);
@@ -271,9 +272,9 @@ public class ObstacleNavigation {
                 if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.08)){
                     dude.setWheelSpeed(5);
                 } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.2)){
-                    dude.setWheelSpeed(15);
+                    dude.setWheelSpeed(20);
                 } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.5)){
-                    dude.setWheelSpeed(35);
+                    dude.setWheelSpeed(50);
                 }
             }
             dude.stopWheels();
@@ -290,9 +291,9 @@ public class ObstacleNavigation {
                 if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.08)){
                     dude.setWheelSpeed(5);
                 } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.2)){
-                    dude.setWheelSpeed(15);
+                    dude.setWheelSpeed(20);
                 } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.5)){
-                    dude.setWheelSpeed(35);
+                    dude.setWheelSpeed(50);
                 }
             }
             dude.stopWheels();
