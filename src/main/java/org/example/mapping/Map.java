@@ -365,10 +365,10 @@ public enum Direction {
 
 
             double distanceToEdge;
-
-            distanceToEdge = distanceToEdge(new Point(ball.getX(), ball.getY()));
+            Point point = new Point(ball.getX(), ball.getY());
+            distanceToEdge = distanceToEdge(point);
             if (distanceToEdge < 100) {
-                ball.setClosetsWall(FindNearestWall(new Point(ball.getX(), ball.getY()), distanceToEdge));
+                ball.setClosetsWall(FindNearestWall(point, distanceToEdge));
                 System.out.println("ball is close to wall");
                 ball.setCloseToWall(true);
                 System.out.println(ball.getClosetswall());

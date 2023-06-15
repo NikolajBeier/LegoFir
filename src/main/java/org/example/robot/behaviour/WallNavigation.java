@@ -20,7 +20,7 @@ public class WallNavigation {
         this.myBehavior = myBehavior;
     }
 
-    //needs an enum of Heading
+
     public void pickUpBallNextToWall(Point waypoint, TennisBall nextBall){
         moveToWayPoint(waypoint);
         slowlyMoveTowardsBallInCorner(nextBall);
