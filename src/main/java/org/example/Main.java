@@ -3,10 +3,8 @@ package org.example;
 //import nu.pattern.OpenCV;
 import org.example.robot.model.Legofir;
 import org.example.mapping.ObjectColor;
-import org.example.ui.Calibration.CalibrationTool;
+import org.example.ui.Calibration.ColorCalibrationUI;
 import org.example.ui.FirstScreen;
-import org.example.ui.ConnectToRobot;
-import org.example.ui.Visualization;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -50,7 +48,7 @@ public class Main {
                     // Overriding existing run() method
                     @Override public void run()
                     {
-                        final CalibrationTool calibrationTool = new CalibrationTool();
+                        final ColorCalibrationUI colorCalibrationUI = new ColorCalibrationUI();
                     }
                 });
             }

@@ -1,13 +1,11 @@
 package org.example.ui.Calibration;
 
 import nu.pattern.OpenCV;
+import org.example.camera.ColorCalibration;
 import org.example.mapping.ObjectColor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfByte;
-import org.opencv.core.Scalar;
+import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
@@ -20,7 +18,10 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.FileWriter;
 
-public class CalibrationTool {
+import static org.opencv.imgproc.Imgproc.INTER_AREA;
+import static org.opencv.imgproc.Imgproc.resize;
+
+public class ColorCalibrationUI {
     JFrame mainFrame = new JFrame();
     JSlider hueMin, hueMax, valMin, valMax, satMin, satMax;
     Color whiteBall, orangeBall, edge, blueRobot, greenRobot;
@@ -33,22 +34,98 @@ public class CalibrationTool {
     boolean running = true;
     boolean hlsImage = false;
     int i = 0;
+    ColorCalibration colorCalibration;
 
     JSONObject jsonObject = new JSONObject();
+    int camWidth = 1280;
+    int camHeight = 960;
+    JLabel cameraScreen = new JLabel();
+    JLabel maskedScreen = new JLabel();
+    MatOfInt params;
+    JButton start;
 
-    public CalibrationTool() {
+
+    public ColorCalibrationUI() {
+        initailizeUI();
         OpenCV.loadLocally();
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        startCalibration();
-                    }
-                }).start();
-            }
+        params = new MatOfInt();
+        params.fromArray(Imgcodecs.IMWRITE_JPEG_QUALITY, 50);
+    }
+
+    private void initailizeUI() {
+
+        int width = Toolkit.getDefaultToolkit().getScreenSize().width;
+        int height = Toolkit.getDefaultToolkit().getScreenSize().height;
+        mainFrame.setLayout(new BorderLayout());
+        mainFrame.setSize(new Dimension(width, height));
+
+        //JSliders Configuration
+        JPanel sliders = new JPanel();
+        sliders.setLayout(new GridLayout(2, 6));
+        hueMin = new JSlider(0, 255, 0);
+        hueMax = new JSlider(0, 255, 0);
+        satMin = new JSlider(0, 255, 0);
+        satMax = new JSlider(0, 255, 0);
+        valMin = new JSlider(0, 255, 0);
+        valMax = new JSlider(0, 255, 0);
+        JLabel hueMinName = new JLabel("Hue Min (B Min) (Hue Min)");
+        JLabel hueMaxName = new JLabel("Hue Max (B Max) (Hue Max)");
+        JLabel satMinName = new JLabel("Sat Min (G Min) (Sat Min)");
+        JLabel satMaxName = new JLabel("Sat Max (G Max) (Sat Max)");
+        JLabel valMinName = new JLabel("Val Min (R Min) (Lighting Min)");
+        JLabel valMaxName = new JLabel("Val Max (R Max) (Lighting Max)");
+        sliders.add(hueMinName);
+        sliders.add(hueMaxName);
+        sliders.add(satMinName);
+        sliders.add(satMaxName);
+        sliders.add(valMinName);
+        sliders.add(valMaxName);
+        sliders.add(hueMin);
+        sliders.add(hueMax);
+        sliders.add(satMin);
+        sliders.add(satMax);
+        sliders.add(valMin);
+        sliders.add(valMax);
+        sliders.setBounds(0, camHeight, camWidth, 100);
+        JPanel southPanel = new JPanel(new GridLayout(2,1));
+
+        start = new JButton("Start Calibration");
+        start.addActionListener(e -> {
+            colorCalibration = new ColorCalibration(this, hueMin, hueMax, satMin, satMax, valMin, valMax);
+            start.setText("Set and next");
+            start.removeActionListener(start.getActionListeners()[0]);
+            start.addActionListener(e1 -> colorCalibration.nextCalibration());
         });
+
+        // The main panel
+        JPanel mainPanel = new JPanel();
+        mainPanel.setPreferredSize(new Dimension(camWidth, camHeight));
+        mainPanel.setLayout(new GridLayout(0,2));
+
+        southPanel.add(sliders);
+        southPanel.add(start);
+
+
+        // Initialize camera screens
+        if(camWidth>width|| camHeight>height){
+            cameraScreen.setBounds(0, 0, width/2, (height-200)/2);
+            maskedScreen.setBounds(0, 0, width/2, (height-200)/2);
+        } else {
+            cameraScreen.setBounds(0, 0, camWidth/2, camHeight/2);
+            maskedScreen.setBounds(0, 0, camWidth/2, camHeight/2);
+        }
+
+        // Add camera screens to the main panel
+        mainPanel.add(cameraScreen);
+        mainPanel.add(maskedScreen);
+
+
+        // Add everything to the main Frame
+        mainFrame.add(mainPanel, BorderLayout.CENTER);
+        mainFrame.add(title, BorderLayout.NORTH);
+        mainFrame.add(southPanel, BorderLayout.SOUTH);
+        mainFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        mainFrame.setVisible(true);
     }
 
     public void startCalibration(){
@@ -269,5 +346,38 @@ public class CalibrationTool {
         jsonArray.add(valMin.getValue());
         jsonArray.add(valMax.getValue());
         return jsonArray;
+    }
+
+    public void updateUI(Mat[] cameras, ColorCalibration.Calibration calibration) {
+        if(calibration== ColorCalibration.Calibration.FINISHED){
+            finishCalibration();
+        } else {
+
+            resize(cameras[0], cameras[0], new Size(1260 / 1.5, 840 / 1.5), cameras[0].width() / 2, cameras[0].height() / 2, INTER_AREA);
+            resize(cameras[1], cameras[1], new Size(1260 / 1.5, 840 / 1.5), cameras[0].width() / 2, cameras[0].height() / 2, INTER_AREA);
+
+            title.setText("Calibrating " + calibration.name());
+            cameraScreen.setIcon(new ImageIcon(convertMatrixToByte(cameras[0])));
+            maskedScreen.setIcon(new ImageIcon(convertMatrixToByte(cameras[1])));
+        }
+    }
+
+    private void finishCalibration() {
+        title.setText("finished");
+        // Remove actionListeners from button
+        for(ActionListener actionListener : start.getActionListeners()){
+            start.removeActionListener(actionListener);
+        }
+        start.setText("FINISH COLOR CALIBRATION (THIS WILL OVERWRITE EXISTING JSON FILE)");
+        start.addActionListener(e->{
+            colorCalibration.writeColorToJSON();
+            mainFrame.dispose();
+        });
+    }
+
+    private byte[] convertMatrixToByte(Mat frame){
+        final MatOfByte buf = new MatOfByte();
+        Imgcodecs.imencode(".jpg", frame, buf, params);
+        return buf.toArray();
     }
 }
