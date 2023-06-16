@@ -179,7 +179,7 @@ public class DriveTowardsBall implements MyBehavior {
             return true;
 
         }
-        if (ballY > bottomRight.y + 100) {
+        if (ballY < bottomRight.y + 100) {
             nearestWall = Direction.SOUTH;
             return true;
         }
