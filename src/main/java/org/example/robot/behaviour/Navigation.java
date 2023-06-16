@@ -170,7 +170,7 @@ public class Navigation {
                 }
 
                  */
-                changeSpeedDynamically(currentAngle,angleToNextPoint,5,100,0.08);
+                changeSpeedDynamically(currentAngle,angleToNextPoint,8,100,0.05);
             }
             dude.stopWheels();
             // Stop turning
