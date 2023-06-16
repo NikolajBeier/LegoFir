@@ -209,6 +209,39 @@ public class Map {
 
 
 
+            double distanceToEdge;
+            Point point = new Point(ball.getX(), ball.getY());
+            distanceToEdge = distanceToEdge(point);
+            if (distanceToEdge < 100) {
+                ball.setClosetsWall(FindNearestWall(point, distanceToEdge));
+                System.out.println("ball is close to wall");
+                ball.setCloseToWall(true);
+                System.out.println(ball.getClosetswall());
+                switch (ball.getClosetswall()) {
+                    case NORTH -> {
+                        ballNextToWallWaypoint = new Point(ball.getX(), ball.getY() - 100);
+                        System.out.println("N created");
+                    }
+                    case SOUTH -> {
+                        ballNextToWallWaypoint = new Point(ball.getX(), ball.getY() + 100);
+                        System.out.println("S created");
+                    }
+                    case EAST -> {
+                        ballNextToWallWaypoint = new Point(ball.getX() - 100, ball.getY());
+                        System.out.println("E created");
+                    }
+                    case WEST -> {
+                        ballNextToWallWaypoint = new Point(ball.getX() + 100, ball.getY());
+                        System.out.println("W created");
+                    }
+                    default -> throw new IllegalStateException("Unexpected value: " + ball.getClosetswall());
+                }
+
+            }
+        } catch (Exception e) {
+            System.out.println("ball not set");
+        }
+    }
 
 }
 

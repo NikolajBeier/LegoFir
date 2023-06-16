@@ -1,7 +1,6 @@
 package org.example.ui;
 
 import lejos.remote.ev3.RemoteEV3;
-import org.example.robot.HarvesterTest;
 import org.example.robot.Launcher;
 import org.example.robot.model.Legofir;
 import org.example.robot.Program;
@@ -29,8 +28,6 @@ public class SelectPrograms {
         programs.add(launcher);
         WASDController wasdController = new WASDController(ev3);
         programs.add(wasdController);
-        HarvesterTest harvesterTest = new HarvesterTest(ev3,dude);
-        programs.add(harvesterTest);
 
         JPanel buttons = new JPanel();
         for(int i = 0; i < programs.size(); i++){

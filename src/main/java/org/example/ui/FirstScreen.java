@@ -1,7 +1,7 @@
 package org.example.ui;
 
 import org.example.robot.model.Legofir;
-import org.example.ui.Calibration.CalibrationTool;
+import org.example.ui.Calibration.ColorCalibrationUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,7 +36,7 @@ public class FirstScreen {
         });
         calibrationTool.addActionListener(e -> {
             EventQueue.invokeLater(() -> {
-                final CalibrationTool calibrationTool = new CalibrationTool();
+                final ColorCalibrationUI colorCalibrationUI = new ColorCalibrationUI();
             });
         });
         cameraCalibration.addActionListener(e-> {

@@ -176,7 +176,9 @@ public class ObstacleNavigation {
 
         while(distance > 17) {
            turnTowards(nextBallPoint);
-           if(distance>50){
+           if(distance>100){
+               dude.moveForward(100);
+           } else if(distance>50){
                dude.moveForward(50);
            } else {
                dude.moveForward(15);
@@ -270,9 +272,9 @@ public class ObstacleNavigation {
                 if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.08)){
                     dude.setWheelSpeed(5);
                 } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.2)){
-                    dude.setWheelSpeed(15);
+                    dude.setWheelSpeed(20);
                 } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.5)){
-                    dude.setWheelSpeed(35);
+                    dude.setWheelSpeed(50);
                 }
             }
             dude.stopWheels();
@@ -289,9 +291,9 @@ public class ObstacleNavigation {
                 if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.08)){
                     dude.setWheelSpeed(5);
                 } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.2)){
-                    dude.setWheelSpeed(15);
+                    dude.setWheelSpeed(20);
                 } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.5)){
-                    dude.setWheelSpeed(35);
+                    dude.setWheelSpeed(50);
                 }
             }
             dude.stopWheels();
