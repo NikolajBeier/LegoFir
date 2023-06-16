@@ -104,7 +104,6 @@ public class Navigation {
             timeBefore = System.currentTimeMillis();
             while(System.currentTimeMillis() - timeBefore < 25000){
                 dude.openCheeks();
-
             }
             dude.stopBallDropper();
         }
@@ -271,13 +270,12 @@ public class Navigation {
     public void driveTowardsWaypoint(Point point) {
         turnsTowardsWayPoint(point);
         distanceToPoint = distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(), dude.getMap().getRobotPosition().getFrontSideY()), point);
-
         if (distanceToPoint<75) {
             dude.moveForward(100);
         } else if (distanceToPoint<150){
             dude.moveForward(250);
         } else {
-            dude.moveForward(300);
+            dude.moveForward(500);
         }
     }
     public void driveTowardsWaypoint(Point point,int speed) {

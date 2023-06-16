@@ -34,7 +34,7 @@ public class CornerNavigation {
             if(isOnWayPoint()){
                 Point nextBallPoint = new Point(nextBall.getX(), nextBall.getY());
                 driveIntoCorner(nextBallPoint);
-                turnTowards(nextBallPoint, 0.01);
+                turnTowards(nextBallPoint, 0.005);
                 collectBallInCorner();
             } else {
                 navigation.driveTowardsWaypoint(wayPoint);
@@ -46,7 +46,7 @@ public class CornerNavigation {
         dude.stopHarvester();
         dude.moveBackward();
         long timeBefore = System.currentTimeMillis();
-        while(System.currentTimeMillis() - timeBefore < 2500) {
+        while(System.currentTimeMillis() - timeBefore < 1000) {
         }
         dude.stopWheels();
     }
@@ -62,11 +62,11 @@ public class CornerNavigation {
     private void driveIntoCorner(Point nextBall){
         double distanceToPoint = Double.MAX_VALUE;
 
-        while(distanceToPoint > 17) {
+        while(distanceToPoint > 16) {
             distanceToPoint = distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(), dude.getMap().getRobotPosition().getFrontSideY()), nextBall);
-            if(distanceToPoint < 40){
+            if(distanceToPoint < 35){
                 turnTowards(nextBall, 0.04);
-                dude.moveForward(15);
+                dude.moveForward(25);
                 continue;
             }
 
@@ -74,7 +74,7 @@ public class CornerNavigation {
 
             turnTowards(nextBall, 0.08);
             if(distanceToPoint < 50){
-                dude.moveForward(25);
+                dude.moveForward(40);
             } else if (distanceToPoint<100) {
                 dude.moveForward(50);
             } else {
