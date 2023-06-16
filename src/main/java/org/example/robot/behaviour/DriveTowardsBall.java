@@ -42,7 +42,6 @@ public class DriveTowardsBall implements MyBehavior {
     boolean stopCondition = false;
     Navigation navigation;
     WallNavigation wallNav;
-    Edge edge;
     CornerNavigation cornerNavigation;
     ObstacleNavigation obstacleNavigation;
 
@@ -173,9 +172,8 @@ public class DriveTowardsBall implements MyBehavior {
         double ballY = nextBall.getY();
 
         //if (distanceToEdge>=distanceToEdge(startingPoint)){
-        if (ballY > topLeft.y - 100) {
+        if (ballY > topRight.y - 100) {
             nearestWall = Direction.NORTH;
-            System.out.println("bolden er mod den nordlige væg");
             return true;
 
         }
@@ -189,7 +187,7 @@ public class DriveTowardsBall implements MyBehavior {
             return true;
         }
 
-        if (ballX > topRight.x-100) {
+        if (ballX > bottomRight.x-100) {
             nearestWall = Direction.EAST;
             return true;
         }

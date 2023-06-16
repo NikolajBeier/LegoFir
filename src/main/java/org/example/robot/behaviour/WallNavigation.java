@@ -67,7 +67,7 @@ public class WallNavigation {
                     return new Point(nextBall.getX() + 100, nextBall.getY());
 
                 }
-                default -> throw new IllegalStateException("Unexpected value: " + nextBall.getClosetswall());
+                default -> throw new IllegalStateException("Unexpected value: ");
             }
 
 

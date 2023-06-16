@@ -1,7 +1,5 @@
 package org.example.mapping;
 
-import org.example.robot.behaviour.DriveTowardsBall;
-
 public class TennisBall {
 
 
@@ -10,14 +8,12 @@ public class TennisBall {
     int y;
 
     boolean isCloseToWall;
-    DriveTowardsBall.Direction closetsWall;
 
     boolean isInCorner;
 
-    public TennisBall(int x, int y, DriveTowardsBall.Direction closetsWall, boolean isInCorner, boolean isCloseTowall) {
+    public TennisBall(int x, int y, boolean isInCorner, boolean isCloseTowall) {
         this.x = x;
         this.y = y;
-        this.closetsWall=closetsWall;
         this.isInCorner = isInCorner;
         this.isCloseToWall = isCloseTowall;
 
@@ -31,14 +27,12 @@ public class TennisBall {
         return y;
     }
 
-    public DriveTowardsBall.Direction getClosetsWall() {
-        return closetsWall;
+
+    public boolean isInCorner() {
+        return this.isInCorner;
     }
 
 
-    public DriveTowardsBall.Direction getClosetswall(){
-        return this.closetsWall;
-    }
     public boolean isCloseToWall(){
         return this.isCloseToWall;
     }
