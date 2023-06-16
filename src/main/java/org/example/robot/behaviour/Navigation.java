@@ -102,7 +102,7 @@ public class Navigation {
             dude.stopWheels();
             angleTowardsGoal(goal);
             timeBefore = System.currentTimeMillis();
-            while(System.currentTimeMillis() - timeBefore < 25000){
+            while(System.currentTimeMillis() - timeBefore < 40000){
                 dude.openCheeks();
             }
             dude.stopBallDropper();
