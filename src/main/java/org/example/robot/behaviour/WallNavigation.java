@@ -48,7 +48,6 @@ public class WallNavigation {
     }
 
     private Point findWaypoint(DriveTowardsBall.Direction direction, TennisBall nextBall) {
-        System.out.println(direction);
         try {
             switch (direction) {
                 case NORTH -> {System.out.println("N created");

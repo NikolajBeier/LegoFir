@@ -34,8 +34,8 @@ public class FrameDrawer {
         drawRobot(frame);
         drawCollision(frame);
         drawWayPoint(frame);
-        drawBallWaypoint(frame);
-        drawBallHeading(frame);
+        //drawBallWaypoint(frame);
+        //drawBallHeading(frame);
 
         if(dude.getMap().getWayPoint()!=null){
             Point p = new Point(dude.getMap().getNextBall().getX() + 100, -(dude.getMap().getNextBall().getY() - 100));
