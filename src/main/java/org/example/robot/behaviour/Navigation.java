@@ -155,7 +155,6 @@ public class Navigation {
 
         currentAngle = dude.getAngle();
         if (pointIsLeftOfRobotHeading()) {
-            logger.info("time: "+System.currentTimeMillis()+". Turning left - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
             // Turn left towards ball
             dude.turnLeft(100);
             while (pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && (!myBehavior.isSuppressed() || (myBehavior.isSuppressed() && dude.getMap().getBalls().size()==0))) {
@@ -174,7 +173,7 @@ public class Navigation {
             }
             dude.stopWheels();
             // Stop turning
-            logger.info("time: "+System.currentTimeMillis()+". Turning left ended - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
+
         }
     }
     private void turnRightTowardsPoint(){

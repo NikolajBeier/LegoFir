@@ -42,8 +42,8 @@ public class BallDetection {
 
         List<Rect> balls = new ArrayList<>();
 
-        Imgproc.cvtColor(image, hlsImage, Imgproc.COLOR_BGR2HLS);
-        Core.inRange(hlsImage, new Scalar(hMin, lMin, sMin), new Scalar(hMax, lMax, sMax), whiteMask);
+        Imgproc.cvtColor(image, hlsImage, Imgproc.COLOR_BGR2HSV);
+        Core.inRange(hlsImage, new Scalar(hMin, sMin, lMin), new Scalar(hMax, sMax, lMax), whiteMask);
 
         // init
         ArrayList<MatOfPoint> whiteContour = new ArrayList<>();
@@ -57,7 +57,7 @@ public class BallDetection {
 
         if (!whiteContour.isEmpty()) {
             for (MatOfPoint contour : whiteContour) {
-                if ( (contourArea(contour) > 300 && contourArea(contour) < 500) || (contourArea(contour) > 600 && contourArea(contour) < 1000)  ) {
+                if ( contourArea(contour) > 150 && contourArea(contour) < 500) {
                     Rect boundingRect = Imgproc.boundingRect(contour);
                     balls.add(boundingRect);
                     //dude.getMap().addBallCord((int)(boundingRect.x+boundingRect.width*0.5), (int)(boundingRect.y+ boundingRect.height*0.5));

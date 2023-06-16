@@ -13,6 +13,7 @@ public class WallNavigation {
     Legofir dude;
     Navigation nav;
     Point nextBall = new Point(0,0);
+    public Point waypointWAll;
     MyBehavior myBehavior;
     public WallNavigation(Legofir dude, Navigation nav, MyBehavior myBehavior){
         this.dude = dude;
@@ -21,8 +22,9 @@ public class WallNavigation {
     }
 
     //needs an enum of Heading
-    public void pickUpBallNextToWall(Point waypoint, TennisBall nextBall){
-        moveToWayPoint(waypoint);
+    public void pickUpBallNextToWall(DriveTowardsBall.Direction direction, TennisBall nextBall){
+        waypointWAll = findWaypoint(direction, nextBall);
+        moveToWayPoint(waypointWAll);
         slowlyMoveTowardsBallInCorner(nextBall);
         turnTowards(new Point(nextBall.getX(), nextBall.getY()));
         dude.collectBall();
@@ -44,6 +46,32 @@ public class WallNavigation {
          */
 
     }
+
+    private Point findWaypoint(DriveTowardsBall.Direction direction, TennisBall nextBall) {
+        try {
+            switch (direction) {
+                case NORTH -> {return new Point(nextBall.getX(), nextBall.getY() - 100);}
+                case SOUTH -> {
+                    return new Point(nextBall.getX(), nextBall.getY() + 100);
+
+                }
+                case EAST -> {
+                    return new Point(nextBall.getX() - 100, nextBall.getY());
+
+                }
+                case WEST -> {
+                    return new Point(nextBall.getX() + 100, nextBall.getY());
+
+                }
+                default -> throw new IllegalStateException("Unexpected value: ");
+            }
+
+
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
 
     private void moveToWayPoint(Point waypoint) {
         while(!myBehavior.isSuppressed()) {

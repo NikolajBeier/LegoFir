@@ -32,10 +32,10 @@ public class FrameDrawer {
         drawObstacle(frame);
         drawExitHoles(frame);
         drawRobot(frame);
-        drawCollision(frame);
+        //drawCollision(frame);
         drawWayPoint(frame);
-        drawBallWaypoint(frame);
-        drawBallHeading(frame);
+        //drawBallWaypoint(frame);
+        //drawBallHeading(frame);
 
         if(dude.getMap().getWayPoint()!=null){
             Point p = new Point(dude.getMap().getNextBall().getX() + 100, -(dude.getMap().getNextBall().getY() - 100));
@@ -114,7 +114,7 @@ public class FrameDrawer {
         Point frontPoint = new Point(dude.getMap().getRobotPosition().getFrontSideX(), (-1)*dude.getMap().getRobotPosition().getFrontSideY());
         Point backPoint = new Point(dude.getMap().getRobotPosition().getBackSideX(), (-1)*dude.getMap().getRobotPosition().getBackSideY());
 
-        circle(frame, frontPoint, 1, new Scalar(0, 0, 255), 1);
+        circle(frame, frontPoint, 4, new Scalar(0, 0, 255), 4);
         putText(frame, "Front", frontPoint, Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 1);
         circle(frame, backPoint, 1, new Scalar(0, 0, 255), 1);
         putText(frame, "Back", backPoint, Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 1);
@@ -127,7 +127,6 @@ public class FrameDrawer {
             line(frame, new Point(dude.getMap().getObstacle().getTopPoint().x,-dude.getMap().getObstacle().getTopPoint().y), new Point(dude.getMap().getObstacle().getBottomPoint().x,-dude.getMap().getObstacle().getBottomPoint().y), new Scalar(0, 255, 0), 2, 8, 0);
             line(frame, new Point(dude.getMap().getObstacle().getLeftPoint().x,-dude.getMap().getObstacle().getLeftPoint().y), new Point(dude.getMap().getObstacle().getRightPoint().x,-dude.getMap().getObstacle().getRightPoint().y), new Scalar(0, 255, 0), 2, 8, 0);
             } catch (NullPointerException e){
-                System.out.println("Obstacle not found");
             }
         }
 
@@ -149,7 +148,6 @@ public class FrameDrawer {
                 putText(frame, "Top left", topLeft, FONT_HERSHEY_SIMPLEX, 1, new Scalar(225, 255, 255), 2);
                 putText(frame, "Top right", topRight, FONT_HERSHEY_SIMPLEX, 1, new Scalar(225, 255, 255), 2);
             } catch (NullPointerException e) {
-                System.out.println("No edge found");
             }
         }
     }
@@ -292,19 +290,17 @@ public class FrameDrawer {
 
 
             }catch (NullPointerException e){
-                System.out.println("NullPointerException");
             }}
 
 
     }
     private void drawBallWaypoint(Mat image){
         try {
-        if (dude.getMap().getBallNextToWallWaypoint() != null && frameDetector.ballDetectionOn && frameDetector.edgeDetectionOn) {
-            Point waypoint = dude.getMap().getBallNextToWallWaypoint();
+        if (dude.getMap().getNextBall() != null && frameDetector.ballDetectionOn && frameDetector.edgeDetectionOn) {
+            Point waypoint = new Point(dude.getMap().getNextBall().getX(),dude.getMap().getNextBall().getY()+100 );
             circle(image, new Point(waypoint.x, -waypoint.y), 25, new Scalar(255, 0, 0), 1);
         }
         }catch (NullPointerException e){
-            System.out.println("NullPointerException");
         }
 
 

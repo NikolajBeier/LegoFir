@@ -166,12 +166,7 @@ public class FrameAnalyzer {
         findValues.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Hue Min: "+hueMin.getValue());
-                System.out.println("Hue Max: "+hueMax.getValue());
-                System.out.println("Sat Min: "+satMin.getValue());
-                System.out.println("Sat Max: "+satMax.getValue());
-                System.out.println("Val Min: "+valMin.getValue());
-                System.out.println("Val Max: "+valMax.getValue());
+
             }
         });
         buttonsSliders.add(findValues);
@@ -256,6 +251,8 @@ public class FrameAnalyzer {
 
     public void setEdgeDetection(boolean b) {
         frameDetector.setEdgeDetectionOn(b);
+        frameDetector.setObstacleDetectionOn(b);
+        frameDetector.setRunIntersectOnce(b);
     }
 
     public boolean isEdgeDetectionOn() {

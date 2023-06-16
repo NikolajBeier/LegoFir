@@ -40,7 +40,6 @@ public class RobotPosition {
     }
 
     public double getHeadingInRadians() {
-        //System.out.println("heading x: " + heading.x + " heading y: " + heading.y);
         return Geometry.degreesOfVectorInRadians(heading.x,heading.y);
     }
     public void setRightSideX(int rightSideX) {
