@@ -139,7 +139,6 @@ public class DriveTowardsBall implements MyBehavior {
                 if (ballY < middleY) {
                     // The ball is in the bottom right corner of the obstacle
                     cornerPosition = Position.BOTTOMRIGHT;
-                    System.out.println("bottom right");
                 } else {
                     // The ball is in the top right corner of the obstacle
                     cornerPosition = Position.TOPRIGHT;

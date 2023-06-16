@@ -125,7 +125,6 @@ public class CameraCalibration {
             // all the required corners have been found...
             if (found && !imageCorners.empty())
             {
-                System.out.println("poopy");
                 // optimization
                 TermCriteria term = new TermCriteria(TermCriteria.EPS | TermCriteria.MAX_ITER, 30, 0.1);
                 Imgproc.cornerSubPix(grayImage, imageCorners, new Size(5, 5), new Size(-1, -1), term);
@@ -151,7 +150,6 @@ public class CameraCalibration {
             // calibrate!
             Calib3d.calibrateCamera(objectPoints, imagePoints, savedImage.size(), intrinsic, distCoeffs, rvecs, tvecs);
             this.isCalibrated = true;
-            System.out.println("gets calibrated");
 
             rvecsGlobal = rvecs;
             tvecsGlobal = tvecs;
@@ -183,7 +181,6 @@ public class CameraCalibration {
             }
 
             this.isCalibrated = true;
-            System.out.println("gets calibrated");
 
             rvecsGlobal = rvecs;
             tvecsGlobal = tvecs;

@@ -227,7 +227,6 @@ public class EdgeDetection {
                             //top left
                             returnValues[1] = intersection.get(intersection.size() - 1);
                             if (oldEdgesFarFromNewEdge(returnValues[1], dude)){
-                                System.out.println("Rerunning intersections");
                                 intersectionDetect(image, dude);
                                 return;
                             }

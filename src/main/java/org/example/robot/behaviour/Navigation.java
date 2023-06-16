@@ -120,7 +120,6 @@ public class Navigation {
         }
 
         if (!isApproximatelySameAngle(currentAngle,angleToNextPoint, 0.05)) {
-            System.out.println("Target Angle: " + Math.toDegrees(angleToNextPoint) + "   Current Angle: " + Math.toDegrees(currentAngle));
 
             //turn towards ball
             if (pointIsLeftOfRobotHeading()) {
@@ -136,7 +135,6 @@ public class Navigation {
 
         currentAngle = dude.getAngle();
         if (pointIsLeftOfRobotHeading()) {
-            logger.info("time: "+System.currentTimeMillis()+". Turning left - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
             // Turn left towards ball
             dude.turnLeft(100);
             while (pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && (!myBehavior.isSuppressed() || (myBehavior.isSuppressed() && dude.getMap().getBalls().size()==0))) {
@@ -151,7 +149,6 @@ public class Navigation {
             }
             dude.stopWheels();
             // Stop turning
-            logger.info("time: "+System.currentTimeMillis()+". Turning left ended - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
         }
     }
     private boolean pointIsLeftOfRobotHeading( ) {
@@ -188,7 +185,6 @@ public class Navigation {
     private void turnRightTowardsPoint(){
         currentAngle = dude.getAngle();
         if (!pointIsLeftOfRobotHeading()) {
-            logger.info("time: "+System.currentTimeMillis()+". Turning right - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
 
             dude.turnRight(100);
             while(!pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && (!myBehavior.isSuppressed() || (myBehavior.isSuppressed() && dude.getMap().getBalls().size()==0))){
@@ -203,7 +199,6 @@ public class Navigation {
             }
             dude.stopWheels();
 
-            logger.info("time: "+System.currentTimeMillis()+". Turning right ended - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
 
         }
     }

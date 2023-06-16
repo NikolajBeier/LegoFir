@@ -127,7 +127,6 @@ public class FrameDrawer {
             line(frame, new Point(dude.getMap().getObstacle().getTopPoint().x,-dude.getMap().getObstacle().getTopPoint().y), new Point(dude.getMap().getObstacle().getBottomPoint().x,-dude.getMap().getObstacle().getBottomPoint().y), new Scalar(0, 255, 0), 2, 8, 0);
             line(frame, new Point(dude.getMap().getObstacle().getLeftPoint().x,-dude.getMap().getObstacle().getLeftPoint().y), new Point(dude.getMap().getObstacle().getRightPoint().x,-dude.getMap().getObstacle().getRightPoint().y), new Scalar(0, 255, 0), 2, 8, 0);
             } catch (NullPointerException e){
-                System.out.println("Obstacle not found");
             }
         }
 
@@ -149,7 +148,6 @@ public class FrameDrawer {
                 putText(frame, "Top left", topLeft, FONT_HERSHEY_SIMPLEX, 1, new Scalar(225, 255, 255), 2);
                 putText(frame, "Top right", topRight, FONT_HERSHEY_SIMPLEX, 1, new Scalar(225, 255, 255), 2);
             } catch (NullPointerException e) {
-                System.out.println("No edge found");
             }
         }
     }
@@ -292,7 +290,6 @@ public class FrameDrawer {
 
 
             }catch (NullPointerException e){
-                System.out.println("NullPointerException");
             }}
 
 
@@ -304,7 +301,6 @@ public class FrameDrawer {
             circle(image, new Point(waypoint.x, -waypoint.y), 25, new Scalar(255, 0, 0), 1);
         }
         }catch (NullPointerException e){
-            System.out.println("NullPointerException");
         }
 
 

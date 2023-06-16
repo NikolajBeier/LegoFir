@@ -153,16 +153,10 @@ public class ObstacleNavigation {
 
     public void pickUpBallInObstacle(TennisBall nextBall, DriveTowardsBall.Position cornerPosition) {
         Point intermediatePoint = findBallIntermediatePoint(nextBall, cornerPosition);
-        System.out.println("Intermediate point: x=" + intermediatePoint.x + ", y=" + intermediatePoint.y);
         moveToIntermediatePoint(intermediatePoint);
-        System.out.println("Intermediate point reached");
         slowlyMoveTowardsBallInCorner(nextBall);
-        System.out.println("Ball reached");
-        System.out.println("Turning Towards Ball");
         turnTowards(new Point(nextBall.getX(), nextBall.getY()));
-        System.out.println("Collecting Ball");
         dude.collectBall();
-        System.out.println("Ball collected");
         dude.moveBackward();
         long timeBefore = System.currentTimeMillis();
         while(System.currentTimeMillis() - timeBefore < 1500) {
@@ -264,7 +258,6 @@ public class ObstacleNavigation {
     private void turnRightTowardsPoint(double currentAngle, double angleToNextPoint) {
         currentAngle = dude.getAngle();
         if (!pointIsLeftOfRobotHeading(currentAngle, angleToNextPoint)) {
-            logger.info("time: "+System.currentTimeMillis()+". Turning right - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
 
             dude.turnRight(100);
             while(!pointIsLeftOfRobotHeading(currentAngle,angleToNextPoint) && currentAngle!= angleToNextPoint){
@@ -283,7 +276,6 @@ public class ObstacleNavigation {
     private void turnLeftTowardsPoint(double currentAngle, double angleToNextPoint) {
         currentAngle = dude.getAngle();
         if (pointIsLeftOfRobotHeading(currentAngle, angleToNextPoint)) {
-            logger.info("time: "+System.currentTimeMillis()+". Turning left - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
             // Turn left towards ball
             dude.turnLeft(100);
             while (pointIsLeftOfRobotHeading(currentAngle,angleToNextPoint) && currentAngle!= angleToNextPoint) {

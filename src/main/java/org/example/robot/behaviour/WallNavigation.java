@@ -50,19 +50,16 @@ public class WallNavigation {
     private Point findWaypoint(DriveTowardsBall.Direction direction, TennisBall nextBall) {
         try {
             switch (direction) {
-                case NORTH -> {System.out.println("N created");
-                    return new Point(nextBall.getX(), nextBall.getY() - 100);
-
-                }
-                case SOUTH -> { System.out.println("S created");
+                case NORTH -> {return new Point(nextBall.getX(), nextBall.getY() - 100);}
+                case SOUTH -> {
                     return new Point(nextBall.getX(), nextBall.getY() + 100);
 
                 }
-                case EAST -> {System.out.println("E created");
+                case EAST -> {
                     return new Point(nextBall.getX() - 100, nextBall.getY());
 
                 }
-                case WEST -> {System.out.println("W created");
+                case WEST -> {
                     return new Point(nextBall.getX() + 100, nextBall.getY());
 
                 }
@@ -71,7 +68,6 @@ public class WallNavigation {
 
 
         } catch (Exception e) {
-            System.out.println("ball not set");
         }
         return null;
     }

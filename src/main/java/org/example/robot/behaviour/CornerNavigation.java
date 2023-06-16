@@ -33,12 +33,10 @@ public class CornerNavigation {
         }
             if(isOnWayPoint()){
                 Point nextBallPoint = new Point(nextBall.getX(), nextBall.getY());
-                System.out.println("drive into corner");
                 driveIntoCorner(nextBallPoint);
                 turnTowards(nextBallPoint, 0.01);
                 collectBallInCorner();
             } else {
-                System.out.println("drive towards waypoint");
                 navigation.driveTowardsWaypoint(wayPoint);
             }
     }
@@ -64,9 +62,8 @@ public class CornerNavigation {
     private void driveIntoCorner(Point nextBall){
         double distanceToPoint = Double.MAX_VALUE;
 
-        while(distanceToPoint > 19.5) {
+        while(distanceToPoint > 17) {
             distanceToPoint = distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(), dude.getMap().getRobotPosition().getFrontSideY()), nextBall);
-            System.out.println("distanceToPoint: " + distanceToPoint);
             if(distanceToPoint < 40){
                 turnTowards(nextBall, 0.04);
                 dude.moveForward(15);
@@ -145,7 +142,6 @@ public class CornerNavigation {
     private void turnRightTowardsPoint(double currentAngle, double angleToNextPoint) {
         currentAngle = dude.getAngle();
         if (!pointIsLeftOfRobotHeading(currentAngle, angleToNextPoint)) {
-            logger.info("time: "+System.currentTimeMillis()+". Turning right - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
 
             dude.turnRight(100);
             while(!pointIsLeftOfRobotHeading(currentAngle,angleToNextPoint) && currentAngle!= angleToNextPoint){
@@ -164,7 +160,6 @@ public class CornerNavigation {
     private void turnLeftTowardsPoint(double currentAngle, double angleToNextPoint) {
         currentAngle = dude.getAngle();
         if (pointIsLeftOfRobotHeading(currentAngle, angleToNextPoint)) {
-            logger.info("time: "+System.currentTimeMillis()+". Turning left - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
             // Turn left towards ball
             dude.turnLeft(100);
             while (pointIsLeftOfRobotHeading(currentAngle,angleToNextPoint) && currentAngle!= angleToNextPoint) {

@@ -64,7 +64,6 @@ public class Launcher implements Program {
 
 
 
-        System.out.println("Når vi her?");
 
            }
     public void launchRobot() {

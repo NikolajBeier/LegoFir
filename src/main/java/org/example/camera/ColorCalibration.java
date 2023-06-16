@@ -189,7 +189,6 @@ public class ColorCalibration {
             json.put("Edge",createJSONArray(ObjectColor.getEdge()));
             json.put("BlueRobot",createJSONArray(ObjectColor.getBlueRobot()));
             fileWriter.write(json.toJSONString());
-            System.out.println(json.toJSONString());
             fileWriter.close();
         } catch(Exception exception){
             exception.printStackTrace();
