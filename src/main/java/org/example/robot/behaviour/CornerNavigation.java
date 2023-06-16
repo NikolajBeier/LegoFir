@@ -62,7 +62,7 @@ public class CornerNavigation {
     private void driveIntoCorner(Point nextBall){
         double distanceToPoint = Double.MAX_VALUE;
 
-        while(distanceToPoint > 17) {
+        while(distanceToPoint > 16) {
             distanceToPoint = distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(), dude.getMap().getRobotPosition().getFrontSideY()), nextBall);
             if(distanceToPoint < 40){
                 turnTowards(nextBall, 0.04);

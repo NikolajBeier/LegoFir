@@ -54,7 +54,7 @@ public class FrameDetector {
             if(counter%60 == 0){
                 edgeDetection.updateEdgeIntersections(frame,dude);
             }
-            edgeDetection.warpToEdge(frame, dude.getMap().getUnWarpedEdges());
+            edgeDetection.warpToEdge(frame, dude.getMap().getUnWarpedEdges(), dude);
         }
         if(obstacleDetectionOn){
 

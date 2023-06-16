@@ -22,8 +22,6 @@ public class EdgeDetection {
 
 
     public EdgeDetection() {
-
-
     }
 
     Mat hlsimage = new Mat();
@@ -155,7 +153,7 @@ public class EdgeDetection {
             //warpToEdge(image, returnValues);
         } catch (NullPointerException e) {
             Point[] oldValues = dude.getMap().getUnWarpedEdges();
-            warpToEdge(image, oldValues);
+            warpToEdge(image, oldValues, dude);
         } finally {
             int offSetX = 126;
             int offSetY = 42;
@@ -171,8 +169,6 @@ public class EdgeDetection {
                             new Point(offSetX, -offSetY),
                             new Point(image.width()-offSetX, -offSetY))
             );
-            dude.getMap().setWayPoint(dude.getMap().getDepositPoint().getCenterLeft().x+200, dude.getMap().getDepositPoint().getCenterLeft().y);
-            dude.getMap().calcDepositPoints();
         }
     }
 
@@ -247,7 +243,7 @@ public class EdgeDetection {
     }
 
 
-    public void warpToEdge(Mat image, Point[] points){
+    public void warpToEdge(Mat image, Point[] points,Legofir dude){
         try {
             MatOfPoint2f src = new MatOfPoint2f(
                     new Point(points[1].x, -points[1].y),
@@ -267,6 +263,9 @@ public class EdgeDetection {
 
             Mat warpMat = Imgproc.getPerspectiveTransform(src, dst);
             Imgproc.warpPerspective(image, image, warpMat, image.size());
+
+            dude.getMap().calcDepositPoints();
+            dude.getMap().setWayPoint(dude.getMap().getDepositPoint().getCenterLeft().x+200, dude.getMap().getDepositPoint().getCenterLeft().y);
         } catch (NullPointerException e){
 
         }

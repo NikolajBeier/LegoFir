@@ -237,6 +237,9 @@ state=RobotState.TURNING_RIGHT;
 
     public void openCheeks(){
         try{
+            if(balldropper.isStalled()){
+                balldropper.rotate(50);
+            }
             balldropper.backward();
         } catch (RemoteException e) {
             stopAll();
@@ -331,8 +334,8 @@ state=RobotState.TURNING_RIGHT;
 
     public void collectBall() {
         try {
-            harvester.rotate(40);
             harvester.rotate(-1400);
+            harvester.rotate(40);
             harvester.resetTachoCount();
         } catch (RemoteException e) {
             stopAll();

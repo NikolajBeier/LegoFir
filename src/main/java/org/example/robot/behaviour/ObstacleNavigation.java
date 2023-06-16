@@ -168,7 +168,7 @@ public class ObstacleNavigation {
         Point nextBallPoint = new Point(nextBall.getX(),nextBall.getY());
         double distance = Double.MAX_VALUE;
 
-        while(distance > 17) {
+        while(distance > 16) {
            turnTowards(nextBallPoint);
            if(distance>100){
                dude.moveForward(100);

@@ -104,7 +104,6 @@ public class Navigation {
             timeBefore = System.currentTimeMillis();
             while(System.currentTimeMillis() - timeBefore < 25000){
                 dude.openCheeks();
-
             }
             dude.stopBallDropper();
         }
