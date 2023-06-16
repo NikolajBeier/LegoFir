@@ -16,6 +16,9 @@ public class FrameDetector {
     Boolean ballDetectionOn = false;
     Boolean robotDetectionOn = false;
     Boolean edgeDetectionOn = false;
+    Boolean obstacleDetectionOn = false;
+
+    Boolean runIntersectOnce = true;
 
     public FrameDetector(Legofir dude) {
         this.dude = dude;
@@ -44,7 +47,17 @@ public class FrameDetector {
     private void detectEdges(Mat frame) {
         // Edge and obstacle detection every 10 frames
         if (edgeDetectionOn) {
-            edgeDetection.intersectionDetect(frame, dude);
+            if(runIntersectOnce){
+                edgeDetection.intersectionDetect(frame, dude);
+                runIntersectOnce = false;
+            }
+            if(counter%60 == 0){
+                edgeDetection.updateEdgeIntersections(frame,dude);
+            }
+            edgeDetection.warpToEdge(frame, dude.getMap().getUnWarpedEdges());
+        }
+        if(obstacleDetectionOn){
+
             obstacleDetection.detect(frame, dude);
         }
     }
@@ -64,6 +77,12 @@ public class FrameDetector {
 
     public void setEdgeDetectionOn(Boolean edgeDetectionOn) {
         this.edgeDetectionOn = edgeDetectionOn;
+    }
+    public void setObstacleDetectionOn(Boolean obstacleDetectionOn){
+        this.obstacleDetectionOn = obstacleDetectionOn;
+    }
+    public void setRunIntersectOnce(Boolean runIntersectOnce){
+        this.runIntersectOnce = runIntersectOnce;
     }
 
     public Boolean isBallDetectionOn() {

@@ -32,7 +32,7 @@ public class FrameDrawer {
         drawObstacle(frame);
         drawExitHoles(frame);
         drawRobot(frame);
-        drawCollision(frame);
+        //drawCollision(frame);
         drawWayPoint(frame);
         //drawBallWaypoint(frame);
         //drawBallHeading(frame);
@@ -114,7 +114,7 @@ public class FrameDrawer {
         Point frontPoint = new Point(dude.getMap().getRobotPosition().getFrontSideX(), (-1)*dude.getMap().getRobotPosition().getFrontSideY());
         Point backPoint = new Point(dude.getMap().getRobotPosition().getBackSideX(), (-1)*dude.getMap().getRobotPosition().getBackSideY());
 
-        circle(frame, frontPoint, 1, new Scalar(0, 0, 255), 1);
+        circle(frame, frontPoint, 4, new Scalar(0, 0, 255), 4);
         putText(frame, "Front", frontPoint, Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 1);
         circle(frame, backPoint, 1, new Scalar(0, 0, 255), 1);
         putText(frame, "Back", backPoint, Imgproc.FONT_HERSHEY_SIMPLEX, 1, new Scalar(0, 0, 255), 1);

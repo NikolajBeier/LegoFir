@@ -21,7 +21,6 @@ public class DriveTowardsBall implements MyBehavior {
         OBSTACLE,
         DEFAULT
     }
-
     enum Position {
         TOPLEFT,
         TOPRIGHT,
