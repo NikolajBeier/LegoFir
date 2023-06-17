@@ -116,19 +116,27 @@ public class EdgeBallNavigation {
         Point nextBallPoint = new Point(nextBall.getX(),nextBall.getY());
         double distance = Double.MAX_VALUE;
 
-        while(distance > 10) {
+
+        while(distance > 12) {
             turnTowards(nextBallPoint);
-            if(distance>100){
-                dude.moveForward(100);
-            } else if(distance>50){
-                dude.moveForward(75);
-            } else {
-                dude.moveForward(50);
-            }
+            moveForwardWithDynamicSpeed(nextBallPoint,45,200);
             distance=distanceBetweenPoints(nextBallPoint, new Point(dude.getMap().getRobotPosition().getFrontSideX(),dude.getMap().getRobotPosition().getFrontSideY()));
         }
         dude.stopWheels();
     }
+
+    private void moveForwardWithDynamicSpeed(Point nextBallPoint, int minSpeed, int maxSpeed) {
+        double distance=distanceBetweenPoints(nextBallPoint, new Point(dude.getMap().getRobotPosition().getFrontSideX(),dude.getMap().getRobotPosition().getFrontSideY()));
+        if(distance<35){
+            dude.moveForward(minSpeed);
+        } else {
+            double diff = 1000-distance;
+            double diffNorm = diff/1000;
+            double speed = minSpeed + (diffNorm * (maxSpeed - minSpeed));
+            dude.moveForward((int)speed);
+        }
+    }
+
     public void turnTowards(Point nextPoint) {
 
         RobotPosition currentPosition = dude.getMap().getRobotPosition();
@@ -193,13 +201,7 @@ public class EdgeBallNavigation {
             dude.turnRight(100);
             while(!pointIsLeftOfRobotHeading(currentAngle,angleToNextPoint) && currentAngle!= angleToNextPoint){
                 currentAngle = dude.getAngle();
-                if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.08)){
-                    dude.setWheelSpeed(5);
-                } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.2)){
-                    dude.setWheelSpeed(20);
-                } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.5)){
-                    dude.setWheelSpeed(50);
-                }
+                changeTurnSpeedDynamically(currentAngle, angleToNextPoint, 25, 300, 0.1);
             }
             dude.stopWheels();
         }
@@ -211,15 +213,29 @@ public class EdgeBallNavigation {
             dude.turnLeft(100);
             while (pointIsLeftOfRobotHeading(currentAngle,angleToNextPoint) && currentAngle!= angleToNextPoint) {
                 currentAngle = dude.getAngle();
-                if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.08)){
-                    dude.setWheelSpeed(5);
-                } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.2)){
-                    dude.setWheelSpeed(20);
-                } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.5)){
-                    dude.setWheelSpeed(50);
-                }
+                changeTurnSpeedDynamically(currentAngle, angleToNextPoint, 25, 300, 0.1);
             }
             dude.stopWheels();
+        }
+    }
+
+    private void changeTurnSpeedDynamically(double currentAngle, double angleToNextPoint, double minSpeed, double maxSpeed, double margin) {
+        if(isApproximatelySameAngle(currentAngle, angleToNextPoint, margin)){
+            dude.setWheelSpeed((int)minSpeed);
+        } else {
+            // Calculate the difference in angles
+            // 180 - abs(abs(a1 - a2) - 180);
+            double angleDiff = Math.PI - Math.abs(Math.abs(currentAngle - angleToNextPoint)-Math.PI);
+            System.out.println("AngleDiff:" + angleDiff);
+
+            // Normalize the angle difference to the range [0, 1]
+            double normalizedAngleDiff = angleDiff / Math.PI; // angles are in radians
+
+            // Calculate the speed based on the angle difference
+            double speed = minSpeed + (normalizedAngleDiff * (maxSpeed - minSpeed));
+            System.out.println("Speed:" + speed);
+
+            dude.setWheelSpeed((int)speed);
         }
     }
 }

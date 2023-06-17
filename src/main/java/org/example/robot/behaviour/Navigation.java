@@ -37,7 +37,7 @@ public class Navigation {
         // Vinkel af vektor..x.
         angleToNextPoint = Geometry.degreesOfVectorInRadians(Pointvector.x, Pointvector.y);
 
-        if (!isApproximatelySameAngle(currentAngle,angleToNextPoint)) {
+        if (!isApproximatelySameAngle(currentAngle,angleToNextPoint,0.1)) {
             //turn towards ball
             if (pointIsLeftOfRobotHeading()) {
                 turnLeftTowardsPoint();
@@ -79,21 +79,6 @@ public class Navigation {
     }
 
     public void turnCheeksTowardsGoal(Point goal, boolean suppressed){
-
-        /*
-         int nextPointX = (int) goal.x;
-        int nextPointY = (int) goal.y;
-        Point pointVector = new Point(nextPointX - currentPosition.getX(), nextPointY - currentPosition.getY());
-        angleToNextPoint = Geometry.degreesOfVectorInRadians(pointVector.x, pointVector.y);
-        double oppositeAngleToNextPoint=0;
-        if (angleToNextPoint>0){
-            oppositeAngleToNextPoint=angleToNextPoint-Math.PI;
-        }else {
-            oppositeAngleToNextPoint= angleToNextPoint+Math.PI;
-        }
-        angleToNextPoint=0;
-         */
-
         if(angleTowardsGoal(goal)) {
             long timeBefore = System.currentTimeMillis();
             while(System.currentTimeMillis() - timeBefore < 500){
@@ -137,7 +122,9 @@ public class Navigation {
             dude.setWheelSpeed((int)minSpeed);
         } else {
             // Calculate the difference in angles
-            double angleDiff = Math.abs(currentAngle - angleToNextPoint);
+            // 180 - abs(abs(a1 - a2) - 180);
+            double angleDiff = Math.PI - Math.abs(Math.abs(currentAngle - angleToNextPoint)-Math.PI);
+            System.out.println("AngleDiff:" + angleDiff);
 
             // Normalize the angle difference to the range [0, 1]
             double normalizedAngleDiff = angleDiff / Math.PI; // angles are in radians
@@ -158,17 +145,7 @@ public class Navigation {
             dude.turnLeft(100);
             while (pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && (!myBehavior.isSuppressed() || (myBehavior.isSuppressed() && dude.getMap().getBalls().size()==0))) {
                 currentAngle = dude.getAngle();
-                /*
-                if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.08)){
-                    dude.setWheelSpeed(5);
-                } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint)){
-                    dude.setWheelSpeed(15);
-                } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.5)){
-                    dude.setWheelSpeed(35);
-                }
-
-                 */
-                changeSpeedDynamically(currentAngle,angleToNextPoint,8,100,0.05);
+                changeSpeedDynamically(currentAngle,angleToNextPoint,25,300,0.1);
             }
             dude.stopWheels();
             // Stop turning
@@ -181,23 +158,9 @@ public class Navigation {
             dude.turnRight(100);
             while(!pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && (!myBehavior.isSuppressed() || (myBehavior.isSuppressed() && dude.getMap().getBalls().size()==0))){
                 currentAngle = dude.getAngle();
-                /*
-                if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.08)){
-                    dude.setWheelSpeed(5);
-                } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint)){
-                    dude.setWheelSpeed(15);
-                } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.5)){
-                    dude.setWheelSpeed(35);
-                }
-
-                 */
-                changeSpeedDynamically(currentAngle,angleToNextPoint,8,100,0.05);
+                changeSpeedDynamically(currentAngle,angleToNextPoint,25,300,0.1);
             }
-
-
             dude.stopWheels();
-
-
         }
     }
     private boolean pointIsLeftOfRobotHeading( ) {
@@ -251,16 +214,8 @@ public class Navigation {
     public void driveTowardsBall(TennisBall nextBall) {
         while(!myBehavior.isSuppressed() || dude.getMap().getBalls().size()==0) {
             turnTowards(nextBall);
-            distanceToPoint = distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(), dude.getMap().getRobotPosition().getFrontSideY()), new Point(nextBall.getX(), nextBall.getY()));
-
-            if (distanceToPoint<75) {
-                dude.moveForward(200);
-            } else if (distanceToPoint<150){
-                dude.moveForward(300);
-            } else {
-                dude.moveForward(400);
-            }
-
+            Point ballPoint = new Point(nextBall.getX(), nextBall.getY());
+            moveForwardWithDynamicSpeed(ballPoint, 200, 400);
             if (closeToBall(nextBall)) {
                 pickUpBall();
                 break;
@@ -269,14 +224,7 @@ public class Navigation {
     }
     public void driveTowardsWaypoint(Point point) {
         turnsTowardsWayPoint(point);
-        distanceToPoint = distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(), dude.getMap().getRobotPosition().getFrontSideY()), point);
-        if (distanceToPoint<75) {
-            dude.moveForward(100);
-        } else if (distanceToPoint<150){
-            dude.moveForward(250);
-        } else {
-            dude.moveForward(500);
-        }
+        moveForwardWithDynamicSpeed(point, 150, 400);
     }
     public void driveTowardsWaypoint(Point point,int speed) {
         turnsTowardsWayPoint(point);
@@ -293,6 +241,18 @@ public class Navigation {
     }
     private boolean isMovingForward() {
         return dude.getState() == RobotState.MOVING_FORWARD;
+    }
+
+    private void moveForwardWithDynamicSpeed(Point nextBallPoint, int minSpeed, int maxSpeed) {
+        double distance=distanceBetweenPoints(nextBallPoint, new Point(dude.getMap().getRobotPosition().getFrontSideX(),dude.getMap().getRobotPosition().getFrontSideY()));
+        if(distance<100){
+            dude.moveForward(minSpeed);
+        } else {
+            double diff = 1000-distance;
+            double diffNorm = diff/1000;
+            double speed = minSpeed + (diffNorm * (maxSpeed - minSpeed));
+            dude.moveForward((int)speed);
+        }
     }
 }
 
