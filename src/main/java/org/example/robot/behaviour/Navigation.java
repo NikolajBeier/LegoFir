@@ -96,7 +96,7 @@ public class Navigation {
 
         if(angleTowardsGoal(goal)) {
             long timeBefore = System.currentTimeMillis();
-            while(System.currentTimeMillis() - timeBefore < 1000){
+            while(System.currentTimeMillis() - timeBefore < 500){
                 dude.moveBackward();
             }
             dude.stopWheels();
@@ -223,7 +223,7 @@ public class Navigation {
             distanceToPoint = distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(), dude.getMap().getRobotPosition().getFrontSideY()), new Point(nextBall.getX(), nextBall.getY()));
 
             if (distanceToPoint<75) {
-                dude.moveForward(100);
+                dude.moveForward(200);
             } else if (distanceToPoint<150){
                 dude.moveForward(300);
             } else {

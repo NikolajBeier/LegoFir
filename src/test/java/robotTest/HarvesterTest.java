@@ -67,17 +67,15 @@ public class HarvesterTest {
          */
 
 
-        System.out.println("Når vi her harvester test?");
 
-        System.out.println("launching harvester test");
-        for(int i=0;i<20;i++) {
-            dude.collectBall();
-            try {
-                sleep(100);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+        dude.beginHarvester();
+        try {
+            sleep(30000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
+        dude.stopHarvester();
+
         System.out.println("finished harvester test");
 
         dude.stopAll();

@@ -77,6 +77,7 @@ public class Launcher implements Program {
 
 
         };
+        dude.beginHarvester();
         arby = new Arbitrator(bArray);
         dude.startTimer();
         arby.go();
