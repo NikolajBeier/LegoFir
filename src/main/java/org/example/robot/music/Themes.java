@@ -80,8 +80,8 @@ public class Themes {
     public void ohmygod(RemoteEV3 ev3) {
 
         Audio sound = ev3.getAudio();
-        sound.setVolume(15);
-        sound.playSample(new File("oh-my-god-memev2.wav"), 100);
+        sound.setVolume(100);
+        System.out.println(sound.playSample(new File("oh-my-godv3.wav"), 100));
 
     }
 
