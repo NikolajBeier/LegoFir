@@ -1,7 +1,6 @@
 package org.example.robot.behaviour;
 
 
-import org.example.mapping.Edge;
 import org.example.mapping.Obstacle;
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
@@ -13,7 +12,7 @@ import static org.example.utility.Geometry.intersection;
 
 
 public class DriveTowardsBall implements MyBehavior {
-    String BehaviorName = "DriveTowardsBall";
+    String behaviorName = "DriveTowardsBall";
 
     enum Condition {
         CORNER,
@@ -40,16 +39,14 @@ public class DriveTowardsBall implements MyBehavior {
     Legofir dude;
     boolean stopCondition = false;
     Navigation navigation;
-    WallNavigation wallNav;
-    CornerNavigation cornerNavigation;
+    EdgeBallNavigation edgeBallNavigation;
     ObstacleNavigation obstacleNavigation;
 
     public DriveTowardsBall(Legofir dude) {
         this.dude = dude;
         navigation = new Navigation(dude, this);
-        wallNav = new WallNavigation(dude, navigation, this);
-        obstacleNavigation = new ObstacleNavigation(dude, this);
-        cornerNavigation = new CornerNavigation(dude, this, navigation);
+        edgeBallNavigation = new EdgeBallNavigation(dude, this, navigation);
+        obstacleNavigation = new ObstacleNavigation(dude,  this);
     }
 
 
@@ -62,7 +59,7 @@ public class DriveTowardsBall implements MyBehavior {
     @Override
     public void action() {
         suppressed = false;
-        dude.setCurrentBehaviourName(BehaviorName);
+        dude.setCurrentBehaviourName(behaviorName);
         while (!suppressed) {
             TennisBall nextBall = dude.getMap().getNextBall();
             Point nextBallPoint = new Point(nextBall.getX(), nextBall.getY());
@@ -72,10 +69,9 @@ public class DriveTowardsBall implements MyBehavior {
                 obstacleNavigation.moveAroundObstacle(nextBallPoint);
             }
 
-            switch (ballConditions(nextBall)) {
-                case CORNER -> cornerNavigation.pickUpBallInCorner(nextBall, cornerPosition);
-                case WALL -> wallNav.pickUpBallNextToWall(nearestWall, nextBall);
-                case OBSTACLE -> obstacleNavigation.pickUpBallInObstacle(nextBall, cornerPosition);
+            Condition ballCondition = ballConditions(nextBall);
+            switch (ballCondition) {
+                case CORNER, WALL, OBSTACLE -> edgeBallNavigation.pickUpBallInObstacle(nextBall, cornerPosition, nearestWall,ballCondition);
                 default -> navigation.driveTowardsBall(nextBall);
             }
         }
@@ -102,12 +98,16 @@ public class DriveTowardsBall implements MyBehavior {
 
     private Condition ballConditions(TennisBall nextBall) {
         if (ballInCorner(nextBall)) {
+            behaviorName = "Drive towards ball in corner";
             return Condition.CORNER;
         } else if (ballInObstacle(nextBall)) {
+            behaviorName = "Drive towards ball in obstacle";
             return Condition.OBSTACLE;
         } else if (ballNearWall(nextBall)) {
+            behaviorName = "Drive towards ball near wall";
             return Condition.WALL;
         }
+        behaviorName = "Drive towards ball in the open";
         return Condition.DEFAULT;
     }
 

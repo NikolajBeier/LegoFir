@@ -1,30 +1,27 @@
 package org.example.robot.behaviour;
 
+import org.example.mapping.Obstacle;
 import org.example.mapping.RobotPosition;
 import org.example.mapping.TennisBall;
 import org.example.robot.model.Legofir;
 import org.example.utility.Geometry;
 import org.opencv.core.Point;
 
-import static org.example.Main.logger;
 import static org.example.utility.Geometry.distanceBetweenPoints;
 
-public class WallNavigation {
+public class EdgeBallNavigation {
     Legofir dude;
-    Navigation nav;
-    Point nextBall = new Point(0,0);
-    public Point waypointWAll;
     MyBehavior myBehavior;
-    public WallNavigation(Legofir dude, Navigation nav, MyBehavior myBehavior){
-        this.dude = dude;
-        this.nav = nav;
-        this.myBehavior = myBehavior;
+    Navigation navigation;
+    public EdgeBallNavigation(Legofir dude,MyBehavior myBehavior,Navigation navigation){
+        this.dude=dude;
+        this.myBehavior=myBehavior;
+        this.navigation=navigation;
     }
 
-    //needs an enum of Heading
-    public void pickUpBallNextToWall(DriveTowardsBall.Direction direction, TennisBall nextBall){
-        waypointWAll = findWaypoint(direction, nextBall);
-        moveToWayPoint(waypointWAll);
+    public void pickUpBallInObstacle(TennisBall nextBall, DriveTowardsBall.Position cornerPosition, DriveTowardsBall.Direction wallDirection, DriveTowardsBall.Condition condition) {
+        Point intermediatePoint = findBallIntermediatePoint(nextBall, cornerPosition,condition,wallDirection);
+        moveToIntermediatePoint(intermediatePoint);
         slowlyMoveTowardsBallInCorner(nextBall);
         turnTowards(new Point(nextBall.getX(), nextBall.getY()));
         dude.collectBall();
@@ -33,51 +30,75 @@ public class WallNavigation {
         while(System.currentTimeMillis() - timeBefore < 1500) {
         }
         dude.stopWheels();
+    }
 
-        /*
-        while (nav.myBehavior.isSuppressed()) {
-            while(!checkIfRobotIsOnPoint()){
-                nav.turnsTowardsWayPoint(waypoint);
-            }
-            nav.driveTowardsWaypoint(waypoint);
-           // needs slowspeed
+    private Point findBallIntermediatePoint(TennisBall nextBall, DriveTowardsBall.Position cornerPosition, DriveTowardsBall.Condition condition, DriveTowardsBall.Direction wallDirection) {
+        Obstacle obstacle = dude.getMap().getObstacle();
+        switch(condition) {
+            case CORNER:
+                return findBallIntermediatePointInCorner(nextBall, cornerPosition);
+            case WALL:
+                return findBallIntermediatePointOnWall(nextBall, wallDirection);
+            case OBSTACLE:
+                return findBallIntermediatePointInObstacle(nextBall, obstacle,cornerPosition);
+            default:
+                return findBallIntermediatePointInCorner(nextBall, cornerPosition);
         }
 
-         */
 
     }
 
-    private Point findWaypoint(DriveTowardsBall.Direction direction, TennisBall nextBall) {
-        try {
-            switch (direction) {
-                case NORTH -> {return new Point(nextBall.getX(), nextBall.getY() - 100);}
-                case SOUTH -> {
-                    return new Point(nextBall.getX(), nextBall.getY() + 100);
-
-                }
-                case EAST -> {
-                    return new Point(nextBall.getX() - 100, nextBall.getY());
-
-                }
-                case WEST -> {
-                    return new Point(nextBall.getX() + 100, nextBall.getY());
-
-                }
-                default -> throw new IllegalStateException("Unexpected value: ");
+    private Point findBallIntermediatePointOnWall(TennisBall nextBall, DriveTowardsBall.Direction wallDirection) {
+        switch (wallDirection) {
+            case NORTH -> {
+                return new Point(nextBall.getX(), nextBall.getY() - 100);
             }
-
-
-        } catch (Exception e) {
+            case SOUTH -> {
+                return new Point(nextBall.getX(), nextBall.getY() + 100);
+            }
+            case EAST -> {
+                return new Point(nextBall.getX() - 100, nextBall.getY());
+            }
+            case WEST -> {
+                return new Point(nextBall.getX() + 100, nextBall.getY());
+            }
+            default -> {
+                return new Point(nextBall.getX(), nextBall.getY() - 100);
+            }
         }
-        return null;
     }
 
+    private Point findBallIntermediatePointInCorner(TennisBall nextBall, DriveTowardsBall.Position cornerPosition) {
+        int wayPointMargin = 125;
+        switch (cornerPosition){
+            case TOPLEFT -> {return new Point(nextBall.getX() + wayPointMargin, nextBall.getY() - wayPointMargin);}
+            case TOPRIGHT -> {return new Point(nextBall.getX() - wayPointMargin, nextBall.getY() - wayPointMargin);}
+            case BOTTOMLEFT -> {return new Point(nextBall.getX() + wayPointMargin , nextBall.getY() + wayPointMargin);}
+            case BOTTOMRIGHT -> {return new Point(nextBall.getX() - wayPointMargin, nextBall.getY() + wayPointMargin);}
+            default -> {return new Point(nextBall.getX() + wayPointMargin, nextBall.getY() - wayPointMargin);}
+        }
+    }
 
-    private void moveToWayPoint(Point waypoint) {
+    private Point findBallIntermediatePointInObstacle(TennisBall nextBall, Obstacle obstacle, DriveTowardsBall.Position cornerPosition) {
+        switch (cornerPosition) {
+            case TOPLEFT:
+                return new Point(obstacle.getLeftPoint().x-100,obstacle.getTopPoint().y+100);
+            case TOPRIGHT:
+                return new Point(obstacle.getRightPoint().x+100,obstacle.getTopPoint().y+100);
+            case BOTTOMLEFT:
+                return new Point(obstacle.getLeftPoint().x-100,obstacle.getBottomPoint().y-100);
+            case BOTTOMRIGHT:
+                return new Point(obstacle.getRightPoint().x+100,obstacle.getBottomPoint().y-100);
+            default:
+                return new Point(obstacle.getRightPoint().x+100,obstacle.getBottomPoint().y-100);
+        }
+    }
+
+    private void moveToIntermediatePoint(Point nextPoint) {
         while(!myBehavior.isSuppressed()) {
-            nav.turnsTowardsWayPoint(waypoint);
-            nav.driveTowardsWaypoint(waypoint);
-            if(isOnTopOf(waypoint)){
+            navigation.turnsTowardsWayPoint(nextPoint);
+            navigation.driveTowardsWaypoint(nextPoint);
+            if(isOnTopOf(nextPoint)){
                 dude.stopWheels();
                 return;
             }
@@ -91,31 +112,23 @@ public class WallNavigation {
                 Math.pow(dude.getMap().getRobotPosition().getY() - nextPoint.y, 2));
         return distance <= errorMargin;
     }
-
     private void slowlyMoveTowardsBallInCorner(TennisBall nextBall) {
         Point nextBallPoint = new Point(nextBall.getX(),nextBall.getY());
         double distance = Double.MAX_VALUE;
 
-        while(distance > 8) {
+        while(distance > 10) {
             turnTowards(nextBallPoint);
-            if(distance>50){
-                dude.moveForward(50);
+            if(distance>100){
+                dude.moveForward(100);
+            } else if(distance>50){
+                dude.moveForward(75);
             } else {
-                dude.moveForward(15);
+                dude.moveForward(50);
             }
             distance=distanceBetweenPoints(nextBallPoint, new Point(dude.getMap().getRobotPosition().getFrontSideX(),dude.getMap().getRobotPosition().getFrontSideY()));
         }
         dude.stopWheels();
     }
-    public Boolean checkIfRobotIsOnPoint(){
-        return (dude.getMap().getRobotPosition().getX() + 25 > dude.getMap().getWayPoint().x &&
-                dude.getMap().getRobotPosition().getX() - 25 < dude.getMap().getWayPoint().x &&
-                dude.getMap().getRobotPosition().getY() + 25 > dude.getMap().getWayPoint().y &&
-                dude.getMap().getRobotPosition().getY() - 25 < dude.getMap().getWayPoint().y);
-    }
-
-
-
     public void turnTowards(Point nextPoint) {
 
         RobotPosition currentPosition = dude.getMap().getRobotPosition();
@@ -138,6 +151,7 @@ public class WallNavigation {
             }
         }
     }
+
     private boolean pointIsLeftOfRobotHeading( double currentAngle, double angleToNextPoint) {
         double oppositeAngleOfRobot;
 
@@ -175,7 +189,6 @@ public class WallNavigation {
     private void turnRightTowardsPoint(double currentAngle, double angleToNextPoint) {
         currentAngle = dude.getAngle();
         if (!pointIsLeftOfRobotHeading(currentAngle, angleToNextPoint)) {
-            logger.info("time: "+System.currentTimeMillis()+". Turning right - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
 
             dude.turnRight(100);
             while(!pointIsLeftOfRobotHeading(currentAngle,angleToNextPoint) && currentAngle!= angleToNextPoint){
@@ -183,9 +196,9 @@ public class WallNavigation {
                 if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.08)){
                     dude.setWheelSpeed(5);
                 } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.2)){
-                    dude.setWheelSpeed(15);
+                    dude.setWheelSpeed(20);
                 } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.5)){
-                    dude.setWheelSpeed(35);
+                    dude.setWheelSpeed(50);
                 }
             }
             dude.stopWheels();
@@ -194,7 +207,6 @@ public class WallNavigation {
     private void turnLeftTowardsPoint(double currentAngle, double angleToNextPoint) {
         currentAngle = dude.getAngle();
         if (pointIsLeftOfRobotHeading(currentAngle, angleToNextPoint)) {
-            logger.info("time: "+System.currentTimeMillis()+". Turning left - Current angle: "+currentAngle + ". Angle to next ball: " + angleToNextPoint);
             // Turn left towards ball
             dude.turnLeft(100);
             while (pointIsLeftOfRobotHeading(currentAngle,angleToNextPoint) && currentAngle!= angleToNextPoint) {
@@ -202,9 +214,9 @@ public class WallNavigation {
                 if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.08)){
                     dude.setWheelSpeed(5);
                 } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.2)){
-                    dude.setWheelSpeed(15);
+                    dude.setWheelSpeed(20);
                 } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.5)){
-                    dude.setWheelSpeed(35);
+                    dude.setWheelSpeed(50);
                 }
             }
             dude.stopWheels();

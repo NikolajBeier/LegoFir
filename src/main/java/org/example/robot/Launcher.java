@@ -58,7 +58,7 @@ public class Launcher implements Program {
 
 
         Audio sound = ev3.getAudio();
-        sound.setVolume(15);
+        sound.setVolume(100);
         themes.ohmygod(ev3);
 
 
@@ -77,6 +77,7 @@ public class Launcher implements Program {
 
 
         };
+        dude.beginHarvester();
         arby = new Arbitrator(bArray);
         dude.startTimer();
         arby.go();

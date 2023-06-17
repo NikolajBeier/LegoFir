@@ -1,6 +1,7 @@
 package org.example.robot.music;
 
 import lejos.hardware.Audio;
+import lejos.hardware.Sound;
 import lejos.remote.ev3.RemoteEV3;
 
 import java.io.File;
@@ -78,11 +79,14 @@ public class Themes {
     }
 
     public void ohmygod(RemoteEV3 ev3) {
-
-        Audio sound = ev3.getAudio();
-        sound.setVolume(15);
-        sound.playSample(new File("oh-my-god-memev2.wav"), 100);
-
+        try {
+            Audio sound = ev3.getAudio();
+            sound.setVolume(100);
+            Sound.playSample(new File("oh-my-godv4.wav"), Sound.VOL_MAX);
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
 }

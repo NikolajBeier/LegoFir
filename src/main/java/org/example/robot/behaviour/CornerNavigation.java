@@ -31,28 +31,28 @@ public class CornerNavigation {
             case BOTTOMLEFT -> wayPoint = new Point(nextBall.getX() + wayPointMargin , nextBall.getY() + wayPointMargin);
             case BOTTOMRIGHT -> wayPoint = new Point(nextBall.getX() - wayPointMargin, nextBall.getY() + wayPointMargin);
         }
-            if(isOnWayPoint()){
-                Point nextBallPoint = new Point(nextBall.getX(), nextBall.getY());
-                driveIntoCorner(nextBallPoint);
-                turnTowards(nextBallPoint, 0.005);
-                collectBallInCorner();
-            } else {
-                navigation.driveTowardsWaypoint(wayPoint);
-            }
+
+        while(!isOnWayPoint()){
+            navigation.driveTowardsWaypoint(wayPoint);
+        }
+        Point nextBallPoint = new Point(nextBall.getX(), nextBall.getY());
+        driveIntoCorner(nextBallPoint);
+        turnTowards(nextBallPoint, 0.005);
+        collectBallInCorner();
     }
 
     private void collectBallInCorner() {
         dude.collectBall();
-        dude.stopHarvester();
+        dude.collectBall();
         dude.moveBackward();
         long timeBefore = System.currentTimeMillis();
-        while(System.currentTimeMillis() - timeBefore < 1000) {
+        while(System.currentTimeMillis() - timeBefore < 2000) {
         }
         dude.stopWheels();
     }
 
     private boolean isOnWayPoint() {
-        double errorMargin = 18;
+        double errorMargin = 25;
 
         double distance = Math.sqrt(Math.pow(dude.getMap().getRobotPosition().getX() - wayPoint.x, 2) +
                 Math.pow(dude.getMap().getRobotPosition().getY() - wayPoint.y, 2));
@@ -62,7 +62,7 @@ public class CornerNavigation {
     private void driveIntoCorner(Point nextBall){
         double distanceToPoint = Double.MAX_VALUE;
 
-        while(distanceToPoint > 16) {
+        while(distanceToPoint > 5) {
             distanceToPoint = distanceBetweenPoints(new Point(dude.getMap().getRobotPosition().getFrontSideX(), dude.getMap().getRobotPosition().getFrontSideY()), nextBall);
             if(distanceToPoint < 35){
                 turnTowards(nextBall, 0.04);

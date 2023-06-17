@@ -200,8 +200,7 @@ state=RobotState.TURNING_RIGHT;
 
     public void beginHarvester(){
         try {
-            System.out.println(harvester.getSpeed());
-            harvester.backward();
+            harvester.forward();
         } catch (RemoteException e) {
             stopAll();
         }
@@ -220,11 +219,14 @@ state=RobotState.TURNING_RIGHT;
     }
 
     public void stopHarvester(){
+        /*
         try {
             harvester.stop(true);
         } catch (RemoteException e) {
             closePorts();
         }
+
+         */
     }
 
     public void stopBallDropper(){
@@ -333,13 +335,19 @@ state=RobotState.TURNING_RIGHT;
     }
 
     public void collectBall() {
+        beginHarvester();
+        /*
         try {
-            harvester.rotate(-1400);
-            harvester.rotate(40);
+            harvester.rotate(1400);
             harvester.resetTachoCount();
+            if(harvester.isStalled()){
+                collectBall();
+            }
         } catch (RemoteException e) {
             stopAll();
         }
+
+         */
     }
     public void collectBallOnce(){
         try {
