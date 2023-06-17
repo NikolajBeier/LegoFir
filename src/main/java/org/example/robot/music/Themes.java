@@ -78,11 +78,14 @@ public class Themes {
     }
 
     public void ohmygod(RemoteEV3 ev3) {
-
-        Audio sound = ev3.getAudio();
-        sound.setVolume(100);
-        System.out.println(sound.playSample(new File("oh-my-godv4.wav"), 100));
-
+        try {
+            Audio sound = ev3.getAudio();
+            sound.setVolume(100);
+            System.out.println(sound.playSample(new File("oh-my-godv4.wav"), 100));
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
 }
