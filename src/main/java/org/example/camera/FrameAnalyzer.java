@@ -68,11 +68,11 @@ public class FrameAnalyzer {
         }
 
         //Calibrate Camera if JSON file exists
-        if(CameraCalibration.fileExists()){
+        /*if(CameraCalibration.fileExists()){
             cameraCalibration = new CameraCalibration();
             cameraCalibration.loadCalibration();
             isCalibrated = true;
-        }
+        }*/
 
         //Starts thread which analyses and alters each frame from video capture and updates ui with the result
         EventQueue.invokeLater(() -> new Thread(() -> {
@@ -90,10 +90,10 @@ public class FrameAnalyzer {
         resize(webcamImage, frame, new Size(1260, 840), webcamImage.width()/2, webcamImage.height()/2, INTER_AREA);
 
         //Calibrate
-        if(isCalibrated){
+        /*if(isCalibrated){
             Imgproc.remap(frame, frame, cameraCalibration.map1, cameraCalibration.map2, Imgproc.INTER_LINEAR);
            // webcamImage = cameraCalibration.undistort(webcamImage);
-        }
+        }*/
 
         // Remove glare TODO: DISABLED FOR NOW, FIX WITH BETTER CALIBRATION, THINK OF PERFORMANCE
        // frame = clahe(frame);

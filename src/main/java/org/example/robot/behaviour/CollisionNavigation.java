@@ -19,15 +19,7 @@ public class CollisionNavigation {
 
     public void avoidFrontCollision() {
         dude.moveBackward();
-        while(isCollidingOnTheFront() && !isCollidingOnTheBack()){}
-        dude.stopWheels();
-        dude.turnRight();
-        startTime = System.currentTimeMillis();
-        while(!isCollidingOnTheRight() && withinTimerinMS(500,startTime)){}
-        dude.stopWheels();
-        dude.moveForward();
-        startTime = System.currentTimeMillis();
-        while(!isCollidingOnTheFront() && withinTimerinMS(500,startTime)){}
+        while(!isCollidingOnTheBack() && withinTimerinMS(1500,startTime)){}
         dude.stopWheels();
     }
 

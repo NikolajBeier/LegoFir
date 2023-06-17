@@ -141,9 +141,9 @@ public class Navigation {
                 if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.08)){
                     dude.setWheelSpeed(5);
                 } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint)){
-                    dude.setWheelSpeed(15);
-                } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.5)){
                     dude.setWheelSpeed(35);
+                } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.5)){
+                    dude.setWheelSpeed(50);
                 }
             }
             dude.stopWheels();
@@ -191,9 +191,9 @@ public class Navigation {
                 if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.08)){
                     dude.setWheelSpeed(5);
                 } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint)){
-                    dude.setWheelSpeed(15);
-                } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.5)){
                     dude.setWheelSpeed(35);
+                } else if(isApproximatelySameAngle(currentAngle,angleToNextPoint,0.5)){
+                    dude.setWheelSpeed(50);
                 }
             }
             dude.stopWheels();
