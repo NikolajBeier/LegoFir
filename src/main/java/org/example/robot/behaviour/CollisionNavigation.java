@@ -6,7 +6,7 @@ import org.opencv.core.Point;
 public class CollisionNavigation {
     Legofir dude;
     private final double FRONTAL_AVOID_DISTANCE = 100;
-    private final double FRONTAL_MIDDLE_DISTANCE = 25;
+    private final double FRONTAL_MIDDLE_DISTANCE = 35;
     private final double BACKWARDS_AVOID_DISTANCE = 150;
     private final double TURNING_AVOID_DISTANCE = 70;
     private long startTime;
@@ -72,7 +72,7 @@ public class CollisionNavigation {
         Point rightSide = new Point(dude.getMap().getRobotPosition().rightSideX, dude.getMap().getRobotPosition().rightSideY);
         double distanceLeft = dude.getMap().distanceToEdge(oppositeHeading,leftSide);
         double distanceRight = dude.getMap().distanceToEdge(oppositeHeading,rightSide);
-        if(distanceRight < FRONTAL_AVOID_DISTANCE || distanceLeft < FRONTAL_AVOID_DISTANCE){
+        if(distanceRight < BACKWARDS_AVOID_DISTANCE || distanceLeft < BACKWARDS_AVOID_DISTANCE){
             return true;
         }
         return false;

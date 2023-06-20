@@ -12,7 +12,7 @@ import static java.lang.Thread.sleep;
 
 public class Launcher implements Program {
     RemoteEV3 ev3;
-    Legofir dude;
+    Legofir robot;
     Arbitrator arby;
     MyBehavior[] bArray;
     Themes themes = new Themes();
@@ -20,7 +20,7 @@ public class Launcher implements Program {
 
     public Launcher(RemoteEV3 ev3, Legofir dude){
         this.ev3 = ev3;
-        this.dude=dude;
+        this.robot =dude;
     }
     public void setupRobot(){
 
@@ -44,17 +44,17 @@ public class Launcher implements Program {
 
         // Robot object
         //dude = new Legofir(left,right,harvester, balldropper,1440,720,720,1000,1000, 1000);
-        dude.setLeft(left);
-        dude.setRight(right);
-        dude.setHarvester(harvester);
-        dude.setBalldropper(balldropper);
-        dude.setDefaultSpeedHarvester(1440);
-        dude.setDefaultSpeedBallDropper(5000);
-        dude.setDefaultAccelerationHarvester(1000);
-        dude.setDefaultAccelerationWheel(50);
-        dude.setDefaultAccelerationBallDropper(5000);
-        dude.setDefaultSpeedWheel(200);
-        dude.setLaunched(true);
+        robot.setLeft(left);
+        robot.setRight(right);
+        robot.setHarvester(harvester);
+        robot.setBalldropper(balldropper);
+        robot.setDefaultSpeedHarvester(1440);
+        robot.setDefaultSpeedBallDropper(5000);
+        robot.setDefaultAccelerationHarvester(1000);
+        robot.setDefaultAccelerationWheel(50);
+        robot.setDefaultAccelerationBallDropper(5000);
+        robot.setDefaultSpeedWheel(200);
+        robot.setLaunched(true);
 
 
         Audio sound = ev3.getAudio();
@@ -67,21 +67,17 @@ public class Launcher implements Program {
 
            }
     public void launchRobot() {
-
         bArray = new MyBehavior[]{
-                new DriveTowardsBall(dude),
-                new DriveTowardsGoal(dude),
-                new AvoidCollision(dude),
-                new DepositBalls(dude),
+                new DriveTowardsBall(robot),
+                new DriveTowardsGoal(robot),
+                new AvoidCollision(robot),
+                new DepositBalls(robot),
                 new StopBehaviour()
-
-
         };
-        dude.beginHarvester();
         arby = new Arbitrator(bArray);
-        dude.startTimer();
+        robot.beginHarvester();
+        robot.startTimer();
         arby.go();
-        System.out.println("arby stoppet");
     }
 
     private void imperialLaunch(Audio sound) {
@@ -110,10 +106,10 @@ public class Launcher implements Program {
         System.out.println("Ventet på arby er stoppet");
         // Stop motors and disconnect ports
         System.out.println("forsøger at stoppe motorerer og disconnecte");
-        dude.stopAll();
+        robot.stopAll();
         System.out.println("arby stopped and ports disconnected");
     }
     public Legofir getDude() {
-        return dude;
+        return robot;
     }
 }

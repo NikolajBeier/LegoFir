@@ -133,6 +133,7 @@ public class Legofir {
     }
     public void moveBackward(){
         state=RobotState.MOVING_BACKWARD;
+        setWheelSpeed(defaultSpeedWheel);
         try {
             left.backward();
             right.backward();

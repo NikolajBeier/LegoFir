@@ -27,8 +27,7 @@ public class EdgeBallNavigation {
         dude.collectBall();
         dude.moveBackward();
         long timeBefore = System.currentTimeMillis();
-        while(System.currentTimeMillis() - timeBefore < 1500) {
-        }
+        while(System.currentTimeMillis() - timeBefore < 1500) {}
         dude.stopWheels();
     }
 
@@ -44,8 +43,6 @@ public class EdgeBallNavigation {
             default:
                 return findBallIntermediatePointInCorner(nextBall, cornerPosition);
         }
-
-
     }
 
     private Point findBallIntermediatePointOnWall(TennisBall nextBall, DriveTowardsBall.Direction wallDirection) {
@@ -82,15 +79,19 @@ public class EdgeBallNavigation {
     private Point findBallIntermediatePointInObstacle(TennisBall nextBall, Obstacle obstacle, DriveTowardsBall.Position cornerPosition) {
         switch (cornerPosition) {
             case TOPLEFT:
-                return new Point(obstacle.getLeftPoint().x-100,obstacle.getTopPoint().y+100);
+                System.out.println("topleft");
+                return new Point(obstacle.getLeftPoint().x-150,obstacle.getTopPoint().y+150);
             case TOPRIGHT:
-                return new Point(obstacle.getRightPoint().x+100,obstacle.getTopPoint().y+100);
+                System.out.println("topright");
+                return new Point(obstacle.getRightPoint().x+150,obstacle.getTopPoint().y+150);
             case BOTTOMLEFT:
-                return new Point(obstacle.getLeftPoint().x-100,obstacle.getBottomPoint().y-100);
+                System.out.println("bottomleft");
+                return new Point(obstacle.getLeftPoint().x-150,obstacle.getBottomPoint().y-150);
             case BOTTOMRIGHT:
-                return new Point(obstacle.getRightPoint().x+100,obstacle.getBottomPoint().y-100);
+                System.out.println("bottomright");
+                return new Point(obstacle.getRightPoint().x+150,obstacle.getBottomPoint().y-150);
             default:
-                return new Point(obstacle.getRightPoint().x+100,obstacle.getBottomPoint().y-100);
+                return new Point(obstacle.getRightPoint().x+150,obstacle.getBottomPoint().y-150);
         }
     }
 
@@ -105,7 +106,7 @@ public class EdgeBallNavigation {
         }
     }
     private boolean isOnTopOf(Point nextPoint) {
-        double errorMargin = 25;
+        double errorMargin = 16;
 
 
         double distance = Math.sqrt(Math.pow(dude.getMap().getRobotPosition().getX() - nextPoint.x, 2) +
@@ -119,7 +120,7 @@ public class EdgeBallNavigation {
 
         while(distance > 12) {
             turnTowards(nextBallPoint);
-            moveForwardWithDynamicSpeed(nextBallPoint,45,200);
+            moveForwardWithDynamicSpeed(nextBallPoint,15,200);
             distance=distanceBetweenPoints(nextBallPoint, new Point(dude.getMap().getRobotPosition().getFrontSideX(),dude.getMap().getRobotPosition().getFrontSideY()));
         }
         dude.stopWheels();
@@ -201,7 +202,7 @@ public class EdgeBallNavigation {
             dude.turnRight(100);
             while(!pointIsLeftOfRobotHeading(currentAngle,angleToNextPoint) && currentAngle!= angleToNextPoint){
                 currentAngle = dude.getAngle();
-                changeTurnSpeedDynamically(currentAngle, angleToNextPoint, 25, 300, 0.1);
+                changeTurnSpeedDynamically(currentAngle, angleToNextPoint, 15, 400, 0.1);
             }
             dude.stopWheels();
         }
@@ -213,7 +214,7 @@ public class EdgeBallNavigation {
             dude.turnLeft(100);
             while (pointIsLeftOfRobotHeading(currentAngle,angleToNextPoint) && currentAngle!= angleToNextPoint) {
                 currentAngle = dude.getAngle();
-                changeTurnSpeedDynamically(currentAngle, angleToNextPoint, 25, 300, 0.1);
+                changeTurnSpeedDynamically(currentAngle, angleToNextPoint, 15, 400, 0.1);
             }
             dude.stopWheels();
         }
@@ -226,14 +227,12 @@ public class EdgeBallNavigation {
             // Calculate the difference in angles
             // 180 - abs(abs(a1 - a2) - 180);
             double angleDiff = Math.PI - Math.abs(Math.abs(currentAngle - angleToNextPoint)-Math.PI);
-            System.out.println("AngleDiff:" + angleDiff);
 
             // Normalize the angle difference to the range [0, 1]
             double normalizedAngleDiff = angleDiff / Math.PI; // angles are in radians
 
             // Calculate the speed based on the angle difference
             double speed = minSpeed + (normalizedAngleDiff * (maxSpeed - minSpeed));
-            System.out.println("Speed:" + speed);
 
             dude.setWheelSpeed((int)speed);
         }

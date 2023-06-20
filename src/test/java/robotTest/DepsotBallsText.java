@@ -7,12 +7,11 @@ import org.example.ui.ConnectToRobot;
 import org.junit.Test;
 
 import static java.lang.Thread.sleep;
-import static org.junit.Assert.assertEquals;
 
-public class HarvesterTest {
+public class DepsotBallsText {
     static String ip = "172.20.10.9";
     @Test
-    public void harvestTest(){
+    public void connectingToRobotTest(){
         Legofir dude=new Legofir();
         ConnectToRobot connectToRobot = new ConnectToRobot(dude);
         connectToRobot.connectToRobot(ip);
@@ -65,16 +64,19 @@ public class HarvesterTest {
 
 
 
-        dude.beginHarvester();
+        dude.openCheeks();
         try {
-            sleep(60000);
+            sleep(30000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        dude.stopHarvester();
+        dude.stopAll();
 
-        System.out.println("finished harvester test");
+        System.out.println("finished BallDropperTest test");
 
         dude.stopAll();
+
+
+
     }
 }

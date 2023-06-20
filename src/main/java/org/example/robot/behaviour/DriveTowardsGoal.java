@@ -53,7 +53,7 @@ public class DriveTowardsGoal implements MyBehavior{
 
 
     private boolean timerExpired() {
-        return System.currentTimeMillis()-dude.startTime>420000;
+        return System.currentTimeMillis()-dude.startTime>360000;
     }
 }
 

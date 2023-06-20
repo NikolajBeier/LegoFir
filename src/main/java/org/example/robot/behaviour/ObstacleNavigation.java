@@ -45,6 +45,7 @@ public class ObstacleNavigation {
         Point nextPoint;
         try {
             nextPoint = findIntermediatePoint(nextBallPoint);
+            System.out.println("IntermediatePoint to avoid collision: x=" + nextPoint.x +" y="+nextPoint.y);
         } catch (NullPointerException e){
             return;
         }
@@ -52,14 +53,11 @@ public class ObstacleNavigation {
     }
 
     private void moveToIntermediatePoint(Point nextPoint) {
-        while(!myBehavior.isSuppressed()) {
+        while(!isOnTopOf(nextPoint)) {
             navigation.turnsTowardsWayPoint(nextPoint);
             navigation.driveTowardsWaypoint(nextPoint);
-            if(isOnTopOf(nextPoint)){
-                dude.stopWheels();
-                return;
-            }
         }
+        dude.stopWheels();
     }
 
     private boolean isOnTopOf(Point nextPoint) {
@@ -79,20 +77,20 @@ public class ObstacleNavigation {
 
         Point obstacleMiddlePoint = intersection(obstacleHorizontal,obstacleVertical);
 
-        Point topWayPoint = new Point(obstacleMiddlePoint.x, obstacleMiddlePoint.y+200);
-        Point topLeftPoint = new Point(obstacleMiddlePoint.x-200, obstacleMiddlePoint.y+200);
+        Point topWayPoint = new Point(obstacleMiddlePoint.x, obstacleMiddlePoint.y+250);
+        Point topLeftPoint = new Point(obstacleMiddlePoint.x-250, obstacleMiddlePoint.y+250);
         Point bottomWayPoint = new Point(obstacleMiddlePoint.x, obstacleMiddlePoint.y-200);
-        Point bottomLeftPoint = new Point(obstacleMiddlePoint.x-200, obstacleMiddlePoint.y-200);
-        Point leftWayPoint = new Point(obstacleMiddlePoint.x-200, obstacleMiddlePoint.y);
-        Point topRightPoint = new Point(obstacleMiddlePoint.x+200, obstacleMiddlePoint.y+200);
-        Point rightWayPoint = new Point(obstacleMiddlePoint.x+200, obstacleMiddlePoint.y);
-        Point bottomRightPoint = new Point(obstacleMiddlePoint.x+200, obstacleMiddlePoint.y-200);
+        Point bottomLeftPoint = new Point(obstacleMiddlePoint.x-250, obstacleMiddlePoint.y-250);
+        Point leftWayPoint = new Point(obstacleMiddlePoint.x-250, obstacleMiddlePoint.y);
+        Point topRightPoint = new Point(obstacleMiddlePoint.x+250, obstacleMiddlePoint.y+250);
+        Point rightWayPoint = new Point(obstacleMiddlePoint.x+250, obstacleMiddlePoint.y);
+        Point bottomRightPoint = new Point(obstacleMiddlePoint.x+250, obstacleMiddlePoint.y-250);
 
         if(robotPoint.x >= obstacleMiddlePoint.x && robotPoint.y >= obstacleMiddlePoint.y) {
             // Robot moving from top right
             if(nextBallPoint.x>= obstacleMiddlePoint.x && nextBallPoint.y>=obstacleMiddlePoint.y) {
                 // ball is also on top right
-                return topRightPoint;
+                return topWayPoint;
             } else if(nextBallPoint.x>= obstacleMiddlePoint.x && nextBallPoint.y<obstacleMiddlePoint.y) {
                 // ball is on bottom right
                 return rightWayPoint;
@@ -110,7 +108,7 @@ public class ObstacleNavigation {
                 return rightWayPoint;
             } else if(nextBallPoint.x>= obstacleMiddlePoint.x && nextBallPoint.y<obstacleMiddlePoint.y) {
                 // ball is on bottom right
-                return bottomRightPoint;
+                return rightWayPoint;
             } else if(nextBallPoint.x< obstacleMiddlePoint.x && nextBallPoint.y>=obstacleMiddlePoint.y) {
                 // ball is on top left
                 return topRightPoint;
@@ -128,7 +126,7 @@ public class ObstacleNavigation {
                 return bottomLeftPoint;
             } else if(nextBallPoint.x< obstacleMiddlePoint.x && nextBallPoint.y>=obstacleMiddlePoint.y) {
                 // ball is on top left
-                return topLeftPoint;
+                return topWayPoint;
             } else {
                 // ball is on bottom left
                 return leftWayPoint;

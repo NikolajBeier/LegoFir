@@ -22,8 +22,10 @@ public class DepositBalls implements MyBehavior {
 
     @Override
     public boolean takeControl() {
-        return checkIfRobotIsOnPoint();
+        return checkIfRobotIsOnPoint() && (noMoreBalls() || timerExpired());
     }
+
+
 
     @Override
     public void action() {
@@ -52,32 +54,19 @@ public class DepositBalls implements MyBehavior {
         return false;
     }
 
-    public Boolean checkIfRobotIsOnPoint(){
+    public boolean checkIfRobotIsOnPoint(){
         double errorMargin = 8;
 
-        if(!dude.getMap().getOrangeBalls().isEmpty() && !dude.getMap().getBalls().isEmpty()){
-            return false;
-        }
+
 
         double distance = Math.sqrt(Math.pow(dude.getMap().getRobotPosition().getX() - dude.getMap().getWayPoint().x, 2) +
                 Math.pow(dude.getMap().getRobotPosition().getY() - dude.getMap().getWayPoint().y, 2));
         return distance <= errorMargin;
-
-        /*
-
-        if(!(dude.getMap().getRobotPosition().getX() > dude.getMap().getWayPoint().x - 10)){
-            isOnPoint = false;
-        }
-        if(!(dude.getMap().getRobotPosition().getX() < dude.getMap().getWayPoint().x + 10)){
-            isOnPoint = false;
-        }
-        if(!(dude.getMap().getRobotPosition().getY() > dude.getMap().getWayPoint().y - 10)){
-            isOnPoint = false;
-        }
-        if(!(dude.getMap().getRobotPosition().getY() < dude.getMap().getWayPoint().y + 10)){
-            isOnPoint = false;
-        }
-
-        */
+    }
+    public boolean noMoreBalls(){
+        return dude.getMap().getOrangeBalls().isEmpty() && dude.getMap().getBalls().isEmpty();
+    }
+    private boolean timerExpired() {
+        return System.currentTimeMillis()-dude.startTime>360000;
     }
 }

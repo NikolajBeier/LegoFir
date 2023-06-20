@@ -29,7 +29,7 @@ public class DepositPoint {
 
         edgepoint = this.edge.getTopLeft();
         edgepoint2 = this.edge.getBottomLeft();
-        xleft = (edgepoint.x+edgepoint2.x)/2;
+        xleft = (edgepoint.x+edgepoint2.x)/2+20;
         yleft = (edgepoint2.y+edgepoint.y)/2;
         this.centerRight = new Point(xright, yright);
         this.centerLeft = new Point(xleft, yleft);

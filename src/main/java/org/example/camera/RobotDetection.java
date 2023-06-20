@@ -189,23 +189,23 @@ public class RobotDetection {
                         dude.getMap().getRobotPosition().setRightSideX((int)realGreenX);
                         dude.getMap().getRobotPosition().setRightSideY((int)realGreenY);
 
+
+
                         Point centerOfLine = new Point((blueCenter.x + greenCenter.x) * 0.5, (blueCenter.y + greenCenter.y) * 0.5);
-                        Point leftHarvesterStart = new Point(centerOfLine.x *0.3, centerOfLine.y*0.3);
-                        Point rightHarvesterStart = new Point(centerOfLine.x *-0.3, centerOfLine.y*-0.3);
+
+
+
 
                         Point vectorFromBlueToGreen = new Point(greenCenter.x - blueCenter.x, greenCenter.y - blueCenter.y);
-                        int lengthOfVector = (int) Math.sqrt(vectorFromBlueToGreen.x * vectorFromBlueToGreen.x + vectorFromBlueToGreen.y * vectorFromBlueToGreen.y);
-
                         Point perpendicularVector = new Point(-vectorFromBlueToGreen.y, vectorFromBlueToGreen.x);
 
-                        Point arrowPoint = new Point(centerOfLine.x + perpendicularVector.x, centerOfLine.y + perpendicularVector.y);
 
                         dude.getMap().setRobotPosition((int)centerOfLine.x,(int)centerOfLine.y,perpendicularVector);
 
                         // calculate front and back points of robot
 
                         Point center = new Point(dude.getMap().getRobotPosition().getX(), -dude.getMap().getRobotPosition().getY());
-                        double ratioBelow = 1.0;
+                        double ratioBelow = 1.4;
                         double ratioAbove = 0.65;
                         double distanceBetweenColors = Geometry.distanceBetweenPoints(blueCenter, greenCenter);
 
@@ -215,7 +215,10 @@ public class RobotDetection {
                         double deltaTop = distanceBetweenColors*ratioAbove;
                         double deltaBottom = distanceBetweenColors*ratioBelow;
 
-                        Point front = new Point(center.x - deltaTop * -Math.cos(angleRad), center.y - deltaTop * Math.sin(angleRad));
+                        Point front = new Point(
+                                center.x - deltaTop * -Math.cos(angleRad),
+                                center.y - deltaTop * Math.sin(angleRad)
+                        );
                         Point back = new Point(center.x + deltaBottom * -Math.cos(angleRad), center.y + deltaBottom * Math.sin(angleRad));
 
                         dude.getMap().getRobotPosition().setFrontSideX((int)front.x);

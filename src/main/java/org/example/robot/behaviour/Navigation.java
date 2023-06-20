@@ -81,16 +81,31 @@ public class Navigation {
     public void turnCheeksTowardsGoal(Point goal, boolean suppressed){
         if(angleTowardsGoal(goal)) {
             long timeBefore = System.currentTimeMillis();
-            while(System.currentTimeMillis() - timeBefore < 500){
+            while(System.currentTimeMillis() - timeBefore < 600){
                 dude.moveBackward();
             }
             dude.stopWheels();
             angleTowardsGoal(goal);
             timeBefore = System.currentTimeMillis();
-            while(System.currentTimeMillis() - timeBefore < 40000){
+            while(System.currentTimeMillis() - timeBefore < 20000){
+                dude.openCheeks();
+            }
+            dude.moveForward();
+            dude.moveBackward();
+            dude.stopWheels();
+            timeBefore = System.currentTimeMillis();
+            while(System.currentTimeMillis() - timeBefore < 20000){
+                dude.openCheeks();
+            }
+            dude.moveForward();
+            dude.moveBackward();
+            dude.stopWheels();
+            timeBefore = System.currentTimeMillis();
+            while(System.currentTimeMillis() - timeBefore < 20000){
                 dude.openCheeks();
             }
             dude.stopBallDropper();
+            dude.stopAll();
         }
     }
     private boolean angleTowardsGoal(Point goal){
@@ -104,7 +119,7 @@ public class Navigation {
         }
 
         if (!isApproximatelySameAngle(currentAngle,angleToNextPoint, 0.05)) {
-            System.out.println("Target Angle: " + Math.toDegrees(angleToNextPoint) + "   Current Angle: " + Math.toDegrees(currentAngle));
+            System.out.println("Target Angle: " + angleToNextPoint + "   Current Angle: " + currentAngle);
 
             //turn towards ball
             if (pointIsLeftOfRobotHeading()) {
@@ -124,14 +139,12 @@ public class Navigation {
             // Calculate the difference in angles
             // 180 - abs(abs(a1 - a2) - 180);
             double angleDiff = Math.PI - Math.abs(Math.abs(currentAngle - angleToNextPoint)-Math.PI);
-            System.out.println("AngleDiff:" + angleDiff);
 
             // Normalize the angle difference to the range [0, 1]
             double normalizedAngleDiff = angleDiff / Math.PI; // angles are in radians
 
             // Calculate the speed based on the angle difference
             double speed = minSpeed + (normalizedAngleDiff * (maxSpeed - minSpeed));
-            System.out.println("Speed:" + speed);
 
             dude.setWheelSpeed((int)speed);
         }
@@ -145,7 +158,7 @@ public class Navigation {
             dude.turnLeft(100);
             while (pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && (!myBehavior.isSuppressed() || (myBehavior.isSuppressed() && dude.getMap().getBalls().size()==0))) {
                 currentAngle = dude.getAngle();
-                changeSpeedDynamically(currentAngle,angleToNextPoint,25,300,0.1);
+                changeSpeedDynamically(currentAngle,angleToNextPoint,15,400,0.1);
             }
             dude.stopWheels();
             // Stop turning
@@ -158,7 +171,7 @@ public class Navigation {
             dude.turnRight(100);
             while(!pointIsLeftOfRobotHeading() && currentAngle!= angleToNextPoint && (!myBehavior.isSuppressed() || (myBehavior.isSuppressed() && dude.getMap().getBalls().size()==0))){
                 currentAngle = dude.getAngle();
-                changeSpeedDynamically(currentAngle,angleToNextPoint,25,300,0.1);
+                changeSpeedDynamically(currentAngle,angleToNextPoint,15,400,0.1);
             }
             dude.stopWheels();
         }
@@ -215,7 +228,7 @@ public class Navigation {
         while(!myBehavior.isSuppressed() || dude.getMap().getBalls().size()==0) {
             turnTowards(nextBall);
             Point ballPoint = new Point(nextBall.getX(), nextBall.getY());
-            moveForwardWithDynamicSpeed(ballPoint, 200, 400);
+            moveForwardWithDynamicSpeed(ballPoint, 200, 500);
             if (closeToBall(nextBall)) {
                 pickUpBall();
                 break;
@@ -224,7 +237,7 @@ public class Navigation {
     }
     public void driveTowardsWaypoint(Point point) {
         turnsTowardsWayPoint(point);
-        moveForwardWithDynamicSpeed(point, 150, 400);
+        moveForwardWithDynamicSpeed(point, 100, 400);
     }
     public void driveTowardsWaypoint(Point point,int speed) {
         turnsTowardsWayPoint(point);

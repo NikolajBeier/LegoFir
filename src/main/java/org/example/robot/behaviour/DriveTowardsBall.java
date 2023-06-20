@@ -66,16 +66,18 @@ public class DriveTowardsBall implements MyBehavior {
 
             // Avoid obstacle if ball is on the other side of it.
             if (obstacleNavigation.pathToNextPointCollidesWithObstacle(nextBallPoint)) {
+                System.out.println("Moving around obstacle");
                 obstacleNavigation.moveAroundObstacle(nextBallPoint);
             }
 
             Condition ballCondition = ballConditions(nextBall);
+            System.out.println("Ball condition: " + ballCondition.name());
             switch (ballCondition) {
                 case CORNER, WALL, OBSTACLE -> edgeBallNavigation.pickUpBallInObstacle(nextBall, cornerPosition, nearestWall,ballCondition);
                 default -> navigation.driveTowardsBall(nextBall);
             }
+            dude.stopWheels();
         }
-
         dude.stopWheels();
         dude.stopHarvester();
     }
@@ -170,22 +172,22 @@ public class DriveTowardsBall implements MyBehavior {
         double ballY = nextBall.getY();
 
         //if (distanceToEdge>=distanceToEdge(startingPoint)){
-        if (ballY > topRight.y - 100) {
+        if (ballY > topRight.y - 75) {
             nearestWall = Direction.NORTH;
             return true;
 
         }
-        if (ballY < bottomRight.y + 100) {
+        if (ballY < bottomRight.y + 75) {
             nearestWall = Direction.SOUTH;
             return true;
         }
 
-        if (ballX < bottomLeft.x + 100) {
+        if (ballX < bottomLeft.x + 75) {
             nearestWall = Direction.WEST;
             return true;
         }
 
-        if (ballX > bottomRight.x-100) {
+        if (ballX > bottomRight.x-75) {
             nearestWall = Direction.EAST;
             return true;
         }
