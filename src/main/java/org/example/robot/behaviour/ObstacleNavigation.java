@@ -77,14 +77,14 @@ public class ObstacleNavigation {
 
         Point obstacleMiddlePoint = intersection(obstacleHorizontal,obstacleVertical);
 
-        Point topWayPoint = new Point(obstacleMiddlePoint.x, obstacleMiddlePoint.y+250);
-        Point topLeftPoint = new Point(obstacleMiddlePoint.x-250, obstacleMiddlePoint.y+250);
+        Point topWayPoint = new Point(obstacleMiddlePoint.x, obstacleMiddlePoint.y+200);
+        Point topLeftPoint = new Point(obstacleMiddlePoint.x-250, obstacleMiddlePoint.y+200);
         Point bottomWayPoint = new Point(obstacleMiddlePoint.x, obstacleMiddlePoint.y-200);
-        Point bottomLeftPoint = new Point(obstacleMiddlePoint.x-250, obstacleMiddlePoint.y-250);
+        Point bottomLeftPoint = new Point(obstacleMiddlePoint.x-250, obstacleMiddlePoint.y-200);
         Point leftWayPoint = new Point(obstacleMiddlePoint.x-250, obstacleMiddlePoint.y);
-        Point topRightPoint = new Point(obstacleMiddlePoint.x+250, obstacleMiddlePoint.y+250);
+        Point topRightPoint = new Point(obstacleMiddlePoint.x+250, obstacleMiddlePoint.y+200);
         Point rightWayPoint = new Point(obstacleMiddlePoint.x+250, obstacleMiddlePoint.y);
-        Point bottomRightPoint = new Point(obstacleMiddlePoint.x+250, obstacleMiddlePoint.y-250);
+        Point bottomRightPoint = new Point(obstacleMiddlePoint.x+250, obstacleMiddlePoint.y-200);
 
         if(robotPoint.x >= obstacleMiddlePoint.x && robotPoint.y >= obstacleMiddlePoint.y) {
             // Robot moving from top right

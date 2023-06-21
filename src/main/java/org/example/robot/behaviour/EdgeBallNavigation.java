@@ -96,17 +96,14 @@ public class EdgeBallNavigation {
     }
 
     private void moveToIntermediatePoint(Point nextPoint) {
-        while(!myBehavior.isSuppressed()) {
+        while(!isOnTopOf(nextPoint)) {
             navigation.turnsTowardsWayPoint(nextPoint);
             navigation.driveTowardsWaypoint(nextPoint);
-            if(isOnTopOf(nextPoint)){
-                dude.stopWheels();
-                return;
-            }
         }
+        dude.stopWheels();
     }
     private boolean isOnTopOf(Point nextPoint) {
-        double errorMargin = 16;
+        double errorMargin = 18;
 
 
         double distance = Math.sqrt(Math.pow(dude.getMap().getRobotPosition().getX() - nextPoint.x, 2) +
@@ -118,7 +115,7 @@ public class EdgeBallNavigation {
         double distance = Double.MAX_VALUE;
 
 
-        while(distance > 12) {
+        while(distance > 15) {
             turnTowards(nextBallPoint);
             moveForwardWithDynamicSpeed(nextBallPoint,15,200);
             distance=distanceBetweenPoints(nextBallPoint, new Point(dude.getMap().getRobotPosition().getFrontSideX(),dude.getMap().getRobotPosition().getFrontSideY()));

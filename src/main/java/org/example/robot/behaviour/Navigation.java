@@ -93,6 +93,7 @@ public class Navigation {
             dude.moveForward();
             dude.moveBackward();
             dude.stopWheels();
+            angleTowardsGoal(goal);
             timeBefore = System.currentTimeMillis();
             while(System.currentTimeMillis() - timeBefore < 20000){
                 dude.openCheeks();
@@ -100,6 +101,7 @@ public class Navigation {
             dude.moveForward();
             dude.moveBackward();
             dude.stopWheels();
+            angleTowardsGoal(goal);
             timeBefore = System.currentTimeMillis();
             while(System.currentTimeMillis() - timeBefore < 20000){
                 dude.openCheeks();
